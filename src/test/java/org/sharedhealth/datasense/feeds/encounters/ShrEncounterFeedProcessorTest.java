@@ -61,6 +61,4 @@ public class ShrEncounterFeedProcessorTest {
         byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("UTF-8")));
         return "Basic " + new String(encodedAuth);
     }
-
-
 }

@@ -52,7 +52,7 @@ ext.libraries = [
         spring_transaction   : "org.springframework:spring-tx:4.1.1.RELEASE",
         spring_jdbc          : "org.springframework:spring-jdbc:4.1.1.RELEASE",
         spring_boot_logging  : "org.springframework.boot:spring-boot-starter-log4j:1.1.1.RELEASE",
-        quartz_scheduler     : "org.quartz-scheduler:quartz:1.7.3",
+        quartz_scheduler     : "org.quartz-scheduler:quartz:2.2.1",
         mysql_connector      : "mysql:mysql-connector-java:5.1.13",
         liquibase            : "org.liquibase:liquibase-core:3.2.2",
         atomfeed_client      : "org.ict4h:atomfeed-client:1.2",
@@ -60,7 +60,9 @@ ext.libraries = [
         rome                 : "rome:rome:1.0",
         apache_httpclient    : "org.apache.httpcomponents:httpclient:4.3.5",
         apache_commons_codec : "commons-codec:commons-codec:1.9",
-        fhir_reference       : "me.fhir:fhir-dstu1:0.0.82.2943"
+        fhir_reference       : "me.fhir:fhir-dstu1:0.0.82.2943",
+        apache_commons_dbcp  : "commons-dbcp:commons-dbcp:1.4",
+        spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE"
 ]
 
 ext.testLibraries = [
@@ -77,8 +79,9 @@ dependencies {
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
-            libraries.fhir_reference
-    testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock
+            libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support
+    testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
+            libraries.apache_commons_dbcp, libraries.spring_ctx_support
 }
 
 war {

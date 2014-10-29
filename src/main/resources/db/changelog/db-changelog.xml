@@ -33,4 +33,8 @@
         </createTable>
     </changeSet>
 
+    <changeSet id="sharedhealth-datasense-20141029-1432" author="sharedhealth" context="setup">
+        <comment>creating quartz tables</comment>
+        <sqlFile path="tables_mysql_2.2.1.sql" relativeToChangelogFile="true"/>
+    </changeSet>
 </databaseChangeLog>

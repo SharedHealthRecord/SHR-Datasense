@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.launch;
 
-import com.mysql.jdbc.jdbc2.optional.MysqlDataSource;
+import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -22,16 +22,19 @@ public class DatabaseConfig {
         String url = environment.getProperty("DATABASE_URL");
         String user = environment.getProperty("DATABASE_USER");
         String password = environment.getProperty("DATABASE_PASSWORD");
+        String driverClass = environment.getProperty("DATABASE_DRIVER");
         String shr = environment.getProperty("DATABASE_SCHEMA");
         int port = Integer.parseInt(environment.getProperty("DATABASE_PORT"));
+        int initialPoolSize = Integer.parseInt(environment.getProperty("DATABASE_CON_POOL_SIZE"));
 
-        MysqlDataSource dataSource = new MysqlDataSource();
-        dataSource.setUrl(url);
-        dataSource.setUser(user);
-        dataSource.setPassword(password);
-        dataSource.setDatabaseName(shr);
-        dataSource.setPortNumber(port);
-        return dataSource;
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(url);
+        basicDataSource.setUsername(user);
+        basicDataSource.setPassword(password);
+        basicDataSource.setDriverClassName(driverClass);
+        basicDataSource.setInitialSize(initialPoolSize);
+
+        return basicDataSource;
     }
 
     @Bean

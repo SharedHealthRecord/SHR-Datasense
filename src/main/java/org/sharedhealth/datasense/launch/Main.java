@@ -2,8 +2,8 @@ package org.sharedhealth.datasense.launch;
 
 
 import liquibase.integration.spring.SpringLiquibase;
-import org.quartz.SchedulerException;
-import org.quartz.impl.StdSchedulerFactory;
+import org.quartz.spi.JobFactory;
+import org.sharedhealth.datasense.scheduler.jobs.SimpleJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
@@ -12,13 +12,19 @@ import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletCon
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.scheduling.quartz.JobDetailFactoryBean;
+import org.springframework.scheduling.quartz.SchedulerFactoryBean;
+import org.springframework.scheduling.quartz.SimpleTriggerFactoryBean;
+import org.springframework.scheduling.quartz.SpringBeanJobFactory;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
-import java.io.InputStream;
+import java.util.HashMap;
 import java.util.Map;
 
 import static java.lang.Integer.valueOf;
@@ -30,6 +36,9 @@ public class Main {
 
     @Autowired
     DataSource dataSource;
+
+    @Autowired
+    PlatformTransactionManager platformTransactionManager;
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -63,19 +72,49 @@ public class Main {
         return liquibase;
     }
 
+    @Bean
+    public SchedulerFactoryBean scheduler() {
+        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
+        schedulerFactoryBean.setDataSource(dataSource);
+        schedulerFactoryBean.setTransactionManager(platformTransactionManager);
 
+        schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
+        schedulerFactoryBean.setJobFactory(jobFactory());
+        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
+        schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
+        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
+        schedulerFactoryBean.setTriggers();
+
+        return schedulerFactoryBean;
+    }
 
     @Bean
-    public StdSchedulerFactory scheduler() {
-        StdSchedulerFactory factory = new StdSchedulerFactory();
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("db/quartz.properties");
-        try {
-            factory.initialize(inputStream);
-        } catch (SchedulerException e) {
-            e.printStackTrace();
-        }
-        return factory;
+    public JobFactory jobFactory() {
+        SpringBeanJobFactory springBeanJobFactory = new SpringBeanJobFactory();
+        return springBeanJobFactory;
     }
+
+    @Bean
+    public Map<String, Object> schedulerContextMap() {
+        HashMap<String, Object> ctx = new HashMap<String, Object>();
+        ctx.put("txMgr", platformTransactionManager);
+        return ctx;
+    }
+
+    @Bean
+    public JobDetailFactoryBean simpleJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(SimpleJob.class);
+        return jobDetailFactoryBean;
+    }
+
+    @Bean
+    public SimpleTriggerFactoryBean simpleTrigger() {
+        SimpleTriggerFactoryBean simpleTriggerFactoryBean = new SimpleTriggerFactoryBean();
+        simpleTriggerFactoryBean.setJobDetail(simpleJob().getObject());
+        return simpleTriggerFactoryBean;
+    }
+
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);
