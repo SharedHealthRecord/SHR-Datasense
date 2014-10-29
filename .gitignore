@@ -13,7 +13,7 @@
 #Build dirs
 build/
 out/
-classes
+classes/
 target
 
 #Logs

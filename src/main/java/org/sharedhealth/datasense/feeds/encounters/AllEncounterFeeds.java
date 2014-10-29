@@ -3,7 +3,6 @@ package org.sharedhealth.datasense.feeds.encounters;
 import com.sun.syndication.feed.atom.Feed;
 import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.WireFeedInput;
-import org.apache.commons.codec.binary.Base64;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ClientProtocolException;
@@ -18,20 +17,27 @@ import org.ict4h.atomfeed.client.repository.AllFeeds;
 import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
-import java.nio.charset.Charset;
+import java.util.Map;
 
 public class AllEncounterFeeds extends AllFeeds {
 
-    public AllEncounterFeeds() {
+    private Map<String, Object> feedProperties;
+
+    public AllEncounterFeeds(Map<String, Object> feedProperties) {
         //pass facility auth info
         //aditional properties - timeout etc
+        this.feedProperties = feedProperties;
     }
 
     @Override
     public Feed getFor(URI uri) {
         HttpGet request = new HttpGet(uri);
-        request.addHeader("Accept", "application/atom+xml");
-        request.addHeader("facilityId", "10000069");
+        Map<String, String> requestHeaders = getRequestHeaders();
+        if (requestHeaders != null) {
+            for (String header : requestHeaders.keySet()) {
+                request.addHeader(header, requestHeaders.get(header));
+            }
+        }
         try {
             String response = getResponse(request);
             WireFeedInput input = new WireFeedInput();
@@ -47,7 +53,6 @@ public class AllEncounterFeeds extends AllFeeds {
     public String getResponse(HttpRequestBase request) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
-            request.addHeader("Authorization", getAuthHeader());
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
                 public String handleResponse(final HttpResponse response) throws IOException {
                     int status = response.getStatusLine().getStatusCode();
@@ -68,9 +73,11 @@ public class AllEncounterFeeds extends AllFeeds {
         }
     }
 
-    public String getAuthHeader() {
-        String auth = "shr" + ":" + "password";
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("UTF-8")));
-        return "Basic " + new String(encodedAuth);
+    public Map<String, String> getRequestHeaders() {
+        Object headers = feedProperties.get("headers");
+        if (headers != null) {
+            return (Map<String, String>) headers;
+        }
+        return null;
     }
 }
