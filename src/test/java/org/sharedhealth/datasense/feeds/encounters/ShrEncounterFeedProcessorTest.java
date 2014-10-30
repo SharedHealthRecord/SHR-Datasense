@@ -15,12 +15,12 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Properties;
+
+import static java.lang.System.getenv;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -39,10 +39,7 @@ public class ShrEncounterFeedProcessorTest {
                 ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
             }
         };
-        InputStream inputStream = getClass().getClassLoader().getResourceAsStream("shr.properties");
-        Properties properties = new Properties();
-        properties.load(inputStream);
-        String feedUrl = getFeedUrl(properties);
+        String feedUrl = getFeedUrl();
         ShrEncounterFeedProcessor feedCrawler =
             new ShrEncounterFeedProcessor(
                 txMgr, shrEventWorker, feedUrl,
@@ -52,10 +49,11 @@ public class ShrEncounterFeedProcessorTest {
         feedCrawler.process();
     }
 
-    private String getFeedUrl(Properties properties) {
-        return properties.getProperty("shr.scheme")
-                +  "://" + properties.getProperty("shr.host")
-                + ":" + properties.getProperty("shr.port")
+    private String getFeedUrl() {
+        Map<String, String> env = getenv();
+        return env.get("SHR_SCHEME")
+                +  "://" + env.get("SHR_HOST")
+                + ":" + env.get("SHR_PORT")
                 + "/catchments/3026/encounters";
     }
 
