@@ -80,11 +80,15 @@ public class Main {
 
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
+        schedulerFactoryBean.setTriggers(simpleTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
-        schedulerFactoryBean.setTriggers();
-
+        try {
+            schedulerFactoryBean.afterPropertiesSet();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         return schedulerFactoryBean;
     }
 
@@ -105,13 +109,18 @@ public class Main {
     public JobDetailFactoryBean simpleJob() {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(SimpleJob.class);
+        jobDetailFactoryBean.setName("Basic Job");
+        jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }
 
     @Bean
     public SimpleTriggerFactoryBean simpleTrigger() {
         SimpleTriggerFactoryBean simpleTriggerFactoryBean = new SimpleTriggerFactoryBean();
+        simpleTriggerFactoryBean.setName("Basic Job");
+        simpleTriggerFactoryBean.setRepeatInterval(10000);
         simpleTriggerFactoryBean.setJobDetail(simpleJob().getObject());
+        simpleTriggerFactoryBean.afterPropertiesSet();
         return simpleTriggerFactoryBean;
     }
 

@@ -15,7 +15,6 @@ public class SimpleJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("********************* scheduler invoked ************** ");;
-        System.out.println(txMgr);
+        System.out.println("********************* scheduler invoked ************** ");
     }
 }
