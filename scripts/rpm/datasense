@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# datasense        This shell script takes care of starting and stopping
+#              the datasense system
+#
+# chkconfig: - 64 36
+# description: The datasense shared health record system
+# processname: datasense
+# config: /etc/default/datasense
+# pidfile: /var/run/datasense/datasense.pid
+### BEGIN INIT INFO
+# Provides: datasense
+# Required-Start: $local_fs $remote_fs $network $named $syslog $time
+# Required-Stop: $local_fs $remote_fs $network $named $syslog $time
+# Short-Description: start and stop datasense system,
+# Description: datasense system
+### END INIT INFO
+
+. /etc/default/datasense
+
+if [[ ! -e /var/run/datasense ]]; then
+    ln -s /opt/datasense/var /var/run/datasense
+fi
+
+if [[ ! -e /var/log/datasense ]]; then
+    mkdir /var/log/datasense
+fi
+
+case "$1" in
+  start)
+    nohup java -Dserver.port=$DATASENSE_PORT -jar /opt/datasense/lib/SHR-Datasense-0.1-SNAPSHOT.war > /var/log/datasense/datasense.log &
+    echo $! > /var/run/datasense/datasense.pid
+    ;;
+  stop)
+    (cat /var/run/datasense/datasense.pid |  xargs -n 1 kill) || (true)
+    ;;
+esac

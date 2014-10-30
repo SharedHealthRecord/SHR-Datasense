@@ -7,7 +7,8 @@ buildscript {
     }
     dependencies {
         classpath(
-                "org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE"
+                "org.springframework.boot:spring-boot-gradle-plugin:1.1.8.RELEASE",
+                "com.netflix.nebula:gradle-ospackage-plugin:2.0.2"
         )
     }
 }
@@ -15,6 +16,7 @@ buildscript {
 apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'spring-boot'
+apply plugin: 'rpm'
 version = '0.1-SNAPSHOT'
 compileJava {
     sourceCompatibility = 1.7
@@ -54,7 +56,7 @@ ext.libraries = [
         spring_boot_logging  : "org.springframework.boot:spring-boot-starter-log4j:1.1.1.RELEASE",
         quartz_scheduler     : "org.quartz-scheduler:quartz:2.2.1",
         mysql_connector      : "mysql:mysql-connector-java:5.1.33",
-        liquibase            : "org.liquibase:liquibase-core:3.2.2",
+        liquibase            : "org.liquibase:liquibase-core:3.1.1",
         atomfeed_client      : "org.ict4h:atomfeed-client:1.2",
         atomfeed_commons     : "org.ict4h:atomfeed-commons:1.2",
         rome                 : "rome:rome:1.0",
@@ -104,4 +106,40 @@ task runDatasense << {
     ProcessBuilder builder = getProcessBuilder()
     Process process = builder.start();
     process.waitFor();
+}
+
+task dist(type:Rpm, dependsOn:build) {
+    packageName = 'datasense'
+    version = '0.1'
+    release = 1
+    arch = NOARCH
+    os = LINUX
+
+    into '/opt/datasense'
+
+    postInstall = file('scripts/postInstall.sh')
+    preUninstall = file('scripts/preUninstall.sh')
+    postUninstall = file('scripts/postUninstall.sh')
+
+    from("${buildDir}/etc") {
+        fileMode = 0755
+        into 'etc'
+    }
+
+    from("scripts/rpm") {
+        fileMode = 0755
+        exclude 'placeholder'
+        into 'bin'
+    }
+
+    from("${buildDir}/libs") {
+        fileMode = 0755
+        into 'lib'
+    }
+
+    from("scripts/rpm") {
+        fileMode = 0755
+        exclude 'datasense'
+        into 'var'
+    }
 }
