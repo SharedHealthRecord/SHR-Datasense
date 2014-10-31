@@ -10,7 +10,6 @@ import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.freeshr.EncounterBundle;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
@@ -19,25 +18,24 @@ import java.util.Map;
 
 public class ShrEncounterFeedProcessor {
 
-    private DataSourceTransactionManager dsTxManager;
     private ShrEventWorker shrEventWorker;
     private String feedUrl;
     private AllMarkers markers;
     private AllFailedEvents failedEvents;
     private Map<String, Object> feedProperties;
+    private AtomFeedSpringTransactionManager transactionManager;
 
-    public ShrEncounterFeedProcessor(DataSourceTransactionManager dsTxManager,
-                                     ShrEventWorker shrEventWorker,
+    public ShrEncounterFeedProcessor(ShrEventWorker shrEventWorker,
                                      String feedUrl,
                                      AllMarkers markers,
                                      AllFailedEvents failedEvents,
-                                     Map<String, Object> feedProperties) {
-        this.dsTxManager = dsTxManager;
+                                     Map<String, Object> feedProperties, AtomFeedSpringTransactionManager transactionManager) {
         this.shrEventWorker = shrEventWorker;
         this.feedUrl = feedUrl;
         this.markers = markers;
         this.failedEvents = failedEvents;
         this.feedProperties = feedProperties;
+        this.transactionManager = transactionManager;
     }
 
     public void process() throws URISyntaxException {
@@ -49,13 +47,12 @@ public class ShrEncounterFeedProcessor {
     }
 
     private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties)  {
-        AtomFeedSpringTransactionManager txManager = new AtomFeedSpringTransactionManager(dsTxManager);
         return new AtomFeedClient(
                 new AllEncounterFeeds(feedProperties),
                 markers,
                 failedEvents,
                 atomProperties,
-                txManager,
+                transactionManager,
                 feedUri,
                 worker);
     }

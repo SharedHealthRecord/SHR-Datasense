@@ -6,6 +6,7 @@ import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.freeshr.EncounterBundle;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,18 +42,18 @@ public class ShrEncounterFeedProcessorTest {
         };
         String feedUrl = getFeedUrl();
         ShrEncounterFeedProcessor feedCrawler =
-            new ShrEncounterFeedProcessor(
-                txMgr, shrEventWorker, feedUrl,
-                new AllMarkersInMemoryImpl(),
-                new AllFailedEventsInMemoryImpl(),
-                getFeedProperties());
+                new ShrEncounterFeedProcessor(shrEventWorker,
+                        feedUrl,
+                        new AllMarkersInMemoryImpl(),
+                        new AllFailedEventsInMemoryImpl(),
+                        getFeedProperties(), new AtomFeedSpringTransactionManager(txMgr));
         feedCrawler.process();
     }
 
     private String getFeedUrl() {
         Map<String, String> env = getenv();
         return env.get("SHR_SCHEME")
-                +  "://" + env.get("SHR_HOST")
+                + "://" + env.get("SHR_HOST")
                 + ":" + env.get("SHR_PORT")
                 + "/catchments/3026/encounters";
     }

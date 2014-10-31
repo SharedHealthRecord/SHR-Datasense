@@ -32,9 +32,13 @@
             <column name="title" type="varchar(255)"></column>
         </createTable>
     </changeSet>
-
     <changeSet id="sharedhealth-datasense-20141029-1432" author="sharedhealth" context="setup">
         <comment>creating quartz tables</comment>
         <sqlFile path="tables_mysql_2.2.1.sql" relativeToChangelogFile="true"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141031-1739" author="sharedhealth" context="setup">
+        <modifyDataType columnName="event_content"
+                        newDataType="TEXT"
+                        tableName="failed_events"/>
     </changeSet>
 </databaseChangeLog>
