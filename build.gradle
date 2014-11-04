@@ -68,10 +68,11 @@ ext.libraries = [
 ]
 
 ext.testLibraries = [
-        junit      : "junit:junit:4.10",
-        mockito    : "org.mockito:mockito-all:1.8.4",
-        wiremock   : "com.github.tomakehurst:wiremock:1.51",
-        spring_test: "org.springframework:spring-test:4.1.1.RELEASE"
+        junit                : "junit:junit:4.10",
+        mockito              : "org.mockito:mockito-all:1.8.4",
+        wiremock             : "com.github.tomakehurst:wiremock:1.51",
+        spring_test          : "org.springframework:spring-test:4.1.1.RELEASE",
+        h2_database          : "com.h2database:h2:1.4.182"
 ]
 
 dependencies {
@@ -83,7 +84,7 @@ dependencies {
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
             libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support
     testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
-            libraries.apache_commons_dbcp, libraries.spring_ctx_support
+            libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.mysql_connector, testLibraries.h2_database
 }
 
 war {

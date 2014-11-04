@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.launch;
 
 
-import liquibase.integration.spring.SpringLiquibase;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
@@ -62,21 +61,6 @@ public class Main {
         String bdshr_port = env.get("DATASENSE_PORT");
         factory.setPort(valueOf(bdshr_port));
         return factory;
-    }
-
-    @Bean
-    public SpringLiquibase liquibase() {
-        Map<String, String> env = getenv();
-        String changelogFile = env.get("DATABASE_CHANGELOG_FILE");
-        String databaseSchema = env.get("DATABASE_SCHEMA");
-        SpringLiquibase liquibase = new SpringLiquibase();
-        liquibase.setChangeLog(changelogFile);
-        liquibase.setDefaultSchema(databaseSchema);
-        liquibase.setIgnoreClasspathPrefix(false);
-        liquibase.setDataSource(dataSource);
-        liquibase.setDropFirst(false);
-        liquibase.setShouldRun(true);
-        return liquibase;
     }
 
     @Bean

@@ -34,7 +34,7 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20141029-1432" author="sharedhealth" context="setup">
         <comment>creating quartz tables</comment>
-        <sqlFile path="tables_mysql_2.2.1.sql" relativeToChangelogFile="true"/>
+        <sqlFile path="classpath:/db/changelog/tables_for_quartz.sql"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20141031-1739" author="sharedhealth" context="setup">
         <modifyDataType columnName="event_content"

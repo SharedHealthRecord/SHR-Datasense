@@ -43,28 +43,22 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
                 ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
             }
         };
-        String feedUrl = getFeedUrl(properties);
-        AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
-        ShrEncounterFeedProcessor feedCrawler =
-                new ShrEncounterFeedProcessor(
-                        shrEventWorker, feedUrl,
-                        new AllMarkersJdbcImpl(transactionManager),
-                        new AllFailedEventsJdbcImpl(transactionManager),
-                        getFeedProperties(properties),
-                        transactionManager);
-        try {
-            feedCrawler.process();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-    }
-
-    private String getFeedUrl(DatasenseProperties properties) {
-        //TODO : for all patients
         for (String catchment : properties.getDatasenseCatchmentList()) {
-            return properties.getShrBaseUrl() + "/catchments/" + catchment + "/encounters";
+            String feedUrl = properties.getShrBaseUrl() + "/catchments/" + catchment + "/encounters";
+            AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
+            ShrEncounterFeedProcessor feedCrawler =
+                    new ShrEncounterFeedProcessor(
+                            shrEventWorker, feedUrl,
+                            new AllMarkersJdbcImpl(transactionManager),
+                            new AllFailedEventsJdbcImpl(transactionManager),
+                            getFeedProperties(properties),
+                            transactionManager);
+            try {
+                feedCrawler.process();
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
         }
-        return null;
     }
 
     public Map<String, Object> getFeedProperties(DatasenseProperties properties) {
