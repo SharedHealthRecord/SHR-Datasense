@@ -4,10 +4,11 @@ import org.apache.commons.codec.binary.Base64;
 import org.hl7.fhir.instance.formats.ResourceOrFeed;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
-import org.sharedhealth.datasense.freeshr.EncounterBundle;
+import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -32,8 +33,9 @@ public class ShrEncounterFeedProcessorTest {
     DataSourceTransactionManager txMgr;
 
     @Test
+    @Ignore
     public void shouldFetchEncountersForCatchment() throws URISyntaxException, IOException {
-        ShrEventWorker shrEventWorker = new ShrEventWorker() {
+        EncounterEventWorker encounterEventWorker = new EncounterEventWorker() {
             @Override
             public void process(EncounterBundle encounterBundle) {
                 System.out.println(encounterBundle.getEncounterId());
@@ -42,7 +44,7 @@ public class ShrEncounterFeedProcessorTest {
         };
         String feedUrl = getFeedUrl();
         ShrEncounterFeedProcessor feedCrawler =
-                new ShrEncounterFeedProcessor(shrEventWorker,
+                new ShrEncounterFeedProcessor(encounterEventWorker,
                         feedUrl,
                         new AllMarkersInMemoryImpl(),
                         new AllFailedEventsInMemoryImpl(),

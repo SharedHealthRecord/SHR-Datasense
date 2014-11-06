@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.freeshr;
+package org.sharedhealth.datasense.model;
 
 import org.hl7.fhir.instance.formats.ResourceOrFeed;
 

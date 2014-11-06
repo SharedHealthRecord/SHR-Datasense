@@ -9,7 +9,7 @@ import org.ict4h.atomfeed.client.repository.AllMarkers;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
-import org.sharedhealth.datasense.freeshr.EncounterBundle;
+import org.sharedhealth.datasense.model.EncounterBundle;
 
 import java.io.ByteArrayInputStream;
 import java.net.URI;
@@ -18,19 +18,19 @@ import java.util.Map;
 
 public class ShrEncounterFeedProcessor {
 
-    private ShrEventWorker shrEventWorker;
+    private EncounterEventWorker encounterEventWorker;
     private String feedUrl;
     private AllMarkers markers;
     private AllFailedEvents failedEvents;
     private Map<String, Object> feedProperties;
     private AtomFeedSpringTransactionManager transactionManager;
 
-    public ShrEncounterFeedProcessor(ShrEventWorker shrEventWorker,
+    public ShrEncounterFeedProcessor(EncounterEventWorker encounterEventWorker,
                                      String feedUrl,
                                      AllMarkers markers,
                                      AllFailedEvents failedEvents,
                                      Map<String, Object> feedProperties, AtomFeedSpringTransactionManager transactionManager) {
-        this.shrEventWorker = shrEventWorker;
+        this.encounterEventWorker = encounterEventWorker;
         this.feedUrl = feedUrl;
         this.markers = markers;
         this.failedEvents = failedEvents;
@@ -42,7 +42,7 @@ public class ShrEncounterFeedProcessor {
         AtomFeedProperties atomProperties = new AtomFeedProperties();
         atomProperties.setMaxFailedEvents(20);
         atomFeedClient(new URI(this.feedUrl),
-                new FeedEventWorker(shrEventWorker),
+                new FeedEventWorker(encounterEventWorker),
                 atomProperties).processEvents();
     }
 
@@ -58,9 +58,9 @@ public class ShrEncounterFeedProcessor {
     }
 
     private class FeedEventWorker implements EventWorker {
-        private ShrEventWorker shrEventWorker;
-        FeedEventWorker(ShrEventWorker shrEventWorker) {
-            this.shrEventWorker = shrEventWorker;
+        private EncounterEventWorker encounterEventWorker;
+        FeedEventWorker(EncounterEventWorker encounterEventWorker) {
+            this.encounterEventWorker = encounterEventWorker;
         }
 
         @Override
@@ -76,7 +76,7 @@ public class ShrEncounterFeedProcessor {
             encounterBundle.setEncounterId(event.getId());
             encounterBundle.setTitle(event.getTitle());
             encounterBundle.addContent(resource);
-            shrEventWorker.process(encounterBundle);
+            encounterEventWorker.process(encounterBundle);
         }
 
         @Override

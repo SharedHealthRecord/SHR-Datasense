@@ -17,6 +17,7 @@ apply plugin: 'java'
 apply plugin: 'war'
 apply plugin: 'spring-boot'
 apply plugin: 'rpm'
+apply plugin: 'idea'
 version = '0.1-SNAPSHOT'
 compileJava {
     sourceCompatibility = 1.7

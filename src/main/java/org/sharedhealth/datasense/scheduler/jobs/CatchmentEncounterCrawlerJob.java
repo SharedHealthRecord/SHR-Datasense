@@ -1,16 +1,14 @@
 package org.sharedhealth.datasense.scheduler.jobs;
 
 import org.apache.commons.codec.binary.Base64;
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.encounters.ShrEncounterFeedProcessor;
-import org.sharedhealth.datasense.feeds.encounters.ShrEventWorker;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
-import org.sharedhealth.datasense.freeshr.EncounterBundle;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -26,6 +24,8 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
     DataSourceTransactionManager txMgr;
     private DatasenseProperties properties;
 
+    private EncounterEventWorker encounterEventWorker;
+
     public void setTxMgr(DataSourceTransactionManager txMgr) {
         this.txMgr = txMgr;
     }
@@ -34,21 +34,18 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
         this.properties = properties;
     }
 
+    public void setEncounterEventWorker(EncounterEventWorker encounterEventWorker) {
+        this.encounterEventWorker = encounterEventWorker;
+    }
+
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        ShrEventWorker shrEventWorker = new ShrEventWorker() {
-            @Override
-            public void process(EncounterBundle encounterBundle) {
-                System.out.println(encounterBundle.getEncounterId());
-                ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
-            }
-        };
         for (String catchment : properties.getDatasenseCatchmentList()) {
             String feedUrl = properties.getShrBaseUrl() + "/catchments/" + catchment + "/encounters";
             AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
             ShrEncounterFeedProcessor feedCrawler =
                     new ShrEncounterFeedProcessor(
-                            shrEventWorker, feedUrl,
+                            encounterEventWorker, feedUrl,
                             new AllMarkersJdbcImpl(transactionManager),
                             new AllFailedEventsJdbcImpl(transactionManager),
                             getFeedProperties(properties),

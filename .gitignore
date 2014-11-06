@@ -21,3 +21,5 @@ nohup.out
 
 #OSX specific files
 .DS_Store
+
+datasense_test*

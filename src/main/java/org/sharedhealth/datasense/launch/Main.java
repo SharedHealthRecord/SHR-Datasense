@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.launch;
 
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
@@ -34,7 +35,11 @@ import static java.lang.System.getenv;
 
 @Configuration
 @Import({DatabaseConfig.class})
-@ComponentScan(basePackages = {"org.sharedhealth.datasense.config"})
+@ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
+        "org.sharedhealth.datasense.processors",
+        "org.sharedhealth.datasense.feeds.encounters",
+        "org.sharedhealth.datasense.repository",
+        "org.sharedhealth.datasense.client"})
 public class Main {
 
     @Autowired
@@ -45,6 +50,9 @@ public class Main {
 
     @Autowired
     private DatasenseProperties properties;
+
+    @Autowired
+    private EncounterEventWorker encounterEventWorker;
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -94,6 +102,7 @@ public class Main {
         HashMap<String, Object> ctx = new HashMap<String, Object>();
         ctx.put("txMgr", txmanager);
         ctx.put("properties", properties);
+        ctx.put("encounterEventWorker", encounterEventWorker);
         return ctx;
     }
 

@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import org.sharedhealth.datasense.freeshr.EncounterBundle;
+import org.sharedhealth.datasense.model.EncounterBundle;
 
-public interface ShrEventWorker {
+public interface EncounterEventWorker {
     public void process(EncounterBundle encounterBundle);
 }

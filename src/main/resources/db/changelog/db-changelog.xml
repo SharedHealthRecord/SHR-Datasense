@@ -2,9 +2,7 @@
 <databaseChangeLog
         xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
-        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd
-            http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
     <!--Add change tags here-->
 
     <changeSet id="ict4h-atomfeed-client-1" context="setup" author="ict4h">
@@ -18,7 +16,7 @@
     </changeSet>
     <changeSet id="ict4h-atomfeed-client-2" context="setup" author="ict4h">
         <createTable tableName="failed_events">
-            <column name="id" type="serial">
+            <column name="id" type="BIGINT" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="feed_uri" type="varchar(255)"/>
@@ -40,5 +38,57 @@
         <modifyDataType columnName="event_content"
                         newDataType="TEXT"
                         tableName="failed_events"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141106-1214" author="sharedhealth" context="setup">
+        <comment>creating location table</comment>
+        <createTable tableName="location">
+            <column name="location_id" type="varchar(255)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(100)"/>
+            <column name="type" type="varchar(30)"/>
+            <column name="level" type="int"/>
+            <column name="parent_id" type="varchar(100)"/>
+            <column name="code" type="varchar(20)">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141106-1244" author="sharedhealth" context="setup">
+        <comment>add foreign key constraints for location table</comment>
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="location"
+                                 constraintName="parent_location_fk"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="location_id"
+                                 referencedTableName="location"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141106-1245" author="sharedhealth" context="setup">
+        <comment>creating patient table</comment>
+        <createTable tableName="patient">
+            <column name="patient_hid" type="varchar(20)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="dob" type="date">
+                <constraints nullable="false"/>
+            </column>
+            <column name="gender" type="varchar(2)"/>
+            <column name="present_location_id" type="varchar(100)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141106-1249" author="sharedhealth" context="setup">
+        <comment>creating facility table</comment>
+        <createTable tableName="facility">
+            <column name="facility_id" type="varchar(20)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)"/>
+            <column name="type" type="varchar(30)"/>
+            <column name="location_id" type="varchar(100)">
+                <constraints foreignKeyName="facility_location_fk" referencedTableName="location"
+                             referencedColumnNames="location_id"/>
+            </column>
+        </createTable>
     </changeSet>
 </databaseChangeLog>
