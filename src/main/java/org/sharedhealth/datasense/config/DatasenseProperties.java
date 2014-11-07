@@ -20,6 +20,8 @@ public class DatasenseProperties implements EnvironmentAware {
     private String shrPassword;
     private String datasenseFacilityId;
     private String datasenseCatchmentList;
+    private String facilityRegistryUrl;
+    private String facilityAuthToken;
 
 
     public String getShrScheme() {
@@ -93,5 +95,15 @@ public class DatasenseProperties implements EnvironmentAware {
         this.mciPassword = env.getProperty("MCI_PASSWORD");
         this.datasenseFacilityId = env.getProperty("DATASENSE_FACILITY_ID");
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
+        this.facilityRegistryUrl = env.getProperty("FACILITY_URL");
+        this.facilityAuthToken=env.getProperty("FACILITY_AUTH_TOKEN");
+    }
+
+    public String getFacilityRegistryUrl() {
+        return facilityRegistryUrl;
+    }
+
+    public String getFacilityAuthToken() {
+        return facilityAuthToken;
     }
 }

@@ -18,6 +18,8 @@ public class FHIRBundleTest {
         FHIRBundle fhirBundle = new FHIRBundle(encounterResource.getFeed());
         List<EncounterComposition> encounterCompositions = fhirBundle.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());
-        assertNotNull(encounterCompositions.get(0).getEncounter());
+        EncounterComposition encounterComposition = encounterCompositions.get(0);
+        assertNotNull(encounterComposition.getEncounter());
+        assertEquals(6, encounterComposition.getResources().size());
     }
 }

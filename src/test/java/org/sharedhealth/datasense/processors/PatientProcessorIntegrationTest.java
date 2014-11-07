@@ -2,16 +2,19 @@ package org.sharedhealth.datasense.processors;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.FHIRBundle;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,6 +36,9 @@ public class PatientProcessorIntegrationTest {
     private PatientProcessor processor;
 
     @Autowired
+    JdbcTemplate jdbcTemplate;
+
+    @Autowired
     private PatientDao patientDao;
 
     private final String VALID_HEALTH_ID = "5927558688825933825";
@@ -46,13 +52,19 @@ public class PatientProcessorIntegrationTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(asString("jsons/" + VALID_HEALTH_ID + ".json"))));
+                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
+    }
+
+    @After
+    public void tearDown() {
+        DatabaseHelper.clearDatasenseTables(jdbcTemplate);
     }
 
     @Test
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
         ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         FHIRBundle fhirBundle = new FHIRBundle(resourceOrFeed.getFeed());
+        processor.setNext(null);
         processor.process(fhirBundle.getEncounterCompositions().get(0));
         Patient patient = patientDao.getPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());

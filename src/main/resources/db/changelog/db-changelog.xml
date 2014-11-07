@@ -42,13 +42,13 @@
     <changeSet id="sharedhealth-datasense-20141106-1214" author="sharedhealth" context="setup">
         <comment>creating location table</comment>
         <createTable tableName="location">
-            <column name="location_id" type="varchar(255)">
+            <column name="location_id" type="varchar(20)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="name" type="varchar(100)"/>
-            <column name="type" type="varchar(30)"/>
+            <column name="type" type="varchar(20)"/>
             <column name="level" type="int"/>
-            <column name="parent_id" type="varchar(100)"/>
+            <column name="parent_id" type="varchar(20)"/>
             <column name="code" type="varchar(20)">
                 <constraints nullable="false"/>
             </column>
@@ -70,11 +70,11 @@
             <column name="patient_hid" type="varchar(20)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="dob" type="date">
+            <column name="dob" type="datetime">
                 <constraints nullable="false"/>
             </column>
             <column name="gender" type="varchar(2)"/>
-            <column name="present_location_id" type="varchar(100)"/>
+            <column name="present_location_id" type="varchar(20)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20141106-1249" author="sharedhealth" context="setup">
@@ -85,10 +85,24 @@
             </column>
             <column name="name" type="varchar(50)"/>
             <column name="type" type="varchar(30)"/>
-            <column name="location_id" type="varchar(100)">
-                <constraints foreignKeyName="facility_location_fk" referencedTableName="location"
-                             referencedColumnNames="location_id"/>
+            <column name="location_id" type="varchar(20)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141106-1930" author="sharedhealth" context="setup">
+        <comment>creating encounter table</comment>
+        <createTable tableName="encounter">
+            <column name="encounter_id" type="varchar(20)">
+                <constraints nullable="false" primaryKey="true"/>
             </column>
+            <column name="encounter_datetime" type="datetime">
+                <constraints nullable="false" />
+            </column>
+            <column name="encounter_type" type="varchar(30)"/>
+            <column name="visit_type" type="varchar(30)"/>
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="patient_age" type="int" />
+            <column name="encounter_location_id" type="varchar(20)"/>
+            <column name="facility_id" type="varchar(20)"/>
         </createTable>
     </changeSet>
 </databaseChangeLog>

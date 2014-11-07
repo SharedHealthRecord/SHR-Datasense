@@ -99,7 +99,7 @@
                     <display value="encounter"/>
                 </indication>
                 <serviceProvider>
-                    <reference value="Bahmni"/>
+                    <reference value="10000059"/>
                 </serviceProvider>
             </Encounter>
         </content>
