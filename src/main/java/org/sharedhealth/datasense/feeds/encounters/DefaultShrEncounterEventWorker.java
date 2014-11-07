@@ -1,12 +1,15 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
+import org.hl7.fhir.instance.model.AtomFeed;
 import org.sharedhealth.datasense.model.EncounterBundle;
+import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.model.fhir.FHIRBundle;
 import org.sharedhealth.datasense.processors.ResourceProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 @Component
 public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
@@ -18,9 +21,13 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
     @Override
     public void process(EncounterBundle encounterBundle) {
         System.out.println("in Default Encounter Worker Processor");
-        FHIRBundle fhirBundle = new FHIRBundle(encounterBundle.getResourceOrFeed().getFeed());
-        for (EncounterComposition encounterComposition : fhirBundle.getEncounterCompositions()) {
+        AtomFeed feed = encounterBundle.getResourceOrFeed().getFeed();
+        BundleContext context = new BundleContext(feed, encounterBundle.getEncounterId());
+        List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
+        for (EncounterComposition encounterComposition : encounterCompositions) {
             firstProcessor.process(encounterComposition);
         }
     }
+
+
 }

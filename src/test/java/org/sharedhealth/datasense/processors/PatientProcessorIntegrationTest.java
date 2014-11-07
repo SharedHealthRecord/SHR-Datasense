@@ -11,7 +11,7 @@ import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.Patient;
-import org.sharedhealth.datasense.model.fhir.FHIRBundle;
+import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -63,9 +63,9 @@ public class PatientProcessorIntegrationTest {
     @Test
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
         ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
-        FHIRBundle fhirBundle = new FHIRBundle(resourceOrFeed.getFeed());
+        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
         processor.setNext(null);
-        processor.process(fhirBundle.getEncounterCompositions().get(0));
+        processor.process(context.getEncounterCompositions().get(0));
         Patient patient = patientDao.getPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());
         Date dateOfBirth = patient.getDateOfBirth();

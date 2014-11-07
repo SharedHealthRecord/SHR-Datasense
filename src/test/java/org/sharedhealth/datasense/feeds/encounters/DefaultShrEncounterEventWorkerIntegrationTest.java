@@ -11,6 +11,7 @@ import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.EncounterBundle;
+import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
+import static org.mockito.MockitoAnnotations.initMocks;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
@@ -44,6 +46,9 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     @Autowired
     private FacilityDao facilityDao;
 
+    @Autowired
+    private EncounterDao encounterDao;
+
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8081);
 
@@ -52,6 +57,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
+        initMocks(this);
         givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)

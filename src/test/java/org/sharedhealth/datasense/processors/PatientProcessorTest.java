@@ -6,8 +6,8 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.sharedhealth.datasense.client.MciWebClient;
 import org.sharedhealth.datasense.model.EncounterBundle;
-import org.sharedhealth.datasense.model.fhir.FHIRBundle;
 import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.repository.PatientDao;
 
 import static org.mockito.Mockito.verify;
@@ -37,12 +37,12 @@ public class PatientProcessorTest {
         String healthId = "5927558688825933825";
         EncounterBundle bundle = new EncounterBundle();
         bundle.addContent(loadFromXmlFile("xmls/sampleEncounter.xml"));
-        FHIRBundle fhirBundle = new FHIRBundle(bundle.getResourceOrFeed().getFeed());
+        BundleContext context = new BundleContext(bundle.getResourceOrFeed().getFeed(), "shrEncounterId");
         Patient patient = new Patient();
         when(webClient.identifyPatient(healthId)).thenReturn(patient);
         PatientProcessor processor = new PatientProcessor(null, webClient, patientDao);
-        processor.process(fhirBundle.getEncounterCompositions().get(0));
+        processor.process(context.getEncounterCompositions().get(0));
         verify(patientDao).getPatientById(healthId);
         verify(patientDao).save(patient);
-   }
+    }
 }

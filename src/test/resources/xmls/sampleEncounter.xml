@@ -12,8 +12,7 @@
             <name>bahmni</name>
         </author>
         <content type="text/xml">
-            <Composition
-                    xmlns="http://hl7.org/fhir">
+            <Composition xmlns="http://hl7.org/fhir">
                 <identifier>
                     <value value="Encounter - 544e86e7-9635-4bf8-9790-e256af478c35"/>
                 </identifier>

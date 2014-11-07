@@ -65,7 +65,8 @@ ext.libraries = [
         apache_commons_codec : "commons-codec:commons-codec:1.9",
         fhir_reference       : "me.fhir:fhir-dstu1:0.0.82.2943",
         apache_commons_dbcp  : "commons-dbcp:commons-dbcp:1.4",
-        spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE"
+        spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE",
+        joda                 : "joda-time:joda-time:2.5"
 ]
 
 ext.testLibraries = [
@@ -83,7 +84,7 @@ dependencies {
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
-            libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support
+            libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda
     testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.mysql_connector, testLibraries.h2_database
 }

@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.model.fhir;
 import org.hl7.fhir.instance.model.Composition;
 import org.hl7.fhir.instance.model.Encounter;
 import org.hl7.fhir.instance.model.Resource;
+import org.hl7.fhir.instance.model.ResourceReference;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ public class EncounterComposition {
     private final Composition composition;
     private final BundleContext context;
     private final PatientReference patientReference;
-    private final ServiceProviderReference serviceProviderReference;
+    private  ServiceProviderReference serviceProviderReference;
     private Encounter encounter;
     private List<Resource> resources;
 
@@ -20,7 +21,10 @@ public class EncounterComposition {
         this.context = context;
         encounter = (Encounter) context.getResourceByReference(composition.getEncounter());
         patientReference = new PatientReference(encounter.getSubject());
-        serviceProviderReference = new ServiceProviderReference(encounter.getServiceProvider());
+        ResourceReference serviceProvider = encounter.getServiceProvider();
+        if(serviceProvider != null) {
+            serviceProviderReference = new ServiceProviderReference(serviceProvider);
+        }
         findResourcesFromComposition();
     }
 
@@ -52,5 +56,9 @@ public class EncounterComposition {
 
     public List<Resource> getResources() {
         return resources;
+    }
+
+    public Composition getComposition() {
+        return composition;
     }
 }

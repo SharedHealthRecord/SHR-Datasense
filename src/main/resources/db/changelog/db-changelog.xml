@@ -100,7 +100,9 @@
             <column name="encounter_type" type="varchar(30)"/>
             <column name="visit_type" type="varchar(30)"/>
             <column name="patient_hid" type="varchar(20)"/>
-            <column name="patient_age" type="int" />
+            <column name="patient_age_years" type="int" />
+            <column name="patient_age_months" type="int" />
+            <column name="patient_age_days" type="int" />
             <column name="encounter_location_id" type="varchar(20)"/>
             <column name="facility_id" type="varchar(20)"/>
         </createTable>
