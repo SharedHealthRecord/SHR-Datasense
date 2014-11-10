@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.processors;
+package org.sharedhealth.datasense.processor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.client.FacilityWebClient;

@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.processors;
+package org.sharedhealth.datasense.processor;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.hl7.fhir.instance.formats.ResourceOrFeed;

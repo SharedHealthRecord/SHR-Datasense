@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.processors;
+package org.sharedhealth.datasense.processor;
 
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -11,28 +11,28 @@ import org.sharedhealth.datasense.model.fhir.ServiceProviderReference;
 import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component("clinicalEncounterProcessor")
 public class ClinicalEncounterProcessor implements ResourceProcessor {
-
-
     private EncounterDao encounterDao;
+    private ResourceProcessor nextProcessor;
 
     @Autowired
-    public ClinicalEncounterProcessor(EncounterDao encounterDao) {
+    public ClinicalEncounterProcessor(@Qualifier("subResourceProcessor") ResourceProcessor nextProcessor, EncounterDao encounterDao) {
+        this.nextProcessor = nextProcessor;
         this.encounterDao = encounterDao;
     }
 
-    private ResourceProcessor nextProcessor;
-
     @Override
     public void process(EncounterComposition composition) {
-        org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounter();
+        org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounterReference().getEncounterReferenceValue();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         encounterDao.save(encounter);
+        composition.getEncounterReference().setValue(encounter);
         if (nextProcessor != null) {
             nextProcessor.process(composition);
         }

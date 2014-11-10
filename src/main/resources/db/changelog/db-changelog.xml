@@ -91,7 +91,7 @@
     <changeSet id="sharedhealth-datasense-20141106-1930" author="sharedhealth" context="setup">
         <comment>creating encounter table</comment>
         <createTable tableName="encounter">
-            <column name="encounter_id" type="varchar(20)">
+            <column name="encounter_id" type="varchar(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="encounter_datetime" type="datetime">
@@ -105,6 +105,20 @@
             <column name="patient_age_days" type="int" />
             <column name="encounter_location_id" type="varchar(20)"/>
             <column name="facility_id" type="varchar(20)"/>
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20141110-1158" author="sharedhealth" context="setup">
+        <comment>creating diagnosis table</comment>
+        <createTable tableName="diagnosis">
+            <column name="diagnosis_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)" />
+            <column name="encounter_id" type="varchar(50)" />
+            <column name="diagnosis_datetime" type="datetime"/>
+            <column name="diagnosis_code" type="varchar(10)" />
+            <column name="diagnosis_concept_id" type="varchar(50)" />
+            <column name="diagnosis_status" type="varchar(20)" />
         </createTable>
     </changeSet>
 </databaseChangeLog>

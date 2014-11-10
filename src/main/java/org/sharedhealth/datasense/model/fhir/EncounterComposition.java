@@ -13,15 +13,16 @@ public class EncounterComposition {
     private final BundleContext context;
     private final PatientReference patientReference;
     private  ServiceProviderReference serviceProviderReference;
-    private Encounter encounter;
+    private EncounterReference encounterReference;
     private List<Resource> resources;
 
     public EncounterComposition(Composition composition, BundleContext context) {
         this.composition = composition;
         this.context = context;
-        encounter = (Encounter) context.getResourceByReference(composition.getEncounter());
-        patientReference = new PatientReference(encounter.getSubject());
-        ResourceReference serviceProvider = encounter.getServiceProvider();
+        encounterReference = new EncounterReference(composition.getEncounter(),
+                (Encounter) context.getResourceByReference(composition.getEncounter()));
+        patientReference = new PatientReference(encounterReference.getEncounterReferenceValue().getSubject());
+        ResourceReference serviceProvider = encounterReference.getEncounterReferenceValue().getServiceProvider();
         if(serviceProvider != null) {
             serviceProviderReference = new ServiceProviderReference(serviceProvider);
         }
@@ -37,8 +38,8 @@ public class EncounterComposition {
         }
     }
 
-    public Encounter getEncounter() {
-        return encounter;
+    public EncounterReference getEncounterReference() {
+        return encounterReference;
     }
 
     public PatientReference getPatientReference() {

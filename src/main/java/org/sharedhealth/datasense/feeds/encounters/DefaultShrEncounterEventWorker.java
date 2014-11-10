@@ -4,7 +4,7 @@ import org.hl7.fhir.instance.model.AtomFeed;
 import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.processors.ResourceProcessor;
+import org.sharedhealth.datasense.processor.ResourceProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;

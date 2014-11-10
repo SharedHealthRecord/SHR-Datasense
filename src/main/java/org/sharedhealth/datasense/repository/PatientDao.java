@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.repository;
 
-import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -15,8 +14,6 @@ import java.util.List;
 public class PatientDao {
     @Autowired
     JdbcTemplate jdbcTemplate;
-
-    Logger log = Logger.getLogger(PatientDao.class);
 
     public Patient getPatientById(String healthId) {
         List<Patient> patients = jdbcTemplate.query(

@@ -36,10 +36,11 @@ import static java.lang.System.getenv;
 @Configuration
 @Import({DatabaseConfig.class})
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
-        "org.sharedhealth.datasense.processors",
+        "org.sharedhealth.datasense.processor",
         "org.sharedhealth.datasense.feeds.encounters",
         "org.sharedhealth.datasense.repository",
-        "org.sharedhealth.datasense.client"})
+        "org.sharedhealth.datasense.client",
+        "org.sharedhealth.datasense.handler"})
 public class Main {
 
     @Autowired

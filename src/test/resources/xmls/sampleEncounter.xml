@@ -30,6 +30,12 @@
                 </section>
                 <section>
                     <content>
+                        <reference value="c74f59f4-81f0-4d6c-b550-ac4f98587b6d"/>
+                        <display value="Diagnosis"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
                         <reference value="bcef21a6-da3b-481e-b2f0-03d7068ad658"/>
                         <display value="Vitals"/>
                     </content>
@@ -101,6 +107,52 @@
                     <reference value="10000059"/>
                 </serviceProvider>
             </Encounter>
+        </content>
+    </entry>
+    <entry>
+        <title>Diagnosis</title>
+        <id>urn:c74f59f4-81f0-4d6c-b550-ac4f98587b6d</id>
+        <updated>2014-11-10T11:42:36.400+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Condition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="c74f59f4-81f0-4d6c-b550-ac4f98587b6d"/>
+                </identifier>
+                <subject>
+                    <reference value="5927558688825933825"/>
+                </subject>
+                <encounter>
+                    <reference value="544e86e7-9635-4bf8-9790-e256af478c35"/>
+                    <display value="encounter"/>
+                </encounter>
+                <asserter>
+                    <reference value="13beae59-61e0-450f-8004-0fa4e4b596e3"/>
+                </asserter>
+                <dateAsserted value="2014-10-29T12:28:41+05:30"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c8c6d000-5b3f-460d-995d-ce3778f20d50"/>
+                        <code value="J19.513891"/>
+                        <display value="Viral pneumonia 513891"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/12722059-401d-4ef1-83c7-ebc3fb32bf80"/>
+                        <code value="12722059-401d-4ef1-83c7-ebc3fb32bf80"/>
+                        <display value="Viral pneumonia 513891"/>
+                    </coding>
+                </code>
+                <category>
+                    <coding>
+                        <system value="http://hl7.org/fhir/condition-category"/>
+                        <code value="diagnosis"/>
+                        <display value="Diagnosis"/>
+                    </coding>
+                </category>
+                <status value="provisional"/>
+            </Condition>
         </content>
     </entry>
     <entry>

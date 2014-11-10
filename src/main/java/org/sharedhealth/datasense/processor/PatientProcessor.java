@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.processors;
+package org.sharedhealth.datasense.processor;
 
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.client.MciWebClient;

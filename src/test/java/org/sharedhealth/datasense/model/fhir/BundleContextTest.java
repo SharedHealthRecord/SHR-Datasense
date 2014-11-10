@@ -18,8 +18,8 @@ public class BundleContextTest {
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());
         EncounterComposition encounterComposition = encounterCompositions.get(0);
-        assertNotNull(encounterComposition.getEncounter());
-        assertEquals(6, encounterComposition.getResources().size());
+        assertNotNull(encounterComposition.getEncounterReference().getEncounterReferenceValue());
+        assertEquals(7, encounterComposition.getResources().size());
     }
 
 }
