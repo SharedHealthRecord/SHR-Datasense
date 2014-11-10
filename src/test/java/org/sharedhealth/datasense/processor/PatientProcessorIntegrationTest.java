@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.client.MciWebClient;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -32,14 +33,14 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class PatientProcessorIntegrationTest {
 
+    private PatientProcessor patientProcessor;
     @Autowired
-    private PatientProcessor processor;
-
+    private JdbcTemplate jdbcTemplate;
     @Autowired
-    JdbcTemplate jdbcTemplate;
-
+    private MciWebClient webClient;
     @Autowired
     private PatientDao patientDao;
+    private PatientProcessor processor;
 
     private final String VALID_HEALTH_ID = "5927558688825933825";
 
@@ -53,6 +54,7 @@ public class PatientProcessorIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
+        processor = new PatientProcessor(null, webClient, patientDao);
     }
 
     @After
