@@ -13,6 +13,7 @@ import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.EncounterBundle;
+import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
 import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
@@ -88,7 +89,9 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         encounterEventWorker.process(bundle);
         assertNotNull(encounterEventWorker);
         assertNotNull(patientDao.getPatientById(VALID_HEALTH_ID));
-        assertEquals("Test:Amta Union Sub Center", facilityDao.findFacilityById(VALID_FACILITY_ID).getFacilityName());
+        Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
+        assertNotNull(facility);
+        assertEquals("Test:Amta Union Sub Center", facility.getFacilityName());
 
         Encounter encounter = encounterDao.findEncounterById(shrEncounterId);
         assertNotNull(encounter);
