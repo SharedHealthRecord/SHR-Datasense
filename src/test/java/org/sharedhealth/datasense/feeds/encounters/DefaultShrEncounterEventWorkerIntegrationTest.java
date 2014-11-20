@@ -71,7 +71,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
-        givenThat(get(urlEqualTo("/~stagedgh/dghshrml4/public/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
+        givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")

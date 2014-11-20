@@ -193,6 +193,7 @@ public class Address {
         locationBuilder.append(upazillaId.trim());
         if (StringUtils.isNotBlank(cityCorporationId)) locationBuilder.append(cityCorporationId.trim());
         if (StringUtils.isNotBlank(unionId)) locationBuilder.append(unionId.trim());
+        if (StringUtils.isNotBlank(wardId)) locationBuilder.append(wardId.trim());
         return locationBuilder.toString();
     }
 }
