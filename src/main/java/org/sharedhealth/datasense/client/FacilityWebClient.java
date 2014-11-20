@@ -63,7 +63,8 @@ public class FacilityWebClient {
 
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet request = new HttpGet(getFacilityUrl(facilityId));
+        String facilityUrl = getFacilityUrl(facilityId);
+        HttpGet request = new HttpGet(facilityUrl);
         request.addHeader("X-Auth-Token", properties.getFacilityAuthToken());
         request.addHeader("Accept", "application/json");
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -81,6 +82,8 @@ public class FacilityWebClient {
         };
         try {
             return httpClient.execute(request, responseHandler);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to connect to facility server. [" + facilityUrl +"]", e);
         } finally {
             httpClient.close();
         }

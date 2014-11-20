@@ -49,11 +49,7 @@ public class PatientProcessorIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
-                .willReturn(aResponse()
-                        .withStatus(200)
-                        .withHeader("Content-Type", "application/json")
-                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
+
         processor = new PatientProcessor(null, webClient, patientDao);
     }
 
@@ -64,13 +60,29 @@ public class PatientProcessorIntegrationTest {
 
     @Test
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
+        givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
         ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
-        processor.setNext(null);
         processor.process(context.getEncounterCompositions().get(0));
         Patient patient = patientDao.getPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());
         Date dateOfBirth = patient.getDateOfBirth();
         assertEquals("2000-03-01", new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth));
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void shouldThrowExceptionIfIncorrectUrl() throws Exception {
+        givenThat(get(urlEqualTo("/api/v1/" + VALID_HEALTH_ID))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
+        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        processor.process(context.getEncounterCompositions().get(0));
     }
 }

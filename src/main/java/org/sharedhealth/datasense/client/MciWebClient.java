@@ -36,7 +36,8 @@ public class MciWebClient {
 
     private String getResponse(String healthId) throws URISyntaxException, IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
-        HttpGet request = new HttpGet(getMciURI(healthId));
+        URI mciURI = getMciURI(healthId);
+        HttpGet request = new HttpGet(mciURI);
         request.addHeader("Authorization", getAuthHeader());
         request.addHeader("Accept", "application/json");
         ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -54,6 +55,8 @@ public class MciWebClient {
         };
         try {
             return httpClient.execute(request, responseHandler);
+        } catch (IOException e) {
+            throw new RuntimeException("Unable to connect to MCI server. [" + mciURI +"]", e);
         } finally {
             httpClient.close();
         }
