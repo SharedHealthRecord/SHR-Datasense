@@ -70,7 +70,7 @@
             <column name="patient_hid" type="varchar(20)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="dob" type="datetime">
+            <column name="dob" type="timestamp">
                 <constraints nullable="false"/>
             </column>
             <column name="gender" type="varchar(2)"/>
@@ -94,7 +94,7 @@
             <column name="encounter_id" type="varchar(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="encounter_datetime" type="datetime">
+            <column name="encounter_datetime" type="timestamp">
                 <constraints nullable="false" />
             </column>
             <column name="encounter_type" type="varchar(30)"/>
@@ -115,7 +115,7 @@
             </column>
             <column name="patient_hid" type="varchar(20)" />
             <column name="encounter_id" type="varchar(50)" />
-            <column name="diagnosis_datetime" type="datetime"/>
+            <column name="diagnosis_datetime" type="timestamp"/>
             <column name="diagnosis_code" type="varchar(10)" />
             <column name="diagnosis_concept_id" type="varchar(50)" />
             <column name="diagnosis_status" type="varchar(20)" />

@@ -36,7 +36,7 @@ public class DiagnosisDao {
                     public Diagnosis mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Diagnosis diagnosis = new Diagnosis();
                         diagnosis.setDiagnosisId(rs.getInt("diagnosis_id"));
-                        diagnosis.setDiagnosisDateTime(rs.getDate("diagnosis_datetime"));
+                        diagnosis.setDiagnosisDateTime(new java.util.Date(rs.getTimestamp("diagnosis_datetime").getTime()));
                         diagnosis.setDiagnosisCode(rs.getString("diagnosis_code"));
                         diagnosis.setDiagnosisConceptId(rs.getString("diagnosis_concept_id"));
                         diagnosis.setDiagnosisStatus(rs.getString("diagnosis_status"));

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -37,7 +38,7 @@ public class EncounterDao {
                     public Encounter mapRow(ResultSet rs, int rowNum) throws SQLException {
                        Encounter encounter = new Encounter();
                         encounter.setEncounterId(rs.getString("encounter_id"));
-                        encounter.setEncounterDateTime(rs.getDate("encounter_datetime"));
+                        encounter.setEncounterDateTime(new Date(rs.getTimestamp("encounter_datetime").getTime()));
                         encounter.setEncounterType(rs.getString("encounter_type"));
                         encounter.setEncounterVisitType(rs.getString("visit_type"));
                         encounter.setPatientAgeInYears(rs.getInt("patient_age_years"));

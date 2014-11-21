@@ -35,7 +35,9 @@ public class ServiceProviderProcessor implements ResourceProcessor {
             if (facility == null) {
                 facility = downloadAndSaveFacility(facilityId);
             }
-            composition.getServiceProviderReference().setValue(facility);
+            if(facility != null) {
+                composition.getServiceProviderReference().setValue(facility);
+            }
         }
         callNextIfGiven(composition);
     }

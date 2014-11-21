@@ -20,8 +20,12 @@ import java.util.regex.Pattern;
 @Component
 public class DiagnosisProcessor implements FhirResourceHandler {
 
-    @Autowired
     private DiagnosisDao diagnosisDao;
+
+    @Autowired
+    public DiagnosisProcessor(DiagnosisDao diagnosisDao) {
+        this.diagnosisDao = diagnosisDao;
+    }
 
     @Override
     public boolean canHandle(Resource resource) {

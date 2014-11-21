@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -23,7 +24,7 @@ public class PatientDao {
                     public Patient mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Patient patient = new Patient();
                         patient.setHid(rs.getString("patient_hid"));
-                        patient.setDateOfBirth(rs.getDate("dob"));
+                        patient.setDateOfBirth(new Date(rs.getTimestamp("dob").getTime()));
                         patient.setGender(rs.getString("gender"));
                         patient.setPresentAddressCode(rs.getString("present_location_id"));
                         return patient;
