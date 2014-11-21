@@ -50,9 +50,8 @@ public class PatientProcessor implements ResourceProcessor {
         } catch (URISyntaxException e) {
             throw new RuntimeException("Unable to identify patient in MCI", e);
         } catch (IOException e) {
-            throw new RuntimeException("Unable to identify patient in MCI", e);
+            throw new RuntimeException("Unable to parse response", e);
         }
-
         if (patient == null) {
             throw new RuntimeException("Could not identify patient by health Id:" + healthId);
         }

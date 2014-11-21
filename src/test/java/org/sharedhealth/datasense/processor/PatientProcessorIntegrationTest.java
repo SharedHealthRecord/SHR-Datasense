@@ -49,7 +49,6 @@ public class PatientProcessorIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-
         processor = new PatientProcessor(null, webClient, patientDao);
     }
 

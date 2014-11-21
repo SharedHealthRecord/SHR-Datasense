@@ -31,7 +31,11 @@ public class MciWebClient {
     }
 
     public Patient identifyPatient(String healthId) throws URISyntaxException, IOException {
-        return MapperUtil.readFrom(getResponse(healthId), Patient.class);
+        String response = getResponse(healthId);
+        if (response != null) {
+            return MapperUtil.readFrom(response, Patient.class);
+        }
+        return null;
     }
 
     private String getResponse(String healthId) throws URISyntaxException, IOException {
@@ -49,7 +53,7 @@ public class MciWebClient {
                 } else if (status == 404) {
                     return null;
                 } else {
-                    throw new ClientProtocolException("Unexpected response status: " + status);
+                    throw new ClientProtocolException("Unexpected response status: " + status + ", response: " + response);
                 }
             }
         };
