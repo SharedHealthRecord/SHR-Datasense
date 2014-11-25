@@ -10,6 +10,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
@@ -27,6 +28,7 @@ public class FacilityWebClient {
 
     private DatasenseProperties properties;
 
+    private Logger log = Logger.getLogger(FacilityWebClient.class);
     @Autowired
     public FacilityWebClient(DatasenseProperties properties) {
         this.properties = properties;
@@ -64,6 +66,7 @@ public class FacilityWebClient {
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         String facilityUrl = getFacilityUrl(facilityId);
+        log.info("Reading from " + facilityUrl);
         HttpGet request = new HttpGet(facilityUrl);
         request.addHeader("X-Auth-Token", properties.getFacilityAuthToken());
         request.addHeader("Accept", "application/json");

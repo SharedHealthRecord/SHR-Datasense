@@ -9,6 +9,7 @@ import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.util.MapperUtil;
@@ -25,6 +26,7 @@ public class MciWebClient {
 
     private DatasenseProperties properties;
 
+    private Logger log = Logger.getLogger(MciWebClient.class);
     @Autowired
     public MciWebClient(DatasenseProperties properties) {
         this.properties = properties;
@@ -41,6 +43,7 @@ public class MciWebClient {
     private String getResponse(String healthId) throws URISyntaxException, IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         URI mciURI = getMciURI(healthId);
+        log.info("Reading from " + mciURI);
         HttpGet request = new HttpGet(mciURI);
         request.addHeader("Authorization", getAuthHeader());
         request.addHeader("Accept", "application/json");
