@@ -46,7 +46,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         Patient patient = composition.getPatientReference().getValue();
         encounter.setPatient(patient);
         ServiceProviderReference facilityReference = composition.getServiceProviderReference();
-        if(facilityReference != null) {
+        if(facilityReference != null && facilityReference.getValue() != null) {
             Facility facility = facilityReference.getValue();
             encounter.setFacility(facility);
             encounter.setLocationCode(facility.getFacilityLocationCode());
