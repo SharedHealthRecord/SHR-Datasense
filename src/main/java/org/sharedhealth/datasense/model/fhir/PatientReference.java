@@ -3,6 +3,8 @@ package org.sharedhealth.datasense.model.fhir;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.sharedhealth.datasense.model.Patient;
 
+import static org.apache.commons.lang3.StringUtils.substringAfterLast;
+
 public class PatientReference extends ResourceReference {
     private ResourceReference subject;
     private Patient value;
@@ -12,7 +14,7 @@ public class PatientReference extends ResourceReference {
     }
 
     public String getHealthId() {
-        return subject.getReferenceSimple();
+        return substringAfterLast(subject.getReferenceSimple(),"/");
     }
 
     public void setValue(Patient patient) {

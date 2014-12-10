@@ -33,7 +33,6 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class PatientProcessorIntegrationTest {
 
-    private PatientProcessor patientProcessor;
     @Autowired
     private JdbcTemplate jdbcTemplate;
     @Autowired
@@ -42,7 +41,7 @@ public class PatientProcessorIntegrationTest {
     private PatientDao patientDao;
     private PatientProcessor processor;
 
-    private final String VALID_HEALTH_ID = "5927558688825933825";
+    private final String VALID_HEALTH_ID = "5942395046400622593";
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8081);
@@ -70,7 +69,7 @@ public class PatientProcessorIntegrationTest {
         Patient patient = patientDao.getPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());
         Date dateOfBirth = patient.getDateOfBirth();
-        assertEquals("2000-03-01", new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth));
+        assertEquals("1970-09-18", new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth));
     }
 
     @Test(expected = RuntimeException.class)

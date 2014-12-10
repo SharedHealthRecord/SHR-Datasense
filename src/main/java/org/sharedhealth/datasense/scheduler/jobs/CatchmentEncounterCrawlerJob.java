@@ -59,8 +59,8 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
     }
 
     public Map<String, Object> getFeedProperties(DatasenseProperties properties) {
-        Map<String, Object> feedProps = new HashMap<String, Object>();
-        Map<String, String> headers = new HashMap<String, String>();
+        Map<String, Object> feedProps = new HashMap<>();
+        Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/atom+xml");
         headers.put("facilityId", properties.getDatasenseFacilityId());
         headers.put("Authorization", getAuthHeader(properties));

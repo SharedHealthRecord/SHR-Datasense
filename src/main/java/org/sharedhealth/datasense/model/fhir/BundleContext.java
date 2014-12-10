@@ -33,7 +33,7 @@ public class BundleContext {
     public Resource getResourceByReference(ResourceReference resourceReference) {
         for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
             //TODO we need to fix resource reference as par FHIR bundle spec
-            if (entry.getId().equals("urn:" +  resourceReference.getReferenceSimple())) {
+            if (entry.getId().equals(resourceReference.getReferenceSimple())) {
                 return entry.getResource();
             }
         }

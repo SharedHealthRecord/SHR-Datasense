@@ -2,8 +2,8 @@ package org.sharedhealth.datasense.processor;
 
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.client.MciWebClient;
-import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;

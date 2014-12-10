@@ -29,7 +29,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        String facilityId = composition.getServiceProviderReference().getFacilityId();
+        String facilityId = parseUrl(composition.getServiceProviderReference().getFacilityId());
         if (StringUtils.isNotBlank(facilityId)) {
             Facility facility = facilityDao.findFacilityById(facilityId);
             if (facility == null) {
@@ -71,5 +71,10 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     @Override
     public void setNext(ResourceProcessor nextProcessor) {
         this.nextProcessor = nextProcessor;
+    }
+
+    protected String parseUrl(String facilityUrl) {
+        String s = StringUtils.substringAfterLast(facilityUrl, "/");
+        return StringUtils.substringBefore(s, ".json");
     }
 }

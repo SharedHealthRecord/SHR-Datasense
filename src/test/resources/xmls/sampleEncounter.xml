@@ -1,73 +1,76 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<feed
-        xmlns="http://www.w3.org/2005/Atom">
+<feed xmlns="http://www.w3.org/2005/Atom">
     <title>Encounter</title>
-    <id>urn:e5bf9730-c185-433f-b1a4-3a18dee1422b</id>
-    <updated>2014-10-29T12:28:41+05:30</updated>
+    <id>urn:ea0ff2d8-e8a3-4228-9e70-c19af88a0abb</id>
+    <updated>2014-12-09T10:59:27+05:30</updated>
     <entry>
         <title>Composition</title>
-        <id>urn:Encounter - 544e86e7-9635-4bf8-9790-e256af478c35</id>
-        <updated>2014-10-29T12:29:36.096+05:30</updated>
+        <id>urn:40e025cd-6412-498f-baac-6fbf7338a9be</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
         <author>
             <name>bahmni</name>
         </author>
         <content type="text/xml">
             <Composition xmlns="http://hl7.org/fhir">
                 <identifier>
-                    <value value="Encounter - 544e86e7-9635-4bf8-9790-e256af478c35"/>
+                    <value value="urn:40e025cd-6412-498f-baac-6fbf7338a9be" />
                 </identifier>
-                <date value="2014-10-29T12:28:41+05:30"/>
-                <status value="final"/>
+                <date value="2014-12-09T10:59:27+05:30" />
+                <status value="final" />
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
                 <encounter>
-                    <reference value="544e86e7-9635-4bf8-9790-e256af478c35"/>
-                    <display value="encounter"/>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
                 </encounter>
                 <section>
                     <content>
-                        <reference value="544e86e7-9635-4bf8-9790-e256af478c35"/>
-                        <display value="Encounter"/>
+                        <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                        <display value="Encounter" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="c74f59f4-81f0-4d6c-b550-ac4f98587b6d"/>
-                        <display value="Diagnosis"/>
+                        <reference value="urn:f819760c-cf6f-422d-8b0e-ccc995da76df" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="bcef21a6-da3b-481e-b2f0-03d7068ad658"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:41c5a6b2-8d96-40f0-8c2d-bbf7348644d2" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="78c074b7-efb4-47fa-80da-0443bf614b19"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:e431e34a-2830-4831-ac8b-38554c346651" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="f79df041-8034-4931-84f0-0c4e80d367ee"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:26499bfd-8a10-46c0-89eb-aef9473d37b3" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="f8ec8957-16e4-46f1-9e25-ab5a4217c992"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:3aa6c50f-2cfe-4f41-a54c-34bdca5966e0" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="63f56378-82b5-4e35-9bf6-89d1540c2e15"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:b26e6398-6e76-46ed-abb2-6b61d623467c" />
+                        <display value="Vitals" />
                     </content>
                 </section>
                 <section>
                     <content>
-                        <reference value="38defc3c-66d8-40ed-a877-aefed9d14813"/>
-                        <display value="Vitals"/>
+                        <reference value="urn:2801e2b9-3886-4bf5-919f-ce9268fdc317" />
+                        <display value="Diagnosis" />
                     </content>
                 </section>
             </Composition>
@@ -75,63 +78,258 @@
     </entry>
     <entry>
         <title>Encounter</title>
-        <id>urn:544e86e7-9635-4bf8-9790-e256af478c35</id>
-        <updated>2014-10-29T12:29:36.096+05:30</updated>
+        <id>urn:7efb426e-5b2b-4faa-99b1-9ffe63056048</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
         <author>
             <name>bahmni</name>
         </author>
         <content type="text/xml">
-            <Encounter
-                    xmlns="http://hl7.org/fhir">
+            <Encounter xmlns="http://hl7.org/fhir">
                 <identifier>
-                    <value value="544e86e7-9635-4bf8-9790-e256af478c35"/>
+                    <value value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
                 </identifier>
-                <status value="finished"/>
-                <class value="outpatient"/>
+                <status value="finished" />
+                <class value="outpatient" />
                 <type>
-                    <text value="OPD"/>
+                    <text value="Consultation" />
                 </type>
                 <subject>
-                    <reference value="5927558688825933825"/>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
                 </subject>
-                <participant>
-                    <individual>
-                        <reference value="13beae59-61e0-450f-8004-0fa4e4b596e3"/>
-                    </individual>
-                </participant>
                 <indication>
-                    <reference value="544e86e7-9635-4bf8-9790-e256af478c35"/>
-                    <display value="encounter"/>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
                 </indication>
                 <serviceProvider>
-                    <reference value="10000059"/>
+                    <reference value="http://http://pagani.websitewelcome.com/~stagedgh/dghshrml4/public/api/1.0//facilities/10000059.json" />
                 </serviceProvider>
             </Encounter>
         </content>
     </entry>
     <entry>
+        <title>Vitals</title>
+        <id>urn:f819760c-cf6f-422d-8b0e-ccc995da76df</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/dd7d33d9-d7a5-4596-98fa-03a88ba631e1" />
+                        <code value="dd7d33d9-d7a5-4596-98fa-03a88ba631e1" />
+                        <display value="Systolic" />
+                    </coding>
+                </name>
+                <valueDecimal value="21.0" />
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:f819760c-cf6f-422d-8b0e-ccc995da76df" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Vitals</title>
+        <id>urn:41c5a6b2-8d96-40f0-8c2d-bbf7348644d2</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/7f6af303-e803-4d62-bbb4-e039ada4c837" />
+                        <code value="7f6af303-e803-4d62-bbb4-e039ada4c837" />
+                        <display value="Diastolic" />
+                    </coding>
+                </name>
+                <valueDecimal value="12.0" />
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:41c5a6b2-8d96-40f0-8c2d-bbf7348644d2" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Vitals</title>
+        <id>urn:e431e34a-2830-4831-ac8b-38554c346651</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/c8e87979-9198-490f-8afe-4673f810825d" />
+                        <code value="c8e87979-9198-490f-8afe-4673f810825d" />
+                        <display value="Blood Pressure" />
+                    </coding>
+                </name>
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:e431e34a-2830-4831-ac8b-38554c346651" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+                <related>
+                    <type value="has-component" />
+                    <target>
+                        <reference value="urn:f819760c-cf6f-422d-8b0e-ccc995da76df" />
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component" />
+                    <target>
+                        <reference value="urn:41c5a6b2-8d96-40f0-8c2d-bbf7348644d2" />
+                    </target>
+                </related>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Vitals</title>
+        <id>urn:26499bfd-8a10-46c0-89eb-aef9473d37b3</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/ac83596d-5bb9-43b0-8db6-e90fa2a6e1e9" />
+                        <code value="ac83596d-5bb9-43b0-8db6-e90fa2a6e1e9" />
+                        <display value="Pulse" />
+                    </coding>
+                </name>
+                <valueDecimal value="32.0" />
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:26499bfd-8a10-46c0-89eb-aef9473d37b3" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Vitals</title>
+        <id>urn:3aa6c50f-2cfe-4f41-a54c-34bdca5966e0</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/ed7401ef-c8ac-4af8-bf7c-1ed1d7147c78" />
+                        <code value="ed7401ef-c8ac-4af8-bf7c-1ed1d7147c78" />
+                        <display value="Temperature" />
+                    </coding>
+                </name>
+                <valueDecimal value="98.0" />
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:3aa6c50f-2cfe-4f41-a54c-34bdca5966e0" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Vitals</title>
+        <id>urn:b26e6398-6e76-46ed-abb2-6b61d623467c</id>
+        <updated>2014-12-09T10:59:59.544+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.53:9080/openmrs/ws/rest/v1/tr/concepts/970b1e8e-ecb7-4c79-aec8-d25b5c551a66" />
+                        <code value="970b1e8e-ecb7-4c79-aec8-d25b5c551a66" />
+                        <display value="Vitals" />
+                    </coding>
+                </name>
+                <status value="final" />
+                <reliability value="ok" />
+                <identifier>
+                    <value value="urn:b26e6398-6e76-46ed-abb2-6b61d623467c" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
+                </subject>
+                <related>
+                    <type value="has-component" />
+                    <target>
+                        <reference value="urn:e431e34a-2830-4831-ac8b-38554c346651" />
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component" />
+                    <target>
+                        <reference value="urn:26499bfd-8a10-46c0-89eb-aef9473d37b3" />
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component" />
+                    <target>
+                        <reference value="urn:3aa6c50f-2cfe-4f41-a54c-34bdca5966e0" />
+                    </target>
+                </related>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
         <title>Diagnosis</title>
-        <id>urn:c74f59f4-81f0-4d6c-b550-ac4f98587b6d</id>
-        <updated>2014-11-10T11:42:36.400+05:30</updated>
+        <id>urn:2801e2b9-3886-4bf5-919f-ce9268fdc317</id>
+        <updated>2014-12-09T10:59:59.650+05:30</updated>
         <author>
             <name>bahmni</name>
         </author>
         <content type="text/xml">
             <Condition xmlns="http://hl7.org/fhir">
                 <identifier>
-                    <value value="c74f59f4-81f0-4d6c-b550-ac4f98587b6d"/>
+                    <value value="urn:2801e2b9-3886-4bf5-919f-ce9268fdc317" />
                 </identifier>
                 <subject>
-                    <reference value="5927558688825933825"/>
+                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <display value="5942395046400622593" />
                 </subject>
                 <encounter>
-                    <reference value="544e86e7-9635-4bf8-9790-e256af478c35"/>
-                    <display value="encounter"/>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
                 </encounter>
-                <asserter>
-                    <reference value="13beae59-61e0-450f-8004-0fa4e4b596e3"/>
-                </asserter>
-                <dateAsserted value="2014-10-29T12:28:41+05:30"/>
+                <dateAsserted value="2014-12-09T10:59:28+05:30" />
                 <code>
                     <coding>
                         <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c8c6d000-5b3f-460d-995d-ce3778f20d50"/>
@@ -146,215 +344,13 @@
                 </code>
                 <category>
                     <coding>
-                        <system value="http://hl7.org/fhir/condition-category"/>
-                        <code value="diagnosis"/>
-                        <display value="Diagnosis"/>
+                        <system value="http://hl7.org/fhir/condition-category" />
+                        <code value="diagnosis" />
+                        <display value="Diagnosis" />
                     </coding>
                 </category>
-                <status value="provisional"/>
+                <status value="confirmed" />
             </Condition>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:bcef21a6-da3b-481e-b2f0-03d7068ad658</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/af747d2f-8946-4ca2-93ec-5eb76986aff8"/>
-                        <code value="af747d2f-8946-4ca2-93ec-5eb76986aff8"/>
-                        <display value="Diastolic"/>
-                    </coding>
-                </name>
-                <valueDecimal value="76.3"/>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="bcef21a6-da3b-481e-b2f0-03d7068ad658"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-            </Observation>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:78c074b7-efb4-47fa-80da-0443bf614b19</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/77405a73-b915-4a93-87a7-f29fe6697fb4"/>
-                        <code value="77405a73-b915-4a93-87a7-f29fe6697fb4"/>
-                        <display value="Systolic"/>
-                    </coding>
-                </name>
-                <valueDecimal value="112.1"/>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="78c074b7-efb4-47fa-80da-0443bf614b19"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-            </Observation>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:f79df041-8034-4931-84f0-0c4e80d367ee</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/e69ef886-6914-4ed7-93a8-7b951dbf7139"/>
-                        <code value="e69ef886-6914-4ed7-93a8-7b951dbf7139"/>
-                        <display value="Blood Pressure"/>
-                    </coding>
-                </name>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="f79df041-8034-4931-84f0-0c4e80d367ee"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-                <related>
-                    <type value="has-component"/>
-                    <target>
-                        <reference value="bcef21a6-da3b-481e-b2f0-03d7068ad658"/>
-                    </target>
-                </related>
-                <related>
-                    <type value="has-component"/>
-                    <target>
-                        <reference value="78c074b7-efb4-47fa-80da-0443bf614b19"/>
-                    </target>
-                </related>
-            </Observation>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:f8ec8957-16e4-46f1-9e25-ab5a4217c992</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/22a952b6-cc36-45e8-8b52-ff5a90fa7c4f"/>
-                        <code value="22a952b6-cc36-45e8-8b52-ff5a90fa7c4f"/>
-                        <display value="Pulse"/>
-                    </coding>
-                </name>
-                <valueDecimal value="72.7"/>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="f8ec8957-16e4-46f1-9e25-ab5a4217c992"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-            </Observation>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:63f56378-82b5-4e35-9bf6-89d1540c2e15</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/a1257651-7473-4c9b-bb0a-1244c5f3c09d"/>
-                        <code value="a1257651-7473-4c9b-bb0a-1244c5f3c09d"/>
-                        <display value="Temperature"/>
-                    </coding>
-                </name>
-                <valueDecimal value="99.4"/>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="63f56378-82b5-4e35-9bf6-89d1540c2e15"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-            </Observation>
-        </content>
-    </entry>
-    <entry>
-        <title>Vitals</title>
-        <id>urn:38defc3c-66d8-40ed-a877-aefed9d14813</id>
-        <updated>2014-10-29T12:29:36.135+05:30</updated>
-        <author>
-            <name>bahmni</name>
-        </author>
-        <content type="text/xml">
-            <Observation
-                    xmlns="http://hl7.org/fhir">
-                <name>
-                    <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/44c245dd-d234-4991-a8b2-3c4a54d5092b"/>
-                        <code value="44c245dd-d234-4991-a8b2-3c4a54d5092b"/>
-                        <display value="Vitals"/>
-                    </coding>
-                </name>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="38defc3c-66d8-40ed-a877-aefed9d14813"/>
-                </identifier>
-                <subject>
-                    <reference value="5927558688825933825"/>
-                </subject>
-                <related>
-                    <type value="has-component"/>
-                    <target>
-                        <reference value="f79df041-8034-4931-84f0-0c4e80d367ee"/>
-                    </target>
-                </related>
-                <related>
-                    <type value="has-component"/>
-                    <target>
-                        <reference value="f8ec8957-16e4-46f1-9e25-ab5a4217c992"/>
-                    </target>
-                </related>
-                <related>
-                    <type value="has-component"/>
-                    <target>
-                        <reference value="63f56378-82b5-4e35-9bf6-89d1540c2e15"/>
-                    </target>
-                </related>
-            </Observation>
         </content>
     </entry>
 </feed>

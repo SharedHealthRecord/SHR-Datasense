@@ -34,7 +34,7 @@ public class PatientProcessorTest {
     @Test
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
 
-        String healthId = "5927558688825933825";
+        String healthId = "5942395046400622593";
         EncounterBundle bundle = new EncounterBundle();
         bundle.addContent(loadFromXmlFile("xmls/sampleEncounter.xml"));
         BundleContext context = new BundleContext(bundle.getResourceOrFeed().getFeed(), "shrEncounterId");

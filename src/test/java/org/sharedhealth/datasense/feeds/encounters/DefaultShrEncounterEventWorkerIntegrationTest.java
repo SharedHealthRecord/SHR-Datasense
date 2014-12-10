@@ -60,7 +60,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(8081);
 
-    private static String VALID_HEALTH_ID = "5927558688825933825";
+    private static String VALID_HEALTH_ID = "5942395046400622593";
     private static String VALID_FACILITY_ID = "10000059";
 
     @Before

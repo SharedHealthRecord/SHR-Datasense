@@ -16,7 +16,7 @@ public class EncounterCompositionTest {
         BundleContext context = new BundleContext(encounterResource.getFeed(), "shrEncounterId");
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());
-        assertEquals("5927558688825933825", encounterCompositions.get(0).getPatientReference().getHealthId());
+        assertEquals("5942395046400622593", encounterCompositions.get(0).getPatientReference().getHealthId());
     }
 
 }

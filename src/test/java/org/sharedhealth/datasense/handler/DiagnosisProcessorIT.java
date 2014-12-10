@@ -66,11 +66,11 @@ public class DiagnosisProcessorIT {
         encounter.setEncounterId(shrEncounterId);
         composition.getEncounterReference().setValue(encounter);
         Patient patient = new Patient();
-        String hid = "5927558688825933825";
+        String hid = "5942395046400622593";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
         ResourceReference resourceReference = new ResourceReference();
-        resourceReference.setReferenceSimple("c74f59f4-81f0-4d6c-b550-ac4f98587b6d");
+        resourceReference.setReferenceSimple("urn:2801e2b9-3886-4bf5-919f-ce9268fdc317");
         Resource resource = context.getResourceByReference(resourceReference);
         processor.process(resource, composition);
         List<Diagnosis> diagnosises = diagnosisDao.findByEncounterId(shrEncounterId);
@@ -79,8 +79,8 @@ public class DiagnosisProcessorIT {
         assertEquals(shrEncounterId, diagnosis.getEncounter().getEncounterId());
         assertEquals("J19.513891", diagnosis.getDiagnosisCode());
         assertEquals("12722059-401d-4ef1-83c7-ebc3fb32bf80", diagnosis.getDiagnosisConcept());
-        assertEquals("provisional", diagnosis.getDiagnosisStatus());
-        assertTrue(DateUtil.parseDate("2014-10-29T12:28:41+05:30").equals(diagnosis.getDiagnosisDateTime()));
+        assertEquals("confirmed", diagnosis.getDiagnosisStatus());
+        assertTrue(DateUtil.parseDate("2014-12-09T10:59:28+05:30").equals(diagnosis.getDiagnosisDateTime()));
         assertEquals(hid, diagnosis.getPatient().getHid());
     }
 }

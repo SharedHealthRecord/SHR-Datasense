@@ -61,7 +61,7 @@ public class ClinicalEncounterProcessorIT {
         Patient patient = new Patient();
         Date dob = new SimpleDateFormat("yyyy-MM-dd").parse("1999-10-22");
         patient.setDateOfBirth(dob);
-        String hid = "5927558688825933825";
+        String hid = "5942395046400622593";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
         String facilityId = "10000059";
@@ -76,8 +76,8 @@ public class ClinicalEncounterProcessorIT {
         assertEquals(hid, encounter.getPatient().getHid());
         assertEquals(facilityId, encounter.getFacility().getFacilityId());
         assertEquals(facilityLocation, encounter.getLocationCode());
-        assertEquals(DateUtil.parseDate("2014-10-29T12:28:41+05:30"), encounter.getEncounterDateTime());
-        assertEquals("OPD", encounter.getEncounterType());
+        assertEquals(DateUtil.parseDate("2014-12-09T10:59:27.000+0530"), encounter.getEncounterDateTime());
+        assertEquals("Consultation", encounter.getEncounterType());
         assertEquals("outpatient", encounter.getEncounterVisitType());
     }
 }
