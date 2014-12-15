@@ -17,14 +17,14 @@ public class Address {
     @JsonProperty("district_id")
     private String districtId;
 
-    @JsonProperty("upazilla_id")
-    private String upazillaId;
+    @JsonProperty("upazila_id")
+    private String upazilaId;
 
     @JsonProperty("city_corporation_id")
     private String cityCorporationId;
 
-    @JsonProperty("ward_id")
-    private String wardId;
+    @JsonProperty("union_or_urban_ward_id")
+    private String unionOrUrbanWardId;
 
     @JsonProperty("union_id")
     @JsonInclude(NON_EMPTY)
@@ -37,13 +37,13 @@ public class Address {
     public Address() {
     }
 
-    public Address(String addressLine, String divisionId, String districtId, String upazillaId, String cityCorporationId, String wardId, String unionId, String thanaId) {
+    public Address(String addressLine, String divisionId, String districtId, String upazilaId, String cityCorporationId, String unionOrUrbanWardId, String unionId, String thanaId) {
         this.addressLine = addressLine;
         this.divisionId = divisionId;
         this.districtId = districtId;
-        this.upazillaId = upazillaId;
+        this.upazilaId = upazilaId;
         this.cityCorporationId = cityCorporationId;
-        this.wardId = wardId;
+        this.unionOrUrbanWardId = unionOrUrbanWardId;
         this.unionId = unionId;
         this.thanaId = thanaId;
     }
@@ -58,10 +58,10 @@ public class Address {
         if (addressLine != null ? !addressLine.equals(address.addressLine) : address.addressLine != null) return false;
         if (divisionId != null ? !divisionId.equals(address.divisionId) : address.divisionId != null) return false;
         if (districtId != null ? !districtId.equals(address.districtId) : address.districtId != null) return false;
-        if (upazillaId != null ? !upazillaId.equals(address.upazillaId) : address.upazillaId != null) return false;
+        if (upazilaId != null ? !upazilaId.equals(address.upazilaId) : address.upazilaId != null) return false;
         if (cityCorporationId != null ? !cityCorporationId.equals(address.cityCorporationId) : address.cityCorporationId != null)
             return false;
-        if (wardId != null ? !wardId.equals(address.wardId) : address.wardId != null) return false;
+        if (unionOrUrbanWardId != null ? !unionOrUrbanWardId.equals(address.unionOrUrbanWardId) : address.unionOrUrbanWardId != null) return false;
         if (unionId != null ? !unionId.equals(address.unionId) : address.unionId != null) return false;
         if (thanaId != null ? !thanaId.equals(address.thanaId) : address.thanaId != null) return false;
 
@@ -73,9 +73,9 @@ public class Address {
         int result = addressLine != null ? addressLine.hashCode() : 0;
         result = 31 * result + (divisionId != null ? divisionId.hashCode() : 0);
         result = 31 * result + (districtId != null ? districtId.hashCode() : 0);
-        result = 31 * result + (upazillaId != null ? upazillaId.hashCode() : 0);
+        result = 31 * result + (upazilaId != null ? upazilaId.hashCode() : 0);
         result = 31 * result + (cityCorporationId != null ? cityCorporationId.hashCode() : 0);
-        result = 31 * result + (wardId != null ? wardId.hashCode() : 0);
+        result = 31 * result + (unionOrUrbanWardId != null ? unionOrUrbanWardId.hashCode() : 0);
         result = 31 * result + (unionId != null ? unionId.hashCode() : 0);
         result = 31 * result + (thanaId != null ? thanaId.hashCode() : 0);
         return result;
@@ -87,9 +87,9 @@ public class Address {
         sb.append("addressLine='").append(addressLine).append('\'');
         sb.append(", divisionId='").append(divisionId).append('\'');
         sb.append(", districtId='").append(districtId).append('\'');
-        sb.append(", upazillaId='").append(upazillaId).append('\'');
+        sb.append(", upazilaId='").append(upazilaId).append('\'');
         sb.append(", cityCorporationId='").append(cityCorporationId).append('\'');
-        sb.append(", wardId='").append(wardId).append('\'');
+        sb.append(", unionOrUrbanWardId='").append(unionOrUrbanWardId).append('\'');
         sb.append(", unionId='").append(unionId).append('\'');
         sb.append(", thanaId='").append(thanaId).append('\'');
         sb.append('}');
@@ -120,12 +120,12 @@ public class Address {
         this.districtId = districtId;
     }
 
-    public String getUpazillaId() {
-        return upazillaId;
+    public String getUpazilaId() {
+        return upazilaId;
     }
 
-    public void setUpazillaId(String upazillaId) {
-        this.upazillaId = upazillaId;
+    public void setUpazilaId(String upazilaId) {
+        this.upazilaId = upazilaId;
     }
 
     public String getCityCorporationId() {
@@ -136,12 +136,12 @@ public class Address {
         this.cityCorporationId = cityCorporationId;
     }
 
-    public String getWardId() {
-        return wardId;
+    public String getUnionOrUrbanWardId() {
+        return unionOrUrbanWardId;
     }
 
-    public void setWardId(String wardId) {
-        this.wardId = wardId;
+    public void setUnionOrUrbanWardId(String unionOrUrbanWardId) {
+        this.unionOrUrbanWardId = unionOrUrbanWardId;
     }
 
     public String createUserGeneratedDistrictId() {
@@ -149,15 +149,15 @@ public class Address {
     }
 
     public String createUserGeneratedUpazillaId() {
-        return divisionId + districtId + upazillaId;
+        return divisionId + districtId + upazilaId;
     }
 
     public String createUserGeneratedCityCorporationId() {
-        return divisionId + districtId + upazillaId + cityCorporationId;
+        return divisionId + districtId + upazilaId + cityCorporationId;
     }
 
     public String createUserGeneratedWardId() {
-        return divisionId + districtId + upazillaId + cityCorporationId + wardId;
+        return divisionId + districtId + upazilaId + cityCorporationId + unionOrUrbanWardId;
     }
 
     public String getUnionId() {
@@ -190,10 +190,10 @@ public class Address {
         StringBuilder locationBuilder = new StringBuilder();
         locationBuilder.append(divisionId.trim());
         locationBuilder.append(districtId.trim());
-        locationBuilder.append(upazillaId.trim());
+        locationBuilder.append(upazilaId.trim());
         if (StringUtils.isNotBlank(cityCorporationId)) locationBuilder.append(cityCorporationId.trim());
         if (StringUtils.isNotBlank(unionId)) locationBuilder.append(unionId.trim());
-        if (StringUtils.isNotBlank(wardId)) locationBuilder.append(wardId.trim());
+        if (StringUtils.isNotBlank(unionOrUrbanWardId)) locationBuilder.append(unionOrUrbanWardId.trim());
         return locationBuilder.toString();
     }
 }

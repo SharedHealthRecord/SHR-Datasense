@@ -56,10 +56,10 @@ public class FacilityWebClient {
         Address address = new Address();
         address.setDistrictId((String) locations.get("district_code"));
         address.setDivisionId((String) locations.get("division_code"));
-        address.setUpazillaId((String) locations.get("upazila_code"));
+        address.setUpazilaId((String) locations.get("upazila_code"));
         address.setCityCorporationId((String) locations.get("paurasava_code"));
         address.setUnionId((String) locations.get("union_code"));
-        address.setWardId((String) locations.get("ward_code"));
+        address.setUnionOrUrbanWardId((String) locations.get("ward_code"));
         return address;
     }
 

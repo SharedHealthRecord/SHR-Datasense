@@ -10,8 +10,8 @@
         "address_line": "India",
         "division_id": "30",
         "district_id": "93",
-        "upazilla_id": "09",
-        "ward_id": "05",
+        "upazila_id": "09",
+        "union_or_urban_ward_id": "05",
         "city_corporation_id": "08",
         "country_code": "050"
     },
