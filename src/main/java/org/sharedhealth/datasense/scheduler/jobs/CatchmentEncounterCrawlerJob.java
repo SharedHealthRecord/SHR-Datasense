@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.scheduler.jobs;
 
-import org.apache.commons.codec.binary.Base64;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.quartz.JobExecutionContext;
@@ -13,21 +12,21 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.net.URISyntaxException;
-import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 
 public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
 
-    private int catchment = 3026;
-    DataSourceTransactionManager txMgr;
+    public static final String AUTH_HEADER = "X-Auth-Token";
+    DataSourceTransactionManager transactionManager;
     private DatasenseProperties properties;
 
     private EncounterEventWorker encounterEventWorker;
 
-    public void setTxMgr(DataSourceTransactionManager txMgr) {
-        this.txMgr = txMgr;
+    public void setTransactionManager(DataSourceTransactionManager transactionManager) {
+        this.transactionManager = transactionManager;
     }
 
     public void setProperties(DatasenseProperties properties) {
@@ -42,7 +41,8 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         for (String catchment : properties.getDatasenseCatchmentList()) {
             String feedUrl = properties.getShrBaseUrl() + "/catchments/" + catchment + "/encounters";
-            AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
+            AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(this
+                    .transactionManager);
             ShrEncounterFeedProcessor feedCrawler =
                     new ShrEncounterFeedProcessor(
                             encounterEventWorker, feedUrl,
@@ -63,14 +63,9 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
         Map<String, String> headers = new HashMap<>();
         headers.put("Accept", "application/atom+xml");
         headers.put("facilityId", properties.getDatasenseFacilityId());
-        headers.put("Authorization", getAuthHeader(properties));
+        headers.put(AUTH_HEADER, UUID.randomUUID().toString());
         feedProps.put("headers", headers);
         return feedProps;
     }
 
-    public String getAuthHeader(DatasenseProperties properties) {
-        String auth = properties.getShrHost() + ":" + properties.getShrPassword();
-        byte[] encodedAuth = Base64.encodeBase64(auth.getBytes(Charset.forName("UTF-8")));
-        return "Basic " + new String(encodedAuth);
-    }
 }
