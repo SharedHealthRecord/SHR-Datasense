@@ -1,0 +1,15 @@
+[
+  {
+    "queryGroupname": "Query Group 1",
+    "queries": [
+      {
+        "queryName": "Query 1",
+        "query": "select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= :MIN_YEAR: and e.patient_age_years < :MAX_YEAR: and p.gender=':GENDER:' and e.visit_type=':VISIT_TYPE:' and encounter_datetime=':ENC_DATE:';"
+      },
+      {
+        "queryName": "Query 2",
+        "query": "select count(distinct e.patient_hid) as v2 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= :MIN_YEAR: and e.patient_age_years < :MAX_YEAR: and p.gender=':GENDER2:' and e.visit_type=':VISIT_TYPE:' and encounter_datetime=':ENC_DATE:';"
+      }
+    ]
+  }
+]

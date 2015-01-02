@@ -36,7 +36,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class DiagnosisProcessorIT {
     @Autowired
-    DiagnosisProcessor processor;
+    DiagnosisResourceHandler processor;
 
     @Autowired
     DiagnosisDao diagnosisDao;
@@ -48,7 +48,7 @@ public class DiagnosisProcessorIT {
 
     @Before
     public void setUp() throws Exception {
-        processor = new DiagnosisProcessor(diagnosisDao);
+        processor = new DiagnosisResourceHandler(diagnosisDao);
     }
 
     @After

@@ -15,6 +15,8 @@ import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -36,14 +38,18 @@ public class ServiceProviderProcessorIT {
     FacilityDao facilityDao;
     @Autowired
     FacilityWebClient webClient;
+    @Autowired
+    @Qualifier("dhisFacilitiesMap")
+    private PropertiesFactoryBean dhisFacilitiesMap;
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8081);
+    public WireMockRule wireMockRule = new WireMockRule(9997);
 
-    private static String VALID_FACILITY_ID = "10000059";
+    private static String VALID_FACILITY_ID = "10000069";
     private ServiceProviderProcessor processor;
+
     @Before
     public void setUp() throws Exception {
-        processor = new ServiceProviderProcessor(null, facilityDao, webClient);
+        processor = new ServiceProviderProcessor(null, facilityDao, webClient, dhisFacilitiesMap);
     }
 
     @After
@@ -63,9 +69,10 @@ public class ServiceProviderProcessorIT {
         processor.process(context.getEncounterCompositions().get(0));
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
         assertNotNull(facility);
-        assertEquals("Test:Amta Union Sub Center", facility.getFacilityName());
-        assertEquals("Union Sub-center", facility.getFacilityType());
-        assertEquals("302614", facility.getFacilityLocationCode());
+        assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
+        assertEquals("Upazila Health Complex", facility.getFacilityType());
+        assertEquals("302618", facility.getFacilityLocationCode());
+        assertEquals("nRm6mKjJsaE",facility.getDhisOrgUnitUid());
     }
 
     @Test(expected = RuntimeException.class)

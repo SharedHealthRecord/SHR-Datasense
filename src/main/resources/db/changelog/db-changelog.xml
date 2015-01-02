@@ -121,4 +121,11 @@
             <column name="diagnosis_status" type="varchar(20)" />
         </createTable>
     </changeSet>
+
+    <changeSet id="sharedhealth-datasense-20150102-1204" author="sharedhealth" context="setup">
+        <comment>adding column dhis_org_unit_uid</comment>
+        <addColumn tableName="facility">
+            <column name="dhis_org_unit_uid" type="varchar(15)"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

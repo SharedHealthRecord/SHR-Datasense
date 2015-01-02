@@ -18,7 +18,7 @@
                 <date value="2014-12-09T10:59:27+05:30" />
                 <status value="final" />
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
                 <encounter>
@@ -94,7 +94,7 @@
                     <text value="Consultation" />
                 </type>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
                 <indication>
@@ -102,7 +102,7 @@
                     <display value="Encounter" />
                 </indication>
                 <serviceProvider>
-                    <reference value="http://http://pagani.websitewelcome.com/~stagedgh/dghshrml4/public/api/1.0//facilities/10000059.json" />
+                    <reference value="http://pagani.websitewelcome.com/~stagedgh/dghshrml4/public/api/1.0//facilities/10000069.json" />
                 </serviceProvider>
             </Encounter>
         </content>
@@ -130,7 +130,7 @@
                     <value value="urn:f819760c-cf6f-422d-8b0e-ccc995da76df" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
             </Observation>
@@ -159,7 +159,7 @@
                     <value value="urn:41c5a6b2-8d96-40f0-8c2d-bbf7348644d2" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
             </Observation>
@@ -187,7 +187,7 @@
                     <value value="urn:e431e34a-2830-4831-ac8b-38554c346651" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
                 <related>
@@ -228,7 +228,7 @@
                     <value value="urn:26499bfd-8a10-46c0-89eb-aef9473d37b3" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
             </Observation>
@@ -257,7 +257,7 @@
                     <value value="urn:3aa6c50f-2cfe-4f41-a54c-34bdca5966e0" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
             </Observation>
@@ -285,7 +285,7 @@
                     <value value="urn:b26e6398-6e76-46ed-abb2-6b61d623467c" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
                 <related>
@@ -322,7 +322,7 @@
                     <value value="urn:2801e2b9-3886-4bf5-919f-ce9268fdc317" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/patients/5942395046400622593" />
+                    <reference value="http://172.18.46.56:9997/patients/5942395046400622593" />
                     <display value="5942395046400622593" />
                 </subject>
                 <encounter>

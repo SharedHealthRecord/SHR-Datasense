@@ -1,0 +1,13 @@
+encounter_id,encounter_datetime,encounter_type,visit_type,patient_hid,patient_age_years,patient_age_months,patient_age_days,encounter_location_id,facility_id
+100,2014-12-23,REG,outpatient,129,7,1,20,302618,1000
+103,2014-12-23,Consultation,outpatient,129,7,1,20,302618,1000
+110,2014-12-23,REG,outpatient,122,6,1,20,302618,1000
+111,2014-12-23,Consultation,outpatient,122,6,1,20,302618,1000
+101,2014-12-23,REG,inpatient,121,3,2,20,302618,1000
+102,2014-12-23,REG,outpatient,124,12,1,20,302618,1000
+104,2014-12-23,REG,outpatient,127,34,1,20,302618,1000
+105,2014-12-23,Consultation,outpatient,127,34,1,20,302618,1000
+106,2014-12-23,Consultation,inpatient,121,3,2,20,302618,1000
+107,2014-12-23,REG,inpatient,130,6,1,20,302618,1000
+108,2014-12-23,Consultation,inpatient,130,6,1,20,302618,1000
+109,2014-12-23,Consultation,inpatient,130,6,1,20,302618,1000

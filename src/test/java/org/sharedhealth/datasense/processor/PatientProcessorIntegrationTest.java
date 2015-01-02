@@ -44,7 +44,7 @@ public class PatientProcessorIntegrationTest {
     private final String VALID_HEALTH_ID = "5942395046400622593";
 
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8081);
+    public WireMockRule wireMockRule = new WireMockRule(9997);
 
     @Before
     public void setUp() throws Exception {

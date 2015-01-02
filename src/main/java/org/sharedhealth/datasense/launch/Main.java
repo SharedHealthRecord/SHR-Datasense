@@ -3,9 +3,11 @@ package org.sharedhealth.datasense.launch;
 
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
@@ -15,6 +17,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
+import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
@@ -80,7 +83,7 @@ public class Main {
 
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
-        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject());
+        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(), dhisPostJobTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
@@ -130,6 +133,39 @@ public class Main {
         }
         return triggerFactoryBean;
     }
+
+    @Bean
+    public JobDetailFactoryBean dhisPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
+        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean;
+    }
+
+    @Bean
+    public CronTriggerFactoryBean dhisPostJobTrigger() {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName("dhis.daily.opdipd.post.job.trigger");
+        triggerFactoryBean.setStartDelay(10000);
+//        triggerFactoryBean.setCronExpression("0 0 0 * * ?");
+        triggerFactoryBean.setCronExpression("1 * * * * ?");
+        triggerFactoryBean.setJobDetail(dhisPostJob().getObject());
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return triggerFactoryBean;
+    }
+
+    @Bean(name = "dhisFacilitiesMap")
+    public PropertiesFactoryBean dhisFacilitiesMap() {
+        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+        propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
+        return propertiesFactoryBean;
+    }
+
 
 
     public static void main(String[] args) throws Exception {
