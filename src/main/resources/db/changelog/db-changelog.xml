@@ -128,4 +128,20 @@
             <column name="dhis_org_unit_uid" type="varchar(15)"></column>
         </addColumn>
     </changeSet>
+    <changeSet id="aggregate-query-service-201501020718" author="ict4h" context="setup">
+        <createTable tableName="aqs_task">
+            <column name="aqs_task_id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true" nullable="false"/>
+            </column>
+            <column name="aqs_config_path" type="varchar(1024)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="task_status" type="varchar(255)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_created" type="datetime">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

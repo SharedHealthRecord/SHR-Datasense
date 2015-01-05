@@ -12,12 +12,13 @@ import org.springframework.core.io.ClassPathResource;
         "org.sharedhealth.datasense.feeds.encounters",
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
-        "org.sharedhealth.datasense.handler"})
+        "org.sharedhealth.datasense.handler",
+        "org.sharedhealth.datasense.export.dhis"})
 public class TestConfig {
-        @Bean(name = "dhisFacilitiesMap")
-        public PropertiesFactoryBean dhisFacilitiesMap() {
-                PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-                propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
-                return propertiesFactoryBean;
-        }
+    @Bean(name = "dhisFacilitiesMap")
+    public PropertiesFactoryBean dhisFacilitiesMap() {
+        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
+        propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
+        return propertiesFactoryBean;
+    }
 }

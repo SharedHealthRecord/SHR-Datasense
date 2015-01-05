@@ -34,6 +34,7 @@ repositories {
     maven { url "http://repo.spring.io/libs-snapshot" }
     maven { url "http://repo.spring.io/milestone" }
     maven { url "https://oss.sonatype.org/content/repositories/snapshots" }
+    maven { url "https://clojars.org/repo"}
 }
 
 task checkStyle(type: Checkstyle) {
@@ -68,7 +69,6 @@ ext.libraries = [
         spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE",
         joda                 : "joda-time:joda-time:2.5",
         free_marker          : "org.freemarker:freemarker:2.3.21"
-
 ]
 
 ext.testLibraries = [
@@ -83,7 +83,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
     }
-    compile files('lib/aggregate-query-service-1.0-SNAPSHOT-standalone.jar')
+    compile group: "org.ict4h", name: "aggregate-query-service", version: "1.0-SNAPSHOT", changing: true
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,

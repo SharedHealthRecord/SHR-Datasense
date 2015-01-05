@@ -1,10 +1,14 @@
 {
-  "query_json_path": "src/test/resources/dhis/queries/query_list_1.json",
+  "query_json_path": "dhis/queries/query_list_1.json",
+  "template_base":"/",
   "template_query_map": [
     {
-      "template_path": "src/test/resources/dhis/templates/post_template.ftl",
-      "query_list": ["Query 1","Query 2"]
+      "template_path": "dhis/templates/post_template.ftl",
+      "query_list": [
+        "Query_1",
+        "Query_2"
+      ]
     }
   ],
-  "http-post-uri": "http://192.168.33.20:8080/dhis/api/dataValueSets"
+  "http-post-uri": "http://localhost:9997/dhis/api/dataValueSets"
 }

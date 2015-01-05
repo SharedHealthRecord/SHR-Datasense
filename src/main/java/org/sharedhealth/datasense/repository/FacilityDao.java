@@ -19,19 +19,7 @@ public class FacilityDao {
     JdbcTemplate jdbcTemplate;
 
     public Facility findFacilityById(String facilityId) {
-        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id=?",
-                new Object[]{facilityId},
-                new RowMapper<Facility>() {
-                    @Override
-                    public Facility mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        return new Facility(
-                                rs.getString("facility_id"),
-                                rs.getString("name"),
-                                rs.getString("type"),
-                                rs.getString("location_id"),
-                                rs.getString("dhis_org_unit_uid"));
-                    }
-                });
+        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id=?", new Object[]{facilityId}, getRowMapperForFacility());
         return facilities.isEmpty() ? null : facilities.get(0);
     }
 
@@ -42,5 +30,23 @@ public class FacilityDao {
                 facility.getFacilityType(),
                 facility.getFacilityLocationCode(),
                 facility.getDhisOrgUnitUid());
+    }
+
+    public List<Facility> findFacilitiesByType(String facilityType) {
+        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type=?", new Object[]{facilityType}, getRowMapperForFacility());
+    }
+
+    private RowMapper<Facility> getRowMapperForFacility() {
+        return new RowMapper<Facility>() {
+            @Override
+            public Facility mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Facility(
+                        rs.getString("facility_id"),
+                        rs.getString("name"),
+                        rs.getString("type"),
+                        rs.getString("location_id"),
+                        rs.getString("dhis_org_unit_uid"));
+            }
+        };
     }
 }

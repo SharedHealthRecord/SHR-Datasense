@@ -1,9 +1,14 @@
 package org.sharedhealth.datasense.export.dhis;
 
 import aggregatequeryservice.postservice;
-import freemarker.template.*;
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import freemarker.template.Configuration;
+import freemarker.template.Template;
+import freemarker.template.TemplateException;
+import freemarker.template.TemplateExceptionHandler;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
@@ -28,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -41,6 +47,9 @@ public class DHISDatasetExportIntegrationTest {
 
     @Autowired
     private DataSource dataSource;
+
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(9997);
 
     @Before
     public void setup() throws IOException {
@@ -95,6 +104,8 @@ public class DHISDatasetExportIntegrationTest {
 
     @Test
     public void shouldPostValues() {
+
+
         jdbcTemplate.execute("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')");
         jdbcTemplate.execute("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')");
         jdbcTemplate.execute("Insert into encounter select * from CSVREAD('classpath:/csv/encounters.csv')");
@@ -115,8 +126,17 @@ public class DHISDatasetExportIntegrationTest {
 
         HashMap<String, String> postHeaders = new HashMap<>();
         postHeaders.put("Authorization","Basic YWRtaW46ZGlzdHJpY3Q=");
-        postHeaders.put("Content-Type","application/json");
-        postservice.renderftlandpost("src/test/resources/dhis/config/post-config.json", dataSource, queryParams, extraParams, postHeaders);
+        postHeaders.put("Content-Type", "application/json");
+        postservice.executeQueriesAndPostResultsSync("dhis/config/post-config.json", dataSource, queryParams, extraParams, postHeaders);
+
+        String postData = "{\n  \"dataSet\": \"iUz0yoVeeiZ\",\n  \"period\": \"20141223\",\n  \"orgUnit\": \"qNNm09QC9O8\",\n  \"dataValues\": [\n    { \"dataElement\": \"AiPqHCbJQJ1\", \"categoryOptionCombo\": \"UBdaznQ8DlT\",\n      \"value\": \"0\"\n    },\n    { \"dataElement\": \"AiPqHCbJQJ1\", \"categoryOptionCombo\": \"tSwmrlTW11V\",\n      \"value\": \"1\"\n    }\n  ]\n}";
+        verify(
+                postRequestedFor(urlEqualTo("/dhis/api/dataValueSets"))
+                        .withHeader("Content-Type", matching("application/json"))
+                        .withHeader("Authorization", matching("Basic YWRtaW46ZGlzdHJpY3Q="))
+                        .withRequestBody(equalToJson(postData))
+
+        );
     }
 
     @Test

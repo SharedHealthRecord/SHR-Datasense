@@ -1,0 +1,15 @@
+{
+  "query_json_path": "/dhis/aqs_query/dhis_opd_ipd_queries.json",
+  "template_query_map": [
+    {
+      "template_path": "/dhis/templates/dhis_opd_ipd_template.ftl",
+      "query_list": [
+        "Inpatient_Male_5_to_15_years_query",
+        "Inpatient_Female_5_to_15_years_query",
+        "Outpatient_Male_5_to_15_years_query",
+        "Outpatient_Female_5_to_15_years_query"
+      ]
+    }
+  ],
+  "http-post-uri": "http://192.168.33.20:8080/dhis/api/dataValueSets"
+}

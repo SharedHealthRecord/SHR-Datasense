@@ -4,6 +4,7 @@ package org.sharedhealth.datasense.launch;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
+import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,6 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
@@ -43,7 +43,9 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.feeds.encounters",
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
-        "org.sharedhealth.datasense.handler"})
+        "org.sharedhealth.datasense.handler",
+        "org.sharedhealth.datasense.export.dhis"
+        })
 public class Main {
 
     @Autowired
@@ -57,6 +59,9 @@ public class Main {
 
     @Autowired
     private EncounterEventWorker encounterEventWorker;
+
+    @Autowired
+    private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -83,7 +88,7 @@ public class Main {
 
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
-        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(), dhisPostJobTrigger().getObject());
+        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(), dhisDailyOPDIPDPostJobTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
@@ -107,6 +112,7 @@ public class Main {
         ctx.put("txMgr", txmanager);
         ctx.put("properties", properties);
         ctx.put("encounterEventWorker", encounterEventWorker);
+        ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
         return ctx;
     }
 
@@ -135,22 +141,22 @@ public class Main {
     }
 
     @Bean
-    public JobDetailFactoryBean dhisPostJob() {
+    public JobDetailFactoryBean dhisDailyOPDIPDJob() {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
         jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
         jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
+         return jobDetailFactoryBean;
     }
 
     @Bean
-    public CronTriggerFactoryBean dhisPostJobTrigger() {
+    public CronTriggerFactoryBean dhisDailyOPDIPDPostJobTrigger() {
         CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
         triggerFactoryBean.setName("dhis.daily.opdipd.post.job.trigger");
         triggerFactoryBean.setStartDelay(10000);
 //        triggerFactoryBean.setCronExpression("0 0 0 * * ?");
         triggerFactoryBean.setCronExpression("1 * * * * ?");
-        triggerFactoryBean.setJobDetail(dhisPostJob().getObject());
+        triggerFactoryBean.setJobDetail(dhisDailyOPDIPDJob().getObject());
         try {
             triggerFactoryBean.afterPropertiesSet();
         } catch (ParseException e) {
@@ -165,7 +171,6 @@ public class Main {
         propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
         return propertiesFactoryBean;
     }
-
 
 
     public static void main(String[] args) throws Exception {
