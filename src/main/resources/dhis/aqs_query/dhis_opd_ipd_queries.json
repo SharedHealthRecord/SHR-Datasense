@@ -3,19 +3,19 @@
     "queryGroupname": "Query Group 1",
     "queries": [
       {
-        "queryName": "Inpatient_Male_5_to_15_years_query",
+        "queryName": "ip_male_5_to_15",
         "query": "select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= 5 and e.patient_age_years < 15 and p.gender='M' and LOWER(e.visit_type)='inpatient' and DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d')=':ENC_DATE:';"
       },
       {
-        "queryName": "Inpatient_Female_5_to_15_years_query",
+        "queryName": "ip_female_5_to_15",
         "query": "select count(distinct e.patient_hid) as v2 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= 5 and e.patient_age_years < 15 and p.gender='F' and LOWER(e.visit_type)='inpatient' and DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d')=':ENC_DATE:';"
       },
       {
-        "queryName": "Outpatient_Male_5_to_15_years_query",
+        "queryName": "op_male_5_to_15",
         "query": "select count(distinct e.patient_hid) as v3 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= 5 and e.patient_age_years < 15 and p.gender='M' and LOWER(e.visit_type)='outpatient' and DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d')=':ENC_DATE:';"
       },
       {
-        "queryName": "Outpatient_Female_5_to_15_years_query",
+        "queryName": "op_female_5_to_15",
         "query": "select count(distinct e.patient_hid) as v4 from encounter e, patient p where facility_id=:FACILITY: and e.patient_hid=p.patient_hid and e.patient_age_years >= 5 and e.patient_age_years < 15 and p.gender='F' and LOWER(e.visit_type)='outpatient' and DATE_FORMAT(e.encounter_datetime, '%Y-%m-%d')=':ENC_DATE:';"
       }
     ]

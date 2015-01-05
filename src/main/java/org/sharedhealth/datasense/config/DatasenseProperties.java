@@ -22,6 +22,9 @@ public class DatasenseProperties implements EnvironmentAware {
     private String datasenseCatchmentList;
     private String facilityRegistryUrl;
     private String facilityAuthToken;
+    private String dhisPostUrl;
+    private String dhisUserName;
+    private String dhisPassword;
 
 
     public String getShrScheme() {
@@ -45,7 +48,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getShrBaseUrl() {
-        return shrScheme +  "://" + shrHost + ":" + shrPort;
+        return shrScheme + "://" + shrHost + ":" + shrPort;
     }
 
     public String getMciScheme() {
@@ -69,7 +72,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getMciBaseUrl() {
-        return mciScheme +  "://" + mciHost + ":" + mciPort + "/api/v1";
+        return mciScheme + "://" + mciHost + ":" + mciPort + "/api/v1";
     }
 
     public String getDatasenseFacilityId() {
@@ -96,7 +99,10 @@ public class DatasenseProperties implements EnvironmentAware {
         this.datasenseFacilityId = env.getProperty("DATASENSE_FACILITY_ID");
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
         this.facilityRegistryUrl = env.getProperty("FACILITY_URL");
-        this.facilityAuthToken=env.getProperty("FACILITY_AUTH_TOKEN");
+        this.facilityAuthToken = env.getProperty("FACILITY_AUTH_TOKEN");
+        this.dhisPostUrl = env.getProperty("DHIS_POST_URL");
+        this.dhisUserName = env.getProperty("DHIS_USER_NAME");
+        this.dhisPassword = env.getProperty("DHIS_PASSWORD");
     }
 
     public String getFacilityRegistryUrl() {
@@ -105,5 +111,17 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getFacilityAuthToken() {
         return facilityAuthToken;
+    }
+
+    public String getDhisPostUrl() {
+        return dhisPostUrl;
+    }
+
+    public String getDhisUserName() {
+        return dhisUserName;
+    }
+
+    public String getDhisPassword() {
+        return dhisPassword;
     }
 }

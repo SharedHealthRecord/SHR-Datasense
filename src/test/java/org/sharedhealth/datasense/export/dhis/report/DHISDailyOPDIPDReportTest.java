@@ -25,7 +25,9 @@ public class DHISDailyOPDIPDReportTest {
     @Test
     public void shouldPostDataForEachFacility() {
         jdbcTemplate.execute("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')");
-        dailyOPDIPDReport.process();
+        jdbcTemplate.execute("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')");
+        jdbcTemplate.execute("Insert into encounter select * from CSVREAD('classpath:/csv/encounters.csv')");
+//        dailyOPDIPDReport.process();
     }
 
     @After
