@@ -5,10 +5,26 @@
     {
       "template_path": "dhis/templates/dhis_opd_ipd_template.ftl",
       "query_list": [
-        "ip_male_5_to_15",
-        "ip_female_5_to_15",
-        "op_male_5_to_15",
-        "op_female_5_to_15"
+        "ip_male_0_to_4",
+        "ip_female_0_to_4",
+        "ip_male_5_to_14",
+        "ip_female_5_to_14",
+        "ip_male_15_to_24",
+        "ip_female_15_to_24",
+        "ip_male_25_to_49",
+        "ip_female_25_to_49",
+        "ip_male_50_above",
+        "ip_female_50_above",
+        "op_male_0_to_4",
+        "op_female_0_to_4",
+        "op_male_5_to_14",
+        "op_female_5_to_14",
+        "op_male_15_to_24",
+        "op_female_15_to_24",
+        "op_male_25_to_49",
+        "op_female_25_to_49",
+        "op_male_50_above",
+        "op_female_50_above"
       ]
     }
   ],

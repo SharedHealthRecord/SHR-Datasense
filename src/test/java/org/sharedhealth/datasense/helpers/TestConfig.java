@@ -13,7 +13,8 @@ import org.springframework.core.io.ClassPathResource;
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
         "org.sharedhealth.datasense.handler",
-        "org.sharedhealth.datasense.export.dhis"})
+        "org.sharedhealth.datasense.export.dhis",
+        "org.sharedhealth.datasense.security"})
 public class TestConfig {
     @Bean(name = "dhisFacilitiesMap")
     public PropertiesFactoryBean dhisFacilitiesMap() {

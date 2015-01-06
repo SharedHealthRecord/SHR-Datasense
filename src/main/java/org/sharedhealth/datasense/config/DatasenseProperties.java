@@ -26,6 +26,13 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisUserName;
     private String dhisPassword;
 
+    //Identity Server Properties
+    private String identityScheme;
+    private String identityHost;
+    private String identityPort;
+    private String identityUser;
+    private String identityPassword;
+
 
     public String getShrScheme() {
         return shrScheme;
@@ -75,6 +82,10 @@ public class DatasenseProperties implements EnvironmentAware {
         return mciScheme + "://" + mciHost + ":" + mciPort + "/api/v1";
     }
 
+    public String getIdentityBaseUrl() {
+        return identityScheme + "://" + identityHost + ":" + identityPort;
+    }
+
     public String getDatasenseFacilityId() {
         return datasenseFacilityId;
     }
@@ -103,6 +114,11 @@ public class DatasenseProperties implements EnvironmentAware {
         this.dhisPostUrl = env.getProperty("DHIS_POST_URL");
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
+        this.identityScheme = env.getProperty("IDENTITY_SCHEME");
+        this.identityHost = env.getProperty("IDENTITY_HOST");
+        this.identityPort = env.getProperty("IDENTITY_PORT");
+        this.identityUser = env.getProperty("IDENTITY_USER");
+        this.identityPassword = env.getProperty("IDENTITY_PASSWORD");
     }
 
     public String getFacilityRegistryUrl() {
@@ -123,5 +139,25 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getDhisPassword() {
         return dhisPassword;
+    }
+
+    public String getIdentityScheme() {
+        return identityScheme;
+    }
+
+    public String getIdentityHost() {
+        return identityHost;
+    }
+
+    public String getIdentityPort() {
+        return identityPort;
+    }
+
+    public String getIdentityUser() {
+        return identityUser;
+    }
+
+    public String getIdentityPassword() {
+        return identityPassword;
     }
 }

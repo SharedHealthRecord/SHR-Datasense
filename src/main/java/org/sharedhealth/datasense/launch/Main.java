@@ -7,6 +7,7 @@ import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
+import org.sharedhealth.datasense.security.IdentityStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
@@ -44,8 +45,9 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
         "org.sharedhealth.datasense.handler",
-        "org.sharedhealth.datasense.export.dhis"
-        })
+        "org.sharedhealth.datasense.export.dhis",
+        "org.sharedhealth.datasense.security"
+})
 public class Main {
 
     @Autowired
@@ -62,6 +64,9 @@ public class Main {
 
     @Autowired
     private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
+
+    @Autowired
+    private IdentityStore identityStore;
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -113,6 +118,7 @@ public class Main {
         ctx.put("properties", properties);
         ctx.put("encounterEventWorker", encounterEventWorker);
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
+        ctx.put("identityStore", identityStore);
         return ctx;
     }
 
@@ -145,8 +151,9 @@ public class Main {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
         jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "default");;
         jobDetailFactoryBean.afterPropertiesSet();
-         return jobDetailFactoryBean;
+        return jobDetailFactoryBean;
     }
 
     @Bean
@@ -155,7 +162,7 @@ public class Main {
         triggerFactoryBean.setName("dhis.daily.opdipd.post.job.trigger");
         triggerFactoryBean.setStartDelay(10000);
 //        triggerFactoryBean.setCronExpression("0 0 0 * * ?");
-        triggerFactoryBean.setCronExpression("1 * * * * ?");
+        triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
         triggerFactoryBean.setJobDetail(dhisDailyOPDIPDJob().getObject());
         try {
             triggerFactoryBean.afterPropertiesSet();
