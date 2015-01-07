@@ -82,7 +82,7 @@ public class DatasenseProperties implements EnvironmentAware {
         return mciScheme + "://" + mciHost + ":" + mciPort + "/api/v1";
     }
 
-    public String getIdentityBaseUrl() {
+    public String getIdentityServerBaseUrl() {
         return identityScheme + "://" + identityHost + ":" + identityPort;
     }
 

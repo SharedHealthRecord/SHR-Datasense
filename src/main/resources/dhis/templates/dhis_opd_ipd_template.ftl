@@ -53,6 +53,56 @@
       "value": "${row.v1}"
     },
 </#list>
+<#list emergency_male_0_to_4 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "u2QXNMacZLt",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_female_0_to_4 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "DA2N93v7s0O",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_male_5_to_14 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "UBdaznQ8DlT",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_female_5_to_14 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "tSwmrlTW11V",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_male_15_to_24 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "GYRYyntlK7n",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_female_15_to_24 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "KahybAysMCQ",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_male_25_to_49 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "cs9cqLXiS5X",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_female_25_to_49 as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "GQAGIsvkK4Q",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_male_50_above as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "xSzlrnhqYNT",
+      "value": "${row.v1}"
+    },
+</#list>
+<#list emergency_female_50_above as row>
+    { "dataElement": "L07RnkDuRaA", "categoryOptionCombo": "MacxOPmyosZ",
+      "value": "${row.v1}"
+    },
+</#list>
 <#list op_male_0_to_4 as row>
     { "dataElement": "Ft1woRONbkY", "categoryOptionCombo": "u2QXNMacZLt",
       "value": "${row.v1}"

@@ -8,6 +8,7 @@ import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.model.EncounterBundle;
 
@@ -24,18 +25,19 @@ public class ShrEncounterFeedProcessor {
     private AllFailedEvents failedEvents;
     private Map<String, Object> feedProperties;
     private AtomFeedSpringTransactionManager transactionManager;
+    private ShrWebClient shrWebClient;
 
     public ShrEncounterFeedProcessor(EncounterEventWorker encounterEventWorker,
                                      String feedUrl,
                                      AllMarkers markers,
                                      AllFailedEvents failedEvents,
-                                     Map<String, Object> feedProperties, AtomFeedSpringTransactionManager transactionManager) {
+                                     AtomFeedSpringTransactionManager transactionManager, ShrWebClient shrWebClient) {
         this.encounterEventWorker = encounterEventWorker;
         this.feedUrl = feedUrl;
         this.markers = markers;
         this.failedEvents = failedEvents;
-        this.feedProperties = feedProperties;
         this.transactionManager = transactionManager;
+        this.shrWebClient = shrWebClient;
     }
 
     public void process() throws URISyntaxException {
@@ -48,7 +50,7 @@ public class ShrEncounterFeedProcessor {
 
     private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties)  {
         return new AtomFeedClient(
-                new AllEncounterFeeds(feedProperties),
+                new AllEncounterFeeds(shrWebClient),
                 markers,
                 failedEvents,
                 atomProperties,

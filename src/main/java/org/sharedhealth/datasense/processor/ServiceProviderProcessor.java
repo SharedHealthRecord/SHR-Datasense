@@ -20,18 +20,18 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     private ResourceProcessor nextProcessor;
     private FacilityDao facilityDao;
-    private FacilityWebClient webClient;
+    private FacilityWebClient facilityWebClient;
     private PropertiesFactoryBean dhisFacilitiesMap;
     private static final Logger logger = LoggerFactory.getLogger(ServiceProviderProcessor.class);
 
     @Autowired
     public ServiceProviderProcessor(@Qualifier("clinicalEncounterProcessor") ResourceProcessor nextProcessor,
-                                    FacilityDao facilityDao, FacilityWebClient webClient,
+                                    FacilityDao facilityDao, FacilityWebClient facilityWebClient,
                                     @Qualifier("dhisFacilitiesMap") PropertiesFactoryBean dhisFacilitiesMap) {
 
         this.nextProcessor = nextProcessor;
         this.facilityDao = facilityDao;
-        this.webClient = webClient;
+        this.facilityWebClient = facilityWebClient;
         this.dhisFacilitiesMap = dhisFacilitiesMap;
     }
 
@@ -56,14 +56,13 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         }
     }
 
-    private Facility downloadAndSaveFacility(String facilityId) {
+    private Facility downloadAndSaveFacility(final String facilityId) {
         Facility facility;
         try {
-            facility = webClient.findById(facilityId);
-        } catch (IOException e) {
-            throw new RuntimeException("Can not find facility with Id:" + facilityId);
-        } catch (URISyntaxException e) {
-            throw new RuntimeException("Can not find facility with Id:" + facilityId);
+            facility = facilityWebClient.findById(facilityId);
+        } catch (Exception e) {
+            logger.error("Can not find facility with Id:" + facilityId, e);
+            throw new RuntimeException("Can not find facility with Id:" + facilityId, e);
         }
 
         if (facility == null) {

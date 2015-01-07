@@ -15,6 +15,16 @@
         "ip_female_25_to_49",
         "ip_male_50_above",
         "ip_female_50_above",
+        "emergency_male_0_to_4",
+        "emergency_female_0_to_4",
+        "emergency_male_5_to_14",
+        "emergency_female_5_to_14",
+        "emergency_male_15_to_24",
+        "emergency_female_15_to_24",
+        "emergency_male_25_to_49",
+        "emergency_female_25_to_49",
+        "emergency_male_50_above",
+        "emergency_female_50_above",
         "op_male_0_to_4",
         "op_female_0_to_4",
         "op_male_5_to_14",
@@ -28,5 +38,5 @@
       ]
     }
   ],
-  "http-post-uri": "http://192.168.33.20:8080/dhis/api/dataValueSets"
+  "http-post-uri": "http://172.18.46.225:8080/dhis/api/dataValueSets"
 }

@@ -1,15 +1,16 @@
 package org.sharedhealth.datasense.export.dhis;
 
 import aggregatequeryservice.postservice;
+import com.github.tomakehurst.wiremock.http.Request;
+import com.github.tomakehurst.wiremock.http.RequestListener;
+import com.github.tomakehurst.wiremock.http.Response;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import com.github.tomakehurst.wiremock.verification.LoggedRequest;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
 import freemarker.template.TemplateExceptionHandler;
-import org.junit.After;
-import org.junit.Before;
-import org.junit.Rule;
-import org.junit.Test;
+import org.junit.*;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
@@ -96,16 +97,8 @@ public class DHISDatasetExportIntegrationTest {
     }
 
     @Test
-    public void testingDataset() throws SQLException {
-        System.out.println("*****************************************");
-        System.out.println(dataSource.getConnection());
-        System.out.println("*****************************************");
-    }
-
-    @Test
+    @Ignore
     public void shouldPostValues() {
-
-
         jdbcTemplate.execute("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')");
         jdbcTemplate.execute("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')");
         jdbcTemplate.execute("Insert into encounter select * from CSVREAD('classpath:/csv/encounters.csv')");
@@ -125,9 +118,11 @@ public class DHISDatasetExportIntegrationTest {
         extraParams.put("orgUnit","qNNm09QC9O8");
 
         HashMap<String, String> postHeaders = new HashMap<>();
-        postHeaders.put("Authorization","Basic YWRtaW46ZGlzdHJpY3Q=");
+        postHeaders.put("Authorization", "Basic YWRtaW46ZGlzdHJpY3Q=");
         postHeaders.put("Content-Type", "application/json");
-        postservice.executeQueriesAndPostResultsSync("dhis/config/post-config.json", dataSource, queryParams, extraParams, postHeaders);
+
+        Object o = postservice.executeQueriesAndPostResultsSync("dhis/config/post-config.json", dataSource, queryParams, extraParams, postHeaders);
+
 
         String postData = "{\n  \"dataSet\": \"iUz0yoVeeiZ\",\n  \"period\": \"20141223\",\n  \"orgUnit\": \"qNNm09QC9O8\",\n  \"dataValues\": [\n    { \"dataElement\": \"AiPqHCbJQJ1\", \"categoryOptionCombo\": \"UBdaznQ8DlT\",\n      \"value\": \"0\"\n    },\n    { \"dataElement\": \"AiPqHCbJQJ1\", \"categoryOptionCombo\": \"tSwmrlTW11V\",\n      \"value\": \"1\"\n    }\n  ]\n}";
         verify(

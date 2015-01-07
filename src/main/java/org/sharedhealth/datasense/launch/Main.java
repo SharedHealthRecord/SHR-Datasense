@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.launch;
 
 
 import org.quartz.spi.JobFactory;
+import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
@@ -66,7 +67,7 @@ public class Main {
     private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
 
     @Autowired
-    private IdentityStore identityStore;
+    private ShrWebClient shrWebClient;
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -118,7 +119,7 @@ public class Main {
         ctx.put("properties", properties);
         ctx.put("encounterEventWorker", encounterEventWorker);
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
-        ctx.put("identityStore", identityStore);
+        ctx.put("shrWebClient", shrWebClient);
         return ctx;
     }
 

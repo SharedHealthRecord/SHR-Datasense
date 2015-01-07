@@ -7,6 +7,8 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.export.dhis.annotations.DhisParam;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.FacilityDao;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +22,7 @@ public class DHISDailyOPDIPDReport implements DHISReport {
     private DatasenseProperties datasenseProperties;
     private static final String facilityType = "Upazila Health Complex";
     private DataSource dataSource;
+
 
     @Autowired
     public DHISDailyOPDIPDReport(FacilityDao facilityDao, DatasenseProperties properties, DataSource dataSource) {

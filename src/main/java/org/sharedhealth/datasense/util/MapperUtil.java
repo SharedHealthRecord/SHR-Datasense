@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -12,5 +13,9 @@ public class MapperUtil {
         mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
         return mapper.readValue(content, returnType);
 
+    }
+
+    public static String asString(Object data) throws JsonProcessingException {
+        return new ObjectMapper().writeValueAsString(data);
     }
 }

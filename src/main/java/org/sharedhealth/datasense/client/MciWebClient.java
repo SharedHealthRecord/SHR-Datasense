@@ -12,6 +12,7 @@ import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -20,16 +21,20 @@ import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
+import java.util.HashMap;
+import java.util.Map;
 
 @Component
 public class MciWebClient {
 
     private DatasenseProperties properties;
-
+    private IdentityServiceClient identityServiceClient;
     private Logger log = Logger.getLogger(MciWebClient.class);
+
     @Autowired
-    public MciWebClient(DatasenseProperties properties) {
+    public MciWebClient(DatasenseProperties properties, IdentityServiceClient identityServiceClient) {
         this.properties = properties;
+        this.identityServiceClient = identityServiceClient;
     }
 
     public Patient identifyPatient(String healthId) throws URISyntaxException, IOException {
@@ -40,33 +45,22 @@ public class MciWebClient {
         return null;
     }
 
-    private String getResponse(String healthId) throws URISyntaxException, IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
+    private String getResponse(final String healthId) throws URISyntaxException, IOException {
         URI mciURI = getMciURI(healthId);
         log.info("Reading from " + mciURI);
-        HttpGet request = new HttpGet(mciURI);
-        request.addHeader("Authorization", getAuthHeader());
-        request.addHeader("Accept", "application/json");
-        ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-            public String handleResponse(final HttpResponse response) throws IOException {
-                int status = response.getStatusLine().getStatusCode();
-                if (status >= 200 && status < 300) {
-                    HttpEntity entity = response.getEntity();
-                    return entity != null ? EntityUtils.toString(entity) : null;
-                } else if (status == 404) {
-                    return null;
-                } else {
-                    throw new ClientProtocolException("Unexpected response status: " + status + ", response: " + response);
-                }
-            }
-        };
+        Map<String, String> headers = new HashMap<>();
+        headers.put("Authorization", getAuthHeader());
+        headers.put("Accept", "application/json");
+        String response = null;
         try {
-            return httpClient.execute(request, responseHandler);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to MCI server. [" + mciURI +"]", e);
-        } finally {
-            httpClient.close();
+            response = new WebClient().get(mciURI, headers);
+        } catch (ConnectionException e) {
+            log.error(String.format("Could not identify patient with healthId [%s]", healthId), e);
+            if (e.getErrorCode() == 401) {
+                identityServiceClient.clearToken();
+            }
         }
+        return response;
     }
 
     private String getAuthHeader() {
@@ -78,6 +72,4 @@ public class MciWebClient {
     private URI getMciURI(String healthId) throws URISyntaxException {
         return new URI(properties.getMciBaseUrl() + "/patients/" + healthId);
     }
-
-
 }

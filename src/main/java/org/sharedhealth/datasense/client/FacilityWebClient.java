@@ -14,12 +14,15 @@ import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
+import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -29,6 +32,7 @@ public class FacilityWebClient {
     private DatasenseProperties properties;
 
     private Logger log = Logger.getLogger(FacilityWebClient.class);
+
     @Autowired
     public FacilityWebClient(DatasenseProperties properties) {
         this.properties = properties;
@@ -64,36 +68,19 @@ public class FacilityWebClient {
     }
 
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
-        CloseableHttpClient httpClient = HttpClients.createDefault();
-        String facilityUrl = getFacilityUrl(facilityId);
+        URI facilityUrl = getFacilityUrl(facilityId);
         log.info("Reading from " + facilityUrl);
-        HttpGet request = new HttpGet(facilityUrl);
-        request.addHeader("X-Auth-Token", properties.getFacilityAuthToken());
-        request.addHeader("Accept", "application/json");
-        ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
-            public String handleResponse(final HttpResponse response) throws IOException {
-                int status = response.getStatusLine().getStatusCode();
-                if (status >= 200 && status < 300) {
-                    HttpEntity entity = response.getEntity();
-                    return entity != null ? EntityUtils.toString(entity) : null;
-                } else if (status == 404) {
-                    return null;
-                } else {
-                    throw new ClientProtocolException("Unexpected response status: " + status);
-                }
-            }
-        };
-        try {
-            return httpClient.execute(request, responseHandler);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to connect to facility server. [" + facilityUrl +"]", e);
-        } finally {
-            httpClient.close();
-        }
+        Map<String, String> headers = new HashMap<>();
+        headers.put("X-Auth-Token", properties.getFacilityAuthToken());
+        headers.put("Accept", "application/json");
+
+        String response = null;
+        response = new WebClient().get(facilityUrl, headers);
+        return response;
     }
 
-    private String getFacilityUrl(String facilityId) {
-        return properties.getFacilityRegistryUrl() + "/" + facilityId + ".json";
+    private URI getFacilityUrl(String facilityId) throws URISyntaxException {
+        return new URI(properties.getFacilityRegistryUrl() + "/" + facilityId + ".json");
     }
 
 }

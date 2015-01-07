@@ -7,6 +7,7 @@ import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.EncounterBundle;
@@ -32,6 +33,9 @@ public class ShrEncounterFeedProcessorTest {
     @Autowired
     DataSourceTransactionManager txMgr;
 
+    @Autowired
+    private ShrWebClient shrWebClient;
+
     @Test
     @Ignore
     public void shouldFetchEncountersForCatchment() throws URISyntaxException, IOException {
@@ -48,7 +52,7 @@ public class ShrEncounterFeedProcessorTest {
                         feedUrl,
                         new AllMarkersInMemoryImpl(),
                         new AllFailedEventsInMemoryImpl(),
-                        getFeedProperties(), new AtomFeedSpringTransactionManager(txMgr));
+                        new AtomFeedSpringTransactionManager(txMgr),shrWebClient);
         feedCrawler.process();
     }
 

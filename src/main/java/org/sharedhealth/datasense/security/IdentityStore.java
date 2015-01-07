@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class IdentityStore {
-    IdentityToken token;
+    private IdentityToken token;
 
     public IdentityToken getToken() {
         return token;
@@ -12,5 +12,9 @@ public class IdentityStore {
 
     public void setToken(IdentityToken token) {
         this.token = token;
+    }
+
+    public void clearToken() {
+        this.token = null;
     }
 }

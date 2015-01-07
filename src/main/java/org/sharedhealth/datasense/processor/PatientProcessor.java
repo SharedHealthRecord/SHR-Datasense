@@ -17,7 +17,7 @@ import java.net.URISyntaxException;
 public class PatientProcessor implements ResourceProcessor {
 
     private ResourceProcessor nextProcessor;
-    private MciWebClient webClient;
+    private MciWebClient mciWebClient;
     private PatientDao patientDao;
 
     private Logger log = Logger.getLogger(PatientProcessor.class);
@@ -27,7 +27,7 @@ public class PatientProcessor implements ResourceProcessor {
                             MciWebClient mciWebClient,
                             PatientDao patientDao) {
         this.nextProcessor = nextProcessor;
-        webClient = mciWebClient;
+        this.mciWebClient = mciWebClient;
         this.patientDao = patientDao;
     }
 
@@ -45,15 +45,17 @@ public class PatientProcessor implements ResourceProcessor {
 
     private Patient downloadPatientAndSave(String healthId) {
         Patient patient;
+        String message = "Could not identify patient by health Id:" + healthId;
         try {
-            patient = webClient.identifyPatient(healthId);
+            patient = mciWebClient.identifyPatient(healthId);
         } catch (URISyntaxException e) {
             throw new RuntimeException("Unable to identify patient in MCI", e);
-        } catch (IOException e) {
-            throw new RuntimeException("Unable to parse response", e);
+        } catch (Exception e) {
+            log.error(message, e);
+            throw new RuntimeException(message, e);
         }
         if (patient == null) {
-            throw new RuntimeException("Could not identify patient by health Id:" + healthId);
+            throw new RuntimeException(message);
         }
         patientDao.save(patient);
         return patient;
