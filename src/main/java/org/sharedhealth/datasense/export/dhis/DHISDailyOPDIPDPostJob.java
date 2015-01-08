@@ -8,8 +8,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 @DhisParam({"reportingDate"})
@@ -34,11 +36,28 @@ public class DHISDailyOPDIPDPostJob extends QuartzJobBean {
         dhisDailyOPDIPDReport.process(map);
     }
 
-    private String getReportingDate(String dateParam) {
-        if (dateParam.endsWith("default")) {
-            return getDefaultReportingDate();
+    static String getReportingDate(String dateParam) {
+        try {
+            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateParam);
+            return dateParam;
+        } catch (ParseException e) {
+            logger.error(String.format("Invalid argument [%s] for reportingParam. Expected date format yyyy-MM-dd. Trying to parse as Integer .. ", dateParam));
         }
-        return dateParam;
+
+        Integer addDays = null;
+        try {
+            addDays = Integer.parseInt(dateParam);
+        } catch (NumberFormatException e) {
+            logger.error(String.format("Invalid argument for reportingParam. Actual [%s] expected values are integer (-1, -2 etc). Defaulting to yesterday", dateParam));
+        }
+
+        if (addDays == null) {
+            addDays = -1;
+        }
+
+        Calendar c = Calendar.getInstance();
+        c.add(Calendar.DATE, addDays);
+        return new SimpleDateFormat("yyyy-MM-dd").format(c.getTime());
     }
 
     private String getDefaultReportingDate() {

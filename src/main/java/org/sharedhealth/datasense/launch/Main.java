@@ -152,7 +152,7 @@ public class Main {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
         jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "default");;
+        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");;
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }
@@ -162,7 +162,6 @@ public class Main {
         CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
         triggerFactoryBean.setName("dhis.daily.opdipd.post.job.trigger");
         triggerFactoryBean.setStartDelay(10000);
-//        triggerFactoryBean.setCronExpression("0 0 0 * * ?");
         triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
         triggerFactoryBean.setJobDetail(dhisDailyOPDIPDJob().getObject());
         try {
