@@ -56,7 +56,7 @@ public class DHISDailyOPDIPDReport implements DHISReport {
         postHeaders.put("Authorization", authentication);
         postHeaders.put("Content-Type", "application/json");
 
-        String pathToConfig = "dhis/aqs_config/daily_opd_ipd_report.json";
+        String pathToConfig =  "/opt/datasense/lib/dhis_config/aqs_config/daily_opd_ipd_report.json";
 
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }

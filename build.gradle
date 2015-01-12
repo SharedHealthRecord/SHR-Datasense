@@ -87,7 +87,7 @@ dependencies {
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
-            libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda,libraries.free_marker
+            libraries.fhir_reference, libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda, libraries.free_marker
     testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.mysql_connector, testLibraries.h2_database
 }
@@ -129,7 +129,7 @@ task debugDatasense << {
     process.waitFor();
 }
 
-task dist(type:Rpm, dependsOn:build) {
+task dist(type: Rpm, dependsOn: ['build', 'zip']) {
     packageName = 'datasense'
     version = '0.1'
     release = 1
@@ -163,4 +163,10 @@ task dist(type:Rpm, dependsOn:build) {
         exclude 'datasense'
         into 'var'
     }
+}
+
+task zip(type: Zip) {
+    from("dhis_config")
+    archiveName "dhis_config.zip"
+    into("dhis_config")
 }

@@ -1,9 +1,9 @@
 {
-  "query_json_path": "dhis/aqs_query/dhis_opd_ipd_queries.json",
-  "template_base":"/",
+  "query_json_path": "/opt/datasense/lib/dhis_config/aqs_query/dhis_opd_ipd_queries.json",
+  "template_base":"/opt/datasense/lib/dhis_config/",
   "template_query_map": [
     {
-      "template_path": "dhis/templates/dhis_opd_ipd_template.ftl",
+      "template_path": "templates/dhis_opd_ipd_template.ftl",
       "query_list": [
         "ip_male_0_to_4",
         "ip_female_0_to_4",
@@ -39,4 +39,5 @@
     }
   ],
   "http-post-uri": "http://172.18.46.225:8080/dhis/api/dataValueSets"
+
 }

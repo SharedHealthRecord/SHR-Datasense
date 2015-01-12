@@ -144,4 +144,15 @@
             </column>
         </createTable>
     </changeSet>
+    <changeSet id="aggregate-query-service-201501121119" author="sharedhealth" context="setup">
+        <addColumn tableName="aqs_task">
+            <column name="results" type="text"/>
+        </addColumn>
+        <addColumn tableName="aqs_task">
+            <column name="input_parameters" type="text"/>
+        </addColumn>
+        <addColumn tableName="aqs_task">
+            <column name="query_config" type="text"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
