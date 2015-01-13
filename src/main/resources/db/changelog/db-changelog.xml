@@ -128,6 +128,23 @@
             <column name="dhis_org_unit_uid" type="varchar(15)"></column>
         </addColumn>
     </changeSet>
+
+    <changeSet id="sharedhealth-datasense-20150113-0455" author="sharedhealth" context="setup">
+        <comment>modifying all timestamp datatype to datetime</comment>
+        <modifyDataType columnName="dob"
+                        newDataType="datetime"
+                        tableName="patient"/>
+        <modifyDataType columnName="failed_at"
+                        newDataType="datetime"
+                        tableName="failed_events"/>
+        <modifyDataType columnName="encounter_datetime"
+                        newDataType="datetime"
+                        tableName="encounter"/>
+        <modifyDataType columnName="diagnosis_datetime"
+                        newDataType="datetime"
+                        tableName="diagnosis"/>
+    </changeSet>
+    
     <changeSet id="aggregate-query-service-201501020718" author="ict4h" context="setup">
         <createTable tableName="aqs_task">
             <column name="aqs_task_id" type="bigint" autoIncrement="true">
