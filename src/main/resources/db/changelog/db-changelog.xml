@@ -172,4 +172,19 @@
             <column name="query_config" type="text"/>
         </addColumn>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150114-1529" author="sharedhealth" context="setup">
+        <comment>creating medication table</comment>
+        <createTable tableName="medication">
+            <column name="medication_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)" />
+            <column name="encounter_id" type="varchar(50)" />
+            <column name="medication_drug_id" type="varchar(50)"/>
+            <column name="medication_code" type="varchar(10)" />
+            <column name="medication_concept_id" type="varchar(50)" />
+            <column name="medication_datetime" type="datetime" />
+            <column name="medication_status" type="varchar(2)" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

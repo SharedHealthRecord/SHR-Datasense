@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Encounter</title>
+    <id>urn:14b70b6c-6d79-4b35-86d1-795e3d88f452</id>
+    <updated>2015-01-14T15:04:57+05:30</updated>
+    <entry>
+        <title>Composition</title>
+        <id>urn:1bc120fa-22a2-4056-acfd-2b49f7024157</id>
+        <updated>2015-01-14T15:05:40.175+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Composition
+                    xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:1bc120fa-22a2-4056-acfd-2b49f7024157"/>
+                </identifier>
+                <date value="2015-01-14T15:04:57+05:30"/>
+                <status value="final"/>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <display value="5955445961621766145"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:478ec1ae-d0ed-41ce-b612-a935bd7e7487"/>
+                    <display value="Encounter"/>
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:478ec1ae-d0ed-41ce-b612-a935bd7e7487"/>
+                        <display value="Encounter"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35"/>
+                        <display value="Immunization"/>
+                    </content>
+                </section>
+            </Composition>
+        </content>
+    </entry>
+    <entry>
+        <title>Encounter</title>
+        <id>urn:478ec1ae-d0ed-41ce-b612-a935bd7e7487</id>
+        <updated>2015-01-14T15:05:40.175+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Encounter
+                    xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:478ec1ae-d0ed-41ce-b612-a935bd7e7487"/>
+                </identifier>
+                <status value="finished"/>
+                <class value="outpatient"/>
+                <type>
+                    <text value="Consultation"/>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <display value="5955445961621766145"/>
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="3accd17c-7561-11e4-a8f7-005056826e54"/>
+                    </individual>
+                </participant>
+                <indication>
+                    <reference value="urn:478ec1ae-d0ed-41ce-b612-a935bd7e7487"/>
+                    <display value="Encounter"/>
+                </indication>
+                <serviceProvider>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0//facilities/10000069.json"/>
+                </serviceProvider>
+            </Encounter>
+        </content>
+    </entry>
+    <entry>
+        <title>Immunization</title>
+        <id>urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35</id>
+        <updated>2015-01-14T15:05:40.256+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Immunization
+                    xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35"/>
+                </identifier>
+                <date value="2015-01-06T00:00:00+05:30"/>
+                <vaccineType>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/drugs/28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
+                        <code value="28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
+                        <display value="OPV 1"/>
+                    </coding>
+                </vaccineType>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <display value="5955445961621766145"/>
+                </subject>
+                <refusedIndicator value="false"/>
+                <reported value="true"/>
+                <requester>
+                    <reference value="3accd17c-7561-11e4-a8f7-005056826e54"/>
+                </requester>
+                <route>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Route-of-Administration"/>
+                        <code value="implant"/>
+                        <display value="implant"/>
+                    </coding>
+                </route>
+                <doseQuantity>
+                    <value value="20.0"/>
+                    <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Quantity-Units"/>
+                    <code value="mg"/>
+                </doseQuantity>
+                <explanation>
+                    <reason>
+                        <coding>
+                            <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Immunization-Reason"/>
+                            <code value="281657000"/>
+                            <display value="Travel vaccinations"/>
+                        </coding>
+                    </reason>
+                </explanation>
+            </Immunization>
+        </content>
+    </entry>
+</feed>
