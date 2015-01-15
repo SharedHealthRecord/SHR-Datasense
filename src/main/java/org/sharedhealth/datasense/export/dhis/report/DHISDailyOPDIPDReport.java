@@ -1,20 +1,18 @@
 package org.sharedhealth.datasense.export.dhis.report;
 
 import aggregatequeryservice.postservice;
-import org.apache.commons.codec.binary.Base64;
-import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.export.dhis.annotations.DhisParam;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.FacilityDao;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.sharedhealth.datasense.util.HttpUtil.getBase64Authentication;
 
 @Component
 public class DHISDailyOPDIPDReport implements DHISReport {
@@ -52,20 +50,12 @@ public class DHISDailyOPDIPDReport implements DHISReport {
         extraParams.put("orgUnit", facility.getDhisOrgUnitUid());
 
         HashMap<String, String> postHeaders = new HashMap<>();
-        String authentication = "Basic " + getBase64Authentication();
+        String authentication = getBase64Authentication(datasenseProperties.getDhisUserName(), datasenseProperties.getDhisPassword());
         postHeaders.put("Authorization", authentication);
         postHeaders.put("Content-Type", "application/json");
 
-        String pathToConfig =  "/opt/datasense/lib/dhis_config/aqs_config/daily_opd_ipd_report.json";
+        String pathToConfig = "/opt/datasense/lib/dhis_config/aqs_config/daily_opd_ipd_report.json";
 
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }
-
-    private String getBase64Authentication() {
-        String credentials = datasenseProperties.getDhisUserName() + ":" + datasenseProperties.getDhisPassword();
-        byte[] credentialBytes = Base64.encodeBase64(credentials.getBytes());
-        return new String(credentialBytes);
-    }
-
-
 }

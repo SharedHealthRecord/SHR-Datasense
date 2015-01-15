@@ -19,7 +19,7 @@
                 <date value="2015-01-14T15:04:57+05:30"/>
                 <status value="final"/>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <reference value="http://localhost:9997/api/v1/patients/5955445961621766145"/>
                     <display value="5955445961621766145"/>
                 </subject>
                 <encounter>
@@ -60,7 +60,7 @@
                     <text value="Consultation"/>
                 </type>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <reference value="http://localhost:9997/api/v1/patients/5955445961621766145"/>
                     <display value="5955445961621766145"/>
                 </subject>
                 <participant>
@@ -94,13 +94,13 @@
                 <date value="2015-01-06T11:00:00+05:30"/>
                 <vaccineType>
                     <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/drugs/28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
+                        <system value="http://localhost:9997/openmrs/ws/rest/v1/tr/drugs/28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
                         <code value="28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
                         <display value="OPV 1"/>
                     </coding>
                 </vaccineType>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5955445961621766145"/>
+                    <reference value="http://localhost:9997/api/v1/patients/5955445961621766145"/>
                     <display value="5955445961621766145"/>
                 </subject>
                 <refusedIndicator value="false"/>
@@ -110,20 +110,20 @@
                 </requester>
                 <route>
                     <coding>
-                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Route-of-Administration"/>
+                        <system value="http://localhost:9997/openmrs/ws/rest/v1/tr/vs/Route-of-Administration"/>
                         <code value="implant"/>
                         <display value="implant"/>
                     </coding>
                 </route>
                 <doseQuantity>
                     <value value="20.0"/>
-                    <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Quantity-Units"/>
+                    <system value="http://localhost:9997/openmrs/ws/rest/v1/tr/vs/Quantity-Units"/>
                     <code value="mg"/>
                 </doseQuantity>
                 <explanation>
                     <reason>
                         <coding>
-                            <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Immunization-Reason"/>
+                            <system value="http://localhost:9997/openmrs/ws/rest/v1/tr/vs/Immunization-Reason"/>
                             <code value="281657000"/>
                             <display value="Travel vaccinations"/>
                         </coding>

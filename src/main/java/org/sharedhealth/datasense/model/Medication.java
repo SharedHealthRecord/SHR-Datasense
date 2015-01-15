@@ -8,6 +8,8 @@ public class Medication {
     private MedicationStatus status;
     private Patient patient;
     private String drugId;
+    private String conceptId;
+    private String referenceCode;
 
     public Encounter getEncounter() {
         return encounter;
@@ -50,5 +52,21 @@ public class Medication {
 
     public void setDrugId(String drugId) {
         this.drugId = drugId;
+    }
+
+    public String getConceptId() {
+        return conceptId;
+    }
+
+    public void setConceptId(String conceptId) {
+        this.conceptId = conceptId;
+    }
+
+    public String getReferenceCode() {
+        return referenceCode;
+    }
+
+    public void setReferenceCode(String referenceCode) {
+        this.referenceCode = referenceCode;
     }
 }

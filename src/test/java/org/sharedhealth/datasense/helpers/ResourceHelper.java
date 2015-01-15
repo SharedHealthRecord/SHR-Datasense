@@ -20,7 +20,6 @@ public class ResourceHelper {
                 response.append(line);
             }
             bufferedReader.close();
-            System.out.println(response.toString());
             return response.toString();
         }
         return null;

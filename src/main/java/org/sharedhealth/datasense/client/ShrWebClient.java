@@ -2,21 +2,18 @@ package org.sharedhealth.datasense.client;
 
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.security.IdentityStore;
-import org.sharedhealth.datasense.security.IdentityToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
 @Component
 public class ShrWebClient {
     private Logger log = Logger.getLogger(ShrWebClient.class);
-    private IdentityServiceClient identityServiceClient ;
+    private IdentityServiceClient identityServiceClient;
     private DatasenseProperties properties;
 
     @Autowired

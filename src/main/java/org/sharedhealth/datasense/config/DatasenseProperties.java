@@ -25,6 +25,8 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisPostUrl;
     private String dhisUserName;
     private String dhisPassword;
+    private String trUser;
+    private String trPassword;
 
     //Identity Server Properties
     private String identityScheme;
@@ -119,6 +121,8 @@ public class DatasenseProperties implements EnvironmentAware {
         this.identityPort = env.getProperty("IDENTITY_PORT");
         this.identityUser = env.getProperty("IDENTITY_USER");
         this.identityPassword = env.getProperty("IDENTITY_PASSWORD");
+        this.trUser = env.getProperty("TR_USER");
+        this.trPassword = env.getProperty("TR_PASSWORD");
     }
 
     public String getFacilityRegistryUrl() {
@@ -159,5 +163,13 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getIdentityPassword() {
         return identityPassword;
+    }
+
+    public String getTrUser() {
+        return trUser;
+    }
+
+    public String getTrPassword() {
+        return trPassword;
     }
 }

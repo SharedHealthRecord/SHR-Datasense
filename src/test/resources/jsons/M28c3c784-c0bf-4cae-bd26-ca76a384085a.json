@@ -1,0 +1,39 @@
+{
+    "resourceType": "Medication",
+    "name": "OPV 1",
+    "code": {
+        "coding": [
+            {
+                "code": "J07BF01",
+                "display": "poliomyelitis oral, monovalent, live attenuated",
+                "system": "http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/8bb7fb27-2be1-4b7a-bee4-e09d7b800d39"
+            },
+            {
+                "code": "9d770880-fd65-43f5-a7b7-2fb7b6a4037a",
+                "display": "OPV 1",
+                "system": "http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/9d770880-fd65-43f5-a7b7-2fb7b6a4037a"
+            }
+        ]
+    },
+    "product": {
+        "form": {
+            "coding": [
+                {
+                    "code": "81ebb8d5-e3b8-437c-9132-0e19b011031a",
+                    "display": "Tablet1",
+                    "system": "http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/81ebb8d5-e3b8-437c-9132-0e19b011031a"
+                }
+            ]
+        }
+    },
+    "extension": [
+        {
+            "url": "http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/medication#strength",
+            "valueString": "10"
+        },
+        {
+            "url": "http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/medication#retired",
+            "valueString": "false"
+        }
+    ]
+}

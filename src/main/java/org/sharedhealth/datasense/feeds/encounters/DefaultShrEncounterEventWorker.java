@@ -20,7 +20,6 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
 
     @Override
     public void process(EncounterBundle encounterBundle) {
-        System.out.println("in Default Encounter Worker Processor");
         AtomFeed feed = encounterBundle.getResourceOrFeed().getFeed();
         BundleContext context = new BundleContext(feed, encounterBundle.getEncounterId());
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();

@@ -1,11 +1,13 @@
 package org.sharedhealth.datasense.handler;
 
+import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.hl7.fhir.instance.formats.ResourceOrFeed;
 import org.hl7.fhir.instance.model.Immunization;
 import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
@@ -24,9 +26,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.util.List;
 
+import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.*;
+import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -34,6 +39,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ImmunizationResourceHandlerIT {
 
+    private final String TR_DRUG_UUID = "28c3c784-c0bf-4cae-bd26-ca76a384085a";
     @Autowired
     private MedicationDao medicationDao;
     @Autowired
@@ -44,8 +50,20 @@ public class ImmunizationResourceHandlerIT {
     private BundleContext bundleContext;
     private Resource immunizationResource;
 
+    @Rule
+    public WireMockRule wireMockRule = new WireMockRule(9997);
+
     @Before
     public void setUp() throws Exception {
+        givenThat(get(urlEqualTo("/openmrs/ws/rest/v1/tr/drugs/" + TR_DRUG_UUID))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/M" + TR_DRUG_UUID + ".json"))));
+        loadBundleContext();
+    }
+
+    private void loadBundleContext() throws IOException {
         ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithImmunization.xml");
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
@@ -94,7 +112,15 @@ public class ImmunizationResourceHandlerIT {
     public void shouldSaveDrugId() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
-        assertEquals("28c3c784-c0bf-4cae-bd26-ca76a384085a", medication.getDrugId());
+        assertEquals(TR_DRUG_UUID, medication.getDrugId());
+    }
+
+    @Test
+    public void shouldSaveConceptIdAndReferenceCodes() throws Exception {
+        immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
+        Medication medication = getMedication();
+        assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a", medication.getConceptId());
+        assertEquals("J07BF01", medication.getReferenceCode());
     }
 
     @Test
