@@ -13,6 +13,7 @@ import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
+import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.MedicationDao;
@@ -49,6 +50,9 @@ public class ImmunizationResourceHandlerIT {
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        Patient patient = new Patient();
+        patient.setHid("5955445961621766145");
+        composition.getPatientReference().setValue(patient);
         Encounter encounter = new Encounter();
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
@@ -63,11 +67,12 @@ public class ImmunizationResourceHandlerIT {
     }
 
     @Test
-    public void shouldSaveImmunizationDateTimeAndEncounter() throws Exception {
+    public void shouldSaveImmunizationDateTimeAndEncounterAndPatient() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
         assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
+        assertEquals("5955445961621766145", medication.getPatient().getHid());
     }
 
     @Test
@@ -78,17 +83,32 @@ public class ImmunizationResourceHandlerIT {
         assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), medication.getDateTime());
     }
 
-    private Medication getMedication() {
-        List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
-        assertFalse(medications.isEmpty());
-        return medications.get(0);
-    }
-
     @Test
     public void shouldSaveImmunizationStatus() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
         assertEquals("A", medication.getStatus().getValue());
+    }
+
+    @Test
+    public void shouldSaveDrugId() throws Exception {
+        immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
+        Medication medication = getMedication();
+        assertEquals("28c3c784-c0bf-4cae-bd26-ca76a384085a", medication.getDrugId());
+    }
+
+    @Test
+    public void shouldNotSaveNonCodedImmunization() throws Exception {
+        ((Immunization) immunizationResource).getVaccineType().getCoding().get(0).setSystemSimple(null);
+        immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
+        List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        assertTrue(medications.isEmpty());
+    }
+
+    private Medication getMedication() {
+        List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        assertFalse(medications.isEmpty());
+        return medications.get(0);
     }
 
     @After

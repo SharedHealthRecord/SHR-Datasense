@@ -14,8 +14,9 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 import java.util.List;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+
+import static org.sharedhealth.datasense.util.TrUrlMatcher.isConceptUrl;
+import static org.sharedhealth.datasense.util.TrUrlMatcher.isReferenceTermUrl;
 
 @Component
 public class DiagnosisResourceHandler implements FhirResourceHandler {
@@ -57,27 +58,11 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
 
     private void populateDiagnosisCodes(Diagnosis diagnosis, List<Coding> coding) {
         for (Coding code : coding) {
-            if (isConceptCode(code)) {
+            if (isConceptUrl(code.getSystemSimple())) {
                 diagnosis.setDiagnosisConceptId(code.getCodeSimple());
-            } else if (isReferenceTermCode(code)) {
+            } else if (isReferenceTermUrl(code.getSystemSimple())) {
                 diagnosis.setDiagnosisCode(code.getCodeSimple());
             }
         }
-    }
-
-    private boolean isReferenceTermCode(Coding code) {
-        String regex = "(.*)\\/openmrs\\/ws\\/rest\\/v1\\/tr\\/referenceterms\\/(.*)";
-        return matcher(code.getSystemSimple(), regex);
-    }
-
-    private boolean isConceptCode(Coding code) {
-        String regex = "(.*)\\/openmrs\\/ws\\/rest\\/v1\\/tr\\/concepts\\/(.*)";
-        return matcher(code.getSystemSimple(), regex);
-    }
-
-    private boolean matcher(String system, String regex) {
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(system);
-        return matcher.matches();
     }
 }
