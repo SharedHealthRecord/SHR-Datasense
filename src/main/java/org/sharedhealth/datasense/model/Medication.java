@@ -3,7 +3,7 @@ package org.sharedhealth.datasense.model;
 import java.util.Date;
 
 public class Medication {
-    private Date medicationDate;
+    private Date dateTime;
     private Encounter encounter;
     private MedicationStatus status;
 
@@ -18,12 +18,12 @@ public class Medication {
     public Medication() {
     }
 
-    public Date getMedicationDate() {
-        return medicationDate;
+    public Date getDateTime() {
+        return dateTime;
     }
 
-    public void setMedicationDate(Date medicationDate) {
-        this.medicationDate = medicationDate;
+    public void setDateTime(Date dateTime) {
+        this.dateTime = dateTime;
     }
 
     public MedicationStatus getStatus() {

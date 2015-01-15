@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.model.Immunization;
 import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
@@ -50,6 +51,7 @@ public class ImmunizationResourceHandlerIT {
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         Encounter encounter = new Encounter();
         encounter.setEncounterId(shrEncounterId);
+        encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
         composition.getEncounterReference().setValue(encounter);
         immunizationResource = bundleContext.getResourceByReference(new ResourceReference().setReferenceSimple("urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35"));
     }
@@ -64,8 +66,16 @@ public class ImmunizationResourceHandlerIT {
     public void shouldSaveImmunizationDateTimeAndEncounter() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
-        assertEquals(DateUtil.parseDate("2015-01-06T00:00:00+05:30"), medication.getMedicationDate());
+        assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
+    }
+
+    @Test
+    public void shouldSaveEncounterDateTimeIfImmunizationDateNotGiven() throws Exception {
+        Immunization immunization = ((Immunization) immunizationResource).setDate(null);
+        immunizationResourceHandler.process(immunization, bundleContext.getEncounterCompositions().get(0));
+        Medication medication = getMedication();
+        assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), medication.getDateTime());
     }
 
     private Medication getMedication() {

@@ -91,7 +91,7 @@
                 <identifier>
                     <value value="urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35"/>
                 </identifier>
-                <date value="2015-01-06T00:00:00+05:30"/>
+                <date value="2015-01-06T11:00:00+05:30"/>
                 <vaccineType>
                     <coding>
                         <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/drugs/28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
