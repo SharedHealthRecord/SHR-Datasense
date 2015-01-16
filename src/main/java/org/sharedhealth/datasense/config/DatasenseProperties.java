@@ -25,6 +25,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisPostUrl;
     private String dhisUserName;
     private String dhisPassword;
+    private String dhisAqsConfigPath;
     private String trUser;
     private String trPassword;
 
@@ -116,6 +117,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.dhisPostUrl = env.getProperty("DHIS_POST_URL");
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
+        this.dhisAqsConfigPath = env.getProperty("DHIS_AQS_CONFIG_PATH");
         this.identityScheme = env.getProperty("IDENTITY_SCHEME");
         this.identityHost = env.getProperty("IDENTITY_HOST");
         this.identityPort = env.getProperty("IDENTITY_PORT");
@@ -171,5 +173,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getTrPassword() {
         return trPassword;
+    }
+
+    public String getDhisAqsConfigPath() {
+        return dhisAqsConfigPath;
     }
 }

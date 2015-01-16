@@ -21,7 +21,12 @@ public class TrWebClient {
     private DatasenseProperties datasenseProperties;
     private Logger log = Logger.getLogger(TrWebClient.class);
 
-    public TrMedication getTrMedicaion(String uri) throws IOException, URISyntaxException {
+    public TrMedication getTrMedication(String uri) throws IOException, URISyntaxException {
+        String response = getResponse(uri);
+        return response != null ? MapperUtil.readFrom(response, TrMedication.class) : null;
+    }
+
+    public String getResponse(String uri) throws IOException, URISyntaxException {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", getBase64Authentication(datasenseProperties.getTrUser(), datasenseProperties.getTrPassword()));
         headers.put("Accept", "application/json");
@@ -32,6 +37,6 @@ public class TrWebClient {
             log.error(String.format("Could not fetch feed for URI [%s]", uri.toString()), e);
             throw new IOException(e);
         }
-        return response != null ? MapperUtil.readFrom(response, TrMedication.class) : null;
+        return response;
     }
 }

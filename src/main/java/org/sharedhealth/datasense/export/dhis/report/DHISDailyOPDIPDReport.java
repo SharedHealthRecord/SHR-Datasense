@@ -4,6 +4,7 @@ import aggregatequeryservice.postservice;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.FacilityDao;
+import org.sharedhealth.datasense.util.DHISHeaderUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -12,27 +13,28 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.sharedhealth.datasense.util.HttpUtil.getBase64Authentication;
+import static org.sharedhealth.datasense.FacilityType.UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE;
 
 @Component
 public class DHISDailyOPDIPDReport implements DHISReport {
     private FacilityDao facilityDao;
-    private DatasenseProperties datasenseProperties;
-    private static final String facilityType = "Upazila Health Complex";
     private DataSource dataSource;
+    private DHISHeaderUtil dhisHeaderUtil;
+    private DatasenseProperties datasenseProperties;
 
 
     @Autowired
-    public DHISDailyOPDIPDReport(FacilityDao facilityDao, DatasenseProperties properties, DataSource dataSource) {
+    public DHISDailyOPDIPDReport(FacilityDao facilityDao, DataSource dataSource, DHISHeaderUtil dhisHeaderUtil, DatasenseProperties datasenseProperties) {
         this.facilityDao = facilityDao;
-        this.datasenseProperties = properties;
         this.dataSource = dataSource;
+        this.dhisHeaderUtil = dhisHeaderUtil;
+        this.datasenseProperties = datasenseProperties;
     }
 
     @Override
     public void process(Map<String, Object> dataMap) {
         String reportingDate = (String) dataMap.get("reportingDate");
-        List<Facility> facilitiesByType = facilityDao.findFacilitiesByType(facilityType);
+        List<Facility> facilitiesByType = facilityDao.findFacilitiesByType(UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE);
         for (Facility facility : facilitiesByType) {
             if (facility.getDhisOrgUnitUid() != null)
                 processReportForFacility(facility, reportingDate);
@@ -49,12 +51,9 @@ public class DHISDailyOPDIPDReport implements DHISReport {
         extraParams.put("period", period);
         extraParams.put("orgUnit", facility.getDhisOrgUnitUid());
 
-        HashMap<String, String> postHeaders = new HashMap<>();
-        String authentication = getBase64Authentication(datasenseProperties.getDhisUserName(), datasenseProperties.getDhisPassword());
-        postHeaders.put("Authorization", authentication);
-        postHeaders.put("Content-Type", "application/json");
+        HashMap<String, String> postHeaders = dhisHeaderUtil.getDhisHeaders();
 
-        String pathToConfig = "/opt/datasense/lib/dhis_config/aqs_config/daily_opd_ipd_report.json";
+        String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + "daily_opd_ipd_report.json";
 
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }

@@ -180,6 +180,7 @@
             </column>
             <column name="patient_hid" type="varchar(20)" />
             <column name="encounter_id" type="varchar(50)" />
+            <column name="name" type="varchar(50)" />
             <column name="drug_id" type="varchar(50)"/>
             <column name="code" type="varchar(10)" />
             <column name="concept_id" type="varchar(50)" />

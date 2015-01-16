@@ -8,7 +8,6 @@ import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
-import org.sharedhealth.datasense.security.IdentityStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
@@ -47,7 +46,8 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.client",
         "org.sharedhealth.datasense.handler",
         "org.sharedhealth.datasense.export.dhis",
-        "org.sharedhealth.datasense.security"
+        "org.sharedhealth.datasense.security",
+        "org.sharedhealth.datasense.util"
 })
 public class Main {
 

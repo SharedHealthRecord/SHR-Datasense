@@ -10,6 +10,7 @@ public class Medication {
     private String drugId;
     private String conceptId;
     private String referenceCode;
+    private String name;
 
     public Encounter getEncounter() {
         return encounter;
@@ -68,5 +69,13 @@ public class Medication {
 
     public void setReferenceCode(String referenceCode) {
         this.referenceCode = referenceCode;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
     }
 }

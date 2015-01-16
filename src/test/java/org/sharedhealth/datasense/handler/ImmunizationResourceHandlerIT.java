@@ -109,10 +109,11 @@ public class ImmunizationResourceHandlerIT {
     }
 
     @Test
-    public void shouldSaveDrugId() throws Exception {
+    public void shouldSaveDrugIdAndName() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
         assertEquals(TR_DRUG_UUID, medication.getDrugId());
+        assertEquals("OPV 1", medication.getName());
     }
 
     @Test

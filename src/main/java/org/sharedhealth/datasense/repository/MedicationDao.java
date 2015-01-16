@@ -20,7 +20,7 @@ public class MedicationDao {
     private JdbcTemplate jdbcTemplate;
 
     public List<Medication> findByEncounterId(String shrEncounterId) {
-        String sql = "select datetime, encounter_id, patient_hid, status, drug_id, concept_id, code from medication where encounter_id=?";
+        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code from medication where encounter_id=?";
         return jdbcTemplate.query(sql, new Object[]{shrEncounterId}, new RowMapper<Medication>() {
             @Override
             public Medication mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -37,6 +37,7 @@ public class MedicationDao {
                 patient.setHid(rs.getString("patient_hid"));
                 medication.setPatient(patient);
 
+                medication.setName(rs.getString("name"));
                 medication.setDrugId(rs.getString("drug_id"));
                 medication.setConceptId(rs.getString("concept_id"));
                 medication.setReferenceCode(rs.getString("code"));
@@ -47,11 +48,12 @@ public class MedicationDao {
     }
 
     public void save(Medication medication) {
-        String sql = "insert into medication (datetime, encounter_id, status, patient_hid, drug_id, concept_id, code) " +
-                "values(?, ?, ?, ?, ?, ?, ?)";
+        String sql = "insert into medication (datetime, encounter_id, name, status, patient_hid, drug_id, concept_id, code) " +
+                "values(?, ?, ?, ?, ?, ?, ?, ?)";
         jdbcTemplate.update(sql,
                 medication.getDateTime(),
                 medication.getEncounter().getEncounterId(),
+                medication.getName(),
                 medication.getStatus().getValue(),
                 medication.getPatient().getHid(),
                 medication.getDrugId(),

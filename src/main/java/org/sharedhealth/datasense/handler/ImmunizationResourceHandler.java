@@ -67,6 +67,8 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
                 medication.setDrugId(coding.getCodeSimple());
                 medication.setConceptId(getConceptId(trMedication.getCode().getCoding()));
                 medication.setReferenceCode(getReferenceCode(trMedication.getCode().getCoding()));
+                medication.setName(trMedication.getName());
+                break;
             }
         }
     }
@@ -90,7 +92,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     private TrMedication getTrMedication(String system) {
         String errorMessage = String.format("Could not connect to [ %s ]", system);
         try {
-            return trWebClient.getTrMedicaion(system);
+            return trWebClient.getTrMedication(system);
         } catch (IOException e) {
             logger.error("IO exception", e);
             throw new RuntimeException("IO exception", e);
