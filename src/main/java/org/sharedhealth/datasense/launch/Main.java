@@ -5,7 +5,9 @@ import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
+import org.sharedhealth.datasense.export.dhis.DHISMonthlyEPIInfantPostJob;
 import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
+import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,6 +69,9 @@ public class Main {
     private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
 
     @Autowired
+    private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
+
+    @Autowired
     private ShrWebClient shrWebClient;
 
     @Bean
@@ -94,7 +99,9 @@ public class Main {
 
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
-        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(), dhisDailyOPDIPDPostJobTrigger().getObject());
+        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(),
+                dhisDailyOPDIPDPostJobTrigger().getObject(),
+                dhisEPIInfantPostJobTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
@@ -119,6 +126,7 @@ public class Main {
         ctx.put("properties", properties);
         ctx.put("encounterEventWorker", encounterEventWorker);
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
+        ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
         ctx.put("shrWebClient", shrWebClient);
         return ctx;
     }
@@ -164,6 +172,31 @@ public class Main {
         triggerFactoryBean.setStartDelay(10000);
         triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
         triggerFactoryBean.setJobDetail(dhisDailyOPDIPDJob().getObject());
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return triggerFactoryBean;
+    }
+
+    @Bean
+    public JobDetailFactoryBean dhisEPIInfantPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
+        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");;
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean;
+    }
+
+    @Bean
+    public CronTriggerFactoryBean dhisEPIInfantPostJobTrigger() {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName("dhis.monthly.epi.infant.post.job.trigger");
+        triggerFactoryBean.setStartDelay(10000);
+        triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
+        triggerFactoryBean.setJobDetail(dhisEPIInfantPostJob().getObject());
         try {
             triggerFactoryBean.afterPropertiesSet();
         } catch (ParseException e) {

@@ -21,5 +21,4 @@ public class BundleContextTest {
         assertNotNull(encounterComposition.getEncounterReference().getEncounterReferenceValue());
         assertEquals(7, encounterComposition.getResources().size());
     }
-
 }

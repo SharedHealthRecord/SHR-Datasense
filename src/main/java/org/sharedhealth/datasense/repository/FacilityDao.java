@@ -3,37 +3,47 @@ package org.sharedhealth.datasense.repository;
 
 import org.sharedhealth.datasense.model.Facility;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+
+import static java.util.Arrays.asList;
 
 @Repository
 public class FacilityDao {
 
     private static final String ALL_FIELDS = "facility_id, name, type, location_id, dhis_org_unit_uid";
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     public Facility findFacilityById(String facilityId) {
-        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id=?", new Object[]{facilityId}, getRowMapperForFacility());
+        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id= :facility_id",
+                Collections.singletonMap("facility_id", facilityId),
+                getRowMapperForFacility());
         return facilities.isEmpty() ? null : facilities.get(0);
     }
 
     public void save(Facility facility) {
-        jdbcTemplate.update("insert into facility (" + ALL_FIELDS + ") values(?, ? ,? ,? ,?)",
-                facility.getFacilityId(),
-                facility.getFacilityName(),
-                facility.getFacilityType(),
-                facility.getFacilityLocationCode(),
-                facility.getDhisOrgUnitUid());
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facility.getFacilityId());
+        map.put("facility_name", facility.getFacilityName());
+        map.put("facility_type", facility.getFacilityType());
+        map.put("facility_location", facility.getFacilityLocationCode());
+        map.put("dhis_org_unit_uid", facility.getDhisOrgUnitUid());
+        String query = "insert into facility (" + ALL_FIELDS + ") values " +
+                "(:facility_id, :facility_name, :facility_type, :facility_location, :dhis_org_unit_uid)";
+        jdbcTemplate.update(query, map);
     }
 
     public List<Facility> findFacilitiesByType(String facilityType) {
-        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type=?", new Object[]{facilityType}, getRowMapperForFacility());
+        List<String> strings = asList(facilityType);
+        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections.singletonMap("ids", strings), getRowMapperForFacility());
     }
 
     private RowMapper<Facility> getRowMapperForFacility() {

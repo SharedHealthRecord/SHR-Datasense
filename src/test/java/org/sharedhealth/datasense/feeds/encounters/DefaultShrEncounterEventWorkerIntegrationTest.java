@@ -19,7 +19,7 @@ import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -43,7 +43,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     private EncounterEventWorker encounterEventWorker;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Autowired
     private PatientDao patientDao;

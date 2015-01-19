@@ -7,7 +7,8 @@ import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -23,15 +24,15 @@ public class DHISDailyOPDIPDReportTest {
     private DHISDailyOPDIPDReport dailyOPDIPDReport;
 
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Test
     public void shouldPostDataForEachFacility() {
-        jdbcTemplate.execute("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')");
-        jdbcTemplate.execute("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')");
-        jdbcTemplate.execute("Insert into encounter select * from CSVREAD('classpath:/csv/encounters.csv')");
+        jdbcTemplate.update("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')", new EmptySqlParameterSource());
+        jdbcTemplate.update("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')", new EmptySqlParameterSource());
+        jdbcTemplate.update("Insert into encounter select * from CSVREAD('classpath:/csv/encounters.csv')", new EmptySqlParameterSource());
         Map<String, Object> map = new HashMap<>();
-        map.put("reportingDate","2014-12-23");
+        map.put("reportingDate", "2014-12-23");
 //        dailyOPDIPDReport.process(map);
     }
 

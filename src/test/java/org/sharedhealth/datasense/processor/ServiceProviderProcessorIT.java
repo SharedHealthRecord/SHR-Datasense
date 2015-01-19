@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -33,11 +34,11 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ServiceProviderProcessorIT {
     @Autowired
-    JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
     @Autowired
-    FacilityDao facilityDao;
+    private FacilityDao facilityDao;
     @Autowired
-    FacilityWebClient webClient;
+    private FacilityWebClient webClient;
     @Autowired
     @Qualifier("dhisFacilitiesMap")
     private PropertiesFactoryBean dhisFacilitiesMap;

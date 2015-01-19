@@ -5,23 +5,25 @@ import org.sharedhealth.datasense.model.Medication;
 import org.sharedhealth.datasense.model.MedicationStatus;
 import org.sharedhealth.datasense.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 @Component
 public class MedicationDao {
     @Autowired
-    private JdbcTemplate jdbcTemplate;
+    private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<Medication> findByEncounterId(String shrEncounterId) {
-        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code from medication where encounter_id=?";
-        return jdbcTemplate.query(sql, new Object[]{shrEncounterId}, new RowMapper<Medication>() {
+        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code from medication where encounter_id= :encounter_id";
+        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new RowMapper<Medication>() {
             @Override
             public Medication mapRow(ResultSet rs, int rowNum) throws SQLException {
                 Medication medication = new Medication();
@@ -48,17 +50,17 @@ public class MedicationDao {
     }
 
     public void save(Medication medication) {
-        String sql = "insert into medication (datetime, encounter_id, name, status, patient_hid, drug_id, concept_id, code) " +
-                "values(?, ?, ?, ?, ?, ?, ?, ?)";
-        jdbcTemplate.update(sql,
-                medication.getDateTime(),
-                medication.getEncounter().getEncounterId(),
-                medication.getName(),
-                medication.getStatus().getValue(),
-                medication.getPatient().getHid(),
-                medication.getDrugId(),
-                medication.getConceptId(),
-                medication.getReferenceCode()
-        );
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", medication.getPatient().getHid());
+        map.put("encounter_id", medication.getEncounter().getEncounterId());
+        map.put("name", medication.getName());
+        map.put("datetime", medication.getDateTime());
+        map.put("status", medication.getStatus().getValue());
+        map.put("drug_id", medication.getDrugId());
+        map.put("concept_id", medication.getConceptId());
+        map.put("code", medication.getReferenceCode());
+        String sql = "insert into medication (patient_hid, encounter_id, name, datetime, status,  drug_id, concept_id, code) " +
+                "values(:patient_hid, :encounter_id, :name, :datetime, :status,  :drug_id, :concept_id, :code)";
+        jdbcTemplate.update(sql, map);
     }
 }
