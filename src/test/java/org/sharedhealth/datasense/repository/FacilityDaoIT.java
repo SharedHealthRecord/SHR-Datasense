@@ -34,9 +34,9 @@ public class FacilityDaoIT {
 
     @Test
     public void shouldFindFacilityByType() throws Exception {
-        assertEquals(2, facilityDao.findFacilitiesByType(asList("Upazila Health Complex")).size());
-        assertEquals(1, facilityDao.findFacilitiesByType(asList("Upazila Level Office")).size());
-        assertEquals(3, facilityDao.findFacilitiesByType(asList("Upazila Level Office", "Upazila Health Complex")).size());
+        assertEquals(2, facilityDao.findFacilitiesByTypes(asList("Upazila Health Complex")).size());
+        assertEquals(1, facilityDao.findFacilitiesByTypes(asList("Upazila Level Office")).size());
+        assertEquals(3, facilityDao.findFacilitiesByTypes(asList("Upazila Level Office", "Upazila Health Complex")).size());
     }
 
     @Test

@@ -39,7 +39,7 @@ public class FacilityDao {
         jdbcTemplate.update(query, map);
     }
 
-    public List<Facility> findFacilitiesByType(List<String> facilityTypes) {
+    public List<Facility> findFacilitiesByTypes(List<String> facilityTypes) {
         return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections.singletonMap("ids", facilityTypes), getRowMapperForFacility());
     }
 

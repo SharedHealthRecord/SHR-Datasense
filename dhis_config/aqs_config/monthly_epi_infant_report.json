@@ -1,0 +1,21 @@
+{
+    "query_json_path": "/opt/datasense/lib/dhis_config/aqs_query/monthly_epi_infant_queries.json",
+    "template_base": "/opt/datasense/lib/dhis_config/",
+    "template_query_map": [
+        {
+            "template_path": "templates/monthly_epi_infant_template.ftl",
+            "query_list": [
+                "BCG_0_to_11_months",
+                "BCG_12_to_23_months",
+                "OPV1_0_to_11_months",
+                "OPV1_12_to_23_months",
+                "OPV2_0_to_11_months",
+                "OPV2_12_to_23_months",
+                "OPV3_0_to_11_months",
+                "OPV3_12_to_23_months"
+            ]
+        }
+    ],
+    "http-post-uri": "http://192.168.33.20:8080/dhis/api/dataValueSets"
+
+}

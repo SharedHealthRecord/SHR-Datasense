@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.sharedhealth.datasense.FacilityType.UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE;
 
@@ -23,6 +24,7 @@ public class DHISDailyOPDIPDReport implements DHISReport {
     private DHISHeaderUtil dhisHeaderUtil;
     private DatasenseProperties datasenseProperties;
 
+    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DHISDailyOPDIPDReport.class);
 
     @Autowired
     public DHISDailyOPDIPDReport(FacilityDao facilityDao, DataSource dataSource, DHISHeaderUtil dhisHeaderUtil, DatasenseProperties datasenseProperties) {
@@ -35,14 +37,14 @@ public class DHISDailyOPDIPDReport implements DHISReport {
     @Override
     public void process(Map<String, Object> dataMap) {
         String reportingDate = (String) dataMap.get("reportingDate");
-        List<Facility> facilitiesByType = facilityDao.findFacilitiesByType(asList(UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE));
+        List<Facility> facilitiesByType = facilityDao.findFacilitiesByTypes(asList(UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE));
         for (Facility facility : facilitiesByType) {
             if (facility.getDhisOrgUnitUid() != null)
-                processReportForFacility(facility, reportingDate);
+                postReportForFacility(facility, reportingDate);
         }
     }
 
-    private void processReportForFacility(Facility facility, String reportingDate) {
+    private void postReportForFacility(Facility facility, String reportingDate) {
         String period = reportingDate.replaceAll("-", "");
         HashMap<String, String> queryParams = new HashMap<>();
         queryParams.put("FACILITY", facility.getFacilityId());
@@ -55,6 +57,8 @@ public class DHISDailyOPDIPDReport implements DHISReport {
         HashMap<String, String> postHeaders = dhisHeaderUtil.getDhisHeaders();
 
         String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + "daily_opd_ipd_report.json";
+
+        logger.info(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility.getFacilityName(), reportingDate));
 
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }

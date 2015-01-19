@@ -24,7 +24,6 @@ public class DHISMonthlyEPIInfantPostJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        System.out.println("Executing");
         String reportingMonthParam = (String) context.getMergedJobDataMap().get("reportingMonth");
         System.out.println(reportingMonthParam);
 
