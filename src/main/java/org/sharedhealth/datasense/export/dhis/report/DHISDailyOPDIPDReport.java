@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Arrays.asList;
 import static org.sharedhealth.datasense.FacilityType.UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE;
 
 @Component
@@ -34,7 +35,7 @@ public class DHISDailyOPDIPDReport implements DHISReport {
     @Override
     public void process(Map<String, Object> dataMap) {
         String reportingDate = (String) dataMap.get("reportingDate");
-        List<Facility> facilitiesByType = facilityDao.findFacilitiesByType(UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE);
+        List<Facility> facilitiesByType = facilityDao.findFacilitiesByType(asList(UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE));
         for (Facility facility : facilitiesByType) {
             if (facility.getDhisOrgUnitUid() != null)
                 processReportForFacility(facility, reportingDate);

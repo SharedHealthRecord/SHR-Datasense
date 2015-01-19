@@ -13,8 +13,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
 @Repository
 public class FacilityDao {
 
@@ -41,9 +39,8 @@ public class FacilityDao {
         jdbcTemplate.update(query, map);
     }
 
-    public List<Facility> findFacilitiesByType(String facilityType) {
-        List<String> strings = asList(facilityType);
-        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections.singletonMap("ids", strings), getRowMapperForFacility());
+    public List<Facility> findFacilitiesByType(List<String> facilityTypes) {
+        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections.singletonMap("ids", facilityTypes), getRowMapperForFacility());
     }
 
     private RowMapper<Facility> getRowMapperForFacility() {

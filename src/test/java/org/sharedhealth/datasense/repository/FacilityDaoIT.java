@@ -15,6 +15,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import static java.util.Arrays.asList;
 import static junit.framework.Assert.assertEquals;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -33,8 +34,9 @@ public class FacilityDaoIT {
 
     @Test
     public void shouldFindFacilityByType() throws Exception {
-        assertEquals(2, facilityDao.findFacilitiesByType("Upazila Health Complex").size());
-        assertEquals(1, facilityDao.findFacilitiesByType("Upazila Level Office").size());
+        assertEquals(2, facilityDao.findFacilitiesByType(asList("Upazila Health Complex")).size());
+        assertEquals(1, facilityDao.findFacilitiesByType(asList("Upazila Level Office")).size());
+        assertEquals(3, facilityDao.findFacilitiesByType(asList("Upazila Level Office", "Upazila Health Complex")).size());
     }
 
     @Test
