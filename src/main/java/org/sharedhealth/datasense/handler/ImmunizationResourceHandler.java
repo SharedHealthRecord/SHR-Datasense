@@ -22,9 +22,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isConceptUrl;
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isReferenceTermUrl;
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isTrMedicationUrl;
+import static org.sharedhealth.datasense.util.TrUrlMatcher.*;
 
 @Component
 public class ImmunizationResourceHandler implements FhirResourceHandler {
