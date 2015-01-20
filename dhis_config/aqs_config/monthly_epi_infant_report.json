@@ -7,15 +7,26 @@
             "query_list": [
                 "BCG_0_to_11_months",
                 "BCG_12_to_23_months",
+                "Penta1_0_to_11_months",
+                "Penta1_12_to_23_months",
+                "Penta2_0_to_11_months",
+                "Penta2_12_to_23_months",
+                "Penta3_0_to_11_months",
+                "Penta3_12_to_23_months",
+                "OPV0_0_to_11_months",
                 "OPV1_0_to_11_months",
                 "OPV1_12_to_23_months",
                 "OPV2_0_to_11_months",
                 "OPV2_12_to_23_months",
                 "OPV3_0_to_11_months",
-                "OPV3_12_to_23_months"
+                "OPV3_12_to_23_months",
+                "OPV4_0_to_11_months",
+                "OPV4_12_to_23_months",
+                "MCV2_12_to_23_months",
+                "MR_0_to_11_months"
             ]
         }
     ],
-    "http-post-uri": "http://192.168.33.20:8080/dhis/api/dataValueSets"
+    "http-post-uri": "http://172.18.46.225:8080/dhis/api/dataValueSets"
 
 }
