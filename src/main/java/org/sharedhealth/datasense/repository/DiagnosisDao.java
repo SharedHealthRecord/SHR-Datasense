@@ -28,16 +28,17 @@ public class DiagnosisDao {
         map.put("code", diagnosis.getDiagnosisCode());
         map.put("concept_id", diagnosis.getDiagnosisConcept());
         map.put("status", diagnosis.getDiagnosisStatus());
+        map.put("uuid", diagnosis.getUuid());
         jdbcTemplate.update("insert into diagnosis(patient_hid, encounter_id, diagnosis_datetime, " +
-                "diagnosis_code, diagnosis_concept_id, diagnosis_status) values " +
-                "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status)", map);
+                "diagnosis_code, diagnosis_concept_id, diagnosis_status, uuid) values " +
+                "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status, :uuid)", map);
 
     }
 
     public List<Diagnosis> findByEncounterId(String encounterId) {
         return jdbcTemplate.query(
                 "select diagnosis_id, patient_hid, encounter_id, diagnosis_datetime, diagnosis_code, diagnosis_concept_id, " +
-                        "diagnosis_status from diagnosis where encounter_id= :encounter_id", Collections.singletonMap("encounter_id", encounterId),
+                        "diagnosis_status, uuid from diagnosis where encounter_id= :encounter_id", Collections.singletonMap("encounter_id", encounterId),
                 new RowMapper<Diagnosis>() {
                     @Override
                     public Diagnosis mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -47,6 +48,8 @@ public class DiagnosisDao {
                         diagnosis.setDiagnosisCode(rs.getString("diagnosis_code"));
                         diagnosis.setDiagnosisConceptId(rs.getString("diagnosis_concept_id"));
                         diagnosis.setDiagnosisStatus(rs.getString("diagnosis_status"));
+                        diagnosis.setUuid(rs.getString("uuid"));
+
                         Encounter encounter = new Encounter();
                         encounter.setEncounterId(rs.getString("encounter_id"));
                         diagnosis.setEncounter(encounter);

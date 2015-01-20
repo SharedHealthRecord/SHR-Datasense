@@ -188,4 +188,42 @@
             <column name="status" type="varchar(2)" />
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150120-1245" author="sharedhealth" context="setup">
+        <comment>creating observation table</comment>
+        <createTable tableName="observation">
+            <column name="observation_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)" />
+            <column name="encounter_id" type="varchar(50)" />
+            <column name="name" type="varchar(50)" />
+            <column name="code" type="varchar(10)" />
+            <column name="concept_id" type="varchar(50)" />
+            <column name="datetime" type="datetime" />
+            <column name="parent_id" type="varchar(50)" />
+            <column name="uuid" type="varchar(50)" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </createTable>
+        <addForeignKeyConstraint baseColumnNames="parent_id"
+                                 baseTableName="observation"
+                                 constraintName="parent_observation_fk"
+                                 onDelete="CASCADE"
+                                 onUpdate="CASCADE"
+                                 referencedColumnNames="uuid"
+                                 referencedTableName="observation"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150120-1448" author="sharedhealth" context="setup">
+        <comment>adding column uuid to diagnosis and medication</comment>
+        <addColumn tableName="diagnosis">
+            <column name="uuid" type="varchar(50)" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+        <addColumn tableName="medication">
+            <column name="uuid" type="varchar(50)" >
+                <constraints nullable="false" unique="true"/>
+            </column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

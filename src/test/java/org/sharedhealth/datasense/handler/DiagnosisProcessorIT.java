@@ -28,6 +28,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
 import static junit.framework.Assert.assertTrue;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
@@ -76,6 +77,7 @@ public class DiagnosisProcessorIT {
         List<Diagnosis> diagnosises = diagnosisDao.findByEncounterId(shrEncounterId);
         assertEquals(1, diagnosises.size());
         Diagnosis diagnosis = diagnosises.get(0);
+        assertNotNull(diagnosis.getUuid());
         assertEquals(shrEncounterId, diagnosis.getEncounter().getEncounterId());
         assertEquals("J19.513891", diagnosis.getDiagnosisCode());
         assertEquals("12722059-401d-4ef1-83c7-ebc3fb32bf80", diagnosis.getDiagnosisConcept());

@@ -22,7 +22,7 @@ public class MedicationDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<Medication> findByEncounterId(String shrEncounterId) {
-        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code from medication where encounter_id= :encounter_id";
+        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code, uuid from medication where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new RowMapper<Medication>() {
             @Override
             public Medication mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -44,6 +44,7 @@ public class MedicationDao {
                 medication.setConceptId(rs.getString("concept_id"));
                 medication.setReferenceCode(rs.getString("code"));
                 medication.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
+                medication.setUuid(rs.getString("uuid"));
                 return medication;
             }
         });
@@ -59,8 +60,9 @@ public class MedicationDao {
         map.put("drug_id", medication.getDrugId());
         map.put("concept_id", medication.getConceptId());
         map.put("code", medication.getReferenceCode());
-        String sql = "insert into medication (patient_hid, encounter_id, name, datetime, status,  drug_id, concept_id, code) " +
-                "values(:patient_hid, :encounter_id, :name, :datetime, :status,  :drug_id, :concept_id, :code)";
+        map.put("uuid", medication.getUuid());
+        String sql = "insert into medication (patient_hid, encounter_id, name, datetime, status,  drug_id, concept_id, code, uuid) " +
+                "values(:patient_hid, :encounter_id, :name, :datetime, :status,  :drug_id, :concept_id, :code, :uuid)";
         jdbcTemplate.update(sql, map);
     }
 }
