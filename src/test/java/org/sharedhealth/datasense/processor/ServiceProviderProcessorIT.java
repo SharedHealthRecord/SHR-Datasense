@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -17,7 +17,6 @@ import org.sharedhealth.datasense.repository.FacilityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -65,7 +64,7 @@ public class ServiceProviderProcessorIT {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
@@ -73,7 +72,7 @@ public class ServiceProviderProcessorIT {
         assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
         assertEquals("Upazila Health Complex", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
-        assertEquals("nRm6mKjJsaE",facility.getDhisOrgUnitUid());
+        assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
     }
 
     @Test(expected = RuntimeException.class)
@@ -81,7 +80,7 @@ public class ServiceProviderProcessorIT {
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
                 .willReturn(aResponse()
                         .withStatus(500)));
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
     }

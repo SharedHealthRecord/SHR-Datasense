@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
 import org.apache.commons.codec.binary.Base64;
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.Ignore;
@@ -43,7 +43,7 @@ public class ShrEncounterFeedProcessorTest {
             @Override
             public void process(EncounterBundle encounterBundle) {
                 System.out.println(encounterBundle.getEncounterId());
-                ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
+                ParserBase.ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
             }
         };
         String feedUrl = getFeedUrl();
@@ -52,7 +52,7 @@ public class ShrEncounterFeedProcessorTest {
                         feedUrl,
                         new AllMarkersInMemoryImpl(),
                         new AllFailedEventsInMemoryImpl(),
-                        new AtomFeedSpringTransactionManager(txMgr),shrWebClient);
+                        new AtomFeedSpringTransactionManager(txMgr), shrWebClient);
         feedCrawler.process();
     }
 

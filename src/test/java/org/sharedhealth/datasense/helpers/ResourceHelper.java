@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.helpers;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.formats.XmlParser;
 
 import java.io.BufferedReader;
@@ -25,9 +25,9 @@ public class ResourceHelper {
         return null;
     }
 
-    public static ResourceOrFeed loadFromXmlFile(String fileName) throws IOException {
+    public static ParserBase.ResourceOrFeed loadFromXmlFile(String fileName) throws IOException {
         String content = asString(fileName);
-        ResourceOrFeed resource;
+        ParserBase.ResourceOrFeed resource;
         try {
              resource = new XmlParser(true).parseGeneral(new ByteArrayInputStream(content.getBytes()));
         } catch (Exception e) {

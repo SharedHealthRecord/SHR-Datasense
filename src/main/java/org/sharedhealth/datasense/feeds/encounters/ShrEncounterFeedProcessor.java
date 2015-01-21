@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.formats.XmlParser;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.domain.Event;
@@ -68,7 +68,7 @@ public class ShrEncounterFeedProcessor {
         @Override
         public void process(Event event) {
             String content = event.getContent();
-            ResourceOrFeed resource;
+            ParserBase.ResourceOrFeed resource;
             try {
                 resource = new XmlParser(true).parseGeneral(new ByteArrayInputStream(content.getBytes()));
             } catch (Exception e) {

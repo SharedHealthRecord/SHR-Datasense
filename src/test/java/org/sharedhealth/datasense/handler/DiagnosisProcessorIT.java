@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
@@ -27,9 +27,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertNotNull;
-import static junit.framework.Assert.assertTrue;
+import static junit.framework.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -59,7 +57,7 @@ public class DiagnosisProcessorIT {
 
     @Test
     public void shouldSaveDiagnosis() throws Exception {
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);

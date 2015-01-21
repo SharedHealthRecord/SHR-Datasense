@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.Test;
 
 import java.util.List;
@@ -13,7 +13,7 @@ public class BundleContextTest {
 
     @Test
     public void shouldParseFeedAndIdentifyEncounter() throws Exception {
-        ResourceOrFeed encounterResource = loadFromXmlFile("xmls/sampleEncounter.xml");
+        ParserBase.ResourceOrFeed encounterResource = loadFromXmlFile("xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(encounterResource.getFeed(), "shrEncounterId");
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());

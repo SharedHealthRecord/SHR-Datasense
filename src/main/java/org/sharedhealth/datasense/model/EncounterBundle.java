@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.model;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 
 public class EncounterBundle {
 
@@ -9,17 +9,13 @@ public class EncounterBundle {
     private String healthId;
     private String publishedDate;
 
-
     private String title;
-
 
     private String link;
 
-
     private String[] categories;
 
-
-    private ResourceOrFeed resourceOrFeed;
+    private ParserBase.ResourceOrFeed resourceOrFeed;
 
     public String getEncounterId() {
         return encounterId;
@@ -33,7 +29,7 @@ public class EncounterBundle {
         return publishedDate;
     }
 
-    public ResourceOrFeed getResourceOrFeed() {
+    public ParserBase.ResourceOrFeed getResourceOrFeed() {
         return resourceOrFeed;
     }
 
@@ -49,7 +45,7 @@ public class EncounterBundle {
         this.publishedDate = date;
     }
 
-    public void addContent(ResourceOrFeed resourceOrFeed) {
+    public void addContent(ParserBase.ResourceOrFeed resourceOrFeed) {
         this.resourceOrFeed = resourceOrFeed;
     }
 

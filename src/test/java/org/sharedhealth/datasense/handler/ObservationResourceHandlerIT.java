@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
@@ -40,11 +40,10 @@ public class ObservationResourceHandlerIT {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
     private BundleContext bundleContext;
-    private org.hl7.fhir.instance.model.Observation fhirObservation;
 
     @Before
     public void setUp() throws Exception {
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
@@ -55,7 +54,7 @@ public class ObservationResourceHandlerIT {
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-20T11:10:53+05:30"));
         composition.getEncounterReference().setValue(encounter);
-        fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2"));
+
     }
 
     @After
@@ -65,11 +64,15 @@ public class ObservationResourceHandlerIT {
 
     @Test
     public void shouldHandleFHIRObservations() throws Exception {
+        ResourceReference deathReference = new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathReference);
         assertTrue(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
-    public void shouldSaveObservation() throws Exception {
+    public void shouldSaveDeathNoteObservation() throws Exception {
+        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathNoteReference);
         observationResourceHandler.process(fhirObservation, bundleContext.getEncounterCompositions().get(0));
         List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());

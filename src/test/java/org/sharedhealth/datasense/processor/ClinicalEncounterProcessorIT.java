@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -50,7 +50,7 @@ public class ClinicalEncounterProcessorIT {
 
     @Test
     public void shouldSaveEncounter() throws Exception {
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);

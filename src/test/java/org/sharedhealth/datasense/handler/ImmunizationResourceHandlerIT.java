@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ResourceOrFeed;
+import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.model.Immunization;
 import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
@@ -64,7 +64,7 @@ public class ImmunizationResourceHandlerIT {
     }
 
     private void loadBundleContext() throws IOException {
-        ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithImmunization.xml");
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithImmunization.xml");
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
