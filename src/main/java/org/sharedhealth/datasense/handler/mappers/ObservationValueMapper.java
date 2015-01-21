@@ -21,9 +21,9 @@ public class ObservationValueMapper {
         } else if (value instanceof Decimal) {
             return ((Decimal) value).getValue().toString();
         } else if (value instanceof Date) {
-            return DateUtil.parseDate(((Date) value).getValue().toString()).toString();
+            return DateUtil.parseToString(((Date) value).getValue());
         } else if (value instanceof DateTime) {
-            return DateUtil.parseDate(((DateTime) value).getValue().toString()).toString();
+            return DateUtil.parseToString(((DateTime) value).getValue());
         } else if (value instanceof org.hl7.fhir.instance.model.Boolean){
             return ((org.hl7.fhir.instance.model.Boolean) value).getStringValue();
         }

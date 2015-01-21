@@ -1,11 +1,18 @@
 package org.sharedhealth.datasense.handler.mappers;
 
-import org.hl7.fhir.instance.model.*;
 import org.hl7.fhir.instance.model.Boolean;
+import org.hl7.fhir.instance.model.CodeableConcept;
+import org.hl7.fhir.instance.model.Coding;
+import org.hl7.fhir.instance.model.Date;
+import org.hl7.fhir.instance.model.DateAndTime;
+import org.hl7.fhir.instance.model.DateTime;
+import org.hl7.fhir.instance.model.Decimal;
+import org.hl7.fhir.instance.model.String_;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
+import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 
@@ -36,12 +43,15 @@ public class ObservationValueMapperTest {
     public void shouldMapDateAndDateTimeValues() throws Exception {
         java.util.Date date = new java.util.Date();
         DateAndTime dateAndTime = new DateAndTime(date);
+        String formatedDate = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(date);
+
         Date fhirDate = new Date();
         fhirDate.setValue(dateAndTime);
-        assertEquals(date.toString(), observationValueMapper.getObservationValue(fhirDate));
+        assertEquals(formatedDate, observationValueMapper.getObservationValue(fhirDate));
+
         DateTime fhirDateTime = new DateTime();
         fhirDateTime.setValue(dateAndTime);
-        assertEquals(date.toString(), observationValueMapper.getObservationValue(fhirDateTime));
+        assertEquals(formatedDate, observationValueMapper.getObservationValue(fhirDateTime));
     }
 
     @Test

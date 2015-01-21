@@ -97,6 +97,6 @@ public class ObservationResourceHandlerIT {
         assertFalse(observations.isEmpty());
         assertEquals(1, observations.size());
         Observation observation = observations.get(0);
-        assertEquals(DateUtil.parseDate("2014-12-28T00:00:00+05:30").toString(), observation.getValue());
+        assertEquals("2014-12-28 00:00:00", observation.getValue());
     }
 }

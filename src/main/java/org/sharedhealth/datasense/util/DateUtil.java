@@ -1,5 +1,7 @@
 package org.sharedhealth.datasense.util;
 
+import org.hl7.fhir.instance.model.DateAndTime;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -46,6 +48,12 @@ public class DateUtil {
         } catch (ParseException e) {
             throw new RuntimeException("invalid date:" + date);
         }
+    }
+
+    public static String parseToString(DateAndTime dateAndTime) {
+        Date parsedDate = parseDate(dateAndTime.toString());
+        SimpleDateFormat format = new SimpleDateFormat(SIMPLE_DATE_WITH_SECS_FORMAT);
+        return format.format(parsedDate);
     }
 
     public static String toUTCString(Date date) {
