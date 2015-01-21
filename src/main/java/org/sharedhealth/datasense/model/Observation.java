@@ -2,7 +2,7 @@ package org.sharedhealth.datasense.model;
 
 import java.util.Date;
 
-public class Observation extends BaseResource{
+public class Observation extends BaseResource {
     private int observationId;
     private Patient patient;
     private Encounter encounter;

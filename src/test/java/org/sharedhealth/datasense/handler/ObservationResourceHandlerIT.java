@@ -24,9 +24,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.util.List;
 
-import static junit.framework.Assert.*;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -70,26 +70,7 @@ public class ObservationResourceHandlerIT {
     }
 
     @Test
-    public void shouldSaveDeathNoteObservation() throws Exception {
-        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathNoteReference);
-        observationResourceHandler.process(fhirObservation, bundleContext.getEncounterCompositions().get(0));
-        List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
-        assertFalse(observations.isEmpty());
-        assertEquals(1, observations.size());
-        Observation observation = observations.get(0);
-        assertEquals(DateUtil.parseDate("2015-01-20T11:10:53+05:30"), observation.getDateTime());
-        assertEquals("shrEncounterId", observation.getEncounter().getEncounterId());
-        assertEquals("5957279291845640193", observation.getPatient().getHid());
-        assertNotNull(observation.getUuid());
-        assertEquals("22473b09-9dfb-47ce-b117-32a10e5b9a5f", observation.getConceptId());
-        assertEquals("419620001", observation.getReferenceCode());
-        assertNull(observation.getValue());
-        assertNull(observation.getParentId());
-    }
-
-    @Test
-    public void shouldSaveDateOfDeathObservation() throws Exception {
+    public void shouldSaveObservationWithoutRelatedComponents() throws Exception {
         ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple("urn:dcd89f72-8e07-4b6d-af52-8575c1b9c72b");
         org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathNoteReference);
         observationResourceHandler.process(fhirObservation, bundleContext.getEncounterCompositions().get(0));
@@ -98,5 +79,41 @@ public class ObservationResourceHandlerIT {
         assertEquals(1, observations.size());
         Observation observation = observations.get(0);
         assertEquals("2014-12-28 00:00:00", observation.getValue());
+        assertEquals(DateUtil.parseDate("2015-01-20T11:10:53+05:30"), observation.getDateTime());
+        assertEquals("shrEncounterId", observation.getEncounter().getEncounterId());
+        assertEquals("5957279291845640193", observation.getPatient().getHid());
+        assertNotNull(observation.getUuid());
+        assertEquals("a6e20fe1-4044-4ce7-8440-577f7f814765", observation.getConceptId());
+        assertNull(observation.getReferenceCode());
+    }
+
+    @Test
+    public void shouldSaveObservationAlongWithRelatedObservations() throws Exception {
+        String deathNoteResourceReference = "urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2";
+        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple(deathNoteResourceReference);
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathNoteReference);
+        observationResourceHandler.process(fhirObservation, bundleContext.getEncounterCompositions().get(0));
+        List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        assertFalse(observations.isEmpty());
+        assertEquals(2, observations.size());
+
+
+        String dateOfDeathConceptId = "a6e20fe1-4044-4ce7-8440-577f7f814765";
+        Observation dateOfDeathObservation = findObservationByConceptId(observations, dateOfDeathConceptId);
+
+        String deathNoteConceptId = "22473b09-9dfb-47ce-b117-32a10e5b9a5f";
+        Observation deathNoteObservation = findObservationByConceptId(observations, deathNoteConceptId);
+        assertNull(deathNoteObservation.getParentId());
+
+        assertEquals(deathNoteObservation.getUuid(), dateOfDeathObservation.getParentId());
+    }
+
+    private Observation findObservationByConceptId(List<Observation> observations, String conceptId) {
+        for (Observation observation : observations) {
+            if(observation.getConceptId().equals(conceptId)) {
+                return observation;
+            }
+        }
+        return null;
     }
 }
