@@ -87,4 +87,16 @@ public class ObservationResourceHandlerIT {
         assertNull(observation.getValue());
         assertNull(observation.getParentId());
     }
+
+    @Test
+    public void shouldSaveDateOfDeathObservation() throws Exception {
+        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple("urn:dcd89f72-8e07-4b6d-af52-8575c1b9c72b");
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) bundleContext.getResourceByReference(deathNoteReference);
+        observationResourceHandler.process(fhirObservation, bundleContext.getEncounterCompositions().get(0));
+        List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        assertFalse(observations.isEmpty());
+        assertEquals(1, observations.size());
+        Observation observation = observations.get(0);
+        assertEquals(DateUtil.parseDate("2014-12-28T00:00:00+05:30").toString(), observation.getValue());
+    }
 }

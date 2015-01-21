@@ -6,7 +6,6 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtil {
-
     public static final String ISO_DATE_IN_MILLIS_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSZ";
     public static final String ISO_DATE_IN_SECS_FORMAT = "yyyy-MM-dd'T'HH:mm:ssZ";
     public static final String UTC_DATE_IN_MILLIS_FORMAT = "yyyy-MM-dd HH:mm:ss.SSSZ";
@@ -14,11 +13,12 @@ public class DateUtil {
     public static final String SIMPLE_DATE_WITH_SECS_FORMAT = "yyyy-MM-dd HH:mm:ss";
     public static final String SIMPLE_DATE_FORMAT = "yyyy-MM-dd";
 
-    public static final String FHIR_ISO_DATE_IN_MILLIS_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    public static final String FHIR_ISO_DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ssXXX";
+    public static final String FHIR_ISO_DATE_IN_MILLIS_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
 
     public static final String[] DATE_FORMATS = new String[]{
             ISO_DATE_IN_MILLIS_FORMAT, ISO_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_IN_MILLIS_FORMAT,
-            UTC_DATE_IN_MILLIS_FORMAT, UTC_DATE_IN_SECS_FORMAT,
+            UTC_DATE_IN_MILLIS_FORMAT, UTC_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_TIME_FORMAT,
             SIMPLE_DATE_WITH_SECS_FORMAT, SIMPLE_DATE_FORMAT};
 
     public static String getCurrentTimeInUTCString() {
