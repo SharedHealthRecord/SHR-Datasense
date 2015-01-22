@@ -6,17 +6,18 @@ import org.hl7.fhir.instance.model.ResourceType;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Observation;
+import org.sharedhealth.datasense.model.fhir.DatasenseResourceReference;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.ObservationDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.hl7.fhir.instance.model.Observation.ObservationRelatedComponent;
 import static org.sharedhealth.datasense.util.FhirCodeLookupService.getConceptId;
 import static org.sharedhealth.datasense.util.FhirCodeLookupService.getReferenceCode;
+import static org.sharedhealth.datasense.util.ResourceLookupService.getDatasenseResourceReference;
 
 @Component
 public class ObservationResourceHandler implements FhirResourceHandler {
@@ -35,45 +36,44 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
+    public void process(DatasenseResourceReference datasenseResourceReference, EncounterComposition composition) {
         Observation observation = new Observation();
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) resource;
-        mapObservation(composition, observation, fhirObservation);
-        List<Observation> childObservations = mapRelatedComponents(composition, observation, fhirObservation);
-        saveObservations(observation, childObservations);
+        mapObservation(composition, observation, datasenseResourceReference);
     }
 
-    private void saveObservations(Observation observation, List<Observation> childObservations) {
-        observationDao.save(observation);
-        for (Observation childObservation : childObservations) {
-            observationDao.save(childObservation);
-        }
-    }
-
-    private List<Observation> mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir.instance.model.Observation fhirObservation) {
-        List<Observation> childObservations= new ArrayList<>();
+    private void mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir.instance.model.Observation fhirObservation) {
         for (ObservationRelatedComponent relatedComponent : fhirObservation.getRelated()) {
-            Resource relatedFhirObservation = composition.getContext().getResourceByReference(relatedComponent.getTarget());
-            if (relatedFhirObservation != null) {
-                Observation childObservation = new Observation();
-                mapObservation(composition, childObservation, (org.hl7.fhir.instance.model.Observation) relatedFhirObservation);
-                childObservation.setParentId(observation.getUuid());
-                childObservations.add(childObservation);
+            DatasenseResourceReference datasenseResourceReference = getDatasenseResourceReference(relatedComponent.getTarget(), composition);
+            Observation childObservation = null;
+            if (datasenseResourceReference.getValue() == null) {
+                childObservation = new Observation();
+                mapObservation(composition, childObservation, datasenseResourceReference);
+            } else {
+                childObservation = (Observation) datasenseResourceReference.getValue();
             }
+            childObservation.setParentId(observation.getUuid());
+            observationDao.updateParentId(childObservation);
         }
-        return childObservations;
     }
 
-    private void mapObservation(EncounterComposition composition, Observation observation, org.hl7.fhir.instance.model.Observation fhirObservation) {
+    private void mapObservation(EncounterComposition composition, Observation observation, DatasenseResourceReference datasenseResourceReference) {
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) datasenseResourceReference.getResourceValue();
+
+        List<Coding> codings = fhirObservation.getName().getCoding();
+        String conceptId = getConceptId(codings);
+        if(conceptId == null) return;
+        observation.setConceptId(conceptId);
+        observation.setReferenceCode(getReferenceCode(codings));
+
         Encounter encounter = composition.getEncounterReference().getValue();
         observation.setEncounter(encounter);
         observation.setPatient(composition.getPatientReference().getValue());
         observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
 
-        List<Coding> codings = fhirObservation.getName().getCoding();
-        observation.setConceptId(getConceptId(codings));
-        observation.setReferenceCode(getReferenceCode(codings));
-
         observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
+
+        observation.setObservationId(observationDao.save(observation));
+        datasenseResourceReference.setValue(observation);
+        mapRelatedComponents(composition, observation, fhirObservation);
     }
 }

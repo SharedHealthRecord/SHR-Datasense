@@ -27,7 +27,7 @@ public class IdentityServiceClient {
         IdentityToken token = identityStore.getToken();
         if (token == null) {
             Identity identity = new Identity(properties.getIdentityUser(), properties.getIdentityPassword());
-            Map<String, String> headers = new HashMap<String, String>();
+            Map<String, String> headers = new HashMap<>();
             headers.put("Content-Type", "application/json");
             headers.put("accept", "application/json");
             String response = new WebClient().post(getIdentityServerUrl(), identity, headers);

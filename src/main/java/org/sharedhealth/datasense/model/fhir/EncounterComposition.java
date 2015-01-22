@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.model.fhir;
 
 import org.hl7.fhir.instance.model.Composition;
 import org.hl7.fhir.instance.model.Encounter;
-import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 
 import java.util.ArrayList;
@@ -14,26 +13,27 @@ public class EncounterComposition {
     private final PatientReference patientReference;
     private  ServiceProviderReference serviceProviderReference;
     private EncounterReference encounterReference;
-    private List<Resource> resources;
+    private List<DatasenseResourceReference> resources;
 
     public EncounterComposition(Composition composition, BundleContext context) {
         this.composition = composition;
         this.context = context;
         encounterReference = new EncounterReference(composition.getEncounter(),
-                (Encounter) context.getResourceByReference(composition.getEncounter()));
+                (Encounter) context.getResourceByReferenceFromFeed(composition.getEncounter()));
         patientReference = new PatientReference(encounterReference.getEncounterReferenceValue().getSubject());
         ResourceReference serviceProvider = encounterReference.getEncounterReferenceValue().getServiceProvider();
         if(serviceProvider != null) {
             serviceProviderReference = new ServiceProviderReference(serviceProvider);
         }
-        findResourcesFromComposition();
+        loadResourcesFromComposition();
     }
 
-    private void findResourcesFromComposition() {
+    private void loadResourcesFromComposition() {
         resources = new ArrayList<>();
         for (Composition.SectionComponent sectionComponent : composition.getSection()) {
             if(!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
-                resources.add(context.getResourceByReference(sectionComponent.getContent()));
+                resources.add(new DatasenseResourceReference(sectionComponent.getContent(),
+                        context.getResourceByReferenceFromFeed(sectionComponent.getContent())));
             }
         }
     }
@@ -55,7 +55,7 @@ public class EncounterComposition {
         return serviceProviderReference;
     }
 
-    public List<Resource> getResources() {
+    public List<DatasenseResourceReference> getResources() {
         return resources;
     }
 

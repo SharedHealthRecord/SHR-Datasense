@@ -216,14 +216,30 @@
     <changeSet id="sharedhealth-datasense-20150120-1448" author="sharedhealth" context="setup">
         <comment>adding column uuid to diagnosis and medication</comment>
         <addColumn tableName="diagnosis">
-            <column name="uuid" type="varchar(50)" >
-                <constraints nullable="false" unique="true"/>
-            </column>
+            <column name="uuid" type="varchar(50)" />
         </addColumn>
         <addColumn tableName="medication">
-            <column name="uuid" type="varchar(50)" >
-                <constraints nullable="false" unique="true"/>
-            </column>
+            <column name="uuid" type="varchar(50)" />
         </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150122-1232" author="sharedhealth" context="setup" dbms="MySQL">
+        <comment>populating uuid columns for diagnosis and medication.</comment>
+        <update tableName="diagnosis">
+            <column name="uuid" valueComputed="uuid()"/>
+        </update>
+        <update tableName="medication">
+            <column name="uuid" valueComputed="uuid()"/>
+        </update>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150121-1802" author="sharedhealth" context="setup">
+        <comment>adding unique and not null constraints to diagnosis and medication.</comment>
+        <addUniqueConstraint columnNames="uuid"
+                             tableName="diagnosis"/>
+        <addNotNullConstraint columnName="uuid"
+                              tableName="diagnosis" columnDataType="varchar(50)"/>
+        <addUniqueConstraint columnNames="uuid"
+                             tableName="medication"/>
+        <addNotNullConstraint columnName="uuid"
+                              tableName="medication" columnDataType="varchar(50)"/>
     </changeSet>
 </databaseChangeLog>

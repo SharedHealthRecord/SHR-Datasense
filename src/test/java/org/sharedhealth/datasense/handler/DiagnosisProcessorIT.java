@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.handler;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
@@ -29,6 +28,7 @@ import java.util.List;
 
 import static junit.framework.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
+import static org.sharedhealth.datasense.util.ResourceLookupService.getDatasenseResourceReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -70,8 +70,7 @@ public class DiagnosisProcessorIT {
         composition.getPatientReference().setValue(patient);
         ResourceReference resourceReference = new ResourceReference();
         resourceReference.setReferenceSimple("urn:2801e2b9-3886-4bf5-919f-ce9268fdc317");
-        Resource resource = context.getResourceByReference(resourceReference);
-        processor.process(resource, composition);
+        processor.process(getDatasenseResourceReference(resourceReference, composition), composition);
         List<Diagnosis> diagnosises = diagnosisDao.findByEncounterId(shrEncounterId);
         assertEquals(1, diagnosises.size());
         Diagnosis diagnosis = diagnosises.get(0);

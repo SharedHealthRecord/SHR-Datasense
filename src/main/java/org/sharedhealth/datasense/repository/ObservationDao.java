@@ -5,7 +5,9 @@ import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.stereotype.Component;
 
 import java.sql.ResultSet;
@@ -48,7 +50,7 @@ public class ObservationDao {
         });
     }
 
-    public void save(Observation observation) {
+    public int save(Observation observation) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", observation.getPatient().getHid());
         map.put("encounter_id", observation.getEncounter().getEncounterId());
@@ -58,8 +60,18 @@ public class ObservationDao {
         map.put("parent_id", observation.getParentId());
         map.put("value", observation.getValue());
         map.put("uuid", observation.getUuid());
-        String sql = "insert into observation (patient_hid, encounter_id, datetime, concept_id, code, parent_id, value, uuid) " +
-                "values(:patient_hid, :encounter_id, :datetime, :concept_id, :code, :parent_id, :value, :uuid)";
-        jdbcTemplate.update(sql, map);
+        String sql = "insert into observation (patient_hid, encounter_id, datetime, concept_id, code, value, uuid) " +
+                "values(:patient_hid, :encounter_id, :datetime, :concept_id, :code, :value, :uuid)";
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, new MapSqlParameterSource(map), generatedKeyHolder);
+        return generatedKeyHolder.getKey().intValue();
+    }
+
+    public void updateParentId(Observation observation) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("parent_id", observation.getParentId());
+        map.put("observation_id", observation.getObservationId());
+        String sql = "update observation set parent_id = :parent_id where observation_id = :observation_id";
+        jdbcTemplate.update(sql, new MapSqlParameterSource(map));
     }
 }

@@ -30,9 +30,8 @@ public class BundleContext {
         return resources;
     }
 
-    public Resource getResourceByReference(ResourceReference resourceReference) {
+    public Resource getResourceByReferenceFromFeed(ResourceReference resourceReference) {
         for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
-            //TODO we need to fix resource reference as par FHIR bundle spec
             if (entry.getId().equals(resourceReference.getReferenceSimple())) {
                 return entry.getResource();
             }
@@ -43,7 +42,7 @@ public class BundleContext {
     public List<EncounterComposition> getEncounterCompositions() {
         if (encounterCompositions == null) {
             List<Resource> compositions = getResourcesOfType(ResourceType.Composition);
-            encounterCompositions = new ArrayList<EncounterComposition>();
+            encounterCompositions = new ArrayList<>();
             //TODO process only compositions of type encounter
             for (Resource composition : compositions) {
                 encounterCompositions.add(new EncounterComposition( (Composition) composition, this));

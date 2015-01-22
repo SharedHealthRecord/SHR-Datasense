@@ -3,7 +3,6 @@ package org.sharedhealth.datasense.handler;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.model.Immunization;
-import org.hl7.fhir.instance.model.Resource;
 import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
@@ -17,6 +16,7 @@ import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
+import org.sharedhealth.datasense.model.fhir.DatasenseResourceReference;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.MedicationDao;
 import org.sharedhealth.datasense.util.DateUtil;
@@ -33,6 +33,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
+import static org.sharedhealth.datasense.util.ResourceLookupService.getDatasenseResourceReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -48,7 +49,7 @@ public class ImmunizationResourceHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private BundleContext bundleContext;
-    private Resource immunizationResource;
+    private DatasenseResourceReference immunizationResource;
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
@@ -75,18 +76,20 @@ public class ImmunizationResourceHandlerIT {
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
         composition.getEncounterReference().setValue(encounter);
-        immunizationResource = bundleContext.getResourceByReference(new ResourceReference().setReferenceSimple("urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35"));
+        ResourceReference resourceReference = new ResourceReference().setReferenceSimple("urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35");
+        immunizationResource = getDatasenseResourceReference(resourceReference, composition);
     }
 
     @Test
     public void shouldHandleImmunizationResources() throws Exception {
         ImmunizationResourceHandler immunizationResourceHandler = new ImmunizationResourceHandler();
-        assertTrue(immunizationResourceHandler.canHandle(immunizationResource));
+        assertTrue(immunizationResourceHandler.canHandle(immunizationResource.getResourceValue()));
     }
 
     @Test
     public void shouldSaveImmunizationDateTimeAndEncounterAndPatient() throws Exception {
-        immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
+        immunizationResourceHandler.process(immunizationResource,
+                bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
         assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
@@ -95,8 +98,8 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldSaveEncounterDateTimeIfImmunizationDateNotGiven() throws Exception {
-        Immunization immunization = ((Immunization) immunizationResource).setDate(null);
-        immunizationResourceHandler.process(immunization, bundleContext.getEncounterCompositions().get(0));
+        ((Immunization) immunizationResource.getResourceValue()).setDate(null);
+        immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
         assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), medication.getDateTime());
     }
@@ -127,7 +130,7 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldNotSaveNonCodedImmunization() throws Exception {
-        ((Immunization) immunizationResource).getVaccineType().getCoding().get(0).setSystemSimple(null);
+        ((Immunization) immunizationResource.getResourceValue()).getVaccineType().getCoding().get(0).setSystemSimple(null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
         assertTrue(medications.isEmpty());

@@ -9,6 +9,7 @@ import org.sharedhealth.datasense.client.TrWebClient;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
 import org.sharedhealth.datasense.model.MedicationStatus;
+import org.sharedhealth.datasense.model.fhir.DatasenseResourceReference;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.tr.TrMedication;
 import org.sharedhealth.datasense.repository.MedicationDao;
@@ -40,8 +41,8 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
-        Immunization immunization = (Immunization) resource;
+    public void process(DatasenseResourceReference datasenseResourceReference, EncounterComposition composition) {
+        Immunization immunization = (Immunization) datasenseResourceReference.getResourceValue();
         Medication medication = new Medication();
         medication.setStatus(MedicationStatus.Administered);
         Encounter encounter = composition.getEncounterReference().getValue();
@@ -54,6 +55,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
             return;
         }
         medicationDao.save(medication);
+        datasenseResourceReference.setValue(medication);
     }
 
     private void setMedicationCodes(Immunization immunization, Medication medication) {
