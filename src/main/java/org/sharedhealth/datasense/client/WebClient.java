@@ -21,7 +21,7 @@ public class WebClient {
     public static final String ZERO_WIDTH_NO_BREAK_SPACE = "\uFEFF";
     public static final String BLANK_CHARACTER = "";
 
-    public String get(URI url, Map<String, String> headers) throws ConnectionException, IOException {
+    public String get(URI url, Map<String, String> headers) throws IOException {
         HttpGet request = new HttpGet(url);
         addHeaders(request, headers);
         return execute(request);
@@ -40,7 +40,7 @@ public class WebClient {
         }
     }
 
-    private String execute(final HttpRequestBase request) throws IOException, ConnectionException {
+    private String execute(final HttpRequestBase request) throws IOException {
         CloseableHttpClient httpClient = HttpClients.createDefault();
         try {
             ResponseHandler<String> responseHandler = new ResponseHandler<String>() {
@@ -73,7 +73,7 @@ public class WebClient {
     private String parseContentInputAsString(HttpEntity entity) throws IOException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(entity.getContent()));
         String inputLine;
-        StringBuffer responseString = new StringBuffer();
+        StringBuilder responseString = new StringBuilder();
         while ((inputLine = reader.readLine()) != null) {
             responseString.append(inputLine);
         }

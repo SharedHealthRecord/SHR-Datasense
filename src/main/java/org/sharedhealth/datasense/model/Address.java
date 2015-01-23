@@ -37,7 +37,8 @@ public class Address {
     public Address() {
     }
 
-    public Address(String addressLine, String divisionId, String districtId, String upazilaId, String cityCorporationId, String unionOrUrbanWardId, String unionId, String thanaId) {
+    public Address(String addressLine, String divisionId, String districtId, String upazilaId, String
+            cityCorporationId, String unionOrUrbanWardId, String unionId, String thanaId) {
         this.addressLine = addressLine;
         this.divisionId = divisionId;
         this.districtId = districtId;
@@ -59,9 +60,12 @@ public class Address {
         if (divisionId != null ? !divisionId.equals(address.divisionId) : address.divisionId != null) return false;
         if (districtId != null ? !districtId.equals(address.districtId) : address.districtId != null) return false;
         if (upazilaId != null ? !upazilaId.equals(address.upazilaId) : address.upazilaId != null) return false;
-        if (cityCorporationId != null ? !cityCorporationId.equals(address.cityCorporationId) : address.cityCorporationId != null)
+        if (cityCorporationId != null ? !cityCorporationId.equals(address.cityCorporationId) : address
+                .cityCorporationId != null)
             return false;
-        if (unionOrUrbanWardId != null ? !unionOrUrbanWardId.equals(address.unionOrUrbanWardId) : address.unionOrUrbanWardId != null) return false;
+        if (unionOrUrbanWardId != null ? !unionOrUrbanWardId.equals(address.unionOrUrbanWardId) : address
+                .unionOrUrbanWardId != null)
+            return false;
         if (unionId != null ? !unionId.equals(address.unionId) : address.unionId != null) return false;
         if (thanaId != null ? !thanaId.equals(address.thanaId) : address.thanaId != null) return false;
 
@@ -183,7 +187,7 @@ public class Address {
         }
 
         int beginIndex = (level - 1) * 2;
-        return code.substring(beginIndex, beginIndex+ 2);
+        return code.substring(beginIndex, beginIndex + 2);
     }
 
     public String getLocationCode() {

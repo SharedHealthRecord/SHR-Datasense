@@ -94,8 +94,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String[] getDatasenseCatchmentList() {
-        String[] catchments = StringUtils.split(datasenseCatchmentList, ",");
-        return catchments;
+        return StringUtils.split(datasenseCatchmentList, ",");
     }
 
     @Override

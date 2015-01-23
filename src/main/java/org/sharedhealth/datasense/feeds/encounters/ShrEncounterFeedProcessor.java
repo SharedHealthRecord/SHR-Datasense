@@ -48,7 +48,7 @@ public class ShrEncounterFeedProcessor {
                 atomProperties).processEvents();
     }
 
-    private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties)  {
+    private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties) {
         return new AtomFeedClient(
                 new AllEncounterFeeds(shrWebClient),
                 markers,
@@ -61,6 +61,7 @@ public class ShrEncounterFeedProcessor {
 
     private class FeedEventWorker implements EventWorker {
         private EncounterEventWorker encounterEventWorker;
+
         FeedEventWorker(EncounterEventWorker encounterEventWorker) {
             this.encounterEventWorker = encounterEventWorker;
         }

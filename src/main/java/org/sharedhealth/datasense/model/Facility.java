@@ -8,9 +8,10 @@ public class Facility {
     private String facilityLocationCode;
     private String dhisOrgUnitUid;
 
-    public Facility(){}
+    public Facility() {}
 
-    public Facility(String facilityId, String facilityName, String facilityType, String facilityLocationCode, String dhisOrgUnitUid) {
+    public Facility(String facilityId, String facilityName, String facilityType, String facilityLocationCode, String
+            dhisOrgUnitUid) {
         this.facilityId = facilityId;
         this.facilityName = facilityName;
         this.facilityType = facilityType;
@@ -51,7 +52,7 @@ public class Facility {
     }
 
     public String getFacilityLocationCode() {
-        if(facilityLocationCode != null) {
+        if (facilityLocationCode != null) {
             return this.facilityLocationCode;
         } else {
             return facilityLocation.getLocationCode();

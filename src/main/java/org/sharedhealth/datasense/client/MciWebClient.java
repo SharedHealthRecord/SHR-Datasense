@@ -1,18 +1,9 @@
 package org.sharedhealth.datasense.client;
 
 import org.apache.commons.codec.binary.Base64;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Patient;
-import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

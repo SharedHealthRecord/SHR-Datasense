@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.util;
 
-public class TrUrlMatcher {
+public class TrUrl {
 
     private final static String CONCEPT_URL_PATH = "/tr/concepts/";
     private final static String REFERENCE_TERM_URL_PATH = "/tr/referenceterms/";

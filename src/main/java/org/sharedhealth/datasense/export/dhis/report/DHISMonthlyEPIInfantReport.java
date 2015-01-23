@@ -5,7 +5,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.FacilityDao;
-import org.sharedhealth.datasense.util.DHISHeaderUtil;
+import org.sharedhealth.datasense.util.DHISHeaders;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,17 +25,18 @@ import static org.sharedhealth.datasense.FacilityType.UPAZILA_LEVEL_OFFICE_FACIL
 public class DHISMonthlyEPIInfantReport implements DHISReport {
 
     private FacilityDao facilityDao;
-    private DHISHeaderUtil dhisHeaderUtil;
+    private DHISHeaders dhisHeaders;
     private DatasenseProperties datasenseProperties;
     private DataSource dataSource;
 
     private static final Logger logger = LoggerFactory.getLogger(DHISMonthlyEPIInfantReport.class);
 
     @Autowired
-    public DHISMonthlyEPIInfantReport(FacilityDao facilityDao, DataSource dataSource, DHISHeaderUtil dhisHeaderUtil, DatasenseProperties datasenseProperties) {
+    public DHISMonthlyEPIInfantReport(FacilityDao facilityDao, DataSource dataSource, DHISHeaders dhisHeaders,
+                                      DatasenseProperties datasenseProperties) {
         this.facilityDao = facilityDao;
         this.dataSource = dataSource;
-        this.dhisHeaderUtil = dhisHeaderUtil;
+        this.dhisHeaders = dhisHeaders;
         this.datasenseProperties = datasenseProperties;
     }
 
@@ -63,11 +64,12 @@ public class DHISMonthlyEPIInfantReport implements DHISReport {
         extraParams.put("period", period);
         extraParams.put("orgUnit", facility.getDhisOrgUnitUid());
 
-        HashMap<String, String> postHeaders = dhisHeaderUtil.getDhisHeaders();
+        HashMap<String, String> postHeaders = dhisHeaders.get();
 
         String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + "monthly_epi_infant_report.json";
 
-        logger.info(format("Posting EPI Infant report for facility [%s] for month [%s]", facility.getFacilityName(), reportingMonth));
+        logger.info(format("Posting EPI Infant report for facility [%s] for month [%s]", facility.getFacilityName(),
+                reportingMonth));
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }
 }

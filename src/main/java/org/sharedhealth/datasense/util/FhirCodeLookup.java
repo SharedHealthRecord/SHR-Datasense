@@ -4,14 +4,14 @@ import org.hl7.fhir.instance.model.Coding;
 
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isConceptUrl;
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isReferenceTermUrl;
+import static org.sharedhealth.datasense.util.TrUrl.isConceptUrl;
+import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 
-public class FhirCodeLookupService {
+public class FhirCodeLookup {
 
     public static String getReferenceCode(List<Coding> codings) {
         for (Coding coding : codings) {
-            if(coding.getSystemSimple() != null && isReferenceTermUrl(coding.getSystemSimple()))
+            if (coding.getSystemSimple() != null && isReferenceTermUrl(coding.getSystemSimple()))
                 return coding.getCodeSimple();
         }
         return null;
@@ -19,7 +19,7 @@ public class FhirCodeLookupService {
 
     public static String getConceptId(List<Coding> codings) {
         for (Coding coding : codings) {
-            if(coding.getSystemSimple() != null && isConceptUrl(coding.getSystemSimple()))
+            if (coding.getSystemSimple() != null && isConceptUrl(coding.getSystemSimple()))
                 return coding.getCodeSimple();
         }
         return null;

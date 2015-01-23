@@ -85,7 +85,7 @@
             </column>
             <column name="name" type="varchar(50)"/>
             <column name="type" type="varchar(30)"/>
-            <column name="location_id" type="varchar(20)" />
+            <column name="location_id" type="varchar(20)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20141106-1930" author="sharedhealth" context="setup">
@@ -95,14 +95,14 @@
                 <constraints nullable="false" primaryKey="true"/>
             </column>
             <column name="encounter_datetime" type="timestamp">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="encounter_type" type="varchar(30)"/>
             <column name="visit_type" type="varchar(30)"/>
             <column name="patient_hid" type="varchar(20)"/>
-            <column name="patient_age_years" type="int" />
-            <column name="patient_age_months" type="int" />
-            <column name="patient_age_days" type="int" />
+            <column name="patient_age_years" type="int"/>
+            <column name="patient_age_months" type="int"/>
+            <column name="patient_age_days" type="int"/>
             <column name="encounter_location_id" type="varchar(20)"/>
             <column name="facility_id" type="varchar(20)"/>
         </createTable>
@@ -113,12 +113,12 @@
             <column name="diagnosis_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="patient_hid" type="varchar(20)" />
-            <column name="encounter_id" type="varchar(50)" />
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
             <column name="diagnosis_datetime" type="timestamp"/>
-            <column name="diagnosis_code" type="varchar(10)" />
-            <column name="diagnosis_concept_id" type="varchar(50)" />
-            <column name="diagnosis_status" type="varchar(20)" />
+            <column name="diagnosis_code" type="varchar(10)"/>
+            <column name="diagnosis_concept_id" type="varchar(50)"/>
+            <column name="diagnosis_status" type="varchar(20)"/>
         </createTable>
     </changeSet>
 
@@ -144,7 +144,7 @@
                         newDataType="datetime"
                         tableName="diagnosis"/>
     </changeSet>
-    
+
     <changeSet id="aggregate-query-service-201501020718" author="ict4h" context="setup">
         <createTable tableName="aqs_task">
             <column name="aqs_task_id" type="bigint" autoIncrement="true">
@@ -178,14 +178,14 @@
             <column name="medication_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="patient_hid" type="varchar(20)" />
-            <column name="encounter_id" type="varchar(50)" />
-            <column name="name" type="varchar(50)" />
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="name" type="varchar(50)"/>
             <column name="drug_id" type="varchar(50)"/>
-            <column name="code" type="varchar(10)" />
-            <column name="concept_id" type="varchar(50)" />
-            <column name="datetime" type="datetime" />
-            <column name="status" type="varchar(2)" />
+            <column name="code" type="varchar(10)"/>
+            <column name="concept_id" type="varchar(50)"/>
+            <column name="datetime" type="datetime"/>
+            <column name="status" type="varchar(2)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150120-1245" author="sharedhealth" context="setup">
@@ -194,14 +194,14 @@
             <column name="observation_id" type="int" autoIncrement="true">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="patient_hid" type="varchar(20)" />
-            <column name="encounter_id" type="varchar(50)" />
-            <column name="code" type="varchar(10)" />
-            <column name="concept_id" type="varchar(50)" />
-            <column name="datetime" type="datetime" />
-            <column name="parent_id" type="varchar(50)" />
-            <column name="value" type="varchar(100)" />
-            <column name="uuid" type="varchar(50)" >
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="code" type="varchar(10)"/>
+            <column name="concept_id" type="varchar(50)"/>
+            <column name="datetime" type="datetime"/>
+            <column name="parent_id" type="varchar(50)"/>
+            <column name="value" type="varchar(100)"/>
+            <column name="uuid" type="varchar(50)">
                 <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
@@ -216,10 +216,10 @@
     <changeSet id="sharedhealth-datasense-20150120-1448" author="sharedhealth" context="setup">
         <comment>adding column uuid to diagnosis and medication</comment>
         <addColumn tableName="diagnosis">
-            <column name="uuid" type="varchar(50)" />
+            <column name="uuid" type="varchar(50)"/>
         </addColumn>
         <addColumn tableName="medication">
-            <column name="uuid" type="varchar(50)" />
+            <column name="uuid" type="varchar(50)"/>
         </addColumn>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150122-1232" author="sharedhealth" context="setup" dbms="MySQL">

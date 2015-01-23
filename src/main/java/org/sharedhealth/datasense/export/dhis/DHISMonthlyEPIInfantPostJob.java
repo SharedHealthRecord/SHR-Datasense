@@ -38,14 +38,16 @@ public class DHISMonthlyEPIInfantPostJob extends QuartzJobBean {
             new SimpleDateFormat("yyyy-MM").parse(monthParam);
             return monthParam;
         } catch (ParseException e) {
-            logger.error(String.format("Invalid argument [%s] for reportingMonth Parameter. Expected format yyyy-MM. Trying to parse as Integer .. ", monthParam));
+            logger.error(String.format("Invalid argument [%s] for reportingMonth Parameter. Expected format yyyy-MM. " +
+                    "Trying to parse as Integer .. ", monthParam));
         }
 
         Integer addMonth = null;
         try {
             addMonth = Integer.parseInt(monthParam);
         } catch (NumberFormatException e) {
-            logger.error(String.format("Invalid argument for reportingMonth Parameter. Actual [%s] expected values are integer (-1, -2 etc). Defaulting to last month", monthParam));
+            logger.error(String.format("Invalid argument for reportingMonth Parameter. Actual [%s] expected values " +
+                    "are integer (-1, -2 etc). Defaulting to last month", monthParam));
         }
 
         if (addMonth == null) {

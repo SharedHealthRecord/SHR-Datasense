@@ -22,14 +22,16 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     private ResourceProcessor nextProcessor;
 
     @Autowired
-    public ClinicalEncounterProcessor(@Qualifier("subResourceProcessor") ResourceProcessor nextProcessor, EncounterDao encounterDao) {
+    public ClinicalEncounterProcessor(@Qualifier("subResourceProcessor") ResourceProcessor nextProcessor,
+                                      EncounterDao encounterDao) {
         this.nextProcessor = nextProcessor;
         this.encounterDao = encounterDao;
     }
 
     @Override
     public void process(EncounterComposition composition) {
-        org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounterReference().getEncounterReferenceValue();
+        org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounterReference()
+                .getEncounterReferenceValue();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         encounterDao.save(encounter);
         composition.getEncounterReference().setValue(encounter);
@@ -38,7 +40,8 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         }
     }
 
-    private Encounter mapEncounterFields(org.hl7.fhir.instance.model.Encounter fhirEncounter, EncounterComposition composition) {
+    private Encounter mapEncounterFields(org.hl7.fhir.instance.model.Encounter fhirEncounter, EncounterComposition
+            composition) {
         Encounter encounter = new Encounter();
         encounter.setEncounterType(fhirEncounter.getType().get(0).getTextSimple());
         encounter.setEncounterId(composition.getContext().getShrEncounterId());
@@ -46,7 +49,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         Patient patient = composition.getPatientReference().getValue();
         encounter.setPatient(patient);
         ServiceProviderReference facilityReference = composition.getServiceProviderReference();
-        if(facilityReference != null && facilityReference.getValue() != null) {
+        if (facilityReference != null && facilityReference.getValue() != null) {
             Facility facility = facilityReference.getValue();
             encounter.setFacility(facility);
             encounter.setLocationCode(facility.getFacilityLocationCode());
@@ -67,7 +70,8 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         LocalDate localBirthDate = new LocalDate(birthDate.getTime());
         LocalDate localEncounterDate = new LocalDate(encounterDate.getTime());
         encounter.setPatientAgeInYears(new Period(localBirthDate, localEncounterDate, PeriodType.years()).getYears());
-        encounter.setPatientAgeInMonths(new Period(localBirthDate, localEncounterDate, PeriodType.months()).getMonths());
+        encounter.setPatientAgeInMonths(new Period(localBirthDate, localEncounterDate, PeriodType.months()).getMonths
+                ());
         encounter.setPatientAgeInDays(new Period(localBirthDate, localEncounterDate, PeriodType.days()).getDays());
     }
 }

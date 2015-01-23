@@ -11,8 +11,8 @@ public enum MedicationStatus {
     }
 
     public static MedicationStatus getMedicationStatus(String value) {
-        if(value.equals("A")) return Administered;
-        if(value.equals("O")) return Ordered;
+        if (value.equals("A")) return Administered;
+        if (value.equals("O")) return Ordered;
         return null;
     }
 

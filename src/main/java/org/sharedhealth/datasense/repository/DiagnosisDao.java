@@ -37,14 +37,17 @@ public class DiagnosisDao {
 
     public List<Diagnosis> findByEncounterId(String encounterId) {
         return jdbcTemplate.query(
-                "select diagnosis_id, patient_hid, encounter_id, diagnosis_datetime, diagnosis_code, diagnosis_concept_id, " +
-                        "diagnosis_status, uuid from diagnosis where encounter_id= :encounter_id", Collections.singletonMap("encounter_id", encounterId),
+                "select diagnosis_id, patient_hid, encounter_id, diagnosis_datetime, diagnosis_code, " +
+                        "diagnosis_concept_id, " +
+                        "diagnosis_status, uuid from diagnosis where encounter_id= :encounter_id", Collections
+                        .singletonMap("encounter_id", encounterId),
                 new RowMapper<Diagnosis>() {
                     @Override
                     public Diagnosis mapRow(ResultSet rs, int rowNum) throws SQLException {
                         Diagnosis diagnosis = new Diagnosis();
                         diagnosis.setDiagnosisId(rs.getInt("diagnosis_id"));
-                        diagnosis.setDiagnosisDateTime(new java.util.Date(rs.getTimestamp("diagnosis_datetime").getTime()));
+                        diagnosis.setDiagnosisDateTime(new java.util.Date(rs.getTimestamp("diagnosis_datetime")
+                                .getTime()));
                         diagnosis.setDiagnosisCode(rs.getString("diagnosis_code"));
                         diagnosis.setDiagnosisConceptId(rs.getString("diagnosis_concept_id"));
                         diagnosis.setDiagnosisStatus(rs.getString("diagnosis_status"));

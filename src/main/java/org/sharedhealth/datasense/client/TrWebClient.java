@@ -13,7 +13,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.sharedhealth.datasense.util.HttpUtil.getBase64Authentication;
+import static org.sharedhealth.datasense.util.DHISHeaders.getBase64Authentication;
 
 @Component
 public class TrWebClient {
@@ -28,13 +28,14 @@ public class TrWebClient {
 
     public String getResponse(String uri) throws IOException, URISyntaxException {
         Map<String, String> headers = new HashMap<>();
-        headers.put("Authorization", getBase64Authentication(datasenseProperties.getTrUser(), datasenseProperties.getTrPassword()));
+        headers.put("Authorization", getBase64Authentication(datasenseProperties.getTrUser(), datasenseProperties
+                .getTrPassword()));
         headers.put("Accept", "application/json");
         String response;
         try {
             response = new WebClient().get(new URI(uri), headers);
         } catch (ConnectionException e) {
-            log.error(String.format("Could not fetch feed for URI [%s]", uri.toString()), e);
+            log.error(String.format("Could not fetch feed for URI [%s]", uri), e);
             throw new IOException(e);
         }
         return response;

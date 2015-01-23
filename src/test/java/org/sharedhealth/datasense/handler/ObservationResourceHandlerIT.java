@@ -27,7 +27,7 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
-import static org.sharedhealth.datasense.util.ResourceLookupService.getDatasenseResourceReference;
+import static org.sharedhealth.datasense.util.ResourceLookup.getDatasenseResourceReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")

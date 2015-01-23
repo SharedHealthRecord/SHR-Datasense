@@ -1,11 +1,6 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import org.hl7.fhir.instance.model.AtomEntry;
-import org.hl7.fhir.instance.model.AtomFeed;
-import org.hl7.fhir.instance.model.Composition;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceReference;
-import org.hl7.fhir.instance.model.ResourceType;
+import org.hl7.fhir.instance.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +40,7 @@ public class BundleContext {
             encounterCompositions = new ArrayList<>();
             //TODO process only compositions of type encounter
             for (Resource composition : compositions) {
-                encounterCompositions.add(new EncounterComposition( (Composition) composition, this));
+                encounterCompositions.add(new EncounterComposition((Composition) composition, this));
             }
         }
         return encounterCompositions;

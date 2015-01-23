@@ -29,7 +29,7 @@ public class AllEncounterFeeds extends AllFeeds {
             WireFeedInput input = new WireFeedInput();
             return (Feed) input.build(new StringReader(response));
         } catch (Exception e) {
-            logger.error(String.format("Error occured while processing feed for uri %s", uri.toString()), e);
+            logger.error(String.format("Error occurred while processing feed for uri %s", uri.toString()), e);
             throw new RuntimeException(e);
         }
     }

@@ -1,10 +1,6 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.Condition;
-import org.hl7.fhir.instance.model.DateAndTime;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceType;
+import org.hl7.fhir.instance.model.*;
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.sharedhealth.datasense.model.fhir.DatasenseResourceReference;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
@@ -16,8 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isConceptUrl;
-import static org.sharedhealth.datasense.util.TrUrlMatcher.isReferenceTermUrl;
+import static org.sharedhealth.datasense.util.TrUrl.isConceptUrl;
+import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 
 @Component
 public class DiagnosisResourceHandler implements FhirResourceHandler {

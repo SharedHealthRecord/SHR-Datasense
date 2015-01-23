@@ -13,7 +13,6 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 @Component("serviceProviderProcessor")
 public class ServiceProviderProcessor implements ResourceProcessor {
@@ -43,7 +42,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
             if (facility == null) {
                 facility = downloadAndSaveFacility(facilityId);
             }
-            if(facility != null) {
+            if (facility != null) {
                 composition.getServiceProviderReference().setValue(facility);
             }
         }
@@ -79,7 +78,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         try {
             return (String) dhisFacilitiesMap.getObject().get(facilityId);
         } catch (IOException e) {
-            logger.error(String.format("DHIS Organisation Unit Uid not found for facility %s", facilityId),e);
+            logger.error(String.format("DHIS Organisation Unit Uid not found for facility %s", facilityId), e);
         }
         return null;
     }

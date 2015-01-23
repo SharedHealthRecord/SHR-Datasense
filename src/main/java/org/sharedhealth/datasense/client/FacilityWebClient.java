@@ -2,19 +2,10 @@ package org.sharedhealth.datasense.client;
 
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
-import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -73,10 +64,7 @@ public class FacilityWebClient {
         Map<String, String> headers = new HashMap<>();
         headers.put("X-Auth-Token", properties.getFacilityAuthToken());
         headers.put("Accept", "application/json");
-
-        String response = null;
-        response = new WebClient().get(facilityUrl, headers);
-        return response;
+        return new WebClient().get(facilityUrl, headers);
     }
 
     private URI getFacilityUrl(String facilityId) throws URISyntaxException {

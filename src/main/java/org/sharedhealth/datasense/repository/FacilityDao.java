@@ -21,7 +21,8 @@ public class FacilityDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public Facility findFacilityById(String facilityId) {
-        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id= :facility_id",
+        List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where facility_id= " +
+                        ":facility_id",
                 Collections.singletonMap("facility_id", facilityId),
                 getRowMapperForFacility());
         return facilities.isEmpty() ? null : facilities.get(0);
@@ -40,7 +41,8 @@ public class FacilityDao {
     }
 
     public List<Facility> findFacilitiesByTypes(List<String> facilityTypes) {
-        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections.singletonMap("ids", facilityTypes), getRowMapperForFacility());
+        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility where type in (:ids)", Collections
+                .singletonMap("ids", facilityTypes), getRowMapperForFacility());
     }
 
     private RowMapper<Facility> getRowMapperForFacility() {

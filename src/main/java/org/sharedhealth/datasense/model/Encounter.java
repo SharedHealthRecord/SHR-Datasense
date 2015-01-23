@@ -61,9 +61,9 @@ public class Encounter {
     }
 
     public String getLocationCode() {
-        if(StringUtils.isNotBlank(locationCode)) {
+        if (StringUtils.isNotBlank(locationCode)) {
             return locationCode;
-        } else if(facility.getFacilityLocationCode()!= null) {
+        } else if (facility.getFacilityLocationCode() != null) {
             return facility.getFacilityLocationCode();
         }
         return null;

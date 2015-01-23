@@ -23,8 +23,10 @@ public class ObservationDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<Observation> findByEncounterId(String shrEncounterId) {
-        String sql = "select observation_id, patient_hid, encounter_id, concept_id, code, datetime, parent_id, value, uuid from observation where encounter_id= :encounter_id";
-        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new RowMapper<Observation>() {
+        String sql = "select observation_id, patient_hid, encounter_id, concept_id, code, datetime, parent_id, value," +
+                " uuid from observation where encounter_id= :encounter_id";
+        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
+                RowMapper<Observation>() {
 
             @Override
             public Observation mapRow(ResultSet rs, int rowNum) throws SQLException {

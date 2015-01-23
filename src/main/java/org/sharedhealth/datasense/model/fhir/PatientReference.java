@@ -14,7 +14,7 @@ public class PatientReference extends ResourceReference {
     }
 
     public String getHealthId() {
-        return substringAfterLast(subject.getReferenceSimple(),"/");
+        return substringAfterLast(subject.getReferenceSimple(), "/");
     }
 
     public void setValue(Patient patient) {

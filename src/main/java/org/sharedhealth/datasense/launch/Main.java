@@ -83,7 +83,8 @@ public class Main {
             public void onStartup(ServletContext servletContext) throws ServletException {
                 ServletRegistration.Dynamic shr = servletContext.addServlet("shr", DispatcherServlet.class);
                 shr.addMapping("/");
-                shr.setInitParameter("contextClass", "org.springframework.web.context.support.AnnotationConfigWebApplicationContext");
+                shr.setInitParameter("contextClass", "org.springframework.web.context.support" +
+                        ".AnnotationConfigWebApplicationContext");
             }
         });
         String bdshr_port = env.get("DATASENSE_PORT");
@@ -160,7 +161,8 @@ public class Main {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
         jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");;
+        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
+        ;
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }
@@ -185,7 +187,8 @@ public class Main {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
         jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");;
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
+        ;
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }

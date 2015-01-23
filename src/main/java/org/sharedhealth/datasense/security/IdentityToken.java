@@ -1,4 +1,5 @@
 package org.sharedhealth.datasense.security;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IdentityToken {

@@ -11,7 +11,6 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.Map;
 
 @DhisParam({"reportingDate"})
@@ -29,8 +28,9 @@ public class DHISDailyOPDIPDPostJob extends QuartzJobBean {
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         Object reportingDateParam = context.getMergedJobDataMap().get("reportingDate");
 
-        String reportingDate = reportingDateParam != null ? getReportingDate((String) reportingDateParam) : getDefaultReportingDate();
-        Map map = context.getMergedJobDataMap();
+        String reportingDate = reportingDateParam != null ? getReportingDate((String) reportingDateParam) :
+                getDefaultReportingDate();
+        Map<String, Object> map = context.getMergedJobDataMap();
         map.put("reportingDate", reportingDate);
         logger.info(String.format("Generating Report for date %s", reportingDate));
         dhisDailyOPDIPDReport.process(map);
@@ -38,17 +38,19 @@ public class DHISDailyOPDIPDPostJob extends QuartzJobBean {
 
     static String getReportingDate(String dateParam) {
         try {
-            Date date = new SimpleDateFormat("yyyy-MM-dd").parse(dateParam);
+            new SimpleDateFormat("yyyy-MM-dd").parse(dateParam);
             return dateParam;
         } catch (ParseException e) {
-            logger.error(String.format("Invalid argument [%s] for reportingParam. Expected date format yyyy-MM-dd. Trying to parse as Integer .. ", dateParam));
+            logger.error(String.format("Invalid argument [%s] for reportingParam. Expected date format yyyy-MM-dd. " +
+                    "Trying to parse as Integer .. ", dateParam));
         }
 
         Integer addDays = null;
         try {
             addDays = Integer.parseInt(dateParam);
         } catch (NumberFormatException e) {
-            logger.error(String.format("Invalid argument for reportingParam. Actual [%s] expected values are integer (-1, -2 etc). Defaulting to yesterday", dateParam));
+            logger.error(String.format("Invalid argument for reportingParam. Actual [%s] expected values are integer " +
+                    "(-1, -2 etc). Defaulting to yesterday", dateParam));
         }
 
         if (addDays == null) {

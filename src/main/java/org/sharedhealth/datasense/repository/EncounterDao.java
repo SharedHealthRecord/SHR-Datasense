@@ -34,9 +34,11 @@ public class EncounterDao {
         map.put("patient_age_days", encounter.getPatientAgeInDays());
         map.put("location_id", encounter.getLocationCode());
         map.put("facility_id", encounter.getFacility().getFacilityId());
-        jdbcTemplate.update("insert into encounter (encounter_id, encounter_datetime, encounter_type, visit_type, patient_hid, " +
+        jdbcTemplate.update("insert into encounter (encounter_id, encounter_datetime, encounter_type, visit_type, " +
+                "patient_hid, " +
                 "patient_age_years, patient_age_months, patient_age_days, encounter_location_id, facility_id) " +
-                "values(:encounter_id, :encounter_datetime, :encounter_type , :visit_type , :patient_hid, :patient_age_years, :patient_age_months," +
+                "values(:encounter_id, :encounter_datetime, :encounter_type , :visit_type , :patient_hid, " +
+                ":patient_age_years, :patient_age_months," +
                 " :patient_age_days , :location_id, :facility_id)", map);
     }
 
@@ -44,7 +46,8 @@ public class EncounterDao {
         List<Encounter> encounters = jdbcTemplate.query(
                 "select encounter_id ,encounter_datetime, encounter_type, visit_type, patient_hid, " +
                         "patient_age_years, patient_age_months, patient_age_days,encounter_location_id, facility_id " +
-                        "from encounter where encounter_id= :encounter_id", Collections.singletonMap("encounter_id", encounterId),
+                        "from encounter where encounter_id= :encounter_id", Collections.singletonMap("encounter_id",
+                        encounterId),
                 new RowMapper<Encounter>() {
                     @Override
                     public Encounter mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -21,10 +21,6 @@ public class EncounterReference {
         return value;
     }
 
-    public ResourceReference getEncounterReference() {
-        return encounterReference;
-    }
-
     public org.hl7.fhir.instance.model.Encounter getEncounterReferenceValue() {
         return encounterReferenceValue;
     }

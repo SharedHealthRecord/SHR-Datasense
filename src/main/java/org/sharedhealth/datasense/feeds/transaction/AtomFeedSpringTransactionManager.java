@@ -17,12 +17,14 @@ import java.util.Map;
 
 public class AtomFeedSpringTransactionManager implements AFTransactionManager, JdbcConnectionProvider {
     private DataSourceTransactionManager transactionManager;
-    private Map<AFTransactionWork.PropagationDefinition, Integer> propagationMap = new HashMap<AFTransactionWork.PropagationDefinition, Integer>();
+    private Map<AFTransactionWork.PropagationDefinition, Integer> propagationMap = new HashMap<>();
 
     public AtomFeedSpringTransactionManager(DataSourceTransactionManager transactionManager) {
         this.transactionManager = transactionManager;
-        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRED, TransactionDefinition.PROPAGATION_REQUIRED);
-        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition.PROPAGATION_REQUIRES_NEW);
+        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRED, TransactionDefinition
+                .PROPAGATION_REQUIRED);
+        propagationMap.put(AFTransactionWork.PropagationDefinition.PROPAGATION_REQUIRES_NEW, TransactionDefinition
+                .PROPAGATION_REQUIRES_NEW);
     }
 
     @Override
@@ -30,7 +32,7 @@ public class AtomFeedSpringTransactionManager implements AFTransactionManager, J
         TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
         Integer txPropagationDef = getTxPropagation(action.getTxPropagationDefinition());
         transactionTemplate.setPropagationBehavior(txPropagationDef);
-        return transactionTemplate.execute( new TransactionCallback<T>() {
+        return transactionTemplate.execute(new TransactionCallback<T>() {
             @Override
             public T doInTransaction(TransactionStatus status) {
                 return action.execute();

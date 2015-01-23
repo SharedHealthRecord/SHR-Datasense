@@ -18,11 +18,10 @@ public class SubResourceProcessor implements ResourceProcessor {
     @Override
     public void process(EncounterComposition composition) {
         for (DatasenseResourceReference resource : composition.getResources()) {
-            if (resource.getValue() == null) {
-                for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
-                    if (fhirResourceHandler.canHandle(resource.getResourceValue())) {
-                        fhirResourceHandler.process(resource, composition);
-                    }
+            if (resource.getValue() != null) continue;
+            for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
+                if (fhirResourceHandler.canHandle(resource.getResourceValue())) {
+                    fhirResourceHandler.process(resource, composition);
                 }
             }
         }

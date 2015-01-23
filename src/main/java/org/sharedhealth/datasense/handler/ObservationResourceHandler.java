@@ -15,9 +15,9 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 
 import static org.hl7.fhir.instance.model.Observation.ObservationRelatedComponent;
-import static org.sharedhealth.datasense.util.FhirCodeLookupService.getConceptId;
-import static org.sharedhealth.datasense.util.FhirCodeLookupService.getReferenceCode;
-import static org.sharedhealth.datasense.util.ResourceLookupService.getDatasenseResourceReference;
+import static org.sharedhealth.datasense.util.FhirCodeLookup.getConceptId;
+import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
+import static org.sharedhealth.datasense.util.ResourceLookup.getDatasenseResourceReference;
 
 @Component
 public class ObservationResourceHandler implements FhirResourceHandler {
@@ -41,10 +41,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         mapObservation(composition, observation, datasenseResourceReference);
     }
 
-    private void mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir.instance.model.Observation fhirObservation) {
+    private void mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir
+            .instance.model.Observation fhirObservation) {
         for (ObservationRelatedComponent relatedComponent : fhirObservation.getRelated()) {
-            DatasenseResourceReference datasenseResourceReference = getDatasenseResourceReference(relatedComponent.getTarget(), composition);
-            Observation childObservation = null;
+            DatasenseResourceReference datasenseResourceReference = getDatasenseResourceReference(relatedComponent
+                    .getTarget(), composition);
+            Observation childObservation;
             if (datasenseResourceReference.getValue() == null) {
                 childObservation = new Observation();
                 mapObservation(composition, childObservation, datasenseResourceReference);
@@ -56,12 +58,14 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         }
     }
 
-    private void mapObservation(EncounterComposition composition, Observation observation, DatasenseResourceReference datasenseResourceReference) {
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) datasenseResourceReference.getResourceValue();
+    private void mapObservation(EncounterComposition composition, Observation observation, DatasenseResourceReference
+            datasenseResourceReference) {
+        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation)
+                datasenseResourceReference.getResourceValue();
 
         List<Coding> codings = fhirObservation.getName().getCoding();
         String conceptId = getConceptId(codings);
-        if(conceptId == null) return;
+        if (conceptId == null) return;
         observation.setConceptId(conceptId);
         observation.setReferenceCode(getReferenceCode(codings));
 

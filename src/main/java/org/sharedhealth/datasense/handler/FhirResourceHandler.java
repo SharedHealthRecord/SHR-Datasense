@@ -6,5 +6,6 @@ import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 
 public interface FhirResourceHandler {
     boolean canHandle(Resource resource);
+
     void process(DatasenseResourceReference datasenseResourceReference, EncounterComposition composition);
 }

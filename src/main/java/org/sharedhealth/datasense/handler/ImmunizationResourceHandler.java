@@ -1,10 +1,6 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.DateAndTime;
-import org.hl7.fhir.instance.model.Immunization;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceType;
+import org.hl7.fhir.instance.model.*;
 import org.sharedhealth.datasense.client.TrWebClient;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
@@ -23,7 +19,7 @@ import java.net.URISyntaxException;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.TrUrlMatcher.*;
+import static org.sharedhealth.datasense.util.TrUrl.*;
 
 @Component
 public class ImmunizationResourceHandler implements FhirResourceHandler {
@@ -51,7 +47,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         medication.setDateTime(getDateTime(immunization, encounter));
         setMedicationCodes(immunization, medication);
         if (medication.getDrugId() == null) {
-            logger.warn("Cannot save non-coded immnunizations.");
+            logger.warn("Cannot save non-coded immunizations.");
             return;
         }
         medicationDao.save(medication);
@@ -75,7 +71,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
 
     private String getReferenceCode(List<org.sharedhealth.datasense.model.tr.Coding> codings) {
         for (org.sharedhealth.datasense.model.tr.Coding coding : codings) {
-            if(isReferenceTermUrl(coding.getSystem()))
+            if (isReferenceTermUrl(coding.getSystem()))
                 return coding.getCode();
         }
         return null;
@@ -83,14 +79,13 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
 
     private String getConceptId(List<org.sharedhealth.datasense.model.tr.Coding> codings) {
         for (org.sharedhealth.datasense.model.tr.Coding coding : codings) {
-            if(isConceptUrl(coding.getSystem()))
+            if (isConceptUrl(coding.getSystem()))
                 return coding.getCode();
         }
         return null;
     }
 
     private TrMedication getTrMedication(String system) {
-        String errorMessage = String.format("Could not connect to [ %s ]", system);
         try {
             return trWebClient.getTrMedication(system);
         } catch (IOException e) {
