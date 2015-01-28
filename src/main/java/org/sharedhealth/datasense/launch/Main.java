@@ -9,7 +9,9 @@ import org.sharedhealth.datasense.export.dhis.DHISMonthlyEPIInfantPostJob;
 import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
+import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
+import org.sharedhealth.datasense.scheduler.jobs.TrConceptSyncJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
@@ -43,7 +45,7 @@ import static java.lang.System.getenv;
 @Import({DatabaseConfig.class})
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
         "org.sharedhealth.datasense.processor",
-        "org.sharedhealth.datasense.feeds.encounters",
+        "org.sharedhealth.datasense.feeds",
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
         "org.sharedhealth.datasense.handler",
@@ -74,6 +76,9 @@ public class Main {
     @Autowired
     private ShrWebClient shrWebClient;
 
+    @Autowired
+    private ConceptEventWorker conceptEventWorker;
+
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
         Map<String, String> env = getenv();
@@ -101,6 +106,7 @@ public class Main {
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
         schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(),
+                trConceptSyncJobTrigger().getObject(),
                 dhisDailyOPDIPDPostJobTrigger().getObject(),
                 dhisEPIInfantPostJobTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
@@ -129,6 +135,8 @@ public class Main {
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
         ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
         ctx.put("shrWebClient", shrWebClient);
+        ctx.put("conceptEventWorker", conceptEventWorker);
+
         return ctx;
     }
 
@@ -148,6 +156,30 @@ public class Main {
         triggerFactoryBean.setStartDelay(10000);
         triggerFactoryBean.setCronExpression("0/30 * * * * ?");
         triggerFactoryBean.setJobDetail(catchmentEncounterJob().getObject());
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return triggerFactoryBean;
+    }
+
+    @Bean
+    public JobDetailFactoryBean trConceptSyncJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(TrConceptSyncJob.class);
+        jobDetailFactoryBean.setName("tr.concept.sync.job");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean;
+    }
+
+    @Bean
+    public CronTriggerFactoryBean trConceptSyncJobTrigger() {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName("tr.concept.sync.job.trigger");
+        triggerFactoryBean.setStartDelay(10000);
+        triggerFactoryBean.setCronExpression("0/30 * * * * ?");
+        triggerFactoryBean.setJobDetail(trConceptSyncJob().getObject());
         try {
             triggerFactoryBean.afterPropertiesSet();
         } catch (ParseException e) {

@@ -242,4 +242,36 @@
         <addNotNullConstraint columnName="uuid"
                               tableName="medication" columnDataType="varchar(50)"/>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150127-1049" author="sharedhealth" context="setup">
+        <comment>creating tr concept table</comment>
+        <createTable tableName="concept">
+            <column name="concept_uuid" type="varchar(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="class" type="varchar(50)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150127-1059" author="sharedhealth" context="setup">
+        <comment>creating tr reference term table</comment>
+        <createTable tableName="reference_term">
+            <column name="reference_term_uuid" type="varchar(50)">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="code" type="varchar(50)" />
+            <column name="source" type="varchar(50)" />
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150127-1060" author="sharedhealth" context="setup">
+        <comment>creating tr reference term map table</comment>
+        <createTable tableName="reference_term_map">
+            <column name="reference_term_map_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="concept_uuid" type="varchar(50)" />
+            <column name="reference_term_uuid" type="varchar(50)" />
+            <column name="relationship_type" type="varchar(50)" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

@@ -9,7 +9,7 @@ import org.springframework.core.io.ClassPathResource;
 @Configuration
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
         "org.sharedhealth.datasense.processor",
-        "org.sharedhealth.datasense.feeds.encounters",
+        "org.sharedhealth.datasense.feeds",
         "org.sharedhealth.datasense.repository",
         "org.sharedhealth.datasense.client",
         "org.sharedhealth.datasense.handler",

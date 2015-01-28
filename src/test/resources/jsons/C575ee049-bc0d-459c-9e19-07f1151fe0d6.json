@@ -1,0 +1,58 @@
+{
+  "conceptClass": "Symptom",
+  "fullySpecifiedName": {
+    "conceptNameType": "FULLY_SPECIFIED",
+    "conceptName": "C Set03",
+    "locale": "en"
+  },
+  "retireReason": null,
+  "retired": false,
+  "setMembers": [],
+  "uuid": "575ee049-bc0d-459c-9e19-07f1151fe0d6",
+  "names": [
+    {
+      "conceptNameType": "SHORT",
+      "conceptName": "BackPain186289",
+      "locale": "en"
+    },
+    {
+      "conceptNameType": "FULLY_SPECIFIED",
+      "conceptName": "C Set03",
+      "locale": "en"
+    },
+    {
+      "conceptNameType": null,
+      "conceptName": "Back Pain 186289 Syn",
+      "locale": "en"
+    }
+  ],
+  "conceptAnswers": [],
+  "datatypeName": "N/A",
+  "referenceTerms": [
+    {
+      "uri": "http://localhost:9997/openmrs/ws/rest/v1/tr/referenceterms/66b81088-adce-4432-83b7-46fbc14ffa85",
+      "uuid": "66b81088-adce-4432-83b7-46fbc14ffa85",
+      "code": "M54.186289",
+      "name": "Back pain 186289",
+      "conceptSource": {
+        "uuid": "acb344fa-9243-46fc-8581-d06d39c54d30",
+        "hl7Code": "ICD10-BD",
+        "description": "ICD10-BD",
+        "name": "ICD10-BD"
+      },
+      "description": "Lower Back Pain",
+      "mapType": "SAME-AS",
+      "version": "1.0",
+      "retired": false,
+      "conceptReferenceTermMaps": []
+    }
+  ],
+  "uri": "http://localhost:9997/openmrs/ws/rest/v1/tr/concepts/575ee049-bc0d-459c-9e19-07f1151fe0d6",
+  "version": "1.0",
+  "description": {
+    "locale": "en",
+    "description": "Back Pain186289"
+  },
+  "properties": {},
+  "set": false
+}

@@ -86,14 +86,15 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     }
 
     private TrMedication getTrMedication(String system) {
+        String errorMessage = String.format("Could not connect to [ %s ]", system);
         try {
             return trWebClient.getTrMedication(system);
         } catch (IOException e) {
-            logger.error("IO exception", e);
-            throw new RuntimeException("IO exception", e);
+            logger.error(errorMessage, e);
+            throw new RuntimeException(errorMessage, e);
         } catch (URISyntaxException e) {
-            logger.error("uri syntax", e);
-            throw new RuntimeException("uri syntax", e);
+            logger.error(errorMessage, e);
+            throw new RuntimeException(errorMessage, e);
         }
     }
 
