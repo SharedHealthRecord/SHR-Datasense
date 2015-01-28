@@ -4,13 +4,15 @@ import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.sharedhealth.datasense.client.TrWebClient;
+import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
 import org.sharedhealth.datasense.feeds.tr.TrConceptFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+
+import java.net.URISyntaxException;
 
 public class TrConceptSyncJob extends QuartzJobBean {
 
@@ -30,6 +32,8 @@ public class TrConceptSyncJob extends QuartzJobBean {
         this.txMgr = txMgr;
     }
 
+    Logger log = Logger.getLogger(TrConceptSyncJob.class);
+
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         String trConceptAtomfeedUrl = properties.getTrConceptAtomfeedUrl();
@@ -42,8 +46,9 @@ public class TrConceptSyncJob extends QuartzJobBean {
                         transactionManager);
         try {
             feedCrawler.process();
-        } catch (Exception e) {
-
+        } catch (URISyntaxException e) {
+            log.error(String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl));
+            e.printStackTrace();
         }
     }
 }

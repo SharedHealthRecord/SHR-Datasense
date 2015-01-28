@@ -15,7 +15,6 @@ import org.sharedhealth.datasense.model.EncounterBundle;
 import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.Map;
 
 public class ShrEncounterFeedProcessor {
 
@@ -23,7 +22,6 @@ public class ShrEncounterFeedProcessor {
     private String feedUrl;
     private AllMarkers markers;
     private AllFailedEvents failedEvents;
-    private Map<String, Object> feedProperties;
     private AtomFeedSpringTransactionManager transactionManager;
     private ShrWebClient shrWebClient;
 
@@ -43,9 +41,11 @@ public class ShrEncounterFeedProcessor {
     public void process() throws URISyntaxException {
         AtomFeedProperties atomProperties = new AtomFeedProperties();
         atomProperties.setMaxFailedEvents(20);
-        atomFeedClient(new URI(this.feedUrl),
+        AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.feedUrl),
                 new FeedEventWorker(encounterEventWorker),
-                atomProperties).processEvents();
+                atomProperties);
+        atomFeedClient.processEvents();
+        atomFeedClient.processFailedEvents();
     }
 
     private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties) {

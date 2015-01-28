@@ -35,9 +35,11 @@ public class TrConceptFeedProcessor {
     public void process() throws URISyntaxException {
         AtomFeedProperties atomProperties = new AtomFeedProperties();
         atomProperties.setMaxFailedEvents(20);
-        atomFeedClient(new URI(this.trConceptAtomfeedUrl),
+        AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.trConceptAtomfeedUrl),
                 conceptEventWorker,
-                atomProperties).processEvents();
+                atomProperties);
+        atomFeedClient.processEvents();
+        atomFeedClient.processFailedEvents();
     }
 
     private AtomFeedClient atomFeedClient(URI feedUri, EventWorker worker, AtomFeedProperties atomProperties) {

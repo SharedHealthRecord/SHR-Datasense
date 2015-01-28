@@ -136,7 +136,6 @@ public class Main {
         ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
         ctx.put("shrWebClient", shrWebClient);
         ctx.put("conceptEventWorker", conceptEventWorker);
-
         return ctx;
     }
 

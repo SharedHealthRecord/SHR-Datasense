@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.scheduler.jobs;
 
+import org.apache.log4j.Logger;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.quartz.JobExecutionContext;
@@ -9,7 +10,6 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.encounters.ShrEncounterFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
-import org.sharedhealth.datasense.security.IdentityStore;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -22,9 +22,9 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
 
     private EncounterEventWorker encounterEventWorker;
 
-    private IdentityStore identityStore;
-
     private ShrWebClient shrWebClient;
+
+    Logger log = Logger.getLogger(CatchmentEncounterCrawlerJob.class);
 
     public void setShrWebClient(ShrWebClient shrWebClient) {
         this.shrWebClient = shrWebClient;
@@ -42,11 +42,6 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
         this.encounterEventWorker = encounterEventWorker;
     }
 
-    public void setIdentityStore(IdentityStore identityStore) {
-        this.identityStore = identityStore;
-    }
-
-
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         for (String catchment : properties.getDatasenseCatchmentList()) {
@@ -61,6 +56,7 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
             try {
                 feedCrawler.process();
             } catch (URISyntaxException e) {
+                log.error(String.format("Unable to process encounter catchment feed [%s]", feedUrl));
                 e.printStackTrace();
             }
         }
