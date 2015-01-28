@@ -7,47 +7,50 @@ import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
+import org.sharedhealth.datasense.feeds.tr.ReferenceTermEventWorker;
 import org.sharedhealth.datasense.feeds.tr.TrConceptFeedProcessor;
+import org.sharedhealth.datasense.feeds.tr.TrReferenceTermFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.net.URISyntaxException;
 
-public class TrConceptSyncJob extends QuartzJobBean {
+public class TrReferenceTermSyncJob extends QuartzJobBean{
 
     private DatasenseProperties properties;
-    private ConceptEventWorker conceptEventWorker;
+    private ReferenceTermEventWorker referenceTermEventWorker;
     private DataSourceTransactionManager txMgr;
 
     public void setProperties(DatasenseProperties properties) {
         this.properties = properties;
     }
 
-    public void setConceptEventWorker(ConceptEventWorker conceptEventWorker) {
-        this.conceptEventWorker = conceptEventWorker;
+    public void setReferenceTermEventWorker(ReferenceTermEventWorker referenceTermEventWorker) {
+        this.referenceTermEventWorker = referenceTermEventWorker;
     }
 
     public void setTxMgr(DataSourceTransactionManager txMgr) {
         this.txMgr = txMgr;
     }
 
-    Logger log = Logger.getLogger(TrConceptSyncJob.class);
+    Logger log = Logger.getLogger(TrReferenceTermSyncJob.class);
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String trConceptAtomfeedUrl = properties.getTrConceptAtomfeedUrl();
+        String trReferenceTermAtomfeedUrl = properties.getTrReferenceTermAtomfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
-        TrConceptFeedProcessor feedCrawler =
-                new TrConceptFeedProcessor(
-                        conceptEventWorker, trConceptAtomfeedUrl,
+        TrReferenceTermFeedProcessor feedCrawler =
+                new TrReferenceTermFeedProcessor(
+                        referenceTermEventWorker,
+                        trReferenceTermAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
                         transactionManager);
         try {
             feedCrawler.process();
         } catch (URISyntaxException e) {
-            log.error(String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl));
+            log.error(String.format("Unable to process reference term feed [%s]", trReferenceTermAtomfeedUrl));
             e.printStackTrace();
         }
     }

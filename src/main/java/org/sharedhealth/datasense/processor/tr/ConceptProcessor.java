@@ -18,15 +18,24 @@ public class ConceptProcessor {
     }
 
     public void process(TrConcept trConcept) {
+        processReferenceTerms(trConcept);
+        conceptDao.saveOrUpdate(trConcept);
+        saveOrUpdateReferenceTermMaps(trConcept);
+    }
+
+    private void saveOrUpdateReferenceTermMaps(TrConcept trConcept) {
+        conceptDao.deleteConceptReferenceTermMap(trConcept.getConceptUuid());
+        if (trConcept.getReferenceTermMaps() != null) {
+            for (TrReferenceTerm trReferenceTerm : trConcept.getReferenceTermMaps()) {
+                conceptDao.saveReferenceTermMap(trReferenceTerm.getReferenceTermUuid(), trConcept.getConceptUuid(), trReferenceTerm.getRelationshipType());
+            }
+        }
+    }
+
+    private void processReferenceTerms(TrConcept trConcept) {
         if (trConcept.getReferenceTermMaps() != null) {
             for (TrReferenceTerm trReferenceTerm : trConcept.getReferenceTermMaps()) {
                 referenceTermProcessor.process(trReferenceTerm);
-            }
-        }
-        conceptDao.saveOrUpdate(trConcept);
-        if (trConcept.getReferenceTermMaps() != null) {
-            for (TrReferenceTerm trReferenceTerm : trConcept.getReferenceTermMaps()) {
-                conceptDao.saveOrUpdateReferenceTermMap(trReferenceTerm.getReferenceTermUuid(), trConcept.getConceptUuid(), trReferenceTerm.getRelationshipType());
             }
         }
     }

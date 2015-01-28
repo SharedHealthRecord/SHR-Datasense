@@ -10,6 +10,8 @@ import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
+import org.sharedhealth.datasense.feeds.tr.ReferenceTermEventWorker;
+import org.sharedhealth.datasense.scheduler.jobs.TrReferenceTermSyncJob;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.sharedhealth.datasense.scheduler.jobs.TrConceptSyncJob;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -79,6 +81,9 @@ public class Main {
     @Autowired
     private ConceptEventWorker conceptEventWorker;
 
+    @Autowired
+    private ReferenceTermEventWorker referenceTermEventWorker;
+
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
         Map<String, String> env = getenv();
@@ -107,6 +112,7 @@ public class Main {
         schedulerFactoryBean.setJobFactory(jobFactory());
         schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(),
                 trConceptSyncJobTrigger().getObject(),
+                trReferenceTermSyncJobTrigger().getObject(),
                 dhisDailyOPDIPDPostJobTrigger().getObject(),
                 dhisEPIInfantPostJobTrigger().getObject());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
@@ -128,7 +134,7 @@ public class Main {
 
     @Bean
     public Map<String, Object> schedulerContextMap() {
-        HashMap<String, Object> ctx = new HashMap<String, Object>();
+        HashMap<String, Object> ctx = new HashMap<>();
         ctx.put("txMgr", txmanager);
         ctx.put("properties", properties);
         ctx.put("encounterEventWorker", encounterEventWorker);
@@ -136,6 +142,7 @@ public class Main {
         ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
         ctx.put("shrWebClient", shrWebClient);
         ctx.put("conceptEventWorker", conceptEventWorker);
+        ctx.put("referenceTermEventWorker", referenceTermEventWorker);
         return ctx;
     }
 
@@ -188,12 +195,35 @@ public class Main {
     }
 
     @Bean
+    public JobDetailFactoryBean trReferenceTermSyncJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(TrReferenceTermSyncJob.class);
+        jobDetailFactoryBean.setName("tr.reference.term.sync.job");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean;
+    }
+
+    @Bean
+    public CronTriggerFactoryBean trReferenceTermSyncJobTrigger() {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName("tr.reference.term.sync.job.trigger");
+        triggerFactoryBean.setStartDelay(10000);
+        triggerFactoryBean.setCronExpression("0/30 * * * * ?");
+        triggerFactoryBean.setJobDetail(trReferenceTermSyncJob().getObject());
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return triggerFactoryBean;
+    }
+
+    @Bean
     public JobDetailFactoryBean dhisDailyOPDIPDJob() {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
         jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
         jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
-        ;
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }
@@ -219,7 +249,6 @@ public class Main {
         jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
         jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
         jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-        ;
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean;
     }

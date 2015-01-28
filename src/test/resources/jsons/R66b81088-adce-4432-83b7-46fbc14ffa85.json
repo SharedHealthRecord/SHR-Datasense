@@ -1,0 +1,16 @@
+{
+  "uri": "http://localhost:9997/openmrs/ws/rest/v1/tr/referenceterms/66b81088-adce-4432-83b7-46fbc14ffa85",
+  "uuid": "66b81088-adce-4432-83b7-46fbc14ffa85",
+  "code": "M54.186289",
+  "name": "Back pain 186289",
+  "conceptSource": {
+    "uuid": "acb344fa-9243-46fc-8581-d06d39c54d30",
+    "hl7Code": "ICD10-BD",
+    "description": "ICD10-BD",
+    "name": "ICD10-BD"
+  },
+  "description": "Lower Back Pain",
+  "version": "1.0",
+  "retired": false,
+  "conceptReferenceTermMaps": []
+}

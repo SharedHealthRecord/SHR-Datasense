@@ -36,20 +36,19 @@ public class ConceptDao {
         jdbcTemplate.update(sql, map);
     }
 
-    public void saveOrUpdateReferenceTermMap(String referenceTermUuid, String conceptUuid, String relationshipType) {
+    public void saveReferenceTermMap(String referenceTermUuid, String conceptUuid, String relationshipType) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("concept_uuid", conceptUuid);
         map.put("reference_term_uuid", referenceTermUuid);
         map.put("relationship_type", relationshipType);
         String sql;
-        if (!checkIfConceptTermMapExists(conceptUuid, referenceTermUuid)) {
-            sql = "insert into reference_term_map (concept_uuid, reference_term_uuid, relationship_type) " +
-                    "values(:concept_uuid, :reference_term_uuid, :relationship_type)";
-        } else {
-            sql = "update reference_term_map set relationship_type = :relationship_type where " +
-                    "concept_uuid = :concept_uuid and reference_term_uuid = :reference_term_uuid";
-        }
+        sql = "insert into reference_term_map (concept_uuid, reference_term_uuid, relationship_type) " +
+                "values(:concept_uuid, :reference_term_uuid, :relationship_type)";
         jdbcTemplate.update(sql, map);
+    }
+
+    public void deleteConceptReferenceTermMap(String conceptUuid) {
+        jdbcTemplate.update("delete from reference_term_map where concept_uuid = :concept_uuid", Collections.singletonMap("concept_uuid", conceptUuid));
     }
 
     public TrConcept findByConceptUuid(String conceptUuid) {
@@ -82,23 +81,5 @@ public class ConceptDao {
                         return referenceTerm;
                     }
                 });
-    }
-
-    public boolean checkIfConceptTermMapExists(String conceptUuid, String referenceTermUuid) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("concept_uuid", conceptUuid);
-        map.put("reference_term_uuid", referenceTermUuid);
-        List<TrReferenceTerm> referenceTerms = jdbcTemplate.query("select relationship_type from reference_term_map " +
-                        "where concept_uuid = :concept_uuid and reference_term_uuid = :reference_term_uuid",
-                map,
-                new RowMapper<TrReferenceTerm>() {
-                    @Override
-                    public TrReferenceTerm mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        TrReferenceTerm referenceTerm = new TrReferenceTerm();
-                        referenceTerm.setRelationshipType(rs.getString("relationship_type"));
-                        return referenceTerm;
-                    }
-                });
-        return !referenceTerms.isEmpty();
     }
 }

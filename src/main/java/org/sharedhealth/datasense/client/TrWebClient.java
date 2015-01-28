@@ -4,6 +4,7 @@ import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.tr.TrConcept;
 import org.sharedhealth.datasense.model.tr.TrMedication;
+import org.sharedhealth.datasense.model.tr.TrReferenceTerm;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -49,5 +50,10 @@ public class TrWebClient {
     public TrConcept getTrConcept(String uri) throws URISyntaxException, IOException {
         String response = getResponse(new URI(uri));
         return response != null ? MapperUtil.readFrom(response, TrConcept.class) : null;
+    }
+
+    public TrReferenceTerm getTrReferenceTerm(String uri) throws URISyntaxException, IOException {
+        String response = getResponse(new URI(uri));
+        return response != null ? MapperUtil.readFrom(response, TrReferenceTerm.class) : null;
     }
 }

@@ -18,7 +18,9 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
 
 public class TrWebClientTest {
     private final static String CONCEPT_UUID = "575ee049-bc0d-459c-9e19-07f1151fe0d6";
+    private final static String REFERENCE_TERM_UUID = "66b81088-adce-4432-83b7-46fbc14ffa85";
     private final static String TR_CONCEPT_URL = "/openmrs/ws/rest/v1/tr/concepts/";
+    private final static String TR_REFERENCE_TERM_URL = "/openmrs/ws/rest/v1/tr/referenceterms/";
     @Mock
     private DatasenseProperties datasenseProperties;
 
@@ -34,6 +36,12 @@ public class TrWebClientTest {
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withBody(asString("jsons/C" + CONCEPT_UUID + ".json"))));
+
+        givenThat(get(urlMatching(TR_REFERENCE_TERM_URL + REFERENCE_TERM_UUID))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withBody(asString("jsons/R" + REFERENCE_TERM_UUID + ".json"))));
+
         when(datasenseProperties.getTrUser()).thenReturn("admin");
         when(datasenseProperties.getTrPassword()).thenReturn("password");
     }
@@ -50,8 +58,17 @@ public class TrWebClientTest {
         TrReferenceTerm trReferenceTerm = trConcept.getReferenceTermMaps().get(0);
         assertEquals("Back pain 186289", trReferenceTerm.getName());
         assertEquals("M54.186289", trReferenceTerm.getCode());
-        assertEquals("66b81088-adce-4432-83b7-46fbc14ffa85", trReferenceTerm.getReferenceTermUuid());
+        assertEquals(REFERENCE_TERM_UUID, trReferenceTerm.getReferenceTermUuid());
         assertEquals("ICD10-BD", trReferenceTerm.getSource());
         assertEquals("SAME-AS", trReferenceTerm.getRelationshipType());
+    }
+
+    @Test
+    public void shouldGetTrReferenceTermFromFeed() throws Exception {
+        TrReferenceTerm trReferenceTerm = trWebClient.getTrReferenceTerm("http://localhost:9997" + TR_REFERENCE_TERM_URL + REFERENCE_TERM_UUID);
+        assertEquals("Back pain 186289", trReferenceTerm.getName());
+        assertEquals("M54.186289", trReferenceTerm.getCode());
+        assertEquals(REFERENCE_TERM_UUID, trReferenceTerm.getReferenceTermUuid());
+        assertEquals("ICD10-BD", trReferenceTerm.getSource());
     }
 }
