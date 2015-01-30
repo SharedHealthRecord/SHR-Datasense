@@ -63,7 +63,7 @@ public class FeedProcessorIT {
                         .withBody(asString("jsons/C" + CONCEPT_UUID + ".json"))));
 
         String trBasePath = "http://localhost:9997";
-        new FeedProcessor(conceptEventWorker,
+        new TRFeedProcessor(conceptEventWorker,
                 trBasePath + trConceptAtomfeedUrl + "1",
                 new AllMarkersInMemoryImpl(),
                 new AllFailedEventsInMemoryImpl(),
@@ -85,7 +85,7 @@ public class FeedProcessorIT {
 
 
         String trBasePath = "http://localhost:9997";
-        new FeedProcessor(referenceTermEventWorker,
+        new TRFeedProcessor(referenceTermEventWorker,
                 trBasePath + trReferenceTermAtomfeedUrl + "1",
                 new AllMarkersInMemoryImpl(),
                 new AllFailedEventsInMemoryImpl(),

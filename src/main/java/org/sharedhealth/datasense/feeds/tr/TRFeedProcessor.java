@@ -12,18 +12,18 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public class FeedProcessor {
+public class TRFeedProcessor {
     private final EventWorker eventWorker;
     private final String trConceptAtomfeedUrl;
     private final AllMarkers markers;
     private final AllFailedEvents failedEvents;
     private final AtomFeedSpringTransactionManager transactionManager;
 
-    public FeedProcessor(EventWorker eventWorker,
-                         String trConceptAtomfeedUrl,
-                         AllMarkers allMarkers,
-                         AllFailedEvents allFailedEvents,
-                         AtomFeedSpringTransactionManager transactionManager) {
+    public TRFeedProcessor(EventWorker eventWorker,
+                           String trConceptAtomfeedUrl,
+                           AllMarkers allMarkers,
+                           AllFailedEvents allFailedEvents,
+                           AtomFeedSpringTransactionManager transactionManager) {
 
         this.eventWorker = eventWorker;
         this.trConceptAtomfeedUrl = trConceptAtomfeedUrl;

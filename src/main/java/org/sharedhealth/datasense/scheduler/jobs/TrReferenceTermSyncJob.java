@@ -6,7 +6,7 @@ import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.feeds.tr.FeedProcessor;
+import org.sharedhealth.datasense.feeds.tr.TRFeedProcessor;
 import org.sharedhealth.datasense.feeds.tr.ReferenceTermEventWorker;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
@@ -38,15 +38,15 @@ public class TrReferenceTermSyncJob extends QuartzJobBean{
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         String trReferenceTermAtomfeedUrl = properties.getTrReferenceTermAtomfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
-        FeedProcessor feedProcessor =
-                new FeedProcessor(
+        TRFeedProcessor TRFeedProcessor =
+                new TRFeedProcessor(
                         referenceTermEventWorker,
                         trReferenceTermAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
                         transactionManager);
         try {
-            feedProcessor.process();
+            TRFeedProcessor.process();
         } catch (URISyntaxException e) {
             log.error(String.format("Unable to process reference term feed [%s]", trReferenceTermAtomfeedUrl));
             e.printStackTrace();

@@ -1,6 +1,9 @@
 package org.sharedhealth.datasense.launch;
 
 
+import org.quartz.CronTrigger;
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
@@ -83,6 +86,15 @@ public class Main {
 
     @Autowired
     private ReferenceTermEventWorker referenceTermEventWorker;
+    private String CATCHMENT_ENCOUNTER_SYNC_JOB = "catchment.encounter.crawler.job";
+    private String CONCEPT_SYNC_JOB = "tr.concept.sync.job";
+    private String REF_TERM_SYNC_JOB = "tr.reference.term.sync.job";
+
+    private String CATCHMENT_ENCOUNTER_SYNC_TRIGGER = "catchment.encounter.crawler.job.trigger";
+    private String CONCEPT_SYNC_TRIGGER = "tr.concept.sync.job.trigger";
+    private String REF_TERM_SYNC_TRIGGER = "tr.reference.term.sync.job.trigger";
+    private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
+    private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -110,11 +122,9 @@ public class Main {
 
         schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
         schedulerFactoryBean.setJobFactory(jobFactory());
-        schedulerFactoryBean.setTriggers(catchmentEncounterJobTrigger().getObject(),
-                trConceptSyncJobTrigger().getObject(),
-                trReferenceTermSyncJobTrigger().getObject(),
-                dhisDailyOPDIPDPostJobTrigger().getObject(),
-                dhisEPIInfantPostJobTrigger().getObject());
+
+
+        schedulerFactoryBean.setTriggers(getTriggers());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
@@ -124,6 +134,16 @@ public class Main {
             e.printStackTrace();
         }
         return schedulerFactoryBean;
+    }
+
+    private Trigger[] getTriggers() {
+        return new Trigger[]{
+                getTrigger(CATCHMENT_ENCOUNTER_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(CatchmentEncounterCrawlerJob.class, CATCHMENT_ENCOUNTER_SYNC_JOB).getObject()),
+                getTrigger(CONCEPT_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrConceptSyncJob.class, CONCEPT_SYNC_JOB).getObject()),
+                getTrigger(REF_TERM_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrReferenceTermSyncJob.class, REF_TERM_SYNC_JOB).getObject()),
+                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/15 * * * ?", dhisDailyOPDIPDJob()),
+                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/15 * * * ?", dhisEPIInfantPostJob())
+        };
     }
 
     @Bean
@@ -146,134 +166,53 @@ public class Main {
         return ctx;
     }
 
-    @Bean
-    public JobDetailFactoryBean catchmentEncounterJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(CatchmentEncounterCrawlerJob.class);
-        jobDetailFactoryBean.setName("catchment.encounter.crawler.job");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean catchmentEncounterJobTrigger() {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName("catchment.encounter.crawler.job.trigger");
-        triggerFactoryBean.setStartDelay(10000);
-        triggerFactoryBean.setCronExpression("0/30 * * * * ?");
-        triggerFactoryBean.setJobDetail(catchmentEncounterJob().getObject());
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return triggerFactoryBean;
-    }
-
-    @Bean
-    public JobDetailFactoryBean trConceptSyncJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(TrConceptSyncJob.class);
-        jobDetailFactoryBean.setName("tr.concept.sync.job");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean trConceptSyncJobTrigger() {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName("tr.concept.sync.job.trigger");
-        triggerFactoryBean.setStartDelay(10000);
-        triggerFactoryBean.setCronExpression("0/30 * * * * ?");
-        triggerFactoryBean.setJobDetail(trConceptSyncJob().getObject());
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return triggerFactoryBean;
-    }
-
-    @Bean
-    public JobDetailFactoryBean trReferenceTermSyncJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(TrReferenceTermSyncJob.class);
-        jobDetailFactoryBean.setName("tr.reference.term.sync.job");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean trReferenceTermSyncJobTrigger() {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName("tr.reference.term.sync.job.trigger");
-        triggerFactoryBean.setStartDelay(10000);
-        triggerFactoryBean.setCronExpression("0/30 * * * * ?");
-        triggerFactoryBean.setJobDetail(trReferenceTermSyncJob().getObject());
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return triggerFactoryBean;
-    }
-
-    @Bean
-    public JobDetailFactoryBean dhisDailyOPDIPDJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
-        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean dhisDailyOPDIPDPostJobTrigger() {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName("dhis.daily.opdipd.post.job.trigger");
-        triggerFactoryBean.setStartDelay(10000);
-        triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
-        triggerFactoryBean.setJobDetail(dhisDailyOPDIPDJob().getObject());
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return triggerFactoryBean;
-    }
-
-    @Bean
-    public JobDetailFactoryBean dhisEPIInfantPostJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
-        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean;
-    }
-
-    @Bean
-    public CronTriggerFactoryBean dhisEPIInfantPostJobTrigger() {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName("dhis.monthly.epi.infant.post.job.trigger");
-        triggerFactoryBean.setStartDelay(10000);
-        triggerFactoryBean.setCronExpression("0 0/15 * * * ?");
-        triggerFactoryBean.setJobDetail(dhisEPIInfantPostJob().getObject());
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return triggerFactoryBean;
-    }
-
     @Bean(name = "dhisFacilitiesMap")
     public PropertiesFactoryBean dhisFacilitiesMap() {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
         return propertiesFactoryBean;
     }
+
+    private JobDetailFactoryBean jobDetail(Class jobClass, String jobName) {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(jobClass);
+        jobDetailFactoryBean.setName(jobName);
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean;
+    }
+
+    private CronTrigger getTrigger(String triggerName, int startDelay, String cronExpression, JobDetail jobDetail) {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName(triggerName);
+        triggerFactoryBean.setStartDelay(startDelay);
+        triggerFactoryBean.setCronExpression(cronExpression);
+        triggerFactoryBean.setJobDetail(jobDetail);
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return triggerFactoryBean.getObject();
+    }
+
+    private JobDetail dhisDailyOPDIPDJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
+        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
+
+    private JobDetail dhisEPIInfantPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
+        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
+
 
 
     public static void main(String[] args) throws Exception {
