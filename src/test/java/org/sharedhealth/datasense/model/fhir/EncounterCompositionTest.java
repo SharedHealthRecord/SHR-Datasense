@@ -1,8 +1,10 @@
 package org.sharedhealth.datasense.model.fhir;
 
 import org.hl7.fhir.instance.formats.ParserBase;
+import org.hl7.fhir.instance.model.Resource;
 import org.junit.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -19,4 +21,12 @@ public class EncounterCompositionTest {
         assertEquals("5942395046400622593", encounterCompositions.get(0).getPatientReference().getHealthId());
     }
 
+    @Test
+    public void shouldLoadParentResources() throws Exception {
+        ParserBase.ResourceOrFeed encounterResource = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(encounterResource.getFeed(), "shrEncounterId");
+        EncounterComposition composition = context.getEncounterCompositions().get(0);
+        ArrayList<Resource> parentResources = composition.getParentResources();
+        assertEquals(2, parentResources.size());
+    }
 }

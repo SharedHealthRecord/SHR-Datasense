@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.instance.model.*;
 import org.sharedhealth.datasense.model.Diagnosis;
-import org.sharedhealth.datasense.model.fhir.DatasenseResourceReference;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
 import org.sharedhealth.datasense.util.DateUtil;
@@ -39,8 +38,8 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(DatasenseResourceReference datasenseResourceReference, EncounterComposition composition) {
-        Condition fhirDiagnosis = (Condition) datasenseResourceReference.getResourceValue();
+    public void process(Resource resource, EncounterComposition composition) {
+        Condition fhirDiagnosis = (Condition) resource;
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setPatient(composition.getPatientReference().getValue());
         diagnosis.setEncounter(composition.getEncounterReference().getValue());
@@ -51,7 +50,6 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
         diagnosis.setDiagnosisDateTime(date);
         diagnosis.setDiagnosisStatus(fhirDiagnosis.getStatus().getValue().toCode());
         diagnosisDao.save(diagnosis);
-        datasenseResourceReference.setValue(diagnosis);
     }
 
     private void populateDiagnosisCodes(Diagnosis diagnosis, List<Coding> coding) {

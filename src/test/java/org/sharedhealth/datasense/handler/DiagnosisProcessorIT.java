@@ -28,7 +28,6 @@ import java.util.List;
 
 import static junit.framework.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
-import static org.sharedhealth.datasense.util.ResourceLookup.getDatasenseResourceReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -70,7 +69,7 @@ public class DiagnosisProcessorIT {
         composition.getPatientReference().setValue(patient);
         ResourceReference resourceReference = new ResourceReference();
         resourceReference.setReferenceSimple("urn:2801e2b9-3886-4bf5-919f-ce9268fdc317");
-        processor.process(getDatasenseResourceReference(resourceReference, composition), composition);
+        processor.process(context.getResourceByReferenceFromFeed(resourceReference), composition);
         List<Diagnosis> diagnosises = diagnosisDao.findByEncounterId(shrEncounterId);
         assertEquals(1, diagnosises.size());
         Diagnosis diagnosis = diagnosises.get(0);

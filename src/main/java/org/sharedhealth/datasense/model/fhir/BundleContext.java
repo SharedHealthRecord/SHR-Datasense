@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.model.fhir;
 import org.hl7.fhir.instance.model.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 public class BundleContext {
@@ -49,4 +50,14 @@ public class BundleContext {
     public String getShrEncounterId() {
         return shrEncounterId;
     }
+
+    public AtomEntry<? extends Resource> getAtomEntryFromFeed(ResourceReference resourceReference) {
+        for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
+            if (entry.getId().equals(resourceReference.getReferenceSimple())) {
+                return entry;
+            }
+        }
+        return null;
+    }
+
 }

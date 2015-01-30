@@ -27,7 +27,6 @@ import java.util.List;
 import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
-import static org.sharedhealth.datasense.util.ResourceLookup.getDatasenseResourceReference;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -78,7 +77,7 @@ public class ObservationResourceHandlerIT {
     public void shouldSaveObservationWithoutRelatedComponents() throws Exception {
         ResourceReference dateOfDeathReference = new ResourceReference().setReferenceSimple(DATE_OF_DEATH_REFERENCE_ID);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(getDatasenseResourceReference(dateOfDeathReference, composition),
+        observationResourceHandler.process(bundleContext.getResourceByReferenceFromFeed(dateOfDeathReference),
                 composition);
         List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
@@ -97,7 +96,7 @@ public class ObservationResourceHandlerIT {
     public void shouldSaveObservationAlongWithRelatedObservations() throws Exception {
         ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple(DEATH_NOTE_REFERENCE_ID);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(getDatasenseResourceReference(deathNoteReference, composition),
+        observationResourceHandler.process(bundleContext.getResourceByReferenceFromFeed(deathNoteReference),
                 composition);
         List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
@@ -109,31 +108,6 @@ public class ObservationResourceHandlerIT {
 
         String deathNoteConceptId = DEATH_NOTE_CONCEPT_ID;
         Observation deathNoteObservation = findObservationByConceptId(observations, deathNoteConceptId);
-        assertNull(deathNoteObservation.getParentId());
-
-        assertEquals(deathNoteObservation.getUuid(), dateOfDeathObservation.getParentId());
-    }
-
-    @Test
-    public void shouldUpdateSavedRelatedObservations() throws Exception {
-        ResourceReference dateOfDeathReference = new ResourceReference().setReferenceSimple(DATE_OF_DEATH_REFERENCE_ID);
-        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(getDatasenseResourceReference(dateOfDeathReference, composition),
-                composition);
-        List<Observation> observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
-        assertEquals(1, observations.size());
-        Observation dateOfDeathObservation = findObservationByConceptId(observations, DATE_OF_DEATH_CONCEPT_ID);
-        assertNull(dateOfDeathObservation.getParentId());
-
-
-        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple(DEATH_NOTE_REFERENCE_ID);
-        observationResourceHandler.process(getDatasenseResourceReference(deathNoteReference, composition),
-                composition);
-        observations = observationDao.findByEncounterId(bundleContext.getShrEncounterId());
-        assertEquals(2, observations.size());
-
-        dateOfDeathObservation = findObservationByConceptId(observations, DATE_OF_DEATH_CONCEPT_ID);
-        Observation deathNoteObservation = findObservationByConceptId(observations, DEATH_NOTE_CONCEPT_ID);
         assertNull(deathNoteObservation.getParentId());
 
         assertEquals(deathNoteObservation.getUuid(), dateOfDeathObservation.getParentId());
