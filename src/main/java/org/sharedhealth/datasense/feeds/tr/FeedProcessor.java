@@ -12,21 +12,21 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.HashMap;
 
-public class TrReferenceTermFeedProcessor {
-    private final ReferenceTermEventWorker referenceTermEventWorker;
-    private final String trReferenceTermAtomfeedUrl;
+public class FeedProcessor {
+    private final EventWorker eventWorker;
+    private final String trConceptAtomfeedUrl;
     private final AllMarkers markers;
     private final AllFailedEvents failedEvents;
     private final AtomFeedSpringTransactionManager transactionManager;
 
-    public TrReferenceTermFeedProcessor(ReferenceTermEventWorker referenceTermEventWorker,
-                                        String trReferenceTermAtomfeedUrl,
-                                        AllMarkers allMarkers,
-                                        AllFailedEvents allFailedEvents,
-                                        AtomFeedSpringTransactionManager transactionManager) {
+    public FeedProcessor(EventWorker eventWorker,
+                         String trConceptAtomfeedUrl,
+                         AllMarkers allMarkers,
+                         AllFailedEvents allFailedEvents,
+                         AtomFeedSpringTransactionManager transactionManager) {
 
-        this.referenceTermEventWorker = referenceTermEventWorker;
-        this.trReferenceTermAtomfeedUrl = trReferenceTermAtomfeedUrl;
+        this.eventWorker = eventWorker;
+        this.trConceptAtomfeedUrl = trConceptAtomfeedUrl;
         this.markers = allMarkers;
         this.failedEvents = allFailedEvents;
         this.transactionManager = transactionManager;
@@ -35,8 +35,8 @@ public class TrReferenceTermFeedProcessor {
     public void process() throws URISyntaxException {
         AtomFeedProperties atomProperties = new AtomFeedProperties();
         atomProperties.setMaxFailedEvents(20);
-        AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.trReferenceTermAtomfeedUrl),
-                referenceTermEventWorker,
+        AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.trConceptAtomfeedUrl),
+                eventWorker,
                 atomProperties);
         atomFeedClient.processEvents();
         atomFeedClient.processFailedEvents();
