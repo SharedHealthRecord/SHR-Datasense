@@ -1,6 +1,9 @@
 package org.sharedhealth.datasense.util;
 
 import org.hl7.fhir.instance.model.DateAndTime;
+import org.joda.time.LocalDate;
+import org.joda.time.Period;
+import org.joda.time.PeriodType;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -71,5 +74,17 @@ public class DateUtil {
     public static String getCurrentTimeInISOString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(ISO_DATE_IN_MILLIS_FORMAT);
         return dateFormat.format(new Date());
+    }
+
+    public static int getYears(Date startDate, Date endDate) {
+        return new Period(new LocalDate(startDate.getTime()), new LocalDate(endDate.getTime()), PeriodType.years()).getYears();
+    }
+
+    public static int getMonths(Date startDate, Date endDate) {
+        return new Period(new LocalDate(startDate.getTime()), new LocalDate(endDate.getTime()), PeriodType.months()).getMonths();
+    }
+
+    public static int getDays(Date startDate, Date endDate) {
+        return new Period(new LocalDate(startDate.getTime()), new LocalDate(endDate.getTime()), PeriodType.days()).getDays();
     }
 }

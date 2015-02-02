@@ -160,6 +160,18 @@
                         <reference value="urn:dcd89f72-8e07-4b6d-af52-8575c1b9c72b"/>
                     </target>
                 </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:879ed6b7-56ae-41f2-bad0-a797446175e6"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:d5ee301c-9bd9-4660-846b-4b224cabe1e2"/>
+                    </target>
+                </related>
             </Observation>
         </content>
     </entry>

@@ -1,8 +1,5 @@
 package org.sharedhealth.datasense.processor;
 
-import org.joda.time.LocalDate;
-import org.joda.time.Period;
-import org.joda.time.PeriodType;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.Patient;
@@ -15,6 +12,10 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+
+import static org.sharedhealth.datasense.util.DateUtil.getDays;
+import static org.sharedhealth.datasense.util.DateUtil.getMonths;
+import static org.sharedhealth.datasense.util.DateUtil.getYears;
 
 @Component("clinicalEncounterProcessor")
 public class ClinicalEncounterProcessor implements ResourceProcessor {
@@ -67,11 +68,8 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     }
 
     public void setPatientAge(Date birthDate, Date encounterDate, Encounter encounter) {
-        LocalDate localBirthDate = new LocalDate(birthDate.getTime());
-        LocalDate localEncounterDate = new LocalDate(encounterDate.getTime());
-        encounter.setPatientAgeInYears(new Period(localBirthDate, localEncounterDate, PeriodType.years()).getYears());
-        encounter.setPatientAgeInMonths(new Period(localBirthDate, localEncounterDate, PeriodType.months()).getMonths
-                ());
-        encounter.setPatientAgeInDays(new Period(localBirthDate, localEncounterDate, PeriodType.days()).getDays());
+        encounter.setPatientAgeInYears(getYears(birthDate, encounterDate));
+        encounter.setPatientAgeInMonths(getMonths(birthDate, encounterDate));
+        encounter.setPatientAgeInDays(getDays(birthDate, encounterDate));
     }
 }

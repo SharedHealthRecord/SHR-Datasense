@@ -51,6 +51,9 @@ public class DatasenseProperties implements EnvironmentAware {
     private String datasenseCatchmentList;
     //Tr Reference Code
     private List<String> deathCodes;
+    private String dateOfDeathUuid;
+    private String circumstancesOfDeathUuid;
+    private String causeOfDeath;
 
 
     @Override
@@ -87,6 +90,9 @@ public class DatasenseProperties implements EnvironmentAware {
         this.trUser = env.getProperty("TR_USER");
         this.trPassword = env.getProperty("TR_PASSWORD");
         this.deathCodes = Arrays.asList(env.getProperty("DEATH_CODES").split(","));
+        this.dateOfDeathUuid = env.getProperty("DATE_OF_DEATH_UUID");
+        this.circumstancesOfDeathUuid = env.getProperty("CIRCUMSTANCES_OF_DEATH_UUID");
+        this.causeOfDeath = env.getProperty("CAUSE_OF_DEATH_UUID");
     }
 
     public String getShrScheme() {
@@ -235,5 +241,17 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public List<String> getDeathCodes() {
         return deathCodes;
+    }
+
+    public String getDateOfDeathUuid() {
+        return dateOfDeathUuid;
+    }
+
+    public String getCircumstancesOfDeathUuid() {
+        return circumstancesOfDeathUuid;
+    }
+
+    public String getCauseOfDeath() {
+        return causeOfDeath;
     }
 }
