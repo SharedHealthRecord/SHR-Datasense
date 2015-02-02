@@ -42,7 +42,7 @@ public class DiagnosisProcessorIT {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
     @Rule
-    public WireMockRule wireMockRule = new WireMockRule(8081);
+    public WireMockRule wireMockRule = new WireMockRule(9997);
 
     @Before
     public void setUp() throws Exception {
