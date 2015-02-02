@@ -29,7 +29,7 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
         if (resource.getResourceType().equals(ResourceType.Condition)) {
             Condition condition = (Condition) resource;
             for (Coding coding : condition.getCategory().getCoding()) {
-                if (coding.getDisplaySimple().equalsIgnoreCase("Diagnosis")) {
+                if (coding.getCodeSimple().equalsIgnoreCase("Diagnosis")) {
                     return true;
                 }
             }

@@ -19,8 +19,16 @@ public class DHISMonthlyEPIInfantPostJobTest {
 
     @Test
     public void shouldParseIntegerAndGiveReportingMonth() throws Exception {
-        String reportingMonth = "2014-11";
-        assertEquals(reportingMonth, getReportingMonth("-2"));
+        Calendar expectedDate = Calendar.getInstance();
+        expectedDate.add(Calendar.MONTH, -2);
+
+        String reportingMonth = getReportingMonth("-2");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM");
+        Calendar actualDate = Calendar.getInstance();
+        actualDate.setTime(simpleDateFormat.parse(reportingMonth));
+
+        assertEquals(expectedDate.MONTH, actualDate.MONTH);
+        assertEquals(expectedDate.YEAR, actualDate.YEAR);
     }
 
     @Test

@@ -274,4 +274,21 @@
             <column name="relationship_type" type="varchar(50)" />
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150130-1635" author="sharedhealth" context="setup">
+        <comment>creating patient death details table</comment>
+        <createTable tableName="patient_death_details">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="patient_hid" type="varchar(50)" />
+            <column name="encounter_id" type="varchar(50)" />
+            <column name="date_of_death" type="datetime" />
+            <column name="cause_concept_uuid" type="varchar(50)" />
+            <column name="cause_code" type="varchar(50)" />
+            <column name="circumstances_of_death" type="varchar(50)" />
+            <column name="patient_age_years" type="int" />
+            <column name="patient_age_months" type="int" />
+            <column name="patient_age_days" type="int" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

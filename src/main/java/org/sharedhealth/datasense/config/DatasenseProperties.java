@@ -5,6 +5,9 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
+import java.util.List;
+
 @Component
 public class DatasenseProperties implements EnvironmentAware {
 
@@ -46,6 +49,8 @@ public class DatasenseProperties implements EnvironmentAware {
     //Datasense Properties
     private String datasenseFacilityId;
     private String datasenseCatchmentList;
+    //Tr Reference Code
+    private List<String> deathCodes;
 
 
     @Override
@@ -81,6 +86,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.trReferenceTermAtomfeedPath = env.getProperty("TR_REFERENCE_TERM_ATOMFEED_PATH");
         this.trUser = env.getProperty("TR_USER");
         this.trPassword = env.getProperty("TR_PASSWORD");
+        this.deathCodes = Arrays.asList(env.getProperty("DEATH_CODES").split(","));
     }
 
     public String getShrScheme() {
@@ -225,5 +231,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getDhisAqsConfigPath() {
         return dhisAqsConfigPath;
+    }
+
+    public List<String> getDeathCodes() {
+        return deathCodes;
     }
 }

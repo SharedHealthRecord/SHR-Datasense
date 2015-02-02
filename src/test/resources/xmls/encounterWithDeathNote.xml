@@ -44,6 +44,18 @@
                         <display value="Death Note"/>
                     </content>
                 </section>
+                <section>
+                    <content>
+                        <reference value="urn:d5ee301c-9bd9-4660-846b-4b224cabe1e2"/>
+                        <display value="Circumstances of Death"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:879ed6b7-56ae-41f2-bad0-a797446175e6"/>
+                        <display value="Cause of Death"/>
+                    </content>
+                </section>
             </Composition>
         </content>
     </entry>
@@ -148,6 +160,77 @@
                         <reference value="urn:dcd89f72-8e07-4b6d-af52-8575c1b9c72b"/>
                     </target>
                 </related>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Cause of Death</title>
+        <id>urn:879ed6b7-56ae-41f2-bad0-a797446175e6</id>
+        <updated>2015-01-28T17:17:40.188+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation
+                    xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/9651ea62-02d6-4049-a186-3b4e0622bccb"/>
+                        <code value="9651ea62-02d6-4049-a186-3b4e0622bccb"/>
+                        <display value="Cause of Death"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c086037f-ec89-4e13-a896-740dc9cc61fe"/>
+                        <code value="J19"/>
+                        <display value="Viral pneumonia"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/03d43153-4d18-4195-a033-6a32792a00e7"/>
+                        <code value="03d43153-4d18-4195-a033-6a32792a00e7"/>
+                        <display value="Viral pneumonia"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:879ed6b7-56ae-41f2-bad0-a797446175e6"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5957279291845640193"/>
+                    <display value="5957279291845640193"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Circumstances of Death</title>
+        <id>urn:d5ee301c-9bd9-4660-846b-4b224cabe1e2</id>
+        <updated>2015-01-28T17:17:40.188+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Observation
+                    xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/9bd4b258-eb1d-4762-bcf7-e38183069e0c"/>
+                        <code value="9bd4b258-eb1d-4762-bcf7-e38183069e0c"/>
+                        <display value="Circumstances of Death"/>
+                    </coding>
+                </name>
+                <valueString value="killed."/>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:d5ee301c-9bd9-4660-846b-4b224cabe1e2"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5957279291845640193"/>
+                    <display value="5957279291845640193"/>
+                </subject>
             </Observation>
         </content>
     </entry>

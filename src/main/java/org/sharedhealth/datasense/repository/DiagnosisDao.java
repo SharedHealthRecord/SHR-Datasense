@@ -32,7 +32,6 @@ public class DiagnosisDao {
         jdbcTemplate.update("insert into diagnosis(patient_hid, encounter_id, diagnosis_datetime, " +
                 "diagnosis_code, diagnosis_concept_id, diagnosis_status, uuid) values " +
                 "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status, :uuid)", map);
-
     }
 
     public List<Diagnosis> findByEncounterId(String encounterId) {

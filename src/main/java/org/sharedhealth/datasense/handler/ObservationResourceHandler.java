@@ -2,7 +2,7 @@ package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.instance.model.Coding;
 import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceType;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Observation;
@@ -21,16 +21,27 @@ import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
 public class ObservationResourceHandler implements FhirResourceHandler {
     private ObservationDao observationDao;
     private ObservationValueMapper observationValueMapper;
+    private DatasenseProperties datasenseProperties;
 
     @Autowired
-    public ObservationResourceHandler(ObservationDao observationDao) {
+    public ObservationResourceHandler(ObservationDao observationDao, DatasenseProperties datasenseProperties) {
         this.observationDao = observationDao;
+        this.datasenseProperties = datasenseProperties;
         this.observationValueMapper = new ObservationValueMapper();
     }
 
     @Override
     public boolean canHandle(Resource resource) {
-        return resource.getResourceType().equals(ResourceType.Observation);
+        if (!(resource instanceof org.hl7.fhir.instance.model.Observation)) {
+            return false;
+        } else {
+            for (Coding coding : ((org.hl7.fhir.instance.model.Observation) resource).getName().getCoding()) {
+                if (datasenseProperties.getDeathCodes().contains(coding.getCodeSimple())) {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     @Override
