@@ -29,6 +29,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String trHost;
     private String trConceptAtomfeedPath;
     private String trReferenceTermAtomfeedPath;
+    private String trMedicationAtomFeedPath;
     private String trPort;
     private String trUser;
     private String trPassword;
@@ -87,6 +88,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.trPort = env.getProperty("TR_PORT");
         this.trConceptAtomfeedPath = env.getProperty("TR_CONCEPT_ATOMFEED_PATH");
         this.trReferenceTermAtomfeedPath = env.getProperty("TR_REFERENCE_TERM_ATOMFEED_PATH");
+        this.trMedicationAtomFeedPath=env.getProperty("TR_MEDICATION_ATOMFEED_PATH");
         this.trUser = env.getProperty("TR_USER");
         this.trPassword = env.getProperty("TR_PASSWORD");
         this.deathCodes = Arrays.asList(env.getProperty("DEATH_CODES").split(","));
@@ -221,6 +223,10 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getTrReferenceTermAtomfeedUrl() {
         return getTrBasePath() + "/" + trReferenceTermAtomfeedPath;
+    }
+
+    public String getTrMedicationfeedUrl() {
+        return getTrBasePath() + "/" + trMedicationAtomFeedPath;
     }
 
     public String getTrBasePath() {

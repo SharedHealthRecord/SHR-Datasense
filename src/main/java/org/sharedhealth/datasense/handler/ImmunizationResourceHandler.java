@@ -59,8 +59,8 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
             if (system != null && isTrMedicationUrl(system)) {
                 TrMedication trMedication = getTrMedication(system);
                 medication.setDrugId(coding.getCodeSimple());
-                medication.setConceptId(getConceptId(trMedication.getCode().getCoding()));
-                medication.setReferenceCode(getReferenceCode(trMedication.getCode().getCoding()));
+                medication.setConceptId(trMedication.getConceptId());
+                medication.setReferenceCode(trMedication.getReferenceCode());
                 medication.setName(trMedication.getName());
                 break;
             }

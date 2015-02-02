@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.client;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.tr.TrConcept;
@@ -29,7 +30,12 @@ public class TrWebClient {
 
     public TrMedication getTrMedication(String uri) throws IOException, URISyntaxException {
         String response = getResponse(new URI(uri));
-        return response != null ? MapperUtil.readFrom(response, TrMedication.class) : null;
+        if(response != null) {
+            TrMedication trMedication = MapperUtil.readFrom(response, TrMedication.class);
+            trMedication.setUuid(StringUtils.substringAfterLast(uri,"/"));
+            return trMedication;
+        }
+        return null;
     }
 
     public String getResponse(URI uri) throws IOException, URISyntaxException {

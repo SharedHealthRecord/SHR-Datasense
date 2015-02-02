@@ -292,4 +292,14 @@
             <column name="uuid" type="varchar(50)" />
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150130-1653" author="sharedhealth" context="setup">
+            <comment>creating tr drug table</comment>
+            <createTable tableName="drug">
+                <column name="drug_uuid" type="varchar(50)" />
+                <column name="concept_uuid" type="varchar(50)" />
+                <column name="name" type="varchar(255)" />
+                <column name="code" type="varchar(255)" />
+                <column name="retired" type="bool" />
+            </createTable>
+        </changeSet>
 </databaseChangeLog>

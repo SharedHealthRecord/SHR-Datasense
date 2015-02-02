@@ -13,10 +13,12 @@ import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
+import org.sharedhealth.datasense.feeds.tr.DrugEventWorker;
 import org.sharedhealth.datasense.feeds.tr.ReferenceTermEventWorker;
-import org.sharedhealth.datasense.scheduler.jobs.TrReferenceTermSyncJob;
 import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
 import org.sharedhealth.datasense.scheduler.jobs.TrConceptSyncJob;
+import org.sharedhealth.datasense.scheduler.jobs.TrDrugSyncJob;
+import org.sharedhealth.datasense.scheduler.jobs.TrReferenceTermSyncJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
@@ -86,13 +88,19 @@ public class Main {
 
     @Autowired
     private ReferenceTermEventWorker referenceTermEventWorker;
+
+    @Autowired
+    private DrugEventWorker drugEventWorker;
+
     private String CATCHMENT_ENCOUNTER_SYNC_JOB = "catchment.encounter.crawler.job";
     private String CONCEPT_SYNC_JOB = "tr.concept.sync.job";
     private String REF_TERM_SYNC_JOB = "tr.reference.term.sync.job";
+    private String DRUG_SYNC_JOB = "tr.drug.sync.job";
 
     private String CATCHMENT_ENCOUNTER_SYNC_TRIGGER = "catchment.encounter.crawler.job.trigger";
     private String CONCEPT_SYNC_TRIGGER = "tr.concept.sync.job.trigger";
     private String REF_TERM_SYNC_TRIGGER = "tr.reference.term.sync.job.trigger";
+    private String DRUG_SYNC_TRIGGER = "tr.drug.sync.job.trigger";
     private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
     private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
 
@@ -141,6 +149,7 @@ public class Main {
                 getTrigger(CATCHMENT_ENCOUNTER_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(CatchmentEncounterCrawlerJob.class, CATCHMENT_ENCOUNTER_SYNC_JOB).getObject()),
                 getTrigger(CONCEPT_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrConceptSyncJob.class, CONCEPT_SYNC_JOB).getObject()),
                 getTrigger(REF_TERM_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrReferenceTermSyncJob.class, REF_TERM_SYNC_JOB).getObject()),
+                getTrigger(DRUG_SYNC_TRIGGER, 50000, "0 0 * * * ?", jobDetail(TrDrugSyncJob.class, DRUG_SYNC_JOB).getObject()),
                 getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/15 * * * ?", dhisDailyOPDIPDJob()),
                 getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/15 * * * ?", dhisEPIInfantPostJob())
         };
@@ -163,6 +172,7 @@ public class Main {
         ctx.put("shrWebClient", shrWebClient);
         ctx.put("conceptEventWorker", conceptEventWorker);
         ctx.put("referenceTermEventWorker", referenceTermEventWorker);
+        ctx.put("drugEventWorker", drugEventWorker);
         return ctx;
     }
 
