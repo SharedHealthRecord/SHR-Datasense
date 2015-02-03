@@ -42,7 +42,7 @@ public class PatientProcessorTest {
         when(webClient.identifyPatient(healthId)).thenReturn(patient);
         PatientProcessor processor = new PatientProcessor(null, webClient, patientDao);
         processor.process(context.getEncounterCompositions().get(0));
-        verify(patientDao).getPatientById(healthId);
+        verify(patientDao).findPatientById(healthId);
         verify(patientDao).save(patient);
     }
 }

@@ -19,11 +19,15 @@ import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import static junit.framework.Assert.*;
@@ -70,7 +74,7 @@ public class DiagnosisProcessorIT {
         ResourceReference resourceReference = new ResourceReference();
         resourceReference.setReferenceSimple("urn:2801e2b9-3886-4bf5-919f-ce9268fdc317");
         processor.process(context.getResourceByReferenceFromFeed(resourceReference), composition);
-        List<Diagnosis> diagnosises = diagnosisDao.findByEncounterId(shrEncounterId);
+        List<Diagnosis> diagnosises = findByEncounterId(shrEncounterId);
         assertEquals(1, diagnosises.size());
         Diagnosis diagnosis = diagnosises.get(0);
         assertNotNull(diagnosis.getUuid());
@@ -80,5 +84,35 @@ public class DiagnosisProcessorIT {
         assertEquals("confirmed", diagnosis.getDiagnosisStatus());
         assertTrue(DateUtil.parseDate("2014-12-09T10:59:28+05:30").equals(diagnosis.getDiagnosisDateTime()));
         assertEquals(hid, diagnosis.getPatient().getHid());
+    }
+
+    private List<Diagnosis> findByEncounterId(String encounterId) {
+        return jdbcTemplate.query(
+                "select diagnosis_id, patient_hid, encounter_id, diagnosis_datetime, diagnosis_code, " +
+                        "diagnosis_concept_id, " +
+                        "diagnosis_status, uuid from diagnosis where encounter_id= :encounter_id", Collections
+                        .singletonMap("encounter_id", encounterId),
+                new RowMapper<Diagnosis>() {
+                    @Override
+                    public Diagnosis mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Diagnosis diagnosis = new Diagnosis();
+                        diagnosis.setDiagnosisId(rs.getInt("diagnosis_id"));
+                        diagnosis.setDiagnosisDateTime(new java.util.Date(rs.getTimestamp("diagnosis_datetime")
+                                .getTime()));
+                        diagnosis.setDiagnosisCode(rs.getString("diagnosis_code"));
+                        diagnosis.setDiagnosisConceptId(rs.getString("diagnosis_concept_id"));
+                        diagnosis.setDiagnosisStatus(rs.getString("diagnosis_status"));
+                        diagnosis.setUuid(rs.getString("uuid"));
+
+                        Encounter encounter = new Encounter();
+                        encounter.setEncounterId(rs.getString("encounter_id"));
+                        diagnosis.setEncounter(encounter);
+
+                        Patient patient = new Patient();
+                        patient.setHid(rs.getString("patient_hid"));
+                        diagnosis.setPatient(patient);
+                        return diagnosis;
+                    }
+                });
     }
 }

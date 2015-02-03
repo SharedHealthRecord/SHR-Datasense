@@ -15,18 +15,23 @@ import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
+import org.sharedhealth.datasense.model.MedicationStatus;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.repository.MedicationDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -40,8 +45,6 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 public class ImmunizationResourceHandlerIT {
 
     private final String TR_DRUG_UUID = "28c3c784-c0bf-4cae-bd26-ca76a384085a";
-    @Autowired
-    private MedicationDao medicationDao;
     @Autowired
     private ImmunizationResourceHandler immunizationResourceHandler;
     @Autowired
@@ -122,12 +125,12 @@ public class ImmunizationResourceHandlerIT {
     public void shouldNotSaveNonCodedImmunization() throws Exception {
         ((Immunization) immunizationResource).getVaccineType().getCoding().get(0).setSystemSimple(null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
         assertTrue(medications.isEmpty());
     }
 
     private Medication getMedication() {
-        List<Medication> medications = medicationDao.findByEncounterId(bundleContext.getShrEncounterId());
+        List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(medications.isEmpty());
         return medications.get(0);
     }
@@ -136,4 +139,32 @@ public class ImmunizationResourceHandlerIT {
     public void tearDown() throws Exception {
         DatabaseHelper.clearDatasenseTables(jdbcTemplate);
     }
+
+    private List<Medication> findByEncounterId(String shrEncounterId) {
+        String sql = "select datetime, encounter_id, patient_hid, status, drug_id, uuid from " +
+                "medication where encounter_id= :encounter_id";
+        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
+                RowMapper<Medication>() {
+                    @Override
+                    public Medication mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Medication medication = new Medication();
+
+                        Date medicationDatetime = new Date(rs.getTimestamp("datetime").getTime());
+                        medication.setDateTime(medicationDatetime);
+
+                        Encounter encounter = new Encounter();
+                        encounter.setEncounterId(rs.getString("encounter_id"));
+                        medication.setEncounter(encounter);
+
+                        Patient patient = new Patient();
+                        patient.setHid(rs.getString("patient_hid"));
+                        medication.setPatient(patient);
+                        medication.setDrugId(rs.getString("drug_id"));
+                        medication.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
+                        medication.setUuid(rs.getString("uuid"));
+                        return medication;
+                    }
+                });
+    }
+
 }

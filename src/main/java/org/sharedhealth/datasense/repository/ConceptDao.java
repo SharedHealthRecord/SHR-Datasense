@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.repository;
 
 import org.sharedhealth.datasense.model.tr.TrConcept;
-import org.sharedhealth.datasense.model.tr.TrReferenceTerm;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -66,20 +65,5 @@ public class ConceptDao {
                     }
                 });
         return trConcepts.isEmpty() ? null : trConcepts.get(0);
-    }
-
-    public List<TrReferenceTerm> findConceptTermMaps(String conceptUuid) {
-        return jdbcTemplate.query("select reference_term_uuid, relationship_type from reference_term_map " +
-                        "where concept_uuid = :concept_uuid",
-                Collections.singletonMap("concept_uuid", conceptUuid),
-                new RowMapper<TrReferenceTerm>() {
-                    @Override
-                    public TrReferenceTerm mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        TrReferenceTerm referenceTerm = new TrReferenceTerm();
-                        referenceTerm.setReferenceTermUuid(rs.getString("reference_term_uuid"));
-                        referenceTerm.setRelationshipType(rs.getString("relationship_type"));
-                        return referenceTerm;
-                    }
-                });
     }
 }

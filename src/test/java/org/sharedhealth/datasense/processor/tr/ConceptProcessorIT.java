@@ -11,11 +11,15 @@ import org.sharedhealth.datasense.model.tr.TrReferenceTerm;
 import org.sharedhealth.datasense.repository.ConceptDao;
 import org.sharedhealth.datasense.repository.ReferenceTermDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -73,7 +77,7 @@ public class ConceptProcessorIT {
         conceptProcessor.process(trConcept);
         assertNotNull(conceptDao.findByConceptUuid(trConcept.getConceptUuid()));
         assertNotNull(referenceTermDao.findByReferenceTermUuid(trReferenceTerm.getReferenceTermUuid()));
-        List<TrReferenceTerm> conceptTermMaps = conceptDao.findConceptTermMaps(trConcept.getConceptUuid());
+        List<TrReferenceTerm> conceptTermMaps = getConceptTermMaps(trConcept.getConceptUuid());
         assertEquals(1, conceptTermMaps.size());
         TrReferenceTerm fetchedReferenceTerm = conceptTermMaps.get(0);
         assertEquals(trReferenceTerm.getReferenceTermUuid(), fetchedReferenceTerm.getReferenceTermUuid());
@@ -89,10 +93,25 @@ public class ConceptProcessorIT {
         String relationshipType = "new Relationship Type";
         trReferenceTerm.setRelationshipType(relationshipType);
         conceptProcessor.process(trConcept);
-        List<TrReferenceTerm> conceptTermMaps = conceptDao.findConceptTermMaps(trConcept.getConceptUuid());
+        List<TrReferenceTerm> conceptTermMaps = getConceptTermMaps(trConcept.getConceptUuid());
         assertEquals(1, conceptTermMaps.size());
         TrReferenceTerm fetchedReferenceTerm = conceptTermMaps.get(0);
         assertEquals(relationshipType, fetchedReferenceTerm.getRelationshipType());
+    }
+
+    private List<TrReferenceTerm> getConceptTermMaps(String conceptUuid) {
+        return jdbcTemplate.query("select reference_term_uuid, relationship_type from reference_term_map " +
+                        "where concept_uuid = :concept_uuid",
+                Collections.singletonMap("concept_uuid", conceptUuid),
+                new RowMapper<TrReferenceTerm>() {
+                    @Override
+                    public TrReferenceTerm mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        TrReferenceTerm referenceTerm = new TrReferenceTerm();
+                        referenceTerm.setReferenceTermUuid(rs.getString("reference_term_uuid"));
+                        referenceTerm.setRelationshipType(rs.getString("relationship_type"));
+                        return referenceTerm;
+                    }
+                });
     }
 
     private TrConcept getTrConceptWithReferenceTerm() {

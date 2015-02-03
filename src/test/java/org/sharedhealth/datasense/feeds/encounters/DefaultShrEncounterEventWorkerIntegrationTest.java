@@ -10,12 +10,8 @@ import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
-import org.sharedhealth.datasense.model.Diagnosis;
-import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.model.Facility;
-import org.sharedhealth.datasense.repository.DiagnosisDao;
-import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +21,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -50,12 +47,6 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
 
     @Autowired
     private FacilityDao facilityDao;
-
-    @Autowired
-    private EncounterDao encounterDao;
-
-    @Autowired
-    private DiagnosisDao diagnosisDao;
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
@@ -88,18 +79,26 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         bundle.setEncounterId(shrEncounterId);
         encounterEventWorker.process(bundle);
         assertNotNull(encounterEventWorker);
-        assertNotNull(patientDao.getPatientById(VALID_HEALTH_ID));
+        assertNotNull(patientDao.findPatientById(VALID_HEALTH_ID));
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
         assertNotNull(facility);
         assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
 
-        Encounter encounter = encounterDao.findEncounterById(shrEncounterId);
-        assertNotNull(encounter);
-        assertEquals(VALID_HEALTH_ID, encounter.getPatient().getHid());
+        assertEquals(1, getEncounterList(shrEncounterId).size());
 
-        List<Diagnosis> diagnosis = diagnosisDao.findByEncounterId(shrEncounterId);
-        assertEquals(1, diagnosis.size());
-        assertEquals(VALID_HEALTH_ID, diagnosis.get(0).getPatient().getHid());
+        assertEquals(1, getDiagnosisList(shrEncounterId).size());
+    }
+
+    private List<Integer> getDiagnosisList(String shrEncounterId) {
+        return jdbcTemplate.queryForList(
+                "select diagnosis_id from diagnosis where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
+    }
+
+    private List<String> getEncounterList(String shrEncounterId) {
+        return jdbcTemplate.queryForList(
+                "select encounter_id from encounter where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), String.class);
     }
 
     @After

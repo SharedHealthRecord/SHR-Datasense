@@ -34,7 +34,7 @@ public class PatientProcessor implements ResourceProcessor {
     public void process(EncounterComposition composition) {
         String healthId = composition.getPatientReference().getHealthId();
         log.info("Processing Patient : " + healthId);
-        Patient patient = patientDao.getPatientById(healthId);
+        Patient patient = patientDao.findPatientById(healthId);
         if (patient == null) {
             patient = downloadPatientAndSave(healthId);
         }

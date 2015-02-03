@@ -14,14 +14,18 @@ import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.repository.ObservationDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
@@ -37,8 +41,6 @@ public class ObservationResourceHandlerIT {
     private final String HEALTH_ID = "5960610240356417537";
     private final String VITALS_RESOURCE_REFERENCE = "urn:10b4fdd0-0507-4063-8259-ee50fff7ad6e";
     private final String PULSE_RESOURCE_REFERENCE = "urn:2bfe946c-95cd-4543-8122-ec8619e56296";
-    @Autowired
-    private ObservationDao observationDao;
     @Autowired
     private ObservationResourceHandler observationResourceHandler;
     @Autowired
@@ -85,7 +87,7 @@ public class ObservationResourceHandlerIT {
         ResourceReference dateOfDeathReference = new ResourceReference().setReferenceSimple(PULSE_RESOURCE_REFERENCE);
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(dateOfDeathReference), composition);
-        List<Observation> observations = observationDao.findByEncounterId(vitalsBundleContext.getShrEncounterId());
+        List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
         assertEquals(1, observations.size());
         Observation observation = observations.get(0);
@@ -104,7 +106,7 @@ public class ObservationResourceHandlerIT {
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(deathNoteReference),
                 composition);
-        List<Observation> observations = observationDao.findByEncounterId(vitalsBundleContext.getShrEncounterId());
+        List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
         assertEquals(4, observations.size());
 
@@ -126,4 +128,36 @@ public class ObservationResourceHandlerIT {
         }
         return null;
     }
+
+    private List<Observation> findByEncounterId(String shrEncounterId) {
+        String sql = "select observation_id, patient_hid, encounter_id, concept_id, code, datetime, parent_id, value," +
+                " uuid from observation where encounter_id= :encounter_id";
+        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
+                RowMapper<Observation>() {
+
+                    @Override
+                    public Observation mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Observation observation = new Observation();
+                        observation.setObservationId(rs.getInt("observation_id"));
+
+                        Encounter encounter = new Encounter();
+                        encounter.setEncounterId(rs.getString("encounter_id"));
+                        observation.setEncounter(encounter);
+
+                        Patient patient = new Patient();
+                        patient.setHid(rs.getString("patient_hid"));
+                        observation.setPatient(patient);
+
+                        observation.setConceptId(rs.getString("concept_id"));
+                        observation.setReferenceCode(rs.getString("code"));
+                        observation.setDatetime(new Date(rs.getTimestamp("datetime").getTime()));
+                        observation.setParentId(rs.getString("parent_id"));
+                        observation.setValue(rs.getString("value"));
+                        observation.setUuid(rs.getString("uuid"));
+                        return observation;
+                    }
+                });
+    }
+
+
 }

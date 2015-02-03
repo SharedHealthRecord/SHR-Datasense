@@ -66,7 +66,7 @@ public class PatientProcessorIntegrationTest {
         ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
-        Patient patient = patientDao.getPatientById(VALID_HEALTH_ID);
+        Patient patient = patientDao.findPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());
         Date dateOfBirth = patient.getDateOfBirth();
         assertEquals("1970-09-18", new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth));

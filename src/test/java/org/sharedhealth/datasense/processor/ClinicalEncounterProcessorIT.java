@@ -16,13 +16,18 @@ import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -67,7 +72,7 @@ public class ClinicalEncounterProcessorIT {
         facility.setFacilityLocationCode(facilityLocation);
         composition.getServiceProviderReference().setValue(facility);
         processor.process(composition);
-        Encounter encounter = encounterDao.findEncounterById(shrEncounterId);
+        Encounter encounter = findEncounterById(shrEncounterId);
         assertNotNull(encounter);
         assertEquals(hid, encounter.getPatient().getHid());
         assertEquals(facilityId, encounter.getFacility().getFacilityId());
@@ -75,5 +80,38 @@ public class ClinicalEncounterProcessorIT {
         assertEquals(DateUtil.parseDate("2014-12-09T10:59:27.000+0530"), encounter.getEncounterDateTime());
         assertEquals("Consultation", encounter.getEncounterType());
         assertEquals("outpatient", encounter.getEncounterVisitType());
+    }
+
+    private Encounter findEncounterById(String encounterId) {
+        List<Encounter> encounters = jdbcTemplate.query(
+                "select encounter_id ,encounter_datetime, encounter_type, visit_type, patient_hid, " +
+                        "patient_age_years, patient_age_months, patient_age_days,encounter_location_id, facility_id " +
+                        "from encounter where encounter_id= :encounter_id", Collections.singletonMap("encounter_id",
+                        encounterId),
+                new RowMapper<Encounter>() {
+                    @Override
+                    public Encounter mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Encounter encounter = new Encounter();
+                        encounter.setEncounterId(rs.getString("encounter_id"));
+                        encounter.setEncounterDateTime(new Date(rs.getTimestamp("encounter_datetime").getTime()));
+                        encounter.setEncounterType(rs.getString("encounter_type"));
+                        encounter.setEncounterVisitType(rs.getString("visit_type"));
+                        encounter.setPatientAgeInYears(rs.getInt("patient_age_years"));
+                        encounter.setPatientAgeInMonths(rs.getInt("patient_age_months"));
+                        encounter.setPatientAgeInDays(rs.getInt("patient_age_days"));
+                        encounter.setLocationCode(rs.getString("encounter_location_id"));
+
+                        Patient patient = new Patient();
+                        patient.setHid(rs.getString("patient_hid"));
+                        encounter.setPatient(patient);
+
+                        Facility facility = new Facility();
+                        facility.setFacilityId(rs.getString("facility_id"));
+                        encounter.setFacility(facility);
+
+                        return encounter;
+                    }
+                });
+        return encounters.isEmpty() ? null : encounters.get(0);
     }
 }

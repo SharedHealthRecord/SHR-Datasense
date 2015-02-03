@@ -18,7 +18,7 @@ public class PatientDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public Patient getPatientById(String healthId) {
+    public Patient findPatientById(String healthId) {
         List<Patient> patients = jdbcTemplate.query(
                 "select patient_hid, dob, gender, present_location_id from patient where patient_hid= :patient_hid",
                 Collections.singletonMap("patient_hid", healthId),
