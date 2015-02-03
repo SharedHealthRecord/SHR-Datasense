@@ -285,7 +285,7 @@
             <column name="date_of_death" type="datetime" />
             <column name="cause_concept_uuid" type="varchar(50)" />
             <column name="cause_code" type="varchar(50)" />
-            <column name="circumstances_of_death" type="varchar(500)" />
+            <column name="circumstances_of_death" type="varchar(50)" />
             <column name="patient_age_years" type="int" />
             <column name="patient_age_months" type="int" />
             <column name="patient_age_days" type="int" />
@@ -302,4 +302,9 @@
                 <column name="retired" type="bool" />
             </createTable>
         </changeSet>
+    <changeSet id="sharedhealth-datasense-20150203-1208" author="sharedhealth" context="setup">
+        <modifyDataType columnName="circumstances_of_death"
+                        newDataType="varchar(500)"
+                        tableName="patient_death_details"/>
+    </changeSet>
 </databaseChangeLog>
