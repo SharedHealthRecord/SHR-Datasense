@@ -298,8 +298,7 @@
                 <column name="drug_uuid" type="varchar(50)" />
                 <column name="concept_uuid" type="varchar(50)" />
                 <column name="name" type="varchar(255)" />
-                <column name="code" type="varchar(255)" />
-                <column name="retired" type="bool" />
+                <column name="reference_term_uuid" type="varchar(255)" />
             </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150203-1151" author="sharedhealth" context="setup">

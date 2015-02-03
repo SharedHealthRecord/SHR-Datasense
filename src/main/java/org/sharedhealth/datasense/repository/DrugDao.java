@@ -20,9 +20,9 @@ public class DrugDao {
 
         String sql = null;
         if (getDrugCountByUuid(drug.getUuid()) == 0) {
-            sql = "insert into drug(drug_uuid, concept_uuid, name, code, retired) values (:drug_uuid, :concept_uuid, :name, :code, :retired)";
+            sql = "insert into drug(drug_uuid, concept_uuid, name, reference_term_uuid) values (:drug_uuid, :concept_uuid, :name, :reference_term_uuid)";
         }else {
-            sql = "update drug set concept_uuid= :concept_uuid, name=:name, code=:code, retired=:retired where drug_uuid= :drug_uuid";
+            sql = "update drug set concept_uuid= :concept_uuid, name=:name, reference_term_uuid=:reference_term_uuid where drug_uuid= :drug_uuid";
         }
         jdbcTemplate.update(sql, getParameterMap(drug));
     }
@@ -39,8 +39,7 @@ public class DrugDao {
         map.put("drug_uuid", drug.getUuid());
         map.put("concept_uuid", drug.getConceptId());
         map.put("name", drug.getName());
-        map.put("code", drug.getReferenceCode());
-        map.put("retired", drug.getRetired());
+        map.put("reference_term_uuid", drug.getReferenceTermId());
         return map;
     }
 }

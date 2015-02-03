@@ -13,7 +13,6 @@ import org.sharedhealth.datasense.model.tr.TrReferenceTerm;
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
@@ -89,9 +88,8 @@ public class TrWebClientTest {
 
         assertEquals("OPV 1",trMedication.getName());
         assertEquals(DRUG_UUID,trMedication.getUuid());
-        assertEquals("J07BF01",trMedication.getReferenceCode());
-        assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a",trMedication.getConceptId());
-        assertTrue(trMedication.getRetired());
+        assertEquals("8bb7fb27-2be1-4b7a-bee4-e09d7b800d39",trMedication.getReferenceTermId());
+        assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a", trMedication.getConceptId());
 
     }
 }

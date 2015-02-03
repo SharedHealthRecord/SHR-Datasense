@@ -2,8 +2,7 @@ package org.sharedhealth.datasense.model.tr;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-
-import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 
 import static org.sharedhealth.datasense.util.TrUrl.isConceptUrl;
 import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
@@ -15,8 +14,6 @@ public class TrMedication {
     private String name;
     @JsonProperty("code")
     private CodeableConcept code;
-    @JsonProperty("extension")
-    private List<ResourceExtension> extension;
 
     public String getName() {
         return name;
@@ -36,14 +33,10 @@ public class TrMedication {
         this.code = code;
     }
 
-    public void setExtension(List<ResourceExtension> extension) {
-        this.extension = extension;
-    }
-
-    public String getReferenceCode() {
+    public String getReferenceTermId() {
         for (org.sharedhealth.datasense.model.tr.Coding coding : code.getCoding()) {
             if (isReferenceTermUrl(coding.getSystem()))
-                return coding.getCode();
+                return StringUtils.substringAfterLast(coding.getSystem(), "/");
         }
         return null;
     }
@@ -56,13 +49,4 @@ public class TrMedication {
         return null;
     }
 
-    public Boolean getRetired(){
-        if(extension != null){
-            for (ResourceExtension resourceExtension : extension) {
-                if (resourceExtension.getUrl().endsWith("retired"))
-                    return Boolean.parseBoolean(resourceExtension.getValueString());
-            }
-        }
-        return false;
-    }
 }
