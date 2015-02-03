@@ -77,6 +77,10 @@
             {
                 "queryName": "MR_0_to_11_months",
                 "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'MR';"
+            },
+            {
+                "queryName": "child_death_5_below",
+                "query": "select count(distinct patient_hid) as v1 from patient_death_details where patient_age_years < 5 and month(date_of_death) = :MONTH: and year(date_of_death) = :YEAR:;"
             }
         ]
     }

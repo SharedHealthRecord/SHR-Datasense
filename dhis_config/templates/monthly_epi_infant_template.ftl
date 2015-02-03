@@ -96,6 +96,11 @@
         <#list MR_0_to_11_months as row>
             {   "dataElement": "gKSBlblSo6g", "categoryOptionCombo": "dCWAvZ8hcrs",
                 "value": "${row.v1}"
+            },
+        </#list>
+        <#list child_death_5_below as row>
+            {   "dataElement": "hGKY8bH3XFs", "categoryOptionCombo": "dCWAvZ8hcrs",
+                "value": "${row.v1}"
             }
         </#list>
     ]

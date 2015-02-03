@@ -23,7 +23,8 @@
                 "OPV4_0_to_11_months",
                 "OPV4_12_to_23_months",
                 "MCV2_12_to_23_months",
-                "MR_0_to_11_months"
+                "MR_0_to_11_months",
+                "child_death_5_below"
             ]
         }
     ],
