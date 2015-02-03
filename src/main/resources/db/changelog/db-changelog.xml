@@ -285,7 +285,7 @@
             <column name="date_of_death" type="datetime" />
             <column name="cause_concept_uuid" type="varchar(50)" />
             <column name="cause_code" type="varchar(50)" />
-            <column name="circumstances_of_death" type="varchar(50)" />
+            <column name="circumstances_of_death" type="varchar(500)" />
             <column name="patient_age_years" type="int" />
             <column name="patient_age_months" type="int" />
             <column name="patient_age_days" type="int" />
