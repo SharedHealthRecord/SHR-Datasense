@@ -301,10 +301,17 @@
                 <column name="code" type="varchar(255)" />
                 <column name="retired" type="bool" />
             </createTable>
-        </changeSet>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150203-1151" author="sharedhealth" context="setup">
+        <comment>alter medication table</comment>
+        <dropColumn columnName="name" tableName="medication"/>
+        <dropColumn columnName="code" tableName="medication"/>
+        <dropColumn columnName="concept_id" tableName="medication"/>
+    </changeSet>
     <changeSet id="sharedhealth-datasense-20150203-1208" author="sharedhealth" context="setup">
         <modifyDataType columnName="circumstances_of_death"
-                        newDataType="varchar(500)"
-                        tableName="patient_death_details"/>
+                newDataType="varchar(500)"
+                tableName="patient_death_details"/>
     </changeSet>
+
 </databaseChangeLog>

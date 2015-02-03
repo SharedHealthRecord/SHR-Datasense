@@ -74,7 +74,6 @@ public class DatasenseProperties implements EnvironmentAware {
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
         this.facilityRegistryUrl = env.getProperty("FACILITY_URL");
         this.facilityAuthToken = env.getProperty("FACILITY_AUTH_TOKEN");
-        this.dhisPostUrl = env.getProperty("DHIS_POST_URL");
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
         this.dhisAqsConfigPath = env.getProperty("DHIS_AQS_CONFIG_PATH");
@@ -167,10 +166,6 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getFacilityAuthToken() {
         return facilityAuthToken;
-    }
-
-    public String getDhisPostUrl() {
-        return dhisPostUrl;
     }
 
     public String getDhisUserName() {

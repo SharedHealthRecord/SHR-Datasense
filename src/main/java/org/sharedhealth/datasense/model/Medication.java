@@ -8,9 +8,6 @@ public class Medication extends BaseResource {
     private MedicationStatus status;
     private Patient patient;
     private String drugId;
-    private String conceptId;
-    private String referenceCode;
-    private String name;
 
     public Encounter getEncounter() {
         return encounter;
@@ -55,27 +52,4 @@ public class Medication extends BaseResource {
         this.drugId = drugId;
     }
 
-    public String getConceptId() {
-        return conceptId;
-    }
-
-    public void setConceptId(String conceptId) {
-        this.conceptId = conceptId;
-    }
-
-    public String getReferenceCode() {
-        return referenceCode;
-    }
-
-    public void setReferenceCode(String referenceCode) {
-        this.referenceCode = referenceCode;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getName() {
-        return name;
-    }
 }

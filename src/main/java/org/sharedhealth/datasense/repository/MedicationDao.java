@@ -22,7 +22,7 @@ public class MedicationDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     public List<Medication> findByEncounterId(String shrEncounterId) {
-        String sql = "select datetime, encounter_id, patient_hid, name, status, drug_id, concept_id, code, uuid from " +
+        String sql = "select datetime, encounter_id, patient_hid, status, drug_id, uuid from " +
                 "medication where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
                 RowMapper<Medication>() {
@@ -41,10 +41,7 @@ public class MedicationDao {
                 patient.setHid(rs.getString("patient_hid"));
                 medication.setPatient(patient);
 
-                medication.setName(rs.getString("name"));
                 medication.setDrugId(rs.getString("drug_id"));
-                medication.setConceptId(rs.getString("concept_id"));
-                medication.setReferenceCode(rs.getString("code"));
                 medication.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
                 medication.setUuid(rs.getString("uuid"));
                 return medication;
@@ -56,16 +53,12 @@ public class MedicationDao {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", medication.getPatient().getHid());
         map.put("encounter_id", medication.getEncounter().getEncounterId());
-        map.put("name", medication.getName());
         map.put("datetime", medication.getDateTime());
         map.put("status", medication.getStatus().getValue());
         map.put("drug_id", medication.getDrugId());
-        map.put("concept_id", medication.getConceptId());
-        map.put("code", medication.getReferenceCode());
         map.put("uuid", medication.getUuid());
-        String sql = "insert into medication (patient_hid, encounter_id, name, datetime, status,  drug_id, " +
-                "concept_id, code, uuid) " +
-                "values(:patient_hid, :encounter_id, :name, :datetime, :status,  :drug_id, :concept_id, :code, :uuid)";
+        String sql = "insert into medication (patient_hid, encounter_id, datetime, status,  drug_id, uuid) " +
+                "values(:patient_hid, :encounter_id, :datetime, :status,  :drug_id, :uuid)";
         jdbcTemplate.update(sql, map);
     }
 }

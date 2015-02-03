@@ -4,79 +4,79 @@
         "queries": [
             {
                 "queryName": "BCG_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'BCG';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'BCG';"
             },
             {
                 "queryName": "BCG_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'BCG';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'BCG';"
             },
             {
                 "queryName": "Penta1_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'Penta 1';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'Penta 1';"
             },
             {
                 "queryName": "Penta1_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'Penta 1';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'Penta 1';"
             },
             {
                 "queryName": "Penta2_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'Penta 2';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'Penta 2';"
             },
             {
                 "queryName": "Penta2_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'Penta 2';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'Penta 2';"
             },
             {
                 "queryName": "Penta3_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'Penta 3';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'Penta 3';"
             },
             {
                 "queryName": "Penta3_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'Penta 3';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'Penta 3';"
             },
             {
                 "queryName": "OPV0_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'OPV 0';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'OPV 0';"
             },
             {
                 "queryName": "OPV1_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'OPV 1';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'OPV 1';"
             },
             {
                 "queryName": "OPV1_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'OPV 1';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'OPV 1';"
             },
             {
                 "queryName": "OPV2_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'OPV 2';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'OPV 2';"
             },
             {
                 "queryName": "OPV2_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'OPV 2';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'OPV 2';"
             },
             {
                 "queryName": "OPV3_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'OPV 3';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'OPV 3';"
             },
             {
                 "queryName": "OPV3_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'OPV 3';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'OPV 3';"
             },
             {
                 "queryName": "OPV4_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'OPV 4';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'OPV 4';"
             },
             {
                 "queryName": "OPV4_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'OPV 4';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'OPV 4';"
             },
             {
                 "queryName": "MCV2_12_to_23_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and m.name = 'MCV 2';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 12 and e.patient_age_months <= 23 and d.name = 'MCV 2';"
             },
             {
                 "queryName": "MR_0_to_11_months",
-                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and m.name = 'MR';"
+                "query": "select count(distinct m.patient_hid) as v1 from medication as m join encounter as e on m.encounter_id = e.encounter_id join drug as d on m.drug_id = d.drug_uuid where month(m.datetime) = :MONTH: and year(m.datetime) = :YEAR: and e.facility_id = :FACILITY: and e.patient_age_months >= 0 and e.patient_age_months <= 11 and d.name = 'MR';"
             },
             {
                 "queryName": "child_death_5_below",
