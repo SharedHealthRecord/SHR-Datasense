@@ -5,12 +5,11 @@ import org.hl7.fhir.instance.model.Coding;
 import org.hl7.fhir.instance.model.DateAndTime;
 import org.hl7.fhir.instance.model.Observation;
 import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.String_;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.PatientDeathDetails;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.repository.ConceptDao;
 import org.sharedhealth.datasense.repository.PatientDeathDetailsDao;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,13 +29,14 @@ public class DeathNoteHandler implements FhirResourceHandler {
 
     private DatasenseProperties datasenseProperties;
     private PatientDeathDetailsDao patientDeathDetailsDao;
-    private ConceptDao conceptDao;
+    private ObservationValueMapper observationValueMapper;
+
 
     @Autowired
-    public DeathNoteHandler(DatasenseProperties datasenseProperties, PatientDeathDetailsDao patientDeathDetailsDao, ConceptDao conceptDao) {
+    public DeathNoteHandler(DatasenseProperties datasenseProperties, PatientDeathDetailsDao patientDeathDetailsDao) {
         this.datasenseProperties = datasenseProperties;
         this.patientDeathDetailsDao = patientDeathDetailsDao;
-        this.conceptDao = conceptDao;
+        this.observationValueMapper = new ObservationValueMapper();
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
 
     private void mapCauseOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
         Observation causeOfDeathObservation = findObservation(composition, deathNoteObservation, datasenseProperties.getCauseOfDeath());
-        if (causeOfDeathObservation != null) {
+        if (causeOfDeathObservation != null && causeOfDeathObservation.getValue() != null) {
             CodeableConcept codeableConcept = (CodeableConcept) causeOfDeathObservation.getValue();
             for (Coding code : codeableConcept.getCoding()) {
                 if (isConceptUrl(code.getSystemSimple())) {
@@ -81,7 +81,11 @@ public class DeathNoteHandler implements FhirResourceHandler {
 
     private String getCircumstancesOfDeath(EncounterComposition composition, Observation deathNoteObservation) {
         Observation circumstancesOfDeathObservation = findObservation(composition, deathNoteObservation, datasenseProperties.getCircumstancesOfDeathUuid());
-        return circumstancesOfDeathObservation != null ? ((String_) circumstancesOfDeathObservation.getValue()).getValue() : null;
+        if (circumstancesOfDeathObservation != null && circumstancesOfDeathObservation.getValue() != null) {
+            String observationValue = observationValueMapper.getObservationValue(circumstancesOfDeathObservation.getValue());
+            return observationValue != null ? observationValue.substring(0, Math.min(observationValue.length(), 500)) : null;
+        }
+        return null;
     }
 
     private void mapDateOfDeathAndPatientAge(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation, Encounter encounter) {
@@ -94,11 +98,9 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private Date getDateValue(Encounter encounter, Observation dateOfDeathObs) {
-        if (dateOfDeathObs != null) {
-            if (dateOfDeathObs.getValue() != null && dateOfDeathObs.getValue() instanceof org.hl7.fhir.instance.model.Date) {
-                DateAndTime dateAndTime = ((org.hl7.fhir.instance.model.Date) dateOfDeathObs.getValue()).getValue();
-                return DateUtil.parseDate(dateAndTime.toString());
-            }
+        if (dateOfDeathObs != null && dateOfDeathObs.getValue() != null) {
+            String dateOfDeath = observationValueMapper.getObservationValue(dateOfDeathObs.getValue());
+            return dateOfDeath != null ? DateUtil.parseDate(dateOfDeath) : null;
         }
         return encounter.getEncounterDateTime();
     }
