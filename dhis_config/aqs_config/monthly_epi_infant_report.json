@@ -29,5 +29,4 @@
         }
     ],
     "http-post-uri": "http://172.18.46.225:8080/dhis/api/dataValueSets"
-
 }

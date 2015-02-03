@@ -34,7 +34,17 @@
         "op_male_25_to_49",
         "op_female_25_to_49",
         "op_male_50_above",
-        "op_female_50_above"
+        "op_female_50_above",
+        "death_male_0_to_4",
+        "death_female_0_to_4",
+        "death_male_5_to_14",
+        "death_female_5_to_14",
+        "death_male_15_to_24",
+        "death_female_15_to_24",
+        "death_male_25_to_49",
+        "death_female_25_to_49",
+        "death_male_50_above",
+        "death_female_50_above"
       ]
     }
   ],
