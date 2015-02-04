@@ -42,6 +42,7 @@ public class MciWebClient {
         Map<String, String> headers = new HashMap<>();
         headers.put("Authorization", getAuthHeader());
         headers.put("Accept", "application/json");
+        headers.put("X-Auth-Token", identityServiceClient.getOrCreateToken().toString());
         String response = null;
         try {
             response = new WebClient().get(mciURI, headers);
