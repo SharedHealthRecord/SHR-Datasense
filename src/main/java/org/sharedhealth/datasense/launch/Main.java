@@ -149,7 +149,7 @@ public class Main {
                 getTrigger(CATCHMENT_ENCOUNTER_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(CatchmentEncounterCrawlerJob.class, CATCHMENT_ENCOUNTER_SYNC_JOB).getObject()),
                 getTrigger(CONCEPT_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrConceptSyncJob.class, CONCEPT_SYNC_JOB).getObject()),
                 getTrigger(REF_TERM_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrReferenceTermSyncJob.class, REF_TERM_SYNC_JOB).getObject()),
-                getTrigger(DRUG_SYNC_TRIGGER, 50000, "0 0 * * * ?", jobDetail(TrDrugSyncJob.class, DRUG_SYNC_JOB).getObject()),
+                getTrigger(DRUG_SYNC_TRIGGER, 50000, "0 0/2 * * * ?", jobDetail(TrDrugSyncJob.class, DRUG_SYNC_JOB).getObject()),
                 getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/15 * * * ?", dhisDailyOPDIPDJob()),
                 getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/15 * * * ?", dhisEPIInfantPostJob())
         };
