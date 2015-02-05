@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Encounter</title>
+    <id>urn:67b835dc-e25a-460c-837b-c80b98e5ee7c</id>
+    <updated>2015-02-04T12:13:54+05:30</updated>
+    <entry>
+        <title>Composition</title>
+        <id>urn:8d084c52-db4b-4655-a2ae-1bffa65b9281</id>
+        <updated>2015-02-04T12:14:40.064+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Composition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:8d084c52-db4b-4655-a2ae-1bffa65b9281" />
+                </identifier>
+                <date value="2015-02-04T12:13:54+05:30" />
+                <status value="final" />
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5963069947981594625" />
+                    <display value="5963069947981594625" />
+                </subject>
+                <encounter>
+                    <reference value="urn:84340b85-0ffc-47b2-9dd1-0c350685ec5e" />
+                    <display value="Encounter" />
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:84340b85-0ffc-47b2-9dd1-0c350685ec5e" />
+                        <display value="Encounter" />
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:09b1ffd7-485a-4073-8333-48d81989f376" />
+                        <display value="Diagnostic Report" />
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:9f582d08-1245-4c5a-a4b0-8d021298ac61" />
+                        <display value="Procedures" />
+                    </content>
+                </section>
+            </Composition>
+        </content>
+    </entry>
+    <entry>
+        <title>Encounter</title>
+        <id>urn:84340b85-0ffc-47b2-9dd1-0c350685ec5e</id>
+        <updated>2015-02-04T12:14:40.064+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Encounter xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:84340b85-0ffc-47b2-9dd1-0c350685ec5e" />
+                </identifier>
+                <status value="finished" />
+                <class value="outpatient" />
+                <type>
+                    <text value="DISCHARGE" />
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5963069947981594625" />
+                    <display value="5963069947981594625" />
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="e8a8bdb9-9fdd-4e66-81ca-5abbb6308ccd" />
+                    </individual>
+                </participant>
+                <indication>
+                    <reference value="urn:84340b85-0ffc-47b2-9dd1-0c350685ec5e" />
+                    <display value="Encounter" />
+                </indication>
+                <serviceProvider>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10000069.json" />
+                </serviceProvider>
+            </Encounter>
+        </content>
+    </entry>
+    <entry>
+        <title>Diagnostic Report</title>
+        <id>urn:09b1ffd7-485a-4073-8333-48d81989f376</id>
+        <updated>2015-02-04T12:14:40.110+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <DiagnosticReport xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/0e150435-2a71-489b-8fdc-72371398a404" />
+                        <code value="0e150435-2a71-489b-8fdc-72371398a404" />
+                        <display value="Haemoglobin Count" />
+                    </coding>
+                </name>
+                <status value="final" />
+                <issued value="2015-02-04T12:13:54+05:30" />
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5963069947981594625" />
+                    <display value="5963069947981594625" />
+                </subject>
+                <performer>
+                    <reference value="e8a8bdb9-9fdd-4e66-81ca-5abbb6308ccd" />
+                </performer>
+                <identifier>
+                    <value value="urn:09b1ffd7-485a-4073-8333-48d81989f376" />
+                </identifier>
+                <diagnosticDateTime value="2015-02-04T12:13:54+05:30" />
+                <result>
+                    <display value="5" />
+                </result>
+                <codedDiagnosis>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/e8816d09-9735-4f08-ad05-471c1f7b4b88" />
+                        <code value="e8816d09-9735-4f08-ad05-471c1f7b4b88" />
+                        <display value="Fever" />
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c80ff1e2-f26c-4d24-830a-2c8ea7997c14" />
+                        <code value="maleria" />
+                        <display value="maleria" />
+                    </coding>
+                </codedDiagnosis>
+            </DiagnosticReport>
+        </content>
+    </entry>
+    <entry>
+        <title>Procedures</title>
+        <id>urn:9f582d08-1245-4c5a-a4b0-8d021298ac61</id>
+        <updated>2015-02-04T12:14:40.110+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Procedure xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:9f582d08-1245-4c5a-a4b0-8d021298ac61" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/5963069947981594625" />
+                    <display value="5963069947981594625" />
+                </subject>
+                <type>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/8399d03b-d138-424e-8029-863e66dcfb75" />
+                        <code value="7W00X0Z" />
+                        <display value="Osteopathic Treatment of Head" />
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b1b46bb3-c956-4e1c-84df-12f03f33b7f5" />
+                        <code value="b1b46bb3-c956-4e1c-84df-12f03f33b7f5" />
+                        <display value="Osteopathic Treatment of Head" />
+                    </coding>
+                </type>
+                <date>
+                    <start value="2015-02-03T00:00:00+05:30" />
+                    <end value="2015-02-04T00:00:00+05:30" />
+                </date>
+                <outcome value="Cancer" />
+                <report>
+                    <reference value="urn:09b1ffd7-485a-4073-8333-48d81989f376" />
+                    <display value="Diagnostic Report" />
+                </report>
+                <followUp value="come on March" />
+            </Procedure>
+        </content>
+    </entry>
+</feed>

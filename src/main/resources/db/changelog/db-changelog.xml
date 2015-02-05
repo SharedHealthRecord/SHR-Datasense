@@ -312,5 +312,21 @@
                 newDataType="varchar(500)"
                 tableName="patient_death_details"/>
     </changeSet>
-
+    <changeSet id="sharedhealth-datasense-20150204-1635" author="sharedhealth" context="setup">
+        <comment>creating patient procedure details table</comment>
+        <createTable tableName="procedures">
+            <column name="procedure_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="patient_hid" type="varchar(50)" />
+            <column name="encounter_id" type="varchar(50)" />
+            <column name="date" type="datetime" />
+            <column name="start_date" type="datetime" />
+            <column name="end_date" type="datetime" />
+            <column name="procedure_uuid" type="varchar(50)" />
+            <column name="procedure_code" type="varchar(50)" />
+            <column name="diagnosis_uuid" type="varchar(50)" />
+            <column name="diagnosis_code" type="varchar(50)" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>
