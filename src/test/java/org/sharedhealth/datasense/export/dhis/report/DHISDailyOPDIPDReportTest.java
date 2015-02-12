@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.export.dhis.report;
 import org.junit.After;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;

@@ -1,0 +1,23 @@
+{
+  "query_json_path": "/opt/datasense/lib/dhis_config/aqs_query/monthly_colposcopy_report_queries.json",
+  "template_base": "/opt/datasense/lib/dhis_config/",
+  "template_query_map": [
+    {
+      "template_path": "templates/monthly_colposcopy_report_template.ftl",
+      "query_list": [
+        "Colposcopy_CIN_I",
+        "Colposcopy_CIN_II",
+        "Colposcopy_CIN_III",
+        "Colposcopy_CA_CERVIX",
+        "Management_LEEP",
+        "Management_Cold_Coagulation",
+        "Management_Cryotherapy",
+        "Histopathology_CIN_I",
+        "Histopathology_CIN_II",
+        "Histopathology_CIN_III",
+        "Histopathology_CA_CERVIX"
+      ]
+    }
+  ],
+  "http-post-uri": "http://172.18.46.225:8080/dhis/api/dataValueSets"
+}

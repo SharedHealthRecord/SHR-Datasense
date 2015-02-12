@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.util;
 
+import org.apache.log4j.Logger;
 import org.hl7.fhir.instance.model.DateAndTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -25,7 +26,7 @@ public class DateUtil {
             ISO_DATE_IN_MILLIS_FORMAT, ISO_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_IN_MILLIS_FORMAT,
             UTC_DATE_IN_MILLIS_FORMAT, UTC_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_TIME_FORMAT,
             SIMPLE_DATE_WITH_SECS_FORMAT, SIMPLE_DATE_FORMAT};
-
+    private static final Logger logger = Logger.getLogger(DateUtil.class);
     public static String getCurrentTimeInUTCString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_IN_MILLIS_FORMAT);
         return dateFormat.format(new Date());
@@ -87,4 +88,5 @@ public class DateUtil {
     public static int getDays(Date startDate, Date endDate) {
         return new Period(new LocalDate(startDate.getTime()), new LocalDate(endDate.getTime()), PeriodType.days()).getDays();
     }
+
 }

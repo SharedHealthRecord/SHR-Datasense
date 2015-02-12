@@ -1,39 +1,33 @@
-package org.sharedhealth.datasense.export.dhis;
+package org.sharedhealth.datasense.export.dhis.Jobs;
 
+import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Map;
 
-public class DHISMonthlyEPIInfantPostJob extends QuartzJobBean {
+public abstract class MonthlyJob extends QuartzJobBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(DHISMonthlyEPIInfantPostJob.class);
-
-    public void setDhisMonthlyEPIInfantReport(DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport) {
-        this.dhisMonthlyEPIInfantReport = dhisMonthlyEPIInfantReport;
-    }
-
-    private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
-
+    private static final Logger logger = Logger.getLogger(MonthlyJob.class);
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         String reportingMonthParam = (String) context.getMergedJobDataMap().get("reportingMonth");
         System.out.println(reportingMonthParam);
 
         String reportingMonth = getReportingMonth(reportingMonthParam);
-        HashMap<String, Object> dataMap = new HashMap<>();
+        Map<String, Object> dataMap = new HashMap<>();
         dataMap.put("reportingMonth", reportingMonth);
-        dhisMonthlyEPIInfantReport.process(dataMap);
+        process(dataMap);
     }
 
-    static String getReportingMonth(String monthParam) {
+    protected abstract void process(Map<String, Object> dataMap);
+
+    public static String getReportingMonth(String monthParam) {
         try {
             new SimpleDateFormat("yyyy-MM").parse(monthParam);
             return monthParam;

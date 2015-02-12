@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 import static junit.framework.Assert.assertEquals;
-import static org.sharedhealth.datasense.export.dhis.DHISMonthlyEPIInfantPostJob.getReportingMonth;
+import static org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyEPIInfantPostJob.getReportingMonth;
 
 public class DHISMonthlyEPIInfantPostJobTest {
 

@@ -1,14 +1,8 @@
-package org.sharedhealth.datasense.export.dhis.report;
+package org.sharedhealth.datasense.export.dhis.reports;
 
 import aggregatequeryservice.postservice;
-import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
-import org.sharedhealth.datasense.repository.FacilityDao;
-import org.sharedhealth.datasense.util.DHISHeaders;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
-import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -17,23 +11,8 @@ import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.sharedhealth.datasense.FacilityType.UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE;
 
-@Component
-public class DHISDailyOPDIPDReport implements DHISReport {
-    private FacilityDao facilityDao;
-    private DataSource dataSource;
-    private DHISHeaders dhisHeaders;
-    private DatasenseProperties datasenseProperties;
+public abstract class DailyDHISReport extends DHISReport {
 
-    private static final org.slf4j.Logger logger = org.slf4j.LoggerFactory.getLogger(DHISDailyOPDIPDReport.class);
-
-    @Autowired
-    public DHISDailyOPDIPDReport(FacilityDao facilityDao, DataSource dataSource, DHISHeaders dhisHeaders,
-                                 DatasenseProperties datasenseProperties) {
-        this.facilityDao = facilityDao;
-        this.dataSource = dataSource;
-        this.dhisHeaders = dhisHeaders;
-        this.datasenseProperties = datasenseProperties;
-    }
 
     @Override
     public void process(Map<String, Object> dataMap) {
@@ -58,11 +37,13 @@ public class DHISDailyOPDIPDReport implements DHISReport {
 
         HashMap<String, String> postHeaders = dhisHeaders.get();
 
-        String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + "daily_opd_ipd_report.json";
+        String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + getConfigFilepath();
 
         logger.info(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility
                 .getFacilityName(), reportingDate));
 
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }
+
+    public abstract String getConfigFilepath();
 }

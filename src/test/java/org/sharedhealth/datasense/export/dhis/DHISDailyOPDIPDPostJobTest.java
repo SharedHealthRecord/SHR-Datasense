@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.export.dhis;
 
 import org.junit.Test;
+import org.sharedhealth.datasense.export.dhis.Jobs.DHISDailyOPDIPDPostJob;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -12,7 +13,7 @@ public class DHISDailyOPDIPDPostJobTest {
     @Test
     public void shouldParseReportingDateAsDate() {
         String reportingDate = "2015-01-07";
-        assertEquals(reportingDate, DHISDailyOPDIPDPostJob.getReportingDate(reportingDate));
+        assertEquals(reportingDate, new DHISDailyOPDIPDPostJob().getReportingDate(reportingDate));
     }
 
     @Test
@@ -20,7 +21,7 @@ public class DHISDailyOPDIPDPostJobTest {
         String dataParam = "0";
         Calendar calendar = Calendar.getInstance();
         String today = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        assertEquals(today, DHISDailyOPDIPDPostJob.getReportingDate(dataParam));
+        assertEquals(today, new DHISDailyOPDIPDPostJob().getReportingDate(dataParam));
     }
 
     @Test
@@ -29,6 +30,6 @@ public class DHISDailyOPDIPDPostJobTest {
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.DATE, -1);
         String yesterday = new SimpleDateFormat("yyyy-MM-dd").format(calendar.getTime());
-        assertEquals(yesterday, DHISDailyOPDIPDPostJob.getReportingDate(dataParam));
+        assertEquals(yesterday, new DHISDailyOPDIPDPostJob().getReportingDate(dataParam));
     }
 }

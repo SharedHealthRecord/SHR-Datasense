@@ -1,28 +1,21 @@
-package org.sharedhealth.datasense.export.dhis;
+package org.sharedhealth.datasense.export.dhis.Jobs;
 
+import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.sharedhealth.datasense.export.dhis.annotations.DhisParam;
-import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.Map;
 
-@DhisParam({"reportingDate"})
-public class DHISDailyOPDIPDPostJob extends QuartzJobBean {
-    private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
+public abstract class DailyJob extends QuartzJobBean {
 
-    private static final Logger logger = LoggerFactory.getLogger(DHISDailyOPDIPDPostJob.class);
+    private static final Logger logger = Logger.getLogger(DailyJob.class);
 
-
-    public void setDhisDailyOPDIPDReport(DHISDailyOPDIPDReport dhisDailyOPDIPDReport) {
-        this.dhisDailyOPDIPDReport = dhisDailyOPDIPDReport;
-    }
+    protected abstract void process(Map<String, Object> dataMap);
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
@@ -33,10 +26,10 @@ public class DHISDailyOPDIPDPostJob extends QuartzJobBean {
         Map<String, Object> map = context.getMergedJobDataMap();
         map.put("reportingDate", reportingDate);
         logger.info(String.format("Generating Report for date %s", reportingDate));
-        dhisDailyOPDIPDReport.process(map);
+        process(map);
     }
 
-    static String getReportingDate(String dateParam) {
+    public static String getReportingDate(String dateParam) {
         try {
             new SimpleDateFormat("yyyy-MM-dd").parse(dateParam);
             return dateParam;

@@ -7,10 +7,12 @@ import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.export.dhis.DHISDailyOPDIPDPostJob;
-import org.sharedhealth.datasense.export.dhis.DHISMonthlyEPIInfantPostJob;
-import org.sharedhealth.datasense.export.dhis.report.DHISDailyOPDIPDReport;
-import org.sharedhealth.datasense.export.dhis.report.DHISMonthlyEPIInfantReport;
+import org.sharedhealth.datasense.export.dhis.Jobs.DHISDailyOPDIPDPostJob;
+import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyColposcopyPostJob;
+import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyEPIInfantPostJob;
+import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
+import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyColposcopyReport;
+import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
 import org.sharedhealth.datasense.feeds.tr.DrugEventWorker;
@@ -81,6 +83,9 @@ public class Main {
     private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
 
     @Autowired
+    private DHISMonthlyColposcopyReport dhisMonthlyColposcopyReport;
+
+    @Autowired
     private ShrWebClient shrWebClient;
 
     @Autowired
@@ -103,6 +108,7 @@ public class Main {
     private String DRUG_SYNC_TRIGGER = "tr.drug.sync.job.trigger";
     private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
     private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
+    private String MONTHLY_COLPOSCOPY_TRIGGER = "dhis.monthly.colcoscopy.post.job.trigger";
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -150,8 +156,9 @@ public class Main {
                 getTrigger(CONCEPT_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrConceptSyncJob.class, CONCEPT_SYNC_JOB).getObject()),
                 getTrigger(REF_TERM_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrReferenceTermSyncJob.class, REF_TERM_SYNC_JOB).getObject()),
                 getTrigger(DRUG_SYNC_TRIGGER, 50000, "0 0/2 * * * ?", jobDetail(TrDrugSyncJob.class, DRUG_SYNC_JOB).getObject()),
-                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/15 * * * ?", dhisDailyOPDIPDJob()),
-                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/15 * * * ?", dhisEPIInfantPostJob())
+                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/1 * * * ?", dhisDailyOPDIPDJob()),
+                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/1 * * * ?", dhisEPIInfantPostJob()),
+                getTrigger(MONTHLY_COLPOSCOPY_TRIGGER, 10000, "0 0/1 * * * ?", dhisColposcopyPostJob())
         };
     }
 
@@ -169,6 +176,7 @@ public class Main {
         ctx.put("encounterEventWorker", encounterEventWorker);
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
         ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
+        ctx.put("dhisMonthlyColposcopyReport", dhisMonthlyColposcopyReport);
         ctx.put("shrWebClient", shrWebClient);
         ctx.put("conceptEventWorker", conceptEventWorker);
         ctx.put("referenceTermEventWorker", referenceTermEventWorker);
@@ -223,7 +231,14 @@ public class Main {
         return jobDetailFactoryBean.getObject();
     }
 
-
+    private JobDetail dhisColposcopyPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISMonthlyColposcopyPostJob.class);
+        jobDetailFactoryBean.setName("dhis.monthly.colcoscopy.post.job.trigger");
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);

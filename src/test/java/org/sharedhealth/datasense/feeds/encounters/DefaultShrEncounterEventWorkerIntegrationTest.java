@@ -105,5 +105,4 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     public void tearDown() {
         DatabaseHelper.clearDatasenseTables(jdbcTemplate);
     }
-
 }
