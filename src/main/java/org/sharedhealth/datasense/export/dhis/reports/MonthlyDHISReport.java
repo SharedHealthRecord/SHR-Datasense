@@ -21,7 +21,8 @@ public abstract class MonthlyDHISReport extends DHISReport {
         List<String> facilityTypes = asList(MEDICAL_UNIVERSITY_FACILITY_TYPE, UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE, UPAZILA_LEVEL_OFFICE_FACILITY_TYPE);
         List<Facility> facilities = facilityDao.findFacilitiesByTypes(facilityTypes);
         for (Facility facility : facilities) {
-            postReportForFacility(facility, reportingMonth);
+            if (facility.getDhisOrgUnitUid() != null)
+                postReportForFacility(facility, reportingMonth);
         }
     }
 
