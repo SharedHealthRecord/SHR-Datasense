@@ -144,7 +144,7 @@ public class Main {
         schedulerFactoryBean.setTriggers(getTriggers());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
-        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(true);
+        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
         try {
             schedulerFactoryBean.afterPropertiesSet();
         } catch (Exception e) {
@@ -153,13 +153,6 @@ public class Main {
         return schedulerFactoryBean;
     }
 
-    @Bean
-    public DefaultLifecycleProcessor lifecycleProcessor(){
-        DefaultLifecycleProcessor lifecycleProcessor = new DefaultLifecycleProcessor();
-        lifecycleProcessor.setTimeoutPerShutdownPhase(TEN_MINUTES);
-        return lifecycleProcessor;
-
-    }
 
     private Trigger[] getTriggers() {
         return new Trigger[]{
