@@ -31,6 +31,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
+import org.springframework.context.support.DefaultLifecycleProcessor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
@@ -63,6 +64,8 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.util"
 })
 public class Main {
+
+    public static final long TEN_MINUTES = 600 * 1000L;
 
     @Autowired
     private DataSource dataSource;
@@ -148,6 +151,14 @@ public class Main {
             e.printStackTrace();
         }
         return schedulerFactoryBean;
+    }
+
+    @Bean
+    public DefaultLifecycleProcessor lifecycleProcessor(){
+        DefaultLifecycleProcessor lifecycleProcessor = new DefaultLifecycleProcessor();
+        lifecycleProcessor.setTimeoutPerShutdownPhase(TEN_MINUTES);
+        return lifecycleProcessor;
+
     }
 
     private Trigger[] getTriggers() {
