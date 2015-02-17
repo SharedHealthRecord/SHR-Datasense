@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.instance.model.*;
+import org.hl7.fhir.instance.model.Boolean;
 import org.sharedhealth.datasense.client.TrWebClient;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Medication;
@@ -32,8 +33,17 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         return resource.getResourceType().equals(ResourceType.Immunization);
     }
 
+    private boolean isVaccinationRefused(Resource resource) {
+        Immunization immunization = (Immunization) resource;
+        Boolean refusedIndicator = immunization.getRefusedIndicator();
+        return refusedIndicator == null ? false : refusedIndicator.getValue();
+    }
+
     @Override
     public void process(Resource resource, EncounterComposition composition) {
+        if (isVaccinationRefused(resource)) {
+            return;
+        }
         Immunization immunization = (Immunization) resource;
         Medication medication = new Medication();
         medication.setStatus(MedicationStatus.Administered);
