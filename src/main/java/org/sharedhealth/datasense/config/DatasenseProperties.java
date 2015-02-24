@@ -11,6 +11,10 @@ import java.util.List;
 @Component
 public class DatasenseProperties implements EnvironmentAware {
 
+    private final static String URL_SEPARATOR = "/";
+    private final static String PORT_SEPARATOR = ":";
+    private final static String SCHEME_SEPARATOR = "://";
+
     //MCI Server Properties
     private String mciScheme;
     private String mciHost;
@@ -44,12 +48,16 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisUserName;
     private String dhisPassword;
     private String dhisAqsConfigPath;
-    //FR Server Properties
-    private String facilityRegistryUrl;
+    //HRM Auth Token
     private String HRMAuthToken;
+    //PR Server Properties
     private String prScheme;
     private String prHost;
     private String prContextPath;
+    //FR Server Properties
+    private String frScheme;
+    private String frHost;
+    private String frContextPath;
     //Datasense Properties
     private String datasenseFacilityId;
     private String datasenseCatchmentList;
@@ -74,11 +82,13 @@ public class DatasenseProperties implements EnvironmentAware {
         this.mciPassword = env.getProperty("MCI_PASSWORD");
         this.datasenseFacilityId = env.getProperty("DATASENSE_FACILITY_ID");
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
-        this.facilityRegistryUrl = env.getProperty("FACILITY_URL");
         this.HRMAuthToken = env.getProperty("HRM_AUTH_TOKEN");
         this.prScheme = env.getProperty("PR_SCHEME");
         this.prHost = env.getProperty("PR_HOST");
         this.prContextPath = env.getProperty("PR_CONTEXT_PATH");
+        this.frScheme = env.getProperty("FR_SCHEME");
+        this.frHost = env.getProperty("FR_HOST");
+        this.frContextPath = env.getProperty("FR_CONTEXT_PATH");
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
         this.dhisAqsConfigPath = env.getProperty("DHIS_AQS_CONFIG_PATH");
@@ -118,7 +128,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getMciPatientUrl() {
-        return getMciBaseUrl() + "/" + mciContextPath;
+        return getMciBaseUrl() + URL_SEPARATOR + mciContextPath;
     }
 
     public String getIdentityServerBaseUrl() {
@@ -131,10 +141,6 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String[] getDatasenseCatchmentList() {
         return StringUtils.split(datasenseCatchmentList, ",");
-    }
-
-    public String getFacilityRegistryUrl() {
-        return facilityRegistryUrl;
     }
 
     public String getHRMAuthToken() {
@@ -166,15 +172,15 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getTrConceptAtomfeedUrl() {
-        return getTrBasePath() + "/" + trConceptAtomfeedPath;
+        return getTrBasePath() + URL_SEPARATOR + trConceptAtomfeedPath;
     }
 
     public String getTrReferenceTermAtomfeedUrl() {
-        return getTrBasePath() + "/" + trReferenceTermAtomfeedPath;
+        return getTrBasePath() + URL_SEPARATOR + trReferenceTermAtomfeedPath;
     }
 
     public String getTrMedicationfeedUrl() {
-        return getTrBasePath() + "/" + trMedicationAtomFeedPath;
+        return getTrBasePath() + URL_SEPARATOR + trMedicationAtomFeedPath;
     }
 
     public String getTrBasePath() {
@@ -206,11 +212,19 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getPrProviderUrl() {
-        return getPrBaseUrl() + "/" + prContextPath;
+        return getPrBaseUrl() + URL_SEPARATOR + prContextPath;
+    }
+
+    private String getFrBaseUrl() {
+        return getBaseUrl(frScheme, frHost, null);
+    }
+
+    public String getFacilityRegistryUrl() {
+        return getFrBaseUrl() + URL_SEPARATOR + frContextPath;
     }
 
     private String getBaseUrl(String scheme, String host, String port) {
-        String path = scheme + "://" + host;
-        return port != null ? path + ":" + port : path;
+        String path = scheme + SCHEME_SEPARATOR + host;
+        return port != null ? path + PORT_SEPARATOR + port : path;
     }
 }
