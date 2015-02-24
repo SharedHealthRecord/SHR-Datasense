@@ -329,4 +329,14 @@
             <column name="diagnosis_code" type="varchar(50)" />
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150219-1433" author="sharedhealth" context="setup">
+        <comment>creating provider table</comment>
+        <createTable tableName="provider">
+            <column name="id" type="varchar(20)">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(50)" />
+            <column name="facility_id" type="varchar(50)" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

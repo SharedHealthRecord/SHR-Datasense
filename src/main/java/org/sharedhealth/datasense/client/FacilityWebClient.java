@@ -62,7 +62,7 @@ public class FacilityWebClient {
         URI facilityUrl = getFacilityUrl(facilityId);
         log.info("Reading from " + facilityUrl);
         Map<String, String> headers = new HashMap<>();
-        headers.put("X-Auth-Token", properties.getFacilityAuthToken());
+        headers.put("X-Auth-Token", properties.getHRMAuthToken());
         headers.put("Accept", "application/json");
         return new WebClient().get(facilityUrl, headers);
     }
@@ -70,5 +70,4 @@ public class FacilityWebClient {
     private URI getFacilityUrl(String facilityId) throws URISyntaxException {
         return new URI(properties.getFacilityRegistryUrl() + "/" + facilityId + ".json");
     }
-
 }

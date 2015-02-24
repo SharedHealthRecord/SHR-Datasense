@@ -10,8 +10,9 @@ public class EncounterComposition {
     private final Composition composition;
     private final BundleContext context;
     private final PatientReference patientReference;
-    private ServiceProviderReference serviceProviderReference;
     private EncounterReference encounterReference;
+    private ServiceProviderReference serviceProviderReference;
+    private ProviderReference providerReference;
 
     public EncounterComposition(Composition composition, BundleContext context) {
         this.composition = composition;
@@ -19,9 +20,17 @@ public class EncounterComposition {
         encounterReference = new EncounterReference(composition.getEncounter(),
                 (Encounter) context.getResourceByReferenceFromFeed(composition.getEncounter()));
         patientReference = new PatientReference(encounterReference.getEncounterReferenceValue().getSubject());
+        serviceProviderReference = new ServiceProviderReference();
         ResourceReference serviceProvider = encounterReference.getEncounterReferenceValue().getServiceProvider();
         if (serviceProvider != null) {
-            serviceProviderReference = new ServiceProviderReference(serviceProvider);
+            serviceProviderReference.setServiceProvider(serviceProvider);
+        }
+        providerReference = new ProviderReference();
+        List<Encounter.EncounterParticipantComponent> participants = encounterReference.getEncounterReferenceValue().getParticipant();
+        if(!participants.isEmpty()) {
+            for (Encounter.EncounterParticipantComponent participant : participants) {
+                providerReference.addReference(participant.getIndividual());
+            }
         }
     }
 
@@ -95,6 +104,9 @@ public class EncounterComposition {
         return context;
     }
 
+    public ProviderReference getProviderReference() {
+        return providerReference;
+    }
 
     public ServiceProviderReference getServiceProviderReference() {
         return serviceProviderReference;

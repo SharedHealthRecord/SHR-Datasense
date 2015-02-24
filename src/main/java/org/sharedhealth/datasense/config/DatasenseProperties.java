@@ -46,7 +46,10 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisAqsConfigPath;
     //FR Server Properties
     private String facilityRegistryUrl;
-    private String facilityAuthToken;
+    private String HRMAuthToken;
+    private String prScheme;
+    private String prHost;
+    private String prContextPath;
     //Datasense Properties
     private String datasenseFacilityId;
     private String datasenseCatchmentList;
@@ -55,7 +58,6 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dateOfDeathUuid;
     private String circumstancesOfDeathUuid;
     private String causeOfDeath;
-
 
     @Override
     public void setEnvironment(Environment env) {
@@ -73,7 +75,10 @@ public class DatasenseProperties implements EnvironmentAware {
         this.datasenseFacilityId = env.getProperty("DATASENSE_FACILITY_ID");
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
         this.facilityRegistryUrl = env.getProperty("FACILITY_URL");
-        this.facilityAuthToken = env.getProperty("FACILITY_AUTH_TOKEN");
+        this.HRMAuthToken = env.getProperty("HRM_AUTH_TOKEN");
+        this.prScheme = env.getProperty("PR_SCHEME");
+        this.prHost = env.getProperty("PR_HOST");
+        this.prContextPath = env.getProperty("PR_CONTEXT_PATH");
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
         this.dhisAqsConfigPath = env.getProperty("DHIS_AQS_CONFIG_PATH");
@@ -87,7 +92,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.trPort = env.getProperty("TR_PORT");
         this.trConceptAtomfeedPath = env.getProperty("TR_CONCEPT_ATOMFEED_PATH");
         this.trReferenceTermAtomfeedPath = env.getProperty("TR_REFERENCE_TERM_ATOMFEED_PATH");
-        this.trMedicationAtomFeedPath=env.getProperty("TR_MEDICATION_ATOMFEED_PATH");
+        this.trMedicationAtomFeedPath = env.getProperty("TR_MEDICATION_ATOMFEED_PATH");
         this.trUser = env.getProperty("TR_USER");
         this.trPassword = env.getProperty("TR_PASSWORD");
         this.deathCodes = Arrays.asList(env.getProperty("DEATH_CODES").split(","));
@@ -96,44 +101,8 @@ public class DatasenseProperties implements EnvironmentAware {
         this.causeOfDeath = env.getProperty("CAUSE_OF_DEATH_UUID");
     }
 
-    public String getShrScheme() {
-        return shrScheme;
-    }
-
-    public String getShrHost() {
-        return shrHost;
-    }
-
-    public String getShrPort() {
-        return shrPort;
-    }
-
-    public String getShrUser() {
-        return shrUser;
-    }
-
-    public String getShrPassword() {
-        return shrPassword;
-    }
-
     public String getShrBaseUrl() {
-        return shrScheme + "://" + shrHost + ":" + shrPort;
-    }
-
-    public String getMciScheme() {
-        return mciScheme;
-    }
-
-    public String getMciContextPath() {
-        return mciContextPath;
-    }
-
-    public String getMciHost() {
-        return mciHost;
-    }
-
-    public String getMciPort() {
-        return mciPort;
+        return getBaseUrl(shrScheme, shrHost, shrPort);
     }
 
     public String getMciUser() {
@@ -145,11 +114,15 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getMciBaseUrl() {
-        return mciScheme + "://" + mciHost + ":" + mciPort + "/" + mciContextPath;
+        return getBaseUrl(mciScheme, mciHost, mciPort);
+    }
+
+    public String getMciPatientUrl() {
+        return getMciBaseUrl() + "/" + mciContextPath;
     }
 
     public String getIdentityServerBaseUrl() {
-        return identityScheme + "://" + identityHost + ":" + identityPort;
+        return getBaseUrl(identityScheme, identityHost, identityPort);
     }
 
     public String getDatasenseFacilityId() {
@@ -164,8 +137,8 @@ public class DatasenseProperties implements EnvironmentAware {
         return facilityRegistryUrl;
     }
 
-    public String getFacilityAuthToken() {
-        return facilityAuthToken;
+    public String getHRMAuthToken() {
+        return HRMAuthToken;
     }
 
     public String getDhisUserName() {
@@ -176,32 +149,12 @@ public class DatasenseProperties implements EnvironmentAware {
         return dhisPassword;
     }
 
-    public String getIdentityScheme() {
-        return identityScheme;
-    }
-
-    public String getIdentityHost() {
-        return identityHost;
-    }
-
-    public String getIdentityPort() {
-        return identityPort;
-    }
-
     public String getIdentityUser() {
         return identityUser;
     }
 
     public String getIdentityPassword() {
         return identityPassword;
-    }
-
-    public String getTrHost() {
-        return trHost;
-    }
-
-    public String getTrPort() {
-        return trPort;
     }
 
     public String getTrUser() {
@@ -225,15 +178,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getTrBasePath() {
-        return trScheme + "://" + trHost + ":" + trPort;
-    }
-
-    public String getTrScheme() {
-        return trScheme;
-    }
-
-    public String getTrConceptAtomfeedPath() {
-        return trConceptAtomfeedPath;
+        return getBaseUrl(trScheme, trHost, trPort);
     }
 
     public String getDhisAqsConfigPath() {
@@ -254,5 +199,18 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getCauseOfDeath() {
         return causeOfDeath;
+    }
+
+    public String getPrBaseUrl() {
+        return getBaseUrl(prScheme, prHost, null);
+    }
+
+    public String getPrProviderUrl() {
+        return getPrBaseUrl() + "/" + prContextPath;
+    }
+
+    private String getBaseUrl(String scheme, String host, String port) {
+        String path = scheme + "://" + host;
+        return port != null ? path + ":" + port : path;
     }
 }

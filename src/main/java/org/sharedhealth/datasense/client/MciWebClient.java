@@ -62,6 +62,6 @@ public class MciWebClient {
     }
 
     private URI getMciURI(String healthId) throws URISyntaxException {
-        return new URI(properties.getMciBaseUrl() + "/" + healthId);
+        return new URI(properties.getMciPatientUrl() + "/" + healthId);
     }
 }

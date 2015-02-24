@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Encounter</title>
+    <id>urn:ea0ff2d8-e8a3-4228-9e70-c19af88a0abb</id>
+    <updated>2014-12-09T10:59:27+05:30</updated>
+    <entry>
+        <title>Composition</title>
+        <id>urn:40e025cd-6412-498f-baac-6fbf7338a9be</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Composition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:40e025cd-6412-498f-baac-6fbf7338a9be" />
+                </identifier>
+                <date value="2014-12-09T10:59:27+05:30" />
+                <status value="final" />
+                <subject>
+                    <reference value="http://172.18.46.56:9997/patients/5968868737778974721" />
+                    <display value="5968868737778974721" />
+                </subject>
+                <encounter>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                        <display value="Encounter" />
+                    </content>
+                </section>
+            </Composition>
+        </content>
+    </entry>
+    <entry>
+        <title>Encounter</title>
+        <id>urn:7efb426e-5b2b-4faa-99b1-9ffe63056048</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Encounter xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                </identifier>
+                <status value="finished" />
+                <class value="outpatient" />
+                <type>
+                    <text value="Consultation" />
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:9997/patients/5968868737778974721" />
+                    <display value="5968868737778974721" />
+                </subject>
+                <indication>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
+                </indication>
+                <participant>
+                    <individual>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/11104.json"/>
+                    </individual>
+                </participant>
+            </Encounter>
+        </content>
+    </entry>
+</feed>
