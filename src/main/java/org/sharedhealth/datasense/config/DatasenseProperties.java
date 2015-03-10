@@ -28,6 +28,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String shrPort;
     private String shrUser;
     private String shrPassword;
+    private String shrVersion;
     //TR Server Properties
     private String trScheme;
     private String trHost;
@@ -74,6 +75,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.shrPort = env.getProperty("SHR_PORT");
         this.shrUser = env.getProperty("SHR_USER");
         this.shrPassword = env.getProperty("SHR_PASSWORD");
+        this.shrVersion = env.getProperty("SHR_VERSION");
         this.mciScheme = env.getProperty("MCI_SCHEME");
         this.mciHost = env.getProperty("MCI_HOST");
         this.mciPort = env.getProperty("MCI_PORT");
@@ -112,7 +114,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getShrBaseUrl() {
-        return getBaseUrl(shrScheme, shrHost, shrPort);
+        return String.format("%s/%s", getBaseUrl(shrScheme, shrHost, shrPort),this.shrVersion);
     }
 
     public String getMciUser() {
