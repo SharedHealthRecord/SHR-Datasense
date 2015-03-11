@@ -6,6 +6,7 @@ import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
+import org.sharedhealth.datasense.util.HeaderUtil;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -16,6 +17,8 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+
+import static org.sharedhealth.datasense.util.HeaderUtil.getHrmAuthTokenHeaders;
 
 @Component
 public class FacilityWebClient {
@@ -61,8 +64,7 @@ public class FacilityWebClient {
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         URI facilityUrl = getFacilityUrl(facilityId);
         log.info("Reading from " + facilityUrl);
-        Map<String, String> headers = new HashMap<>();
-        headers.put("X-Auth-Token", properties.getHRMAuthToken());
+        Map<String, String> headers = getHrmAuthTokenHeaders(properties);
         headers.put("Accept", "application/json");
         return new WebClient().get(facilityUrl, headers);
     }

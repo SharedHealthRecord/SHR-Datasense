@@ -23,6 +23,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.junit.Assert.assertEquals;
@@ -30,6 +31,8 @@ import static org.junit.Assert.assertNotNull;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.asString;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
+import static org.sharedhealth.datasense.util.HeaderUtil.AUTH_TOKEN_KEY;
+import static org.sharedhealth.datasense.util.HeaderUtil.CLIENT_ID_KEY;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -57,6 +60,18 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        String authToken = "b7aa1f4001ac4b922dabd6a02a0dabc44cf5af74a0d1b68003ce7ccdb897a1d2";
+        UUID token = UUID.randomUUID();
+
+        String response = "{\"access_token\" : \"" + token.toString() + "\"}";
+        
+        givenThat(post(urlEqualTo("/signin"))
+                .withHeader(CLIENT_ID_KEY, equalTo("18552"))
+                .withHeader(AUTH_TOKEN_KEY, equalTo(authToken))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withBody(response)));
+        
         givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)

@@ -2,13 +2,15 @@ package org.sharedhealth.datasense.client;
 
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.security.IdentityToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
-import java.util.HashMap;
 import java.util.Map;
+
+import static org.sharedhealth.datasense.util.HeaderUtil.getHrmAccessTokenHeaders;
 
 @Component
 public class ShrWebClient {
@@ -23,10 +25,10 @@ public class ShrWebClient {
     }
 
     public String getEncounterFeedContent(URI uri) throws IOException {
-        Map<String, String> headers = new HashMap<>();
+        IdentityToken accessToken = identityServiceClient.getOrCreateToken();
+        Map<String, String> headers = getHrmAccessTokenHeaders(accessToken, properties);
         headers.put("Accept", "application/atom+xml");
         headers.put("facilityId", properties.getDatasenseFacilityId());
-        headers.put("X-Auth-Token", identityServiceClient.getOrCreateToken().toString());
         try {
             return new WebClient().get(uri, headers);
         } catch (ConnectionException e) {

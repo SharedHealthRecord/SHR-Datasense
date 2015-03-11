@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.export.dhis.reports;
 import aggregatequeryservice.postservice;
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.model.Facility;
+import org.sharedhealth.datasense.util.HeaderUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.Map;
 import static java.lang.String.format;
 import static java.util.Arrays.asList;
 import static org.sharedhealth.datasense.FacilityType.*;
+import static org.sharedhealth.datasense.util.HeaderUtil.getDhisHeaders;
 
 public abstract class MonthlyDHISReport extends DHISReport {
 
@@ -40,7 +42,7 @@ public abstract class MonthlyDHISReport extends DHISReport {
         extraParams.put("period", period);
         extraParams.put("orgUnit", facility.getDhisOrgUnitUid());
 
-        HashMap<String, String> postHeaders = dhisHeaders.get();
+        HashMap<String, String> postHeaders = getDhisHeaders(datasenseProperties);
 
         String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + getConfigFilepath();
 

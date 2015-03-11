@@ -20,14 +20,10 @@ public class DatasenseProperties implements EnvironmentAware {
     private String mciHost;
     private String mciPort;
     private String mciContextPath;
-    private String mciUser;
-    private String mciPassword;
     //SHR Server Properties
     private String shrScheme;
     private String shrHost;
     private String shrPort;
-    private String shrUser;
-    private String shrPassword;
     private String shrVersion;
     //TR Server Properties
     private String trScheme;
@@ -39,18 +35,20 @@ public class DatasenseProperties implements EnvironmentAware {
     private String trUser;
     private String trPassword;
     //Identity Server Properties
-    private String identityScheme;
-    private String identityHost;
-    private String identityPort;
-    private String identityUser;
-    private String identityPassword;
+    private String idpScheme;
+    private String idpHost;
+    private String idpPort;
+    private String idpClientId;
+    private String idpAuthToken;
+    private String idpClientEmail;
+    private String idpClientPassword;
+    private String idpServerSigninPath;
+
     //DHIS Server Properties
     private String dhisPostUrl;
     private String dhisUserName;
     private String dhisPassword;
     private String dhisAqsConfigPath;
-    //HRM Auth Token
-    private String HRMAuthToken;
     //PR Server Properties
     private String prScheme;
     private String prHost;
@@ -73,18 +71,13 @@ public class DatasenseProperties implements EnvironmentAware {
         this.shrScheme = env.getProperty("SHR_SCHEME");
         this.shrHost = env.getProperty("SHR_HOST");
         this.shrPort = env.getProperty("SHR_PORT");
-        this.shrUser = env.getProperty("SHR_USER");
-        this.shrPassword = env.getProperty("SHR_PASSWORD");
         this.shrVersion = env.getProperty("SHR_VERSION");
         this.mciScheme = env.getProperty("MCI_SCHEME");
         this.mciHost = env.getProperty("MCI_HOST");
         this.mciPort = env.getProperty("MCI_PORT");
         this.mciContextPath = env.getProperty("MCI_CONTEXT_PATH");
-        this.mciUser = env.getProperty("MCI_USER");
-        this.mciPassword = env.getProperty("MCI_PASSWORD");
         this.datasenseFacilityId = env.getProperty("DATASENSE_FACILITY_ID");
         this.datasenseCatchmentList = env.getProperty("DATASENSE_CATCHMENT_LIST");
-        this.HRMAuthToken = env.getProperty("HRM_AUTH_TOKEN");
         this.prScheme = env.getProperty("PR_SCHEME");
         this.prHost = env.getProperty("PR_HOST");
         this.prContextPath = env.getProperty("PR_CONTEXT_PATH");
@@ -94,11 +87,14 @@ public class DatasenseProperties implements EnvironmentAware {
         this.dhisUserName = env.getProperty("DHIS_USER_NAME");
         this.dhisPassword = env.getProperty("DHIS_PASSWORD");
         this.dhisAqsConfigPath = env.getProperty("DHIS_AQS_CONFIG_PATH");
-        this.identityScheme = env.getProperty("IDENTITY_SCHEME");
-        this.identityHost = env.getProperty("IDENTITY_HOST");
-        this.identityPort = env.getProperty("IDENTITY_PORT");
-        this.identityUser = env.getProperty("IDENTITY_USER");
-        this.identityPassword = env.getProperty("IDENTITY_PASSWORD");
+        this.idpScheme = env.getProperty("IDP_SCHEME");
+        this.idpHost = env.getProperty("IDP_HOST");
+        this.idpPort = env.getProperty("IDP_PORT");
+        this.idpClientId = env.getProperty("IDP_CLIENT_ID");
+        this.idpAuthToken = env.getProperty("IDP_AUTH_TOKEN");
+        this.idpServerSigninPath = env.getProperty("IDP_SIGNIN_PATH");
+        this.idpClientEmail = env.getProperty("IDP_CLIENT_EMAIL");
+        this.idpClientPassword = env.getProperty("IDP_CLIENT_PASSWORD");
         this.trScheme = env.getProperty("TR_SCHEME");
         this.trHost = env.getProperty("TR_HOST");
         this.trPort = env.getProperty("TR_PORT");
@@ -114,15 +110,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getShrBaseUrl() {
-        return String.format("%s/%s", getBaseUrl(shrScheme, shrHost, shrPort),this.shrVersion);
-    }
-
-    public String getMciUser() {
-        return mciUser;
-    }
-
-    public String getMciPassword() {
-        return mciPassword;
+        return String.format("%s/%s", getBaseUrl(shrScheme, shrHost, shrPort), this.shrVersion);
     }
 
     public String getMciBaseUrl() {
@@ -134,7 +122,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getIdentityServerBaseUrl() {
-        return getBaseUrl(identityScheme, identityHost, identityPort);
+        return getBaseUrl(idpScheme, idpHost, idpPort);
     }
 
     public String getDatasenseFacilityId() {
@@ -145,10 +133,6 @@ public class DatasenseProperties implements EnvironmentAware {
         return StringUtils.split(datasenseCatchmentList, ",");
     }
 
-    public String getHRMAuthToken() {
-        return HRMAuthToken;
-    }
-
     public String getDhisUserName() {
         return dhisUserName;
     }
@@ -157,14 +141,22 @@ public class DatasenseProperties implements EnvironmentAware {
         return dhisPassword;
     }
 
-    public String getIdentityUser() {
-        return identityUser;
+    public String getIdpAuthToken() {
+        return idpAuthToken;
     }
 
-    public String getIdentityPassword() {
-        return identityPassword;
+    public String getIdpClientId() {
+        return idpClientId;
+    }
+    
+    public String getIdpClientEmail() {
+        return idpClientEmail;
     }
 
+    public String getIdpClientPassword() {
+        return idpClientPassword;
+    }
+    
     public String getTrUser() {
         return trUser;
     }
@@ -228,5 +220,9 @@ public class DatasenseProperties implements EnvironmentAware {
     private String getBaseUrl(String scheme, String host, String port) {
         String path = scheme + SCHEME_SEPARATOR + host;
         return port != null ? path + PORT_SEPARATOR + port : path;
+    }
+
+    public String getIdpServerSigninPath() {
+        return idpServerSigninPath;
     }
 }

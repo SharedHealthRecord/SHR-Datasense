@@ -1,7 +1,9 @@
 package org.sharedhealth.datasense.client;
 
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.message.BasicNameValuePair;
 import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.security.Identity;
 import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.security.IdentityToken;
 import org.sharedhealth.datasense.util.MapperUtil;
@@ -9,11 +11,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import static org.sharedhealth.datasense.util.HeaderUtil.URL_SEPARATOR_FOR_CONTEXT_PATH;
+import static org.sharedhealth.datasense.util.HeaderUtil.getHrmAuthTokenHeaders;
 
 @Component
 public class IdentityServiceClient {
+    private static final String EMAIL_KEY = "email";
+    private static final String PASSWORD_KEY = "password";
     private DatasenseProperties properties;
     private IdentityStore identityStore;
 
@@ -26,22 +34,28 @@ public class IdentityServiceClient {
     public IdentityToken getOrCreateToken() throws IOException {
         IdentityToken token = identityStore.getToken();
         if (token == null) {
-            Identity identity = new Identity(properties.getIdentityUser(), properties.getIdentityPassword());
-            Map<String, String> headers = new HashMap<>();
-            headers.put("Content-Type", "application/json");
+            UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getNameValuePairs());
+            Map<String, String> headers = getHrmAuthTokenHeaders(properties);
             headers.put("accept", "application/json");
-            String response = new WebClient().post(getIdentityServerUrl(), identity, headers);
+            String response = new WebClient().post(getIdentityServerSigninUrl(), headers, entity);
             token = MapperUtil.readFrom(response, IdentityToken.class);
             identityStore.setToken(token);
         }
         return token;
     }
 
+    private List<? extends NameValuePair> getNameValuePairs() {
+        ArrayList<BasicNameValuePair> valuePairs = new ArrayList<>();
+        valuePairs.add(new BasicNameValuePair(EMAIL_KEY, properties.getIdpClientEmail()));
+        valuePairs.add(new BasicNameValuePair(PASSWORD_KEY, properties.getIdpClientPassword()));
+        return valuePairs;
+    }
+
     public void clearToken() {
         identityStore.clearToken();
     }
 
-    private String getIdentityServerUrl() {
-        return properties.getIdentityServerBaseUrl() + "/login";
+    private String getIdentityServerSigninUrl() {
+        return properties.getIdentityServerBaseUrl() + URL_SEPARATOR_FOR_CONTEXT_PATH + properties.getIdpServerSigninPath();
     }
 }

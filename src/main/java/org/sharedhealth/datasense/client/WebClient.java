@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.client;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
@@ -27,13 +28,11 @@ public class WebClient {
         return execute(request);
     }
 
-    public String post(String url, Object data, Map<String, String> headers) {
+    public String post(String url, Map<String, String> headers, HttpEntity entity) {
         try {
-            String content = MapperUtil.asString(data);
             HttpPost request = new HttpPost(URI.create(url));
-            StringEntity entity = new StringEntity(content);
-            addHeaders(request, headers);
             request.setEntity(entity);
+            addHeaders(request, headers);
             return execute(request);
         } catch (IOException e) {
             throw new RuntimeException(e);

@@ -16,7 +16,7 @@ import java.net.URISyntaxException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.sharedhealth.datasense.util.DHISHeaders.getBase64Authentication;
+import static org.sharedhealth.datasense.util.HeaderUtil.getBase64Authentication;
 
 @Component
 public class TrWebClient {
