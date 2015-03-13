@@ -1,7 +1,6 @@
-#!/bin/sh
+#!/bin/bash
 #
-# datasense        This shell script takes care of starting and stopping
-#              the datasense system
+# datasense        start/stop/status script
 #
 # chkconfig: - 64 36
 # description: The datasense shared health record system
@@ -13,25 +12,84 @@
 # Required-Start: $local_fs $remote_fs $network $named $syslog $time
 # Required-Stop: $local_fs $remote_fs $network $named $syslog $time
 # Short-Description: start and stop datasense system,
-# Description: datasense system
+# Description: BDSHR system
 ### END INIT INFO
 
+export DATASENSE_USER=sharedhealth
+export DATASENSE_RUN=/opt/datasense/bin/start.sh
+
+# load configuration
 . /etc/default/datasense
 
-if [[ ! -e /var/run/datasense ]]; then
-    ln -s /opt/datasense/var /var/run/datasense
-fi
+create_dirs() {
+    if [[ ! -e /var/run/datasense ]]; then
+        ln -s /opt/datasense/var /var/run/datasense
+    fi
 
-if [[ ! -e /var/log/datasense ]]; then
-    mkdir /var/log/datasense
-fi
+    if [[ ! -e /var/log/datasense ]]; then
+        mkdir /var/log/datasense
+    fi
+}
+datasense_pid() {
+        echo `ps -fe | grep 'datasense' | grep -v grep | tr -s " "|cut -d" " -f2`
+}
 
-case "$1" in
-  start)
-    nohup java -Dserver.port=$DATASENSE_PORT -jar /opt/datasense/lib/datasense-0.1-SNAPSHOT.war > /var/log/datasense/datasense.log &
-    echo $! > /var/run/datasense/datasense.pid
-    ;;
-  stop)
-    (cat /var/run/datasense/datasense.pid |  xargs -n 1 kill) || (true)
-    ;;
+start(){
+    pid=$(datasense_pid)
+    if [ -n "$pid" ]
+    then
+        echo -e "\e[00;31mService datasense is already running (pid: $pid)\e[00m"
+    else
+        # Start datasense
+        create_dirs
+        echo -e "\e[00;32mStarting datasense\e[00m"
+        if [ `user_exists $DATASENSE_USER` = "1" ]
+        then
+                /bin/su $DATASENSE_USER -c $DATASENSE_RUN
+        else
+                sh $DATASENSE_RUN
+        fi
+  fi
+  return 0
+}
+status(){
+          pid=$(datasense_pid)
+          if [ -n "$pid" ]; then echo -e "\e[00;32mService datasense is running with pid: $pid\e[00m"
+          else echo -e "\e[00;31mService datasense is not running\e[00m"
+          fi
+}
+
+stop() {
+	echo -e "\e[00;31mTerminating datasense\e[00m"
+	kill -9 $(datasense_pid)
+}
+user_exists(){
+        if id -u $1 >/dev/null 2>&1; then
+        echo "1"
+        else
+                echo "0"
+        fi
+}
+
+case $1 in
+	start)
+	  start
+	;;
+	stop)
+	  stop
+	;;
+	restart)
+	  stop
+	  start
+	;;
+	status)
+		status
+	;;
+	kill)
+		stop
+	;;
+	*)
+
+	;;
 esac
+exit 0

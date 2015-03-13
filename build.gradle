@@ -161,6 +161,7 @@ task dist(type: Rpm, dependsOn: ['build', 'zip']) {
     from("scripts/rpm") {
         fileMode = 0755
         exclude 'datasense'
+        exclude 'start.sh'
         into 'var'
     }
 }
