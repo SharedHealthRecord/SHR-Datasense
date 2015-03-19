@@ -17,6 +17,7 @@
 
 export DATASENSE_USER=sharedhealth
 export DATASENSE_RUN=/opt/datasense/bin/start.sh
+export CUR_USER=`/usr/bin/whoami`
 
 # load configuration
 . /etc/default/datasense
@@ -43,7 +44,7 @@ start(){
         # Start datasense
         create_dirs
         echo -e "\e[00;32mStarting datasense\e[00m"
-        if [ `user_exists $DATASENSE_USER` = "1" ]
+        if [ `user_exists $DATASENSE_USER` = "1" ]  && ["$CUR_USER" != "$DATASENSE_USER"];
         then
                 /bin/su $DATASENSE_USER -c $DATASENSE_RUN
         else
