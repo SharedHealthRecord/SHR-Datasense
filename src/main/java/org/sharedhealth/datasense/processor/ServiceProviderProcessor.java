@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.processor;
 
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.client.FacilityWebClient;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ServiceProviderReference;
@@ -23,6 +24,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     private FacilityWebClient facilityWebClient;
     private PropertiesFactoryBean dhisFacilitiesMap;
     private ProviderProcessor providerProcessor;
+    private DatasenseProperties datasenseProperties;
     private static final Logger logger = LoggerFactory.getLogger(ServiceProviderProcessor.class);
 
     @Autowired
@@ -30,42 +32,49 @@ public class ServiceProviderProcessor implements ResourceProcessor {
                                     FacilityDao facilityDao,
                                     FacilityWebClient facilityWebClient,
                                     @Qualifier("dhisFacilitiesMap") PropertiesFactoryBean dhisFacilitiesMap,
-                                    ProviderProcessor providerProcessor) {
+                                    ProviderProcessor providerProcessor, DatasenseProperties datasenseProperties) {
 
         this.nextProcessor = nextProcessor;
         this.facilityDao = facilityDao;
         this.facilityWebClient = facilityWebClient;
         this.dhisFacilitiesMap = dhisFacilitiesMap;
         this.providerProcessor = providerProcessor;
+        this.datasenseProperties = datasenseProperties;
     }
 
     @Override
     public void process(EncounterComposition composition) {
-        Facility facility = loadFacilityFromServiceProvider(composition);
-        if (facility == null) {
-            loadFacilityFromParticipant(composition);
+        String facilityId = null;
+        Facility facility = null;
+        ServiceProviderReference serviceProviderReference = composition.getServiceProviderReference();
+        if (serviceProviderReference != null && serviceProviderReference.getServiceProvider() != null) {
+            facilityId = serviceProviderReference.getFacilityId();
         }
+        if (!isBahmniCloud(facilityId)) {
+            facility = loadFacilityFromServiceProvider(facilityId);
+        }
+        if (facility == null) {
+            facility = loadFacilityFromParticipant(composition);
+        }
+        setFacilityValue(composition, facility);
         callNextIfGiven(composition);
     }
 
-    private void loadFacilityFromParticipant(EncounterComposition composition) {
-        String facilityId;
-        facilityId = providerProcessor.process(composition);
-        if (facilityId != null) {
-            Facility facility = findFacility(facilityId);
-            setFacilityValue(composition, facility);
-        }
+    private boolean isBahmniCloud(String facilityId) {
+        return datasenseProperties.getBahmniOnCloudFacilityId().equals(facilityId);
     }
 
-    private Facility loadFacilityFromServiceProvider(EncounterComposition composition) {
-        ServiceProviderReference serviceProviderReference = composition.getServiceProviderReference();
-        if (serviceProviderReference != null && serviceProviderReference.getServiceProvider() != null) {
-            String facilityId = serviceProviderReference.getFacilityId();
-            if (StringUtils.isNotBlank(facilityId)) {
-                Facility facility = findFacility(facilityId);
-                setFacilityValue(composition, facility);
-                return facility;
-            }
+    private Facility loadFacilityFromParticipant(EncounterComposition composition) {
+        String facilityId = providerProcessor.process(composition);
+        if (facilityId != null) {
+            return findFacility(facilityId);
+        }
+        return null;
+    }
+
+    private Facility loadFacilityFromServiceProvider(String facilityId) {
+        if (StringUtils.isNotBlank(facilityId)) {
+            return findFacility(facilityId);
         }
         return null;
     }

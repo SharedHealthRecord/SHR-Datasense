@@ -65,6 +65,8 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dateOfDeathUuid;
     private String circumstancesOfDeathUuid;
     private String causeOfDeath;
+    
+    private String bahmniOnCloudFacilityId;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -107,6 +109,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.dateOfDeathUuid = env.getProperty("DATE_OF_DEATH_UUID");
         this.circumstancesOfDeathUuid = env.getProperty("CIRCUMSTANCES_OF_DEATH_UUID");
         this.causeOfDeath = env.getProperty("CAUSE_OF_DEATH_UUID");
+        this.bahmniOnCloudFacilityId = env.getProperty("BAHMNI_ON_CLOUD_FACILITY_ID");
     }
 
     public String getShrBaseUrl() {
@@ -224,5 +227,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getIdpServerSigninPath() {
         return idpServerSigninPath;
+    }
+
+    public String getBahmniOnCloudFacilityId() {
+        return bahmniOnCloudFacilityId;
     }
 }

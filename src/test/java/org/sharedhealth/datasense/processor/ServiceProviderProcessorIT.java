@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.sharedhealth.datasense.client.FacilityWebClient;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -49,16 +50,18 @@ public class ServiceProviderProcessorIT {
     private PropertiesFactoryBean dhisFacilitiesMap;
     @Mock
     private ProviderProcessor providerProcessor;
+    @Mock
+    private DatasenseProperties datasenseProperties;
+
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
-
     private static String VALID_FACILITY_ID = "10000069";
     private ServiceProviderProcessor processor;
 
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        processor = new ServiceProviderProcessor(null, facilityDao, webClient, dhisFacilitiesMap, providerProcessor);
+        processor = new ServiceProviderProcessor(null, facilityDao, webClient, dhisFacilitiesMap, providerProcessor, datasenseProperties);
     }
 
     @After
@@ -77,6 +80,8 @@ public class ServiceProviderProcessorIT {
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
 
+        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
+        
         processor.process(context.getEncounterCompositions().get(0));
 
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
@@ -95,6 +100,8 @@ public class ServiceProviderProcessorIT {
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
 
+        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
+        
         processor.process(context.getEncounterCompositions().get(0));
 
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
@@ -109,10 +116,11 @@ public class ServiceProviderProcessorIT {
     public void shouldFetchFacilityFromProviderIfNotPresentInEncounter() throws Exception {
         ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithProvider.xml");
         BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
-
+//
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
 
+        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(VALID_FACILITY_ID);
 
         processor.process(context.getEncounterCompositions().get(0));
@@ -135,7 +143,8 @@ public class ServiceProviderProcessorIT {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
-
+        
+        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(VALID_FACILITY_ID);
 
         processor.process(context.getEncounterCompositions().get(0));
@@ -146,5 +155,35 @@ public class ServiceProviderProcessorIT {
         assertEquals("Upazila Health Complex", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
         assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
+    }
+
+    @Test
+    public void shouldFetchFacilityOfProviderWhenServiceProviderIsBahmniOnCloud() throws Exception {
+        String facilityIdOfProvider = "10000059";
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithServiceProviderAsBahmniCloud.xml");
+        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+
+        givenThat(get(urlEqualTo("/api/1.0/facilities/" + facilityIdOfProvider + ".json"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/F" + facilityIdOfProvider + ".json"))));
+
+        givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
+        
+        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn(VALID_FACILITY_ID);
+        when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(facilityIdOfProvider);
+
+        processor.process(context.getEncounterCompositions().get(0));
+
+        Facility facility = facilityDao.findFacilityById(facilityIdOfProvider);
+        assertNotNull(facility);
+        assertEquals("Test:Amta Union Sub Center", facility.getFacilityName());
+        assertEquals("Union Sub-center", facility.getFacilityType());
+        assertEquals("302614", facility.getFacilityLocationCode());
     }
 }
