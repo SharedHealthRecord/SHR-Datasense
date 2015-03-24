@@ -113,7 +113,8 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getShrBaseUrl() {
-        return String.format("%s/%s", getBaseUrl(shrScheme, shrHost, shrPort), this.shrVersion);
+        String shrUrl = getBaseUrl(shrScheme, shrHost, shrPort);
+        return StringUtils.isEmpty(this.shrVersion) ? shrUrl : String.format("%s/%s", shrUrl, this.shrVersion);
     }
 
     public String getMciBaseUrl() {
