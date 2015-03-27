@@ -133,7 +133,7 @@ task debugDatasense << {
 task dist(type: Rpm, dependsOn: ['build', 'zip']) {
     packageName = 'datasense'
     version = '0.1'
-    release = 1
+    release = project.hasProperty('release') ? project.release : '1'
     arch = NOARCH
     os = LINUX
 
