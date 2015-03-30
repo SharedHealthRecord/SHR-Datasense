@@ -27,6 +27,7 @@ import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static java.util.Arrays.asList;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.mockito.Matchers.any;
@@ -80,8 +81,8 @@ public class ServiceProviderProcessorIT {
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
 
-        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
-        
+        when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
+
         processor.process(context.getEncounterCompositions().get(0));
 
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
@@ -100,8 +101,8 @@ public class ServiceProviderProcessorIT {
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
 
-        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
-        
+        when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
+
         processor.process(context.getEncounterCompositions().get(0));
 
         Facility facility = facilityDao.findFacilityById(VALID_FACILITY_ID);
@@ -120,7 +121,7 @@ public class ServiceProviderProcessorIT {
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
 
-        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
+        when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(VALID_FACILITY_ID);
 
         processor.process(context.getEncounterCompositions().get(0));
@@ -143,8 +144,8 @@ public class ServiceProviderProcessorIT {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
-        
-        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn("12345");
+
+        when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(VALID_FACILITY_ID);
 
         processor.process(context.getEncounterCompositions().get(0));
@@ -174,8 +175,8 @@ public class ServiceProviderProcessorIT {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/F" + VALID_FACILITY_ID + ".json"))));
-        
-        when(datasenseProperties.getBahmniOnCloudFacilityId()).thenReturn(VALID_FACILITY_ID);
+
+        when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList(VALID_FACILITY_ID));
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(facilityIdOfProvider);
 
         processor.process(context.getEncounterCompositions().get(0));

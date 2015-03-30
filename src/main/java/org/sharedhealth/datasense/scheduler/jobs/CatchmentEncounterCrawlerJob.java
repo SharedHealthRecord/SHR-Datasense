@@ -10,6 +10,7 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.encounters.ShrEncounterFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
+import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
@@ -45,7 +46,7 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         for (String catchment : properties.getDatasenseCatchmentList()) {
-            String feedUrl = properties.getShrBaseUrl() + "/catchments/" + catchment + "/encounters";
+            String feedUrl = StringUtil.ensureSuffix(properties.getShrBaseUrl(), "/") + "catchments/" + catchment + "/encounters";
             AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
             ShrEncounterFeedProcessor feedCrawler =
                     new ShrEncounterFeedProcessor(

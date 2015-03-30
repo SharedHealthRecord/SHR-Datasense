@@ -61,7 +61,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     }
 
     private boolean isBahmniCloud(String facilityId) {
-        return datasenseProperties.getBahmniOnCloudFacilityId().equals(facilityId);
+        return datasenseProperties.getCloudHostedFacilityIds().contains(facilityId);
     }
 
     private Facility loadFacilityFromParticipant(EncounterComposition composition) {

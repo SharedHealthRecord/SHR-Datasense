@@ -7,6 +7,7 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.security.IdentityToken;
 import org.sharedhealth.datasense.util.MapperUtil;
+import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static org.sharedhealth.datasense.util.HeaderUtil.URL_SEPARATOR_FOR_CONTEXT_PATH;
+import static org.sharedhealth.datasense.util.HeaderUtil.URL_SEPARATOR;
 import static org.sharedhealth.datasense.util.HeaderUtil.getHrmAuthTokenHeaders;
 
 @Component
@@ -37,7 +38,8 @@ public class IdentityServiceClient {
             UrlEncodedFormEntity entity = new UrlEncodedFormEntity(getNameValuePairs());
             Map<String, String> headers = getHrmAuthTokenHeaders(properties);
             headers.put("accept", "application/json");
-            String response = new WebClient().post(getIdentityServerSigninUrl(), headers, entity);
+            String loginUrl = StringUtil.removeSuffix(properties.getIdentityServerLoginUrl(), URL_SEPARATOR);
+            String response = new WebClient().post(loginUrl, headers, entity);
             token = MapperUtil.readFrom(response, IdentityToken.class);
             identityStore.setToken(token);
         }
@@ -55,7 +57,4 @@ public class IdentityServiceClient {
         identityStore.clearToken();
     }
 
-    private String getIdentityServerSigninUrl() {
-        return properties.getIdentityServerBaseUrl() + URL_SEPARATOR_FOR_CONTEXT_PATH + properties.getIdpServerSigninPath();
-    }
 }

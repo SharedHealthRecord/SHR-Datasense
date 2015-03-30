@@ -6,18 +6,18 @@ import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
-import org.sharedhealth.datasense.util.HeaderUtil;
 import org.sharedhealth.datasense.util.MapperUtil;
+import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static org.sharedhealth.datasense.util.HeaderUtil.URL_SEPARATOR;
 import static org.sharedhealth.datasense.util.HeaderUtil.getHrmAuthTokenHeaders;
 
 @Component
@@ -70,6 +70,6 @@ public class FacilityWebClient {
     }
 
     private URI getFacilityUrl(String facilityId) throws URISyntaxException {
-        return new URI(properties.getFacilityRegistryUrl() + "/" + facilityId + ".json");
+        return new URI(StringUtil.ensureSuffix(properties.getFacilityRegistryUrl(), URL_SEPARATOR) + facilityId + ".json");
     }
 }

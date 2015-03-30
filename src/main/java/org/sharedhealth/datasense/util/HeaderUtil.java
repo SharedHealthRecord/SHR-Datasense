@@ -14,7 +14,7 @@ public class HeaderUtil {
     public static final String AUTH_TOKEN_KEY = "X-Auth-Token";
     public static final String CLIENT_ID_KEY = "client_id";
     public static final String FROM_KEY = "From";
-    public static final String URL_SEPARATOR_FOR_CONTEXT_PATH = "/";
+    public static final String URL_SEPARATOR = "/";
 
     public static String getBase64Authentication(String userName, String password) {
         String credentials = userName + ":" + password;
