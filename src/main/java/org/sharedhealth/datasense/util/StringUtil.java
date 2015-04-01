@@ -28,9 +28,4 @@ public class StringUtil {
             return trimmedValue;
         }
     }
-
-    public static void main(String[] args) {
-        System.out.println(removePrefix("/test", "/"));
-        System.out.println(removePrefix("abcd1234", "abcd"));
-    }
 }
