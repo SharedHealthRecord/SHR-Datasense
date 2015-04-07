@@ -4,24 +4,10 @@ package org.sharedhealth.datasense.launch;
 import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
-import org.quartz.Trigger;
 import org.quartz.spi.JobFactory;
-import org.sharedhealth.datasense.client.ShrWebClient;
-import org.sharedhealth.datasense.config.DatasenseProperties;
-import org.sharedhealth.datasense.export.dhis.Jobs.DHISDailyOPDIPDPostJob;
-import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyColposcopyPostJob;
-import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyEPIInfantPostJob;
 import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyColposcopyReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyEPIInfantReport;
-import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
-import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
-import org.sharedhealth.datasense.feeds.tr.DrugEventWorker;
-import org.sharedhealth.datasense.feeds.tr.ReferenceTermEventWorker;
-import org.sharedhealth.datasense.scheduler.jobs.CatchmentEncounterCrawlerJob;
-import org.sharedhealth.datasense.scheduler.jobs.TrConceptSyncJob;
-import org.sharedhealth.datasense.scheduler.jobs.TrDrugSyncJob;
-import org.sharedhealth.datasense.scheduler.jobs.TrReferenceTermSyncJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
@@ -34,9 +20,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
-import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -62,7 +46,7 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.handler",
         "org.sharedhealth.datasense.export.dhis",
         "org.sharedhealth.datasense.security",
-        "org.sharedhealth.datasense.util","org.sharedhealth.datasense.scheduler.jobs"
+        "org.sharedhealth.datasense.util", "org.sharedhealth.datasense.scheduler.jobs"
 })
 public class Main {
     @Autowired
@@ -82,10 +66,6 @@ public class Main {
 
     Logger log = Logger.getLogger(Main.class);
 
-    private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
-    private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
-    private String MONTHLY_COLPOSCOPY_TRIGGER = "dhis.monthly.colcoscopy.post.job.trigger";
-
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
         Map<String, String> env = getenv();
@@ -97,6 +77,7 @@ public class Main {
                 shr.addMapping("/");
                 shr.setInitParameter("contextClass", "org.springframework.web.context.support" +
                         ".AnnotationConfigWebApplicationContext");
+                shr.setInitParameter("contextConfigLocation", "org.sharedhealth.datasense.launch.WebMvcConfig");
             }
         });
         String bdshr_port = env.get("DATASENSE_PORT");
@@ -114,7 +95,6 @@ public class Main {
         schedulerFactoryBean.setJobFactory(jobFactory());
 
 
-        schedulerFactoryBean.setTriggers(getTriggers());
         schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
@@ -128,14 +108,6 @@ public class Main {
         return schedulerFactoryBean;
     }
 
-
-    private Trigger[] getTriggers() {
-        return new Trigger[]{
-                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/1 * * * ?", dhisDailyOPDIPDJob()),
-                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/1 * * * ?", dhisEPIInfantPostJob()),
-                getTrigger(MONTHLY_COLPOSCOPY_TRIGGER, 10000, "0 0/1 * * * ?", dhisColposcopyPostJob())
-        };
-    }
 
     @Bean
     public JobFactory jobFactory() {
@@ -172,33 +144,6 @@ public class Main {
             e.printStackTrace();
         }
         return triggerFactoryBean.getObject();
-    }
-
-    private JobDetail dhisDailyOPDIPDJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
-        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean.getObject();
-    }
-
-    private JobDetail dhisEPIInfantPostJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
-        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
-        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean.getObject();
-    }
-
-    private JobDetail dhisColposcopyPostJob() {
-        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-        jobDetailFactoryBean.setJobClass(DHISMonthlyColposcopyPostJob.class);
-        jobDetailFactoryBean.setName("dhis.monthly.colcoscopy.post.job.trigger");
-        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-        jobDetailFactoryBean.afterPropertiesSet();
-        return jobDetailFactoryBean.getObject();
     }
 
     public static void main(String[] args) throws Exception {

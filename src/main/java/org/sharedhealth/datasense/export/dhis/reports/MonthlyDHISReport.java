@@ -46,7 +46,7 @@ public abstract class MonthlyDHISReport extends DHISReport {
 
         String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + getConfigFilepath();
 
-        logger.info(format("Posting for facility [%s] for month [%s]", facility.getFacilityName(),
+        logger.debug(format("Posting for facility [%s] for month [%s]", facility.getFacilityName(),
                 reportingMonth));
         postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }

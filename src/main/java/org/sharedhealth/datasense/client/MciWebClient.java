@@ -3,7 +3,6 @@ package org.sharedhealth.datasense.client;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Patient;
-import org.sharedhealth.datasense.util.HeaderUtil;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;

@@ -41,7 +41,7 @@ public abstract class DailyDHISReport extends DHISReport {
 
         String pathToConfig = datasenseProperties.getDhisAqsConfigPath() + getConfigFilepath();
 
-        logger.info(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility
+        logger.debug(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility
                 .getFacilityName(), reportingDate));
 
             postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
