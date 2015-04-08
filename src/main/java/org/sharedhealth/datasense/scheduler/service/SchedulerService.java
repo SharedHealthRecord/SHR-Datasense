@@ -1,5 +1,6 @@
-package org.sharedhealth.datasense.controller;
+package org.sharedhealth.datasense.scheduler.service;
 
+import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyColposcopyPostJob;
@@ -7,11 +8,7 @@ import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyEPIInfantPostJob;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
 import java.util.HashMap;
@@ -22,50 +19,45 @@ import java.util.Set;
 import static java.util.Arrays.asList;
 import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
 
-@Controller
-@RequestMapping(value = "/scheduler")
-public class SchedulerController {
+@Service
+public class SchedulerService {
+    private static final Logger logger = Logger.getLogger(SchedulerService.class);
+
     private Scheduler scheduler;
     private static final String DAILY_IPD_OPD_JOB = "dhis.daily.opdipd.post.job";
     private static final String MONTHLY_EPI_INFANT_JOB = "dhis.monthly.epi.infant.post.job";
     private static final String MONTHLY_COLPOSCOPY_JOB = "dhis.monthly.colcoscopy.post.job";
 
+    public static final List<String> jobNames = asList(DAILY_IPD_OPD_JOB, MONTHLY_EPI_INFANT_JOB, MONTHLY_COLPOSCOPY_JOB);
+
     private Map<String, JobDetail> jobs;
-    private List<String> jobNames;
+
+    private final String NO_SUCH_REPORT_MESSAGE = "There are no such reports";
 
     @Autowired
-    public SchedulerController(Scheduler scheduler) {
+    public SchedulerService(Scheduler scheduler) {
         this.scheduler = scheduler;
-        this.jobNames = asList(DAILY_IPD_OPD_JOB, MONTHLY_EPI_INFANT_JOB, MONTHLY_COLPOSCOPY_JOB);
         this.jobs = getAllJobs();
     }
 
-    private Map<String, JobDetail> getAllJobs() {
-        HashMap<String, JobDetail> jobs = new HashMap<>();
-        jobs.put(DAILY_IPD_OPD_JOB, dhisDailyOPDIPDJob());
-        jobs.put(MONTHLY_EPI_INFANT_JOB, dhisEPIInfantPostJob());
-        jobs.put(MONTHLY_COLPOSCOPY_JOB, dhisColposcopyPostJob());
-        return jobs;
-    }
-
-    @RequestMapping(value = "/start")
-    @ResponseBody
-    public String startScheduler(
-            @RequestParam(value = "reportId") Integer reportID,
-            @RequestParam(value = "expression") String cronExpression,
-            @RequestParam(value = "paramKey") String reportParamKey,
-            @RequestParam(value = "paramValue") String reportParamValue)
-            throws SchedulerException {
-
+    public String startJob(Integer reportID, String cronExpression, String reportParamKey, String reportParamValue) throws SchedulerException {
         String jobName = getJobName(reportID);
-        if (null == jobName) return "There are no such reports";
+        if (null == jobName) {
+            logger.info(NO_SUCH_REPORT_MESSAGE);
+            return NO_SUCH_REPORT_MESSAGE;
+        }
 
         if (isJobAlreadyPresent(jobName)) {
+            logger.info(String.format("The job %s was already running", jobName));
+            
             return "The job is already running";
         }
 
         JobDetail jobDetail = jobs.get(jobName);
-        if (null == jobDetail) return "There are no such reports";
+        if (null == jobDetail) {
+            logger.info(NO_SUCH_REPORT_MESSAGE);
+            return NO_SUCH_REPORT_MESSAGE;
+        }
 
         jobDetail.getJobDataMap().put(reportParamKey, reportParamValue);
 
@@ -75,18 +67,23 @@ public class SchedulerController {
         return "Job Started";
     }
 
-    @RequestMapping(value = "/stop", method = RequestMethod.GET)
-    @ResponseBody
-    public String stopScheduler(@RequestParam(value = "reportId") Integer reportID) throws SchedulerException {
+    public String stopJob(Integer reportID) throws SchedulerException {
         String jobName = getJobName(reportID);
-        if (null == jobName) return "There are no such reports";
+        if (null == jobName) {
+            logger.info(NO_SUCH_REPORT_MESSAGE);
+            return NO_SUCH_REPORT_MESSAGE;
+        }
 
         if (!isJobAlreadyPresent(jobName)) {
+            logger.info(String.format("The job %s was not running", jobName));
             return "The job is not running";
         }
 
         Trigger trigger = getTriggerByJobName(jobName);
-        if (null == trigger) return "cannot stop job";
+        if (null == trigger) {
+            logger.error(String.format("Cannot find trigger for job %s to stop", jobName));
+            return "cannot stop job";
+        }
 
         scheduler.unscheduleJob(trigger.getKey());
         return "Job Stopped";
@@ -124,6 +121,14 @@ public class SchedulerController {
             }
         }
         return false;
+    }
+
+    private Map<String, JobDetail> getAllJobs() {
+        HashMap<String, JobDetail> jobs = new HashMap<>();
+        jobs.put(DAILY_IPD_OPD_JOB, dhisDailyOPDIPDJob());
+        jobs.put(MONTHLY_EPI_INFANT_JOB, dhisEPIInfantPostJob());
+        jobs.put(MONTHLY_COLPOSCOPY_JOB, dhisColposcopyPostJob());
+        return jobs;
     }
 
     private CronTrigger getTrigger(String triggerName, String cronExpression, JobDetail jobDetail) {
