@@ -14,7 +14,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.net.URISyntaxException;
 
-public class TrDrugSyncJob extends QuartzJobBean{
+public class TrDrugSyncJob extends QuartzJobBean {
 
     private DatasenseProperties properties;
     private DrugEventWorker drugEventWorker;
@@ -47,8 +47,9 @@ public class TrDrugSyncJob extends QuartzJobBean{
         try {
             TRFeedProcessor.process();
         } catch (URISyntaxException e) {
-            log.error(String.format("Unable to process drug feed [%s]", trMedicationAtomfeedUrl));
-            e.printStackTrace();
+            String message = String.format("Unable to process drug feed [%s]", trMedicationAtomfeedUrl);
+            log.error(message);
+            throw new RuntimeException(message, e);
         }
     }
 }

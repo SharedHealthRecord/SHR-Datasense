@@ -42,7 +42,6 @@ public class ShrEncounterFeedProcessorTest {
         EncounterEventWorker encounterEventWorker = new EncounterEventWorker() {
             @Override
             public void process(EncounterBundle encounterBundle) {
-                System.out.println(encounterBundle.getEncounterId());
                 ParserBase.ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
             }
         };

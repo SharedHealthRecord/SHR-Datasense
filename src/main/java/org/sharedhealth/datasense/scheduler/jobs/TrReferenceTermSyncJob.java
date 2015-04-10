@@ -48,8 +48,9 @@ public class TrReferenceTermSyncJob extends QuartzJobBean{
         try {
             TRFeedProcessor.process();
         } catch (URISyntaxException e) {
-            log.error(String.format("Unable to process reference term feed [%s]", trReferenceTermAtomfeedUrl));
-            e.printStackTrace();
+            String message = String.format("Unable to process reference term feed [%s]", trReferenceTermAtomfeedUrl);
+            log.error(message);
+            throw new RuntimeException(message, e);
         }
     }
 }

@@ -57,8 +57,9 @@ public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
             try {
                 feedCrawler.process();
             } catch (URISyntaxException e) {
-                log.error(String.format("Unable to process encounter catchment feed [%s]", feedUrl));
-                e.printStackTrace();
+                String errorMessage = String.format("Unable to process encounter catchment feed [%s]", feedUrl);
+                log.error(errorMessage);
+                throw new RuntimeException(errorMessage, e);
             }
         }
     }

@@ -17,7 +17,6 @@ public abstract class MonthlyJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         String reportingMonthParam = (String) context.getMergedJobDataMap().get("reportingMonth");
-        System.out.println(reportingMonthParam);
 
         String reportingMonth = getReportingMonth(reportingMonthParam);
         Map<String, Object> dataMap = new HashMap<>();

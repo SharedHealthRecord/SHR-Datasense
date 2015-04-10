@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.launch;
 
 
+import org.apache.log4j.Logger;
 import org.quartz.CronTrigger;
 import org.quartz.JobDetail;
 import org.quartz.Trigger;
@@ -31,7 +32,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
-import org.springframework.context.support.DefaultLifecycleProcessor;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
@@ -100,6 +100,8 @@ public class Main {
     @Autowired
     private DrugEventWorker drugEventWorker;
 
+    Logger log = Logger.getLogger(Main.class);
+
     private String CATCHMENT_ENCOUNTER_SYNC_JOB = "catchment.encounter.crawler.job";
     private String CONCEPT_SYNC_JOB = "tr.concept.sync.job";
     private String REF_TERM_SYNC_JOB = "tr.reference.term.sync.job";
@@ -148,7 +150,9 @@ public class Main {
         try {
             schedulerFactoryBean.afterPropertiesSet();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Cannot start scheduler");
+            //:todo this should be thrown
+//            throw new RuntimeException("Cannot start scheduler");
         }
         return schedulerFactoryBean;
     }
@@ -212,6 +216,7 @@ public class Main {
         try {
             triggerFactoryBean.afterPropertiesSet();
         } catch (ParseException e) {
+            log.error(String.format("Error starting trigger %s", triggerName));
             e.printStackTrace();
         }
         return triggerFactoryBean.getObject();

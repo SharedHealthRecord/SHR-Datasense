@@ -47,8 +47,9 @@ public class TrConceptSyncJob extends QuartzJobBean {
         try {
             TRFeedProcessor.process();
         } catch (URISyntaxException e) {
-            log.error(String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl));
-            e.printStackTrace();
+            String message = String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl);
+            log.error(message);
+            throw new RuntimeException(message, e);
         }
     }
 }

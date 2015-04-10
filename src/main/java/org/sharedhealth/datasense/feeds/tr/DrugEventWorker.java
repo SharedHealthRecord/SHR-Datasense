@@ -38,10 +38,10 @@ public class DrugEventWorker implements EventWorker{
             drugProcessor.process(trDrug);
         } catch (URISyntaxException e) {
             log.error(errorMessage, e);
-            e.printStackTrace();
+            throw new RuntimeException(errorMessage, e);
         } catch (IOException e) {
             log.error(errorMessage, e);
-            e.printStackTrace();
+            throw new RuntimeException(errorMessage, e);
         }
 
     }
