@@ -44,7 +44,7 @@ public abstract class DailyDHISReport extends DHISReport {
         logger.info(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility
                 .getFacilityName(), reportingDate));
 
-        postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
+            postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }
 
     public abstract String getConfigFilepath();

@@ -11,40 +11,44 @@ import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
 import org.sharedhealth.datasense.feeds.encounters.ShrEncounterFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.util.StringUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 
-
-public class CatchmentEncounterCrawlerJob extends QuartzJobBean {
+@Component
+public class CatchmentEncounterCrawlerJob {
+    @Autowired
     private DataSourceTransactionManager txMgr;
+    @Autowired
     private DatasenseProperties properties;
-
-    private EncounterEventWorker encounterEventWorker;
-
+    @Autowired
     private ShrWebClient shrWebClient;
+    @Autowired
+    private EncounterEventWorker encounterEventWorker;
 
     Logger log = Logger.getLogger(CatchmentEncounterCrawlerJob.class);
 
-    public void setShrWebClient(ShrWebClient shrWebClient) {
-        this.shrWebClient = shrWebClient;
-    }
+//    public void setShrWebClient(ShrWebClient shrWebClient) {
+//        this.shrWebClient = shrWebClient;
+//    }
+//
+//    public void setTxMgr(DataSourceTransactionManager txMgr) {
+//        this.txMgr = txMgr;
+//    }
+//
+//    public void setProperties(DatasenseProperties properties) {
+//        this.properties = properties;
+//    }
+//
+//    public void setEncounterEventWorker(EncounterEventWorker encounterEventWorker) {
+//        this.encounterEventWorker = encounterEventWorker;
+//    }
 
-    public void setTxMgr(DataSourceTransactionManager txMgr) {
-        this.txMgr = txMgr;
-    }
-
-    public void setProperties(DatasenseProperties properties) {
-        this.properties = properties;
-    }
-
-    public void setEncounterEventWorker(EncounterEventWorker encounterEventWorker) {
-        this.encounterEventWorker = encounterEventWorker;
-    }
-
-    @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    @Scheduled(fixedDelay = 500, initialDelay = 500)
+    public void executeInternal() {
         for (String catchment : properties.getDatasenseCatchmentList()) {
             String feedUrl = StringUtil.ensureSuffix(properties.getShrBaseUrl(), "/") + "catchments/" + catchment + "/encounters";
             AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);

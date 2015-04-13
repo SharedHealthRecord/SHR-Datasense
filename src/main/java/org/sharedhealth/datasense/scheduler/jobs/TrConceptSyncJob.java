@@ -9,43 +9,49 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.tr.ConceptEventWorker;
 import org.sharedhealth.datasense.feeds.tr.TRFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.scheduling.quartz.QuartzJobBean;
+import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
 
-public class TrConceptSyncJob extends QuartzJobBean {
-
+@Component
+public class TrConceptSyncJob {
+    @Autowired
     private DatasenseProperties properties;
+    @Autowired
     private ConceptEventWorker conceptEventWorker;
+    @Autowired
     private DataSourceTransactionManager txMgr;
 
-    public void setProperties(DatasenseProperties properties) {
-        this.properties = properties;
-    }
-
-    public void setConceptEventWorker(ConceptEventWorker conceptEventWorker) {
-        this.conceptEventWorker = conceptEventWorker;
-    }
-
-    public void setTxMgr(DataSourceTransactionManager txMgr) {
-        this.txMgr = txMgr;
-    }
+//    public void setProperties(DatasenseProperties properties) {
+//        this.properties = properties;
+//    }
+//
+//    public void setConceptEventWorker(ConceptEventWorker conceptEventWorker) {
+//        this.conceptEventWorker = conceptEventWorker;
+//    }
+//
+//    public void setTxMgr(DataSourceTransactionManager txMgr) {
+//        this.txMgr = txMgr;
+//    }
 
     Logger log = Logger.getLogger(TrConceptSyncJob.class);
 
-    @Override
-    protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
+    @Scheduled(fixedDelay = 2000, initialDelay = 2000)
+    public void executeInternal() {
         String trConceptAtomfeedUrl = properties.getTrConceptAtomfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
-        TRFeedProcessor TRFeedProcessor =
+        TRFeedProcessor feedProcessor =
                 new TRFeedProcessor(
                         conceptEventWorker, trConceptAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
                         transactionManager);
         try {
-            TRFeedProcessor.process();
+            feedProcessor.process();
         } catch (URISyntaxException e) {
             String message = String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl);
             log.error(message);

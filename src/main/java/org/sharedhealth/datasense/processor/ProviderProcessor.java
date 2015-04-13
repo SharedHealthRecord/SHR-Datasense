@@ -10,8 +10,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
 
 @Component
 public class ProviderProcessor {
@@ -26,7 +24,6 @@ public class ProviderProcessor {
         this.providerWebClient = providerWebClient;
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
     public String process(EncounterComposition composition) {
         ProviderReference providerReference = composition.getProviderReference();
         if (providerReference != null && !providerReference.getReferences().isEmpty()) {
