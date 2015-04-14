@@ -66,56 +66,26 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.util","org.sharedhealth.datasense.scheduler.jobs"
 })
 public class Main {
+    @Autowired
+    private DataSource dataSource;
 
-    public static final long TEN_MINUTES = 600 * 1000L;
+    @Autowired
+    private DataSourceTransactionManager txmanager;
 
-//    @Autowired
-//    private DataSource dataSource;
-//
-//    @Autowired
-//    private DataSourceTransactionManager txmanager;
-//
-//    @Autowired
-//    private DatasenseProperties properties;
-//
-//    @Autowired
-//    private EncounterEventWorker encounterEventWorker;
-//
-//    @Autowired
-//    private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
-//
-//    @Autowired
-//    private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
-//
-//    @Autowired
-//    private DHISMonthlyColposcopyReport dhisMonthlyColposcopyReport;
-//
-//    @Autowired
-//    private ShrWebClient shrWebClient;
-//
-//    @Autowired
-//    private ConceptEventWorker conceptEventWorker;
-//
-//    @Autowired
-//    private ReferenceTermEventWorker referenceTermEventWorker;
-//
-//    @Autowired
-//    private DrugEventWorker drugEventWorker;
+    @Autowired
+    private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
+
+    @Autowired
+    private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
+
+    @Autowired
+    private DHISMonthlyColposcopyReport dhisMonthlyColposcopyReport;
 
     Logger log = Logger.getLogger(Main.class);
 
-//    private String CATCHMENT_ENCOUNTER_SYNC_JOB = "catchment.encounter.crawler.job";
-//    private String CONCEPT_SYNC_JOB = "tr.concept.sync.job";
-//    private String REF_TERM_SYNC_JOB = "tr.reference.term.sync.job";
-//    private String DRUG_SYNC_JOB = "tr.drug.sync.job";
-//
-//    private String CATCHMENT_ENCOUNTER_SYNC_TRIGGER = "catchment.encounter.crawler.job.trigger";
-//    private String CONCEPT_SYNC_TRIGGER = "tr.concept.sync.job.trigger";
-//    private String REF_TERM_SYNC_TRIGGER = "tr.reference.term.sync.job.trigger";
-//    private String DRUG_SYNC_TRIGGER = "tr.drug.sync.job.trigger";
-//    private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
-//    private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
-//    private String MONTHLY_COLPOSCOPY_TRIGGER = "dhis.monthly.colcoscopy.post.job.trigger";
+    private String DAILY_IPD_OPD_TRIGGER = "dhis.daily.opdipd.post.job.trigger";
+    private String MONTHLY_EPI_INFANT_TRIGGER = "dhis.monthly.epi.infant.post.job.trigger";
+    private String MONTHLY_COLPOSCOPY_TRIGGER = "dhis.monthly.colcoscopy.post.job.trigger";
 
     @Bean
     public EmbeddedServletContainerFactory getFactory() {
@@ -135,64 +105,53 @@ public class Main {
         return factory;
     }
 
-//    @Bean
-//    public SchedulerFactoryBean scheduler() {
-//        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-//        schedulerFactoryBean.setDataSource(dataSource);
-//        schedulerFactoryBean.setTransactionManager(txmanager);
-//
-//        schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
-//        schedulerFactoryBean.setJobFactory(jobFactory());
-//
-//
-//        schedulerFactoryBean.setTriggers(getTriggers());
-//        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
-//        schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
-//        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
-//        try {
-//            schedulerFactoryBean.afterPropertiesSet();
-//        } catch (Exception e) {
-//            log.error("Cannot start scheduler");
-//            //:todo this should be thrown
-////            throw new RuntimeException("Cannot start scheduler");
-//        }
-//        return schedulerFactoryBean;
-//    }
+    @Bean
+    public SchedulerFactoryBean scheduler() {
+        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
+        schedulerFactoryBean.setDataSource(dataSource);
+        schedulerFactoryBean.setTransactionManager(txmanager);
+
+        schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
+        schedulerFactoryBean.setJobFactory(jobFactory());
+
+
+        schedulerFactoryBean.setTriggers(getTriggers());
+        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
+        schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
+        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
+        try {
+            schedulerFactoryBean.afterPropertiesSet();
+        } catch (Exception e) {
+            log.error("Cannot start scheduler");
+            //:todo this should be thrown
+//            throw new RuntimeException("Cannot start scheduler");
+        }
+        return schedulerFactoryBean;
+    }
 
 
     private Trigger[] getTriggers() {
         return new Trigger[]{
-//                getTrigger(CATCHMENT_ENCOUNTER_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(CatchmentEncounterCrawlerJob.class, CATCHMENT_ENCOUNTER_SYNC_JOB).getObject()),
-//                getTrigger(CONCEPT_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrConceptSyncJob.class, CONCEPT_SYNC_JOB).getObject()),
-//                getTrigger(REF_TERM_SYNC_TRIGGER, 10000, "0/30 * * * * ?", jobDetail(TrReferenceTermSyncJob.class, REF_TERM_SYNC_JOB).getObject()),
-//                getTrigger(DRUG_SYNC_TRIGGER, 50000, "0 0/2 * * * ?", jobDetail(TrDrugSyncJob.class, DRUG_SYNC_JOB).getObject()),
-//                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/1 * * * ?", dhisDailyOPDIPDJob()),
-//                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/1 * * * ?", dhisEPIInfantPostJob()),
-//                getTrigger(MONTHLY_COLPOSCOPY_TRIGGER, 10000, "0 0/1 * * * ?", dhisColposcopyPostJob())
+                getTrigger(DAILY_IPD_OPD_TRIGGER, 10000, "0 0/1 * * * ?", dhisDailyOPDIPDJob()),
+                getTrigger(MONTHLY_EPI_INFANT_TRIGGER, 10000, "0 0/1 * * * ?", dhisEPIInfantPostJob()),
+                getTrigger(MONTHLY_COLPOSCOPY_TRIGGER, 10000, "0 0/1 * * * ?", dhisColposcopyPostJob())
         };
     }
 
-//    @Bean
-//    public JobFactory jobFactory() {
-//        SpringBeanJobFactory springBeanJobFactory = new SpringBeanJobFactory();
-//        return springBeanJobFactory;
-//    }
+    @Bean
+    public JobFactory jobFactory() {
+        SpringBeanJobFactory springBeanJobFactory = new SpringBeanJobFactory();
+        return springBeanJobFactory;
+    }
 
-//    @Bean
-//    public Map<String, Object> schedulerContextMap() {
-//        HashMap<String, Object> ctx = new HashMap<>();
-//        ctx.put("txMgr", txmanager);
-//        ctx.put("properties", properties);
-//        ctx.put("encounterEventWorker", encounterEventWorker);
-//        ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
-//        ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
-//        ctx.put("dhisMonthlyColposcopyReport", dhisMonthlyColposcopyReport);
-//        ctx.put("shrWebClient", shrWebClient);
-//        ctx.put("conceptEventWorker", conceptEventWorker);
-//        ctx.put("referenceTermEventWorker", referenceTermEventWorker);
-//        ctx.put("drugEventWorker", drugEventWorker);
-//        return ctx;
-//    }
+    @Bean
+    public Map<String, Object> schedulerContextMap() {
+        HashMap<String, Object> ctx = new HashMap<>();
+        ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
+        ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
+        ctx.put("dhisMonthlyColposcopyReport", dhisMonthlyColposcopyReport);
+        return ctx;
+    }
 
     @Bean(name = "dhisFacilitiesMap")
     public PropertiesFactoryBean dhisFacilitiesMap() {
@@ -201,55 +160,47 @@ public class Main {
         return propertiesFactoryBean;
     }
 
-//    private JobDetailFactoryBean jobDetail(Class jobClass, String jobName) {
-//        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-//        jobDetailFactoryBean.setJobClass(jobClass);
-//        jobDetailFactoryBean.setName(jobName);
-//        jobDetailFactoryBean.afterPropertiesSet();
-//        return jobDetailFactoryBean;
-//    }
-//
-//    private CronTrigger getTrigger(String triggerName, int startDelay, String cronExpression, JobDetail jobDetail) {
-//        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-//        triggerFactoryBean.setName(triggerName);
-//        triggerFactoryBean.setStartDelay(startDelay);
-//        triggerFactoryBean.setCronExpression(cronExpression);
-//        triggerFactoryBean.setJobDetail(jobDetail);
-//        try {
-//            triggerFactoryBean.afterPropertiesSet();
-//        } catch (ParseException e) {
-//            log.error(String.format("Error starting trigger %s", triggerName));
-//            e.printStackTrace();
-//        }
-//        return triggerFactoryBean.getObject();
-//    }
-//
-//    private JobDetail dhisDailyOPDIPDJob() {
-//        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-//        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
-//        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
-//        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
-//        jobDetailFactoryBean.afterPropertiesSet();
-//        return jobDetailFactoryBean.getObject();
-//    }
-//
-//    private JobDetail dhisEPIInfantPostJob() {
-//        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-//        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
-//        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
-//        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-//        jobDetailFactoryBean.afterPropertiesSet();
-//        return jobDetailFactoryBean.getObject();
-//    }
-//
-//    private JobDetail dhisColposcopyPostJob() {
-//        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
-//        jobDetailFactoryBean.setJobClass(DHISMonthlyColposcopyPostJob.class);
-//        jobDetailFactoryBean.setName("dhis.monthly.colcoscopy.post.job.trigger");
-//        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
-//        jobDetailFactoryBean.afterPropertiesSet();
-//        return jobDetailFactoryBean.getObject();
-//    }
+    private CronTrigger getTrigger(String triggerName, int startDelay, String cronExpression, JobDetail jobDetail) {
+        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
+        triggerFactoryBean.setName(triggerName);
+        triggerFactoryBean.setStartDelay(startDelay);
+        triggerFactoryBean.setCronExpression(cronExpression);
+        triggerFactoryBean.setJobDetail(jobDetail);
+        try {
+            triggerFactoryBean.afterPropertiesSet();
+        } catch (ParseException e) {
+            log.error(String.format("Error starting trigger %s", triggerName));
+            e.printStackTrace();
+        }
+        return triggerFactoryBean.getObject();
+    }
+
+    private JobDetail dhisDailyOPDIPDJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
+        jobDetailFactoryBean.setName("dhis.daily.opdipd.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingDate", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
+
+    private JobDetail dhisEPIInfantPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISMonthlyEPIInfantPostJob.class);
+        jobDetailFactoryBean.setName("dhis.monthly.epi.infant.post.job");
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
+
+    private JobDetail dhisColposcopyPostJob() {
+        JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
+        jobDetailFactoryBean.setJobClass(DHISMonthlyColposcopyPostJob.class);
+        jobDetailFactoryBean.setName("dhis.monthly.colcoscopy.post.job.trigger");
+        jobDetailFactoryBean.getJobDataMap().put("reportingMonth", "-1");
+        jobDetailFactoryBean.afterPropertiesSet();
+        return jobDetailFactoryBean.getObject();
+    }
 
     public static void main(String[] args) throws Exception {
         SpringApplication.run(Main.class, args);

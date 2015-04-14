@@ -3,11 +3,12 @@ package org.sharedhealth.datasense.config;
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.support.PropertySourcesPlaceholderConfigurer;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static java.util.Arrays.asList;
@@ -122,7 +123,7 @@ public class DatasenseProperties implements EnvironmentAware {
     public String getIdpClientId() {
         return idpClientId;
     }
-    
+
     public String getIdpClientEmail() {
         return idpClientEmail;
     }
@@ -130,7 +131,7 @@ public class DatasenseProperties implements EnvironmentAware {
     public String getIdpClientPassword() {
         return idpClientPassword;
     }
-    
+
     public String getTrUser() {
         return trUser;
     }
@@ -140,15 +141,15 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getTrConceptAtomfeedUrl() {
-        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) +  StringUtil.removePrefix(trConceptAtomfeedPath, URL_SEPARATOR);
+        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) + StringUtil.removePrefix(trConceptAtomfeedPath, URL_SEPARATOR);
     }
 
     public String getTrReferenceTermAtomfeedUrl() {
-        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) +  StringUtil.removePrefix(trReferenceTermAtomfeedPath, URL_SEPARATOR);
+        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) + StringUtil.removePrefix(trReferenceTermAtomfeedPath, URL_SEPARATOR);
     }
 
     public String getTrMedicationfeedUrl() {
-        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) +  StringUtil.removePrefix(trMedicationAtomFeedPath, URL_SEPARATOR);
+        return StringUtil.ensureSuffix(getTrBasePath(), URL_SEPARATOR) + StringUtil.removePrefix(trMedicationAtomFeedPath, URL_SEPARATOR);
     }
 
     public String getTrBasePath() {
@@ -191,5 +192,10 @@ public class DatasenseProperties implements EnvironmentAware {
     public List<String> getCloudHostedFacilityIds() {
         if (StringUtils.isBlank(cloudHostedFacilityIds)) return new ArrayList<>();
         return asList(cloudHostedFacilityIds.trim().split(","));
+    }
+
+    @Bean
+    public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
+        return new PropertySourcesPlaceholderConfigurer();
     }
 }

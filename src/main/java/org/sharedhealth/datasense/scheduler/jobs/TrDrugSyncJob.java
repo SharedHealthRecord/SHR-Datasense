@@ -26,22 +26,10 @@ public class TrDrugSyncJob {
     @Autowired
     private DataSourceTransactionManager txMgr;
 
-//    public void setProperties(DatasenseProperties properties) {
-//        this.properties = properties;
-//    }
-//
-//    public void setTxMgr(DataSourceTransactionManager txMgr) {
-//        this.txMgr = txMgr;
-//    }
-//
-//    public void setDrugEventWorker(DrugEventWorker drugEventWorker) {
-//        this.drugEventWorker = drugEventWorker;
-//    }
-
     Logger log = Logger.getLogger(TrDrugSyncJob.class);
-    
-    @Scheduled(fixedDelay = 2000, initialDelay = 2000)
-    public void executeInternal() {
+
+    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 10000)
+    public void start() {
         String trMedicationAtomfeedUrl = properties.getTrMedicationfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
         TRFeedProcessor feedProcessor =

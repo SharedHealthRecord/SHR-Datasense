@@ -3,8 +3,6 @@ package org.sharedhealth.datasense.scheduler.jobs;
 import org.apache.log4j.Logger;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
@@ -31,24 +29,9 @@ public class CatchmentEncounterCrawlerJob {
 
     Logger log = Logger.getLogger(CatchmentEncounterCrawlerJob.class);
 
-//    public void setShrWebClient(ShrWebClient shrWebClient) {
-//        this.shrWebClient = shrWebClient;
-//    }
-//
-//    public void setTxMgr(DataSourceTransactionManager txMgr) {
-//        this.txMgr = txMgr;
-//    }
-//
-//    public void setProperties(DatasenseProperties properties) {
-//        this.properties = properties;
-//    }
-//
-//    public void setEncounterEventWorker(EncounterEventWorker encounterEventWorker) {
-//        this.encounterEventWorker = encounterEventWorker;
-//    }
 
-    @Scheduled(fixedDelay = 500, initialDelay = 500)
-    public void executeInternal() {
+    @Scheduled(fixedDelayString = "${ENCOUNTER_SYNC_JOB_INTERVAL}", initialDelay = 10000)
+    public void start() {
         for (String catchment : properties.getDatasenseCatchmentList()) {
             String feedUrl = StringUtil.ensureSuffix(properties.getShrBaseUrl(), "/") + "catchments/" + catchment + "/encounters";
             AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
