@@ -53,8 +53,7 @@ import static java.lang.Integer.valueOf;
 import static java.lang.System.getenv;
 
 @Configuration
-@Import({DatabaseConfig.class})
-@EnableScheduling
+@Import({DatabaseConfig.class, ScheduleConfig.class})
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
         "org.sharedhealth.datasense.processor",
         "org.sharedhealth.datasense.feeds",

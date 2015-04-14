@@ -3,8 +3,6 @@ package org.sharedhealth.datasense.scheduler.jobs;
 import org.apache.log4j.Logger;
 import org.ict4h.atomfeed.client.repository.jdbc.AllFailedEventsJdbcImpl;
 import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
-import org.quartz.JobExecutionContext;
-import org.quartz.JobExecutionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.tr.DrugEventWorker;
 import org.sharedhealth.datasense.feeds.tr.TRFeedProcessor;
@@ -12,7 +10,6 @@ import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionMan
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.scheduling.quartz.QuartzJobBean;
 import org.springframework.stereotype.Component;
 
 import java.net.URISyntaxException;
@@ -28,7 +25,7 @@ public class TrDrugSyncJob {
 
     Logger log = Logger.getLogger(TrDrugSyncJob.class);
 
-    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 10000)
+    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 70000)
     public void start() {
         String trMedicationAtomfeedUrl = properties.getTrMedicationfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
@@ -37,7 +34,7 @@ public class TrDrugSyncJob {
                         trMedicationAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
-                        transactionManager);
+                        transactionManager, properties);
         try {
             feedProcessor.process();
         } catch (URISyntaxException e) {

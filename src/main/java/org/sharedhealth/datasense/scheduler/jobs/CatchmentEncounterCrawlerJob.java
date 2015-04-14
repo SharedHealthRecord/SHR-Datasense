@@ -40,7 +40,7 @@ public class CatchmentEncounterCrawlerJob {
                             encounterEventWorker, feedUrl,
                             new AllMarkersJdbcImpl(transactionManager),
                             new AllFailedEventsJdbcImpl(transactionManager),
-                            transactionManager, shrWebClient);
+                            transactionManager, shrWebClient, properties);
             try {
                 feedCrawler.process();
             } catch (URISyntaxException e) {

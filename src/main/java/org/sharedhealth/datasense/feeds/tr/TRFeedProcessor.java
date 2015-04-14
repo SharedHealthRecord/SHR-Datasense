@@ -6,6 +6,7 @@ import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.ict4h.atomfeed.client.repository.AllMarkers;
 import org.ict4h.atomfeed.client.service.AtomFeedClient;
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 
 import java.net.URI;
@@ -18,23 +19,25 @@ public class TRFeedProcessor {
     private final AllMarkers markers;
     private final AllFailedEvents failedEvents;
     private final AtomFeedSpringTransactionManager transactionManager;
+    private DatasenseProperties properties;
 
     public TRFeedProcessor(EventWorker eventWorker,
                            String trConceptAtomfeedUrl,
                            AllMarkers allMarkers,
                            AllFailedEvents allFailedEvents,
-                           AtomFeedSpringTransactionManager transactionManager) {
+                           AtomFeedSpringTransactionManager transactionManager, DatasenseProperties properties) {
 
         this.eventWorker = eventWorker;
         this.trConceptAtomfeedUrl = trConceptAtomfeedUrl;
         this.markers = allMarkers;
         this.failedEvents = allFailedEvents;
         this.transactionManager = transactionManager;
+        this.properties = properties;
     }
 
     public void process() throws URISyntaxException {
         AtomFeedProperties atomProperties = new AtomFeedProperties();
-        atomProperties.setMaxFailedEvents(20);
+        atomProperties.setMaxFailedEvents(properties.getMaxFailedEvents());
         AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.trConceptAtomfeedUrl),
                 eventWorker,
                 atomProperties);

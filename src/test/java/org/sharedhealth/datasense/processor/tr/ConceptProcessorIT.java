@@ -28,7 +28,7 @@ import static org.junit.Assert.assertNotNull;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
-@ContextConfiguration(classes = {TestConfig.class, DatabaseConfig.class})
+@ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ConceptProcessorIT {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;

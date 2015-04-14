@@ -35,7 +35,7 @@ public class TrReferenceTermSyncJob {
                         trReferenceTermAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
-                        transactionManager);
+                        transactionManager, properties);
         try {
             feedProcessor.process();
         } catch (URISyntaxException e) {

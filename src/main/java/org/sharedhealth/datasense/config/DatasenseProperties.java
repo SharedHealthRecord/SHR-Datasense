@@ -57,6 +57,8 @@ public class DatasenseProperties implements EnvironmentAware {
     private String causeOfDeath;
     private String cloudHostedFacilityIds;
 
+    private String maxFailedEvents;
+
 
     @Override
     public void setEnvironment(Environment env) {
@@ -85,6 +87,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.facilityRegistryUrl = env.getProperty("FACILITY_REGISTRY_URL");
         this.providerRegistryUrl = env.getProperty("PROVIDER_REGISTRY_URL");
         this.idpServerLoginUrl = env.getProperty("IDP_SERVER_LOGIN_URL");
+        this.maxFailedEvents = env.getProperty("MAX_FAILED_EVENTS");
     }
 
     public String getShrBaseUrl() {
@@ -192,6 +195,10 @@ public class DatasenseProperties implements EnvironmentAware {
     public List<String> getCloudHostedFacilityIds() {
         if (StringUtils.isBlank(cloudHostedFacilityIds)) return new ArrayList<>();
         return asList(cloudHostedFacilityIds.trim().split(","));
+    }
+
+    public int getMaxFailedEvents() {
+        return Integer.parseInt(maxFailedEvents);
     }
 
     @Bean

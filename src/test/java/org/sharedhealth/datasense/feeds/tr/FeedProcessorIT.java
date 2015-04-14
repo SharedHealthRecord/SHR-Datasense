@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
@@ -46,6 +47,8 @@ public class FeedProcessorIT {
     private ConceptDao conceptDao;
     @Autowired
     private ReferenceTermDao referenceTermDao;
+    @Autowired
+    private DatasenseProperties properties;
 
 
     @Rule
@@ -67,7 +70,7 @@ public class FeedProcessorIT {
                 trBasePath + trConceptAtomfeedUrl + "1",
                 new AllMarkersInMemoryImpl(),
                 new AllFailedEventsInMemoryImpl(),
-                new AtomFeedSpringTransactionManager(txMgr)).process();
+                new AtomFeedSpringTransactionManager(txMgr), properties).process();
         assertNotNull(conceptDao.findByConceptUuid(CONCEPT_UUID));
     }
 
@@ -89,7 +92,7 @@ public class FeedProcessorIT {
                 trBasePath + trReferenceTermAtomfeedUrl + "1",
                 new AllMarkersInMemoryImpl(),
                 new AllFailedEventsInMemoryImpl(),
-                new AtomFeedSpringTransactionManager(txMgr)).process();
+                new AtomFeedSpringTransactionManager(txMgr), properties).process();
         assertNotNull(referenceTermDao.findByReferenceTermUuid(REFERENCE_TERM_UUID));
     }
 

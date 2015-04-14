@@ -22,7 +22,7 @@ import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
-@ContextConfiguration(classes = {TestConfig.class, DatabaseConfig.class})
+@ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ReferenceTermProcessorIT {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;

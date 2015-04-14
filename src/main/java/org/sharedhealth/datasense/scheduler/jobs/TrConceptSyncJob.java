@@ -25,7 +25,7 @@ public class TrConceptSyncJob {
 
     Logger log = Logger.getLogger(TrConceptSyncJob.class);
 
-    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 10000)
+    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 30000)
     public void start() {
         String trConceptAtomfeedUrl = properties.getTrConceptAtomfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
@@ -34,7 +34,7 @@ public class TrConceptSyncJob {
                         conceptEventWorker, trConceptAtomfeedUrl,
                         new AllMarkersJdbcImpl(transactionManager),
                         new AllFailedEventsJdbcImpl(transactionManager),
-                        transactionManager);
+                        transactionManager, properties);
         try {
             feedProcessor.process();
         } catch (URISyntaxException e) {

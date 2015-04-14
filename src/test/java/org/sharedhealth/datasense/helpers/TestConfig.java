@@ -1,10 +1,15 @@
 package org.sharedhealth.datasense.helpers;
 
+import org.apache.commons.dbcp.BasicDataSource;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.core.io.ClassPathResource;
+
+import javax.sql.DataSource;
 
 @Configuration
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
@@ -15,12 +20,33 @@ import org.springframework.core.io.ClassPathResource;
         "org.sharedhealth.datasense.handler",
         "org.sharedhealth.datasense.export.dhis",
         "org.sharedhealth.datasense.security",
-        "org.sharedhealth.datasense.util"})
+        "org.sharedhealth.datasense.util","org.sharedhealth.datasense.scheduler.jobs"})
 public class TestConfig {
+
+    @Autowired
+    Environment environment;
+    
     @Bean(name = "dhisFacilitiesMap")
     public PropertiesFactoryBean dhisFacilitiesMap() {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
         return propertiesFactoryBean;
+    }
+
+    @Bean
+    public DataSource dataSource() {
+        String url = environment.getProperty("DATABASE_URL");
+        String user = environment.getProperty("DATABASE_USER");
+        String password = environment.getProperty("DATABASE_PASSWORD");
+        String driverClass = environment.getProperty("DATABASE_DRIVER");
+        int initialPoolSize = Integer.parseInt(environment.getProperty("DATABASE_CON_POOL_SIZE"));
+
+        BasicDataSource basicDataSource = new BasicDataSource();
+        basicDataSource.setUrl(url);
+        basicDataSource.setUsername(user);
+        basicDataSource.setPassword(password);
+        basicDataSource.setDriverClassName(driverClass);
+        basicDataSource.setInitialSize(initialPoolSize);
+        return basicDataSource;
     }
 }

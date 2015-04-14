@@ -8,6 +8,7 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.client.ShrWebClient;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.EncounterBundle;
@@ -36,6 +37,9 @@ public class ShrEncounterFeedProcessorTest {
     @Autowired
     private ShrWebClient shrWebClient;
 
+    @Autowired
+    private DatasenseProperties properties;
+
     @Test
     @Ignore
     public void shouldFetchEncountersForCatchment() throws URISyntaxException, IOException {
@@ -51,7 +55,7 @@ public class ShrEncounterFeedProcessorTest {
                         feedUrl,
                         new AllMarkersInMemoryImpl(),
                         new AllFailedEventsInMemoryImpl(),
-                        new AtomFeedSpringTransactionManager(txMgr), shrWebClient);
+                        new AtomFeedSpringTransactionManager(txMgr), shrWebClient, properties);
         feedCrawler.process();
     }
 
