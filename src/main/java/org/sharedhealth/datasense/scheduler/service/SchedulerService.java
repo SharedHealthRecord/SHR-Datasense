@@ -11,10 +11,7 @@ import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
 
 import java.text.ParseException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 import static java.util.Arrays.asList;
 import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
@@ -28,7 +25,7 @@ public class SchedulerService {
     private static final String MONTHLY_EPI_INFANT_JOB = "dhis.monthly.epi.infant.post.job";
     private static final String MONTHLY_COLPOSCOPY_JOB = "dhis.monthly.colcoscopy.post.job";
 
-    public static final List<String> jobNames = asList(DAILY_IPD_OPD_JOB, MONTHLY_EPI_INFANT_JOB, MONTHLY_COLPOSCOPY_JOB);
+    public static final List<String> ALL_JOB_NAMES = asList(DAILY_IPD_OPD_JOB, MONTHLY_EPI_INFANT_JOB, MONTHLY_COLPOSCOPY_JOB);
 
     private Map<String, JobDetail> jobs;
 
@@ -90,6 +87,26 @@ public class SchedulerService {
         logger.info(String.format("Job %s stopped", jobName));
         return "Job Stopped";
     }
+    
+    public List<String> getRunningJobs() throws SchedulerException {
+        List<String> runningJobs = new ArrayList<>();
+        for (String jobName : ALL_JOB_NAMES) {
+            if(isJobAlreadyPresent(jobName)){
+                runningJobs.add(jobName);
+            }
+        }
+        return runningJobs;
+    }
+    
+    public List<String> getStoppedJobs() throws SchedulerException {
+        List<String> stoppedJobs = new ArrayList<>();
+        for (String jobName : ALL_JOB_NAMES) {
+            if(!isJobAlreadyPresent(jobName)){
+                stoppedJobs.add(jobName);
+            }
+        }
+        return stoppedJobs;
+    }
 
     private Trigger getTriggerByJobName(String jobName) throws SchedulerException {
         Trigger trigger = null;
@@ -107,7 +124,7 @@ public class SchedulerService {
 
     private String getJobName(Integer reportID) {
         try {
-            return jobNames.get(reportID - 1);
+            return ALL_JOB_NAMES.get(reportID - 1);
         } catch (ArrayIndexOutOfBoundsException e) {
             return null;
         }

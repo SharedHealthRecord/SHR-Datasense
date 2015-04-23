@@ -1,0 +1,17 @@
+<html>
+<head>
+    <title>Manage Scheduler</title>
+</head>
+<body>
+<div>
+    <section class="block" th:each="jobName: ${runningJobs}">
+        <p th:text="${jobName}"></p>
+    </section>
+</div>
+<div>
+    <section class="block" th:each="jobName: ${stoppedJobs}">
+        <p th:text="${jobName}"></p>
+    </section>
+</div>
+</body>
+</html>

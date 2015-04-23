@@ -33,7 +33,7 @@ import static java.lang.Integer.valueOf;
 import static java.lang.System.getenv;
 
 @Configuration
-@Import({DatabaseConfig.class, ScheduleConfig.class})
+@Import({DatabaseConfig.class, ScheduleConfig.class, ApplicationConfig.class})
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
         "org.sharedhealth.datasense.processor",
         "org.sharedhealth.datasense.feeds",
@@ -69,7 +69,7 @@ public class Main {
         factory.addInitializers(new ServletContextInitializer() {
             @Override
             public void onStartup(ServletContext servletContext) throws ServletException {
-                ServletRegistration.Dynamic shr = servletContext.addServlet("shr", DispatcherServlet.class);
+                ServletRegistration.Dynamic shr = servletContext.addServlet("datasense", DispatcherServlet.class);
                 shr.addMapping("/");
                 shr.setInitParameter("contextClass", "org.springframework.web.context.support" +
                         ".AnnotationConfigWebApplicationContext");

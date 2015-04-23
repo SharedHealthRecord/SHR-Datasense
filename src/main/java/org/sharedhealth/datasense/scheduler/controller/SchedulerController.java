@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 @RequestMapping(value = "/scheduler")
@@ -19,7 +20,15 @@ public class SchedulerController {
         this.schedulerService = schedulerService;
     }
 
-    @RequestMapping(value = "/start")
+    @RequestMapping(value = "/manage", method = RequestMethod.GET)
+    public ModelAndView manageScheduler() throws SchedulerException {
+        ModelAndView modelAndView = new ModelAndView("index");
+        modelAndView.addObject("runningJobs", schedulerService.getRunningJobs());
+        modelAndView.addObject("stoppedJobs", schedulerService.getStoppedJobs());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/start", method = RequestMethod.GET)
     @ResponseBody
     public String startScheduler(
             @RequestParam(value = "reportId") Integer reportID,
