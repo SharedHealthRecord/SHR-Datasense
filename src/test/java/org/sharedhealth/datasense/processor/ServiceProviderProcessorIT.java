@@ -90,7 +90,6 @@ public class ServiceProviderProcessorIT {
         assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
         assertEquals("Upazila Health Complex", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
-        assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
     }
 
     @Test
@@ -110,7 +109,6 @@ public class ServiceProviderProcessorIT {
         assertEquals("Test Facility", facility.getFacilityName());
         assertEquals("Test Facility Type", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
-        assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
     }
 
     @Test
@@ -131,7 +129,6 @@ public class ServiceProviderProcessorIT {
         assertEquals("Test Facility", facility.getFacilityName());
         assertEquals("Test Facility Type", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
-        assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
     }
 
     @Test
@@ -155,7 +152,6 @@ public class ServiceProviderProcessorIT {
         assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
         assertEquals("Upazila Health Complex", facility.getFacilityType());
         assertEquals("302618", facility.getFacilityLocationCode());
-        assertEquals("nRm6mKjJsaE", facility.getDhisOrgUnitUid());
     }
 
     @Test
