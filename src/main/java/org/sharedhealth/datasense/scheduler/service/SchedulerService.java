@@ -49,7 +49,7 @@ public class SchedulerService {
 
         if (isJobAlreadyPresent(jobName)) {
             logger.info(String.format("The job %s was already running", jobName));
-            
+
             return "The job is already running";
         }
 
@@ -64,6 +64,7 @@ public class SchedulerService {
         String triggerName = jobName + ".trigger";
         CronTrigger trigger = getTrigger(triggerName, cronExpression, jobDetail);
         scheduler.scheduleJob(jobDetail, trigger);
+        logger.info(String.format("Job %s starred", jobName));
         return "Job Started";
     }
 
@@ -86,6 +87,7 @@ public class SchedulerService {
         }
 
         scheduler.unscheduleJob(trigger.getKey());
+        logger.info(String.format("Job %s stopped", jobName));
         return "Job Stopped";
     }
 

@@ -28,7 +28,7 @@ public class DatabaseConfig {
         int initialPoolSize = Integer.parseInt(environment.getProperty("DATABASE_CON_POOL_SIZE"));
 
         BasicDataSource basicDataSource = new BasicDataSource();
-        basicDataSource.setDefaultAutoCommit(false);
+//        basicDataSource.setDefaultAutoCommit(false);
         basicDataSource.setUrl(url);
         basicDataSource.setUsername(user);
         basicDataSource.setPassword(password);

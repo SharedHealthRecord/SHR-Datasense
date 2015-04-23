@@ -2,8 +2,6 @@ package org.sharedhealth.datasense.launch;
 
 
 import org.apache.log4j.Logger;
-import org.quartz.CronTrigger;
-import org.quartz.JobDetail;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyColposcopyReport;
@@ -20,7 +18,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.scheduling.quartz.CronTriggerFactoryBean;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.web.servlet.DispatcherServlet;
@@ -29,7 +26,6 @@ import javax.servlet.ServletContext;
 import javax.servlet.ServletException;
 import javax.servlet.ServletRegistration;
 import javax.sql.DataSource;
-import java.text.ParseException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -95,7 +91,7 @@ public class Main {
         schedulerFactoryBean.setJobFactory(jobFactory());
 
 
-        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
+//        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
         schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
         schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
         try {
@@ -103,7 +99,7 @@ public class Main {
         } catch (Exception e) {
             log.error("Cannot start scheduler");
             //:todo this should be thrown
-//            throw new RuntimeException("Cannot start scheduler");
+            throw new RuntimeException("Cannot start scheduler:-", e);
         }
         return schedulerFactoryBean;
     }
@@ -129,21 +125,6 @@ public class Main {
         PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
         propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
         return propertiesFactoryBean;
-    }
-
-    private CronTrigger getTrigger(String triggerName, int startDelay, String cronExpression, JobDetail jobDetail) {
-        CronTriggerFactoryBean triggerFactoryBean = new CronTriggerFactoryBean();
-        triggerFactoryBean.setName(triggerName);
-        triggerFactoryBean.setStartDelay(startDelay);
-        triggerFactoryBean.setCronExpression(cronExpression);
-        triggerFactoryBean.setJobDetail(jobDetail);
-        try {
-            triggerFactoryBean.afterPropertiesSet();
-        } catch (ParseException e) {
-            log.error(String.format("Error starting trigger %s", triggerName));
-            e.printStackTrace();
-        }
-        return triggerFactoryBean.getObject();
     }
 
     public static void main(String[] args) throws Exception {
