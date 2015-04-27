@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.scheduler.service;
+package org.sharedhealth.datasense.service;
 
 import org.apache.log4j.Logger;
 import org.quartz.*;
@@ -37,9 +37,8 @@ public class SchedulerService {
         this.jobs = getAllJobs();
     }
 
-    public String startJob(Integer reportID, String cronExpression, String reportParamKey, String reportParamValue) throws SchedulerException {
-        String jobName = getJobName(reportID);
-        if (null == jobName) {
+    public String startJob(String jobName, String cronExpression, String reportParamKey, String reportParamValue) throws SchedulerException {
+        if (!(ALL_JOB_NAMES.contains(jobName))) {
             logger.info(NO_SUCH_REPORT_MESSAGE);
             return NO_SUCH_REPORT_MESSAGE;
         }
@@ -65,9 +64,8 @@ public class SchedulerService {
         return "Job Started";
     }
 
-    public String stopJob(Integer reportID) throws SchedulerException {
-        String jobName = getJobName(reportID);
-        if (null == jobName) {
+    public String stopJob(String jobName) throws SchedulerException {
+        if (!(ALL_JOB_NAMES.contains(jobName))) {
             logger.info(NO_SUCH_REPORT_MESSAGE);
             return NO_SUCH_REPORT_MESSAGE;
         }
@@ -87,25 +85,33 @@ public class SchedulerService {
         logger.info(String.format("Job %s stopped", jobName));
         return "Job Stopped";
     }
-    
-    public List<String> getRunningJobs() throws SchedulerException {
-        List<String> runningJobs = new ArrayList<>();
+
+    public List<JobAttributes> getStoppedJobs() throws SchedulerException {
+        List<JobAttributes> stoppedJobs = new ArrayList<>();
         for (String jobName : ALL_JOB_NAMES) {
-            if(isJobAlreadyPresent(jobName)){
-                runningJobs.add(jobName);
+            if (!isJobAlreadyPresent(jobName)) {
+                stoppedJobs.add(new JobAttributes(jobName));
+            }
+        }
+        return stoppedJobs;
+    }
+
+    public List<JobAttributes> getRunningJobs() throws SchedulerException {
+        List<JobAttributes> runningJobs = new ArrayList<>();
+        for (String jobName : ALL_JOB_NAMES) {
+            if (isJobAlreadyPresent(jobName)) {
+                runningJobs.add(getJobDetails(jobName));
             }
         }
         return runningJobs;
     }
-    
-    public List<String> getStoppedJobs() throws SchedulerException {
-        List<String> stoppedJobs = new ArrayList<>();
-        for (String jobName : ALL_JOB_NAMES) {
-            if(!isJobAlreadyPresent(jobName)){
-                stoppedJobs.add(jobName);
-            }
-        }
-        return stoppedJobs;
+
+    private JobAttributes getJobDetails(String jobName) throws SchedulerException {
+        Trigger trigger = getTriggerByJobName(jobName);
+        String cronExpression = ((CronTrigger) trigger).getCronExpression();
+        JobDetail jobDetail = scheduler.getJobDetail(trigger.getJobKey());
+        Map.Entry<String, Object> firstEntry = jobDetail.getJobDataMap().entrySet().iterator().next();
+        return new JobAttributes(jobName, cronExpression, firstEntry.getKey(), (String) firstEntry.getValue());
     }
 
     private Trigger getTriggerByJobName(String jobName) throws SchedulerException {

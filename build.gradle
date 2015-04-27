@@ -107,7 +107,7 @@ task runDatasense(type: JavaExec) {
     Properties properties = new Properties();
     properties.load(new FileInputStream(file('env/local.properties')))
     main = mainClassName
-    jvmArgs = ['-DDATASENSE_LOG_LEVEL=INFO']
+    jvmArgs = ['-DDATASENSE_LOG_LEVEL=DEBUG']
     classpath = sourceSets.main.runtimeClasspath
     environment properties
 }

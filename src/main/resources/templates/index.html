@@ -3,14 +3,31 @@
     <title>Manage Scheduler</title>
 </head>
 <body>
-<div>
-    <section class="block" th:each="jobName: ${runningJobs}">
-        <p th:text="${jobName}"></p>
+<div th:if="!${runningJobs.isEmpty()}">
+    <h3>Running Jobs</h3>
+
+    <section class="block running-jobs" th:each="job: ${runningJobs}">
+        <form action="/scheduler/stop" method="post">
+            <input th:value="${job.name}" name="reportName" type="text" readonly="true"/>
+            <input th:value="${job.cronExpression}" name="expression" type="text" placeholder="Enter Cron Expression" readonly="true"/>
+            <input th:value="${job.paramKey}" name="paramKey" type="text" placeholder="Enter Parameter Key" readonly="true"/>
+            <input th:value="${job.paramValue}" name="paramValue" type="text" placeholder="Enter Parameter value" readonly="true"/>
+            <button type="submit">Stop Job</button>
+        </form>
     </section>
 </div>
-<div>
-    <section class="block" th:each="jobName: ${stoppedJobs}">
-        <p th:text="${jobName}"></p>
+
+<div th:if="!${stoppedJobs.isEmpty()}">
+    <h3>Stopped Jobs</h3>
+    
+    <section class="block stopped-jobs" th:each="job: ${stoppedJobs}">
+        <form action="/scheduler/start" method="post">
+            <input th:value="${job.name}" name="reportName" type="text" readonly="true"/>
+            <input th:value="${job.cronExpression}" name="expression" type="text" placeholder="Enter Cron Expression" required="true"/>
+            <input th:value="${job.paramKey}" name="paramKey" type="text" placeholder="Enter Parameter Key" required="true"/>
+            <input th:value="${job.paramValue}" name="paramValue" type="text" placeholder="Enter Parameter value" required="true"/>
+            <button type="submit">Start Job</button>
+        </form>
     </section>
 </div>
 </body>

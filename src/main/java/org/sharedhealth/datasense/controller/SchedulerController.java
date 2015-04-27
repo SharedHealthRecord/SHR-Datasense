@@ -1,7 +1,7 @@
-package org.sharedhealth.datasense.scheduler.controller;
+package org.sharedhealth.datasense.controller;
 
 import org.quartz.SchedulerException;
-import org.sharedhealth.datasense.scheduler.service.SchedulerService;
+import org.sharedhealth.datasense.service.SchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Controller
 @RequestMapping(value = "/scheduler")
@@ -28,22 +31,26 @@ public class SchedulerController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/start", method = RequestMethod.GET)
+    @RequestMapping(value = "/start", method = RequestMethod.POST)
     @ResponseBody
-    public String startScheduler(
-            @RequestParam(value = "reportId") Integer reportID,
+    public ModelAndView startScheduler(
+            @RequestParam(value = "reportName") String reportName,
             @RequestParam(value = "expression") String cronExpression,
             @RequestParam(value = "paramKey") String reportParamKey,
-            @RequestParam(value = "paramValue") String reportParamValue)
-            throws SchedulerException {
-
-        return schedulerService.startJob(reportID, cronExpression, reportParamKey, reportParamValue);
+            @RequestParam(value = "paramValue") String reportParamValue,
+            HttpServletResponse response)
+            throws SchedulerException, IOException {
+        schedulerService.startJob(reportName, cronExpression, reportParamKey, reportParamValue);
+        response.sendRedirect("/scheduler/manage");
+        return null;
     }
 
-    @RequestMapping(value = "/stop", method = RequestMethod.GET)
+    @RequestMapping(value = "/stop", method = RequestMethod.POST)
     @ResponseBody
-    public String stopScheduler(@RequestParam(value = "reportId") Integer reportID) throws SchedulerException {
-        return schedulerService.stopJob(reportID);
+    public ModelAndView stopScheduler(@RequestParam(value = "reportName") String reportName, HttpServletResponse response) throws SchedulerException, IOException {
+        schedulerService.stopJob(reportName);
+        response.sendRedirect("/scheduler/manage");
+        return null;
     }
 
 

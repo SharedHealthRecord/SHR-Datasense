@@ -42,7 +42,10 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.handler",
         "org.sharedhealth.datasense.export.dhis",
         "org.sharedhealth.datasense.security",
-        "org.sharedhealth.datasense.util", "org.sharedhealth.datasense.scheduler.jobs"
+        "org.sharedhealth.datasense.util",
+        "org.sharedhealth.datasense.scheduler.jobs",
+        "org.sharedhealth.datasense.service",
+        "org.sharedhealth.datasense.controller"
 })
 public class Main {
     @Autowired
