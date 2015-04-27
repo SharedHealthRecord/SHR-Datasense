@@ -346,6 +346,27 @@
                         tableName="concept"/>
 
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150427-1411" author="sanjana" context="setup">
+        <comment>Adding created timestamp column to encounter tables</comment>
+        <addColumn tableName="encounter">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+        <addColumn tableName="diagnosis">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+        <addColumn tableName="medication">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+        <addColumn tableName="observation">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+        <addColumn tableName="procedures">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+        <addColumn tableName="patient_death_details">
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
     <changeSet id="sharedhealth-datasense-20150428-1111" author="utsab">
         <comment>Adding metadata columns to concept table</comment>
         <addColumn tableName="concept">
