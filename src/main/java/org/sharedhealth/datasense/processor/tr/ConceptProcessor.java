@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.processor.tr;
 import org.sharedhealth.datasense.model.tr.TrConcept;
 import org.sharedhealth.datasense.model.tr.TrReferenceTerm;
 import org.sharedhealth.datasense.repository.ConceptDao;
+import org.sharedhealth.datasense.repository.ReferenceTermDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -10,11 +11,13 @@ import org.springframework.stereotype.Component;
 public class ConceptProcessor {
     private final ReferenceTermProcessor referenceTermProcessor;
     private final ConceptDao conceptDao;
+    private final ReferenceTermDao referenceTermDao;
 
     @Autowired
-    public ConceptProcessor(ReferenceTermProcessor referenceTermProcessor, ConceptDao conceptDao) {
+    public ConceptProcessor(ReferenceTermProcessor referenceTermProcessor, ConceptDao conceptDao, ReferenceTermDao referenceTermDao) {
         this.referenceTermProcessor = referenceTermProcessor;
         this.conceptDao = conceptDao;
+        this.referenceTermDao = referenceTermDao;
     }
 
     public void process(TrConcept trConcept) {
@@ -24,10 +27,10 @@ public class ConceptProcessor {
     }
 
     private void saveOrUpdateReferenceTermMaps(TrConcept trConcept) {
-        conceptDao.deleteConceptReferenceTermMap(trConcept.getConceptUuid());
+        referenceTermDao.deleteConceptReferenceTermMap(trConcept.getConceptUuid());
         if (trConcept.getReferenceTermMaps() != null) {
             for (TrReferenceTerm trReferenceTerm : trConcept.getReferenceTermMaps()) {
-                conceptDao.saveReferenceTermMap(trReferenceTerm.getReferenceTermUuid(), trConcept.getConceptUuid(), trReferenceTerm.getRelationshipType());
+                referenceTermDao.saveReferenceTermMap(trReferenceTerm.getReferenceTermUuid(), trConcept.getConceptUuid(), trReferenceTerm.getRelationshipType());
             }
         }
     }

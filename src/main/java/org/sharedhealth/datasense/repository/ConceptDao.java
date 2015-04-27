@@ -37,21 +37,6 @@ public class ConceptDao {
         jdbcTemplate.update(sql, map);
     }
 
-    public void saveReferenceTermMap(String referenceTermUuid, String conceptUuid, String relationshipType) {
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("concept_uuid", conceptUuid);
-        map.put("reference_term_uuid", referenceTermUuid);
-        map.put("relationship_type", relationshipType);
-        String sql;
-        sql = "insert into reference_term_map (concept_uuid, reference_term_uuid, relationship_type) " +
-                "values(:concept_uuid, :reference_term_uuid, :relationship_type)";
-        jdbcTemplate.update(sql, map);
-    }
-
-    public void deleteConceptReferenceTermMap(String conceptUuid) {
-        jdbcTemplate.update("delete from reference_term_map where concept_uuid = :concept_uuid", Collections.singletonMap("concept_uuid", conceptUuid));
-    }
-
     public TrConcept findByConceptUuid(String conceptUuid) {
         List<TrConcept> trConcepts = jdbcTemplate.query(
                 "select concept_uuid, name, class from concept where concept_uuid = :concept_uuid",
