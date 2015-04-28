@@ -9,6 +9,7 @@ import org.springframework.scheduling.quartz.QuartzJobBean;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -30,9 +31,9 @@ public abstract class MonthlyJob extends QuartzJobBean {
     protected abstract void process(Map<String, Object> dataMap);
 
     public static String getReportingMonth(String monthParam) {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM");
         try {
-            new SimpleDateFormat("yyyy-MM").parse(monthParam);
-            return monthParam;
+            return dateFormat.format(dateFormat.parse(monthParam));
         } catch (ParseException e) {
             logger.debug(String.format("Invalid argument [%s] for reportingMonth Parameter. Expected format yyyy-MM. " +
                     "Trying to parse as Integer .. ", monthParam));
@@ -51,6 +52,6 @@ public abstract class MonthlyJob extends QuartzJobBean {
         }
         Calendar c = Calendar.getInstance();
         c.add(Calendar.MONTH, addMonth);
-        return new SimpleDateFormat("yyyy-MM").format(c.getTime());
+        return dateFormat.format(c.getTime());
     }
 }

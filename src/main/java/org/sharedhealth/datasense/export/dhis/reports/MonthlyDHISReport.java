@@ -18,7 +18,6 @@ public abstract class MonthlyDHISReport extends DHISReport {
 
     @Override
     public void process(Map<String, Object> dataMap) {
-
         String reportingMonth = (String) dataMap.get("reportingMonth");
         List<String> facilityTypes = asList(MEDICAL_UNIVERSITY_FACILITY_TYPE, UPAZILA_HEALTH_COMPLEX_FACILITY_TYPE, UPAZILA_LEVEL_OFFICE_FACILITY_TYPE);
         List<Facility> facilities = facilityDao.findFacilitiesByTypes(facilityTypes);

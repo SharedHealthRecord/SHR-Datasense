@@ -49,7 +49,7 @@ public class SchedulerService {
 
         jobDetail.getJobDataMap().put(reportParamKey, reportParamValue);
 
-        String triggerName = jobName + ".trigger";
+        String triggerName = jobName + "-TRIGGER";
         CronTrigger trigger = getTrigger(triggerName, cronExpression, jobDetail);
         scheduler.scheduleJob(jobDetail, trigger);
         logger.info(String.format("Job %s starred", jobName));
