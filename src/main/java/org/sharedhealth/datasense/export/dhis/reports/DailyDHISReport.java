@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.export.dhis.reports;
 
 import aggregatequeryservice.postservice;
 import org.sharedhealth.datasense.model.Facility;
-import org.sharedhealth.datasense.util.HeaderUtil;
 
 import java.util.HashMap;
 import java.util.List;
@@ -44,7 +43,7 @@ public abstract class DailyDHISReport extends DHISReport {
         logger.debug(format("Posting Daily OPD IPD Emergency report for facility [%s] for date [%s]", facility
                 .getFacilityName(), reportingDate));
 
-            postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
+        postservice.executeQueriesAndPostResultsSync(pathToConfig, dataSource, queryParams, extraParams, postHeaders);
     }
 
     public abstract String getConfigFilepath();
