@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -23,13 +24,14 @@ public class ConceptDao {
         map1.put("concept_uuid", trConcept.getConceptUuid());
         map1.put("name", trConcept.getName());
         map1.put("class", trConcept.getConceptClass());
+        map1.put("updated_at", new Date());
         HashMap<String, Object> map = map1;
         String sql;
         if (findByConceptUuid(trConcept.getConceptUuid()) == null) {
             sql = "insert into concept(concept_uuid, name, class) values " +
                     "(:concept_uuid, :name, :class)";
         } else {
-            sql = "update concept set name = :name, class = :class where concept_uuid = :concept_uuid";
+            sql = "update concept set name = :name, class = :class, updated_at=:updated_at where concept_uuid = :concept_uuid";
         }
 
         jdbcTemplate.update(sql, map);

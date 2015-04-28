@@ -346,4 +346,49 @@
                         tableName="concept"/>
 
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1111" author="utsab">
+        <comment>Adding metadata columns to concept table</comment>
+        <addColumn tableName="concept">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+            <column name="updated_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1130" author="utsab">
+        <comment>Adding metadata columns to reference_term table</comment>
+        <addColumn tableName="reference_term">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+            <column name="updated_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1133" author="utsab">
+        <comment>Adding metadata columns to drug table</comment>
+        <addColumn tableName="drug">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+            <column name="updated_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1135" author="utsab">
+        <comment>Adding metadata column to reference_term_map table</comment>
+        <addColumn tableName="reference_term_map">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1137" author="utsab">
+        <comment>Adding metadata column to facility table</comment>
+        <addColumn tableName="facility">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1138" author="utsab">
+        <comment>Adding metadata column to location table</comment>
+        <addColumn tableName="location">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150428-1139" author="utsab">
+        <comment>Adding metadata column to provider table</comment>
+        <addColumn tableName="provider">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

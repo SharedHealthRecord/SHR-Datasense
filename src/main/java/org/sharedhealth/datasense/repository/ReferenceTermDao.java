@@ -9,6 +9,7 @@ import org.springframework.stereotype.Component;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class ReferenceTermDao {
             sql = "insert into reference_term (reference_term_uuid, name, code, source) values " +
                     "(:reference_term_uuid, :name, :code, :source)";
         } else {
-            sql = "update reference_term set name = :name, code = :code, source = :source where " +
+            sql = "update reference_term set name = :name, code = :code, source = :source, updated_at =:updated_at where " +
                     "reference_term_uuid = :reference_term_uuid";
         }
         jdbcTemplate.update(sql, map);
@@ -54,6 +55,7 @@ public class ReferenceTermDao {
         map.put("name", trReferenceTerm.getName());
         map.put("code", trReferenceTerm.getCode());
         map.put("source", trReferenceTerm.getSource());
+        map.put("updated_at", new Date());
         return map;
     }
 }

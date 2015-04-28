@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,7 +23,7 @@ public class DrugDao {
         if (getDrugCountByUuid(drug.getUuid()) == 0) {
             sql = "insert into drug(drug_uuid, concept_uuid, name, reference_term_uuid) values (:drug_uuid, :concept_uuid, :name, :reference_term_uuid)";
         }else {
-            sql = "update drug set concept_uuid= :concept_uuid, name=:name, reference_term_uuid=:reference_term_uuid where drug_uuid= :drug_uuid";
+            sql = "update drug set concept_uuid= :concept_uuid, name=:name, reference_term_uuid=:reference_term_uuid, updated_at=:updated_at where drug_uuid= :drug_uuid";
         }
         jdbcTemplate.update(sql, getParameterMap(drug));
     }
@@ -40,6 +41,7 @@ public class DrugDao {
         map.put("concept_uuid", drug.getConceptId());
         map.put("name", drug.getName());
         map.put("reference_term_uuid", drug.getReferenceTermId());
+        map.put("updated_at", new Date());
         return map;
     }
 }

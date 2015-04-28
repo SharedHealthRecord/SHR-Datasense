@@ -1,4 +1,4 @@
-facility_id,name,type,location_id,dhis_org_unit_uid
-1000,Dohar Upazila Health Complex 1,Upazila Health Complex,302618,nRm6mKjJsaE
-1001,Dohar Upazila Level Office,Upazila Level Office,302619,nRm6mKjJszE
-1003,Dohar Upazila Health Complex 2,Upazila Health Complex,302610,nRm6mzjzsaE
+facility_id,name,type,location_id,dhis_org_unit_uid,created_at
+1000,Dohar Upazila Health Complex 1,Upazila Health Complex,302618,nRm6mKjJsaE,2015-04-28 11:44:03
+1001,Dohar Upazila Level Office,Upazila Level Office,302619,nRm6mKjJszE,2015-04-28 11:44:03
+1003,Dohar Upazila Health Complex 2,Upazila Health Complex,302610,nRm6mzjzsaE,2015-04-28 11:44:03
