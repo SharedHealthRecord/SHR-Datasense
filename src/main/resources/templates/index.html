@@ -24,7 +24,7 @@
         <form action="/scheduler/start" method="post">
             <input th:value="${job.name}" name="reportName" type="text" readonly="true"/>
             <input th:value="${job.cronExpression}" name="expression" type="text" placeholder="Enter Cron Expression" required="true"/>
-            <input th:value="${job.paramKey}" name="paramKey" type="text" placeholder="Enter Parameter Key" required="true"/>
+            <input th:value="${job.paramKey}" name="paramKey" type="text" placeholder="Enter Parameter Key" readonly="true"/>
             <input th:value="${job.paramValue}" name="paramValue" type="text" placeholder="Enter Parameter value" required="true"/>
             <button type="submit">Start Job</button>
         </form>

@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.export.dhis.Jobs;
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.sharedhealth.datasense.util.SchedulerConstants;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.text.ParseException;
@@ -10,6 +11,8 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+
+import static org.sharedhealth.datasense.util.SchedulerConstants.DAILY_JOB_PARAM_KEY;
 
 public abstract class DailyJob extends QuartzJobBean {
 
@@ -19,7 +22,7 @@ public abstract class DailyJob extends QuartzJobBean {
 
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        Object reportingDateParam = context.getMergedJobDataMap().get("reportingDate");
+        Object reportingDateParam = context.getMergedJobDataMap().get(DAILY_JOB_PARAM_KEY);
 
         String reportingDate = reportingDateParam != null ? getReportingDate((String) reportingDateParam) :
                 getDefaultReportingDate();
@@ -34,7 +37,7 @@ public abstract class DailyJob extends QuartzJobBean {
             new SimpleDateFormat("yyyy-MM-dd").parse(dateParam);
             return dateParam;
         } catch (ParseException e) {
-            logger.error(String.format("Invalid argument [%s] for reportingParam. Expected date format yyyy-MM-dd. " +
+            logger.debug(String.format("Invalid argument [%s] for reportingParam. Expected date format yyyy-MM-dd. " +
                     "Trying to parse as Integer .. ", dateParam));
         }
 
@@ -42,7 +45,7 @@ public abstract class DailyJob extends QuartzJobBean {
         try {
             addDays = Integer.parseInt(dateParam);
         } catch (NumberFormatException e) {
-            logger.error(String.format("Invalid argument for reportingParam. Actual [%s] expected values are integer " +
+            logger.debug(String.format("Invalid argument for reportingParam. Actual [%s] expected values are integer " +
                     "(-1, -2 etc). Defaulting to yesterday", dateParam));
         }
 

@@ -13,23 +13,15 @@ import org.springframework.stereotype.Service;
 import java.text.ParseException;
 import java.util.*;
 
-import static java.util.Arrays.asList;
 import static org.quartz.impl.matchers.GroupMatcher.jobGroupEquals;
+import static org.sharedhealth.datasense.util.SchedulerConstants.*;
 
 @Service
 public class SchedulerService {
     private static final Logger logger = Logger.getLogger(SchedulerService.class);
 
     private Scheduler scheduler;
-    private static final String DAILY_IPD_OPD_JOB = "dhis.daily.opdipd.post.job";
-    private static final String MONTHLY_EPI_INFANT_JOB = "dhis.monthly.epi.infant.post.job";
-    private static final String MONTHLY_COLPOSCOPY_JOB = "dhis.monthly.colcoscopy.post.job";
-
-    public static final List<String> ALL_JOB_NAMES = asList(DAILY_IPD_OPD_JOB, MONTHLY_EPI_INFANT_JOB, MONTHLY_COLPOSCOPY_JOB);
-
     private Map<String, JobDetail> jobs;
-
-    private final String NO_SUCH_REPORT_MESSAGE = "There are no such reports";
 
     @Autowired
     public SchedulerService(Scheduler scheduler) {
@@ -111,7 +103,7 @@ public class SchedulerService {
         String cronExpression = ((CronTrigger) trigger).getCronExpression();
         JobDetail jobDetail = scheduler.getJobDetail(trigger.getJobKey());
         Map.Entry<String, Object> firstEntry = jobDetail.getJobDataMap().entrySet().iterator().next();
-        return new JobAttributes(jobName, cronExpression, firstEntry.getKey(), (String) firstEntry.getValue());
+        return new JobAttributes(jobName, cronExpression, (String) firstEntry.getValue());
     }
 
     private Trigger getTriggerByJobName(String jobName) throws SchedulerException {
@@ -127,15 +119,7 @@ public class SchedulerService {
         }
         return trigger;
     }
-
-    private String getJobName(Integer reportID) {
-        try {
-            return ALL_JOB_NAMES.get(reportID - 1);
-        } catch (ArrayIndexOutOfBoundsException e) {
-            return null;
-        }
-    }
-
+    
     private boolean isJobAlreadyPresent(String jobName) throws SchedulerException {
         List<String> jobGroupNames = scheduler.getJobGroupNames();
         for (String jobGroupName : jobGroupNames) {
@@ -150,7 +134,7 @@ public class SchedulerService {
 
     private Map<String, JobDetail> getAllJobs() {
         HashMap<String, JobDetail> jobs = new HashMap<>();
-        jobs.put(DAILY_IPD_OPD_JOB, dhisDailyOPDIPDJob());
+        jobs.put(DAILY_OPD_IPD_JOB, dhisDailyOPDIPDJob());
         jobs.put(MONTHLY_EPI_INFANT_JOB, dhisEPIInfantPostJob());
         jobs.put(MONTHLY_COLPOSCOPY_JOB, dhisColposcopyPostJob());
         return jobs;
@@ -172,7 +156,7 @@ public class SchedulerService {
     private JobDetail dhisDailyOPDIPDJob() {
         JobDetailFactoryBean jobDetailFactoryBean = new JobDetailFactoryBean();
         jobDetailFactoryBean.setJobClass(DHISDailyOPDIPDPostJob.class);
-        jobDetailFactoryBean.setName(DAILY_IPD_OPD_JOB);
+        jobDetailFactoryBean.setName(DAILY_OPD_IPD_JOB);
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean.getObject();
     }

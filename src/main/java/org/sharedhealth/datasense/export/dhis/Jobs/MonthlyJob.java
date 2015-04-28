@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.export.dhis.Jobs;
 import org.apache.log4j.Logger;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.sharedhealth.datasense.util.SchedulerConstants;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.text.ParseException;
@@ -11,12 +12,14 @@ import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
+import static org.sharedhealth.datasense.util.SchedulerConstants.MONTHLY_JOB_PARAM_KEY;
+
 public abstract class MonthlyJob extends QuartzJobBean {
 
     private static final Logger logger = Logger.getLogger(MonthlyJob.class);
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
-        String reportingMonthParam = (String) context.getMergedJobDataMap().get("reportingMonth");
+        String reportingMonthParam = (String) context.getMergedJobDataMap().get(MONTHLY_JOB_PARAM_KEY);
 
         String reportingMonth = getReportingMonth(reportingMonthParam);
         Map<String, Object> dataMap = new HashMap<>();
@@ -31,7 +34,7 @@ public abstract class MonthlyJob extends QuartzJobBean {
             new SimpleDateFormat("yyyy-MM").parse(monthParam);
             return monthParam;
         } catch (ParseException e) {
-            logger.error(String.format("Invalid argument [%s] for reportingMonth Parameter. Expected format yyyy-MM. " +
+            logger.debug(String.format("Invalid argument [%s] for reportingMonth Parameter. Expected format yyyy-MM. " +
                     "Trying to parse as Integer .. ", monthParam));
         }
 
@@ -39,7 +42,7 @@ public abstract class MonthlyJob extends QuartzJobBean {
         try {
             addMonth = Integer.parseInt(monthParam);
         } catch (NumberFormatException e) {
-            logger.error(String.format("Invalid argument for reportingMonth Parameter. Actual [%s] expected values " +
+            logger.debug(String.format("Invalid argument for reportingMonth Parameter. Actual [%s] expected values " +
                     "are integer (-1, -2 etc). Defaulting to last month", monthParam));
         }
 

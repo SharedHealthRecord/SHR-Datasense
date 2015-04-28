@@ -1,5 +1,8 @@
 package org.sharedhealth.datasense.service;
 
+import static org.sharedhealth.datasense.util.SchedulerConstants.DAILY_JOB_PARAM_KEY;
+import static org.sharedhealth.datasense.util.SchedulerConstants.MONTHLY_JOB_PARAM_KEY;
+
 public class JobAttributes {
     private String name;
     private String cronExpression;
@@ -7,14 +10,23 @@ public class JobAttributes {
     private String paramValue;
 
     public JobAttributes(String name) {
-        this(name, null, null, null);
+        this.name = name;
+        setParamKey();
     }
 
-    public JobAttributes(String name, String cronExpression, String paramKey, String paramValue) {
+    public JobAttributes(String name, String cronExpression, String paramValue) {
         this.name = name;
         this.cronExpression = cronExpression;
-        this.paramKey = paramKey;
         this.paramValue = paramValue;
+        setParamKey();
+    }
+
+    private void setParamKey() {
+        if (this.name.startsWith("DAILY-")) {
+            this.paramKey = DAILY_JOB_PARAM_KEY;
+        } else if (this.name.startsWith("MONTHLY-")) {
+            this.paramKey = MONTHLY_JOB_PARAM_KEY;
+        }
     }
 
     public String getName() {

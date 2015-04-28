@@ -33,7 +33,7 @@ public class SchedulerController {
 
     @RequestMapping(value = "/start", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView startScheduler(
+    public void startScheduler(
             @RequestParam(value = "reportName") String reportName,
             @RequestParam(value = "expression") String cronExpression,
             @RequestParam(value = "paramKey") String reportParamKey,
@@ -42,15 +42,13 @@ public class SchedulerController {
             throws SchedulerException, IOException {
         schedulerService.startJob(reportName, cronExpression, reportParamKey, reportParamValue);
         response.sendRedirect("/scheduler/manage");
-        return null;
     }
 
     @RequestMapping(value = "/stop", method = RequestMethod.POST)
     @ResponseBody
-    public ModelAndView stopScheduler(@RequestParam(value = "reportName") String reportName, HttpServletResponse response) throws SchedulerException, IOException {
+    public void stopScheduler(@RequestParam(value = "reportName") String reportName, HttpServletResponse response) throws SchedulerException, IOException {
         schedulerService.stopJob(reportName);
         response.sendRedirect("/scheduler/manage");
-        return null;
     }
 
 
