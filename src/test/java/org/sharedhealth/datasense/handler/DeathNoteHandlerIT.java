@@ -143,6 +143,9 @@ public class DeathNoteHandlerIT {
                 return patientDeathDetails;
             }
         });
-        return patientDeathDetailsList.isEmpty() ? null : patientDeathDetailsList.get(0);
+        assertFalse(patientDeathDetailsList.isEmpty());
+        assertEquals(1, patientDeathDetailsList.size());
+
+        return patientDeathDetailsList.get(0);
     }
 }

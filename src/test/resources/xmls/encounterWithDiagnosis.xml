@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Encounter</title>
+    <id>urn:ea0ff2d8-e8a3-4228-9e70-c19af88a0abb</id>
+    <updated>2014-12-09T10:59:27+05:30</updated>
+    <entry>
+        <title>Composition</title>
+        <id>urn:40e025cd-6412-498f-baac-6fbf7338a9be</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Composition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:40e025cd-6412-498f-baac-6fbf7338a9be" />
+                </identifier>
+                <date value="2014-12-09T10:59:27+05:30" />
+                <status value="final" />
+                <subject>
+                    <reference value="http://172.18.46.56:9997/patients/5960610240356417537" />
+                    <display value="5960610240356417537" />
+                </subject>
+                <encounter>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                        <display value="Encounter" />
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:2801e2b9-3886-4bf5-919f-ce9268fdc317" />
+                        <display value="Diagnosis" />
+                    </content>
+                </section>
+            </Composition>
+        </content>
+    </entry>
+    <entry>
+        <title>Encounter</title>
+        <id>urn:7efb426e-5b2b-4faa-99b1-9ffe63056048</id>
+        <updated>2014-12-09T10:59:59.129+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Encounter xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                </identifier>
+                <status value="finished" />
+                <class value="outpatient" />
+                <type>
+                    <text value="Consultation" />
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:9997/patients/5960610240356417537" />
+                    <display value="5960610240356417537" />
+                </subject>
+                <indication>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
+                </indication>
+                <serviceProvider>
+                    <reference value="http://localhost:9997/public/api/1.0/facilities/10000069.json" />
+                </serviceProvider>
+            </Encounter>
+        </content>
+    </entry>
+    <entry>
+        <title>Diagnosis</title>
+        <id>urn:2801e2b9-3886-4bf5-919f-ce9268fdc317</id>
+        <updated>2014-12-09T10:59:59.650+05:30</updated>
+        <author>
+            <name>bahmni</name>
+        </author>
+        <content type="text/xml">
+            <Condition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:2801e2b9-3886-4bf5-919f-ce9268fdc317" />
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:9997/patients/5960610240356417537" />
+                    <display value="5960610240356417537" />
+                </subject>
+                <encounter>
+                    <reference value="urn:7efb426e-5b2b-4faa-99b1-9ffe63056048" />
+                    <display value="Encounter" />
+                </encounter>
+                <dateAsserted value="2014-12-09T10:59:28+05:30" />
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c8c6d000-5b3f-460d-995d-ce3778f20d50"/>
+                        <code value="J19.513891"/>
+                        <display value="Viral pneumonia 513891"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/12722059-401d-4ef1-83c7-ebc3fb32bf80"/>
+                        <code value="12722059-401d-4ef1-83c7-ebc3fb32bf80"/>
+                        <display value="Viral pneumonia 513891"/>
+                    </coding>
+                </code>
+                <category>
+                    <coding>
+                        <system value="http://hl7.org/fhir/condition-category" />
+                        <code value="diagnosis" />
+                        <display value="Diagnosis" />
+                    </coding>
+                </category>
+                <status value="confirmed" />
+            </Condition>
+        </content>
+    </entry>
+</feed>

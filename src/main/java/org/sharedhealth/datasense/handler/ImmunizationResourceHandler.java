@@ -59,6 +59,11 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         medicationDao.save(medication);
     }
 
+    @Override
+    public void deleteExisting(EncounterComposition composition) {
+        medicationDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+    }
+
     private void setMedicationCodes(Immunization immunization, Medication medication) {
         List<Coding> codings = immunization.getVaccineType().getCoding();
         for (Coding coding : codings) {

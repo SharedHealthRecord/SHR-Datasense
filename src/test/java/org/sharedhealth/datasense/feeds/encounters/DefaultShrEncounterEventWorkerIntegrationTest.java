@@ -99,20 +99,103 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         assertNotNull(facility);
         assertEquals("Dohar Upazila Health Complex", facility.getFacilityName());
 
-        assertEquals(1, getEncounterList(shrEncounterId).size());
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
 
-        assertEquals(1, getDiagnosisList(shrEncounterId).size());
+        assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
     }
 
-    private List<Integer> getDiagnosisList(String shrEncounterId) {
+    @Test
+    public void shouldUpdateAnExistingEncounter() throws Exception {
+        EncounterBundle bundle = new EncounterBundle();
+        String healthId = "5960610240356417537";
+        givenThat(get(urlEqualTo("/api/v1/patients/" + healthId))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/P" + healthId + ".json"))));
+
+        bundle.setHealthId(healthId);
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithVitalsObservation.xml"));
+        String shrEncounterId = "shrEncounterId";
+        bundle.setEncounterId(shrEncounterId);
+        encounterEventWorker.process(bundle);
+
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(4, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
+
+
+        //update encounter with procedure
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithProcedure.xml"));
+        encounterEventWorker.process(bundle);
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(1, getProcedureIdList(shrEncounterId).size());
+        assertEquals(0, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
+
+        //update encounter with diagnosis
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithDiagnosis.xml"));
+        encounterEventWorker.process(bundle);
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(0, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getProcedureIdList(shrEncounterId).size());
+
+        //update encounter with death note
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithDeathNote.xml"));
+        encounterEventWorker.process(bundle);
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(0, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getProcedureIdList(shrEncounterId).size());
+        assertEquals(1, getPatientDeathList(shrEncounterId).size());
+
+        //update encounter with immunization
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithImmunization.xml"));
+        encounterEventWorker.process(bundle);
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(1, getMedicationIdList(shrEncounterId).size());
+        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(0, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getProcedureIdList(shrEncounterId).size());
+        assertEquals(0, getPatientDeathList(shrEncounterId).size());
+    }
+
+    private List<Integer> getProcedureIdList(String shrEncounterId) {
+        return jdbcTemplate.queryForList(
+                "select procedure_id from procedures where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
+
+    }
+
+    private List<Integer> getMedicationIdList(String shrEncounterId) {
+        return jdbcTemplate.queryForList(
+                "select medication_id from medication where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
+
+    }
+
+    private List<Integer> getPatientDeathList(String shrEncounterId) {
+        return jdbcTemplate.queryForList(
+                "select id from patient_death_details where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
+
+    }
+
+    private List<Integer> getDiagnosisIdList(String shrEncounterId) {
         return jdbcTemplate.queryForList(
                 "select diagnosis_id from diagnosis where encounter_id= :encounter_id",
                 Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
     }
 
-    private List<String> getEncounterList(String shrEncounterId) {
+    private List<String> getEncounterIdList(String shrEncounterId) {
         return jdbcTemplate.queryForList(
                 "select encounter_id from encounter where encounter_id= :encounter_id",
+                Collections.singletonMap("encounter_id", shrEncounterId), String.class);
+    }
+
+    private List<String> getObservationIdList(String shrEncounterId){
+        return jdbcTemplate.queryForList("select observation_id from observation where encounter_id = :encounter_id",
                 Collections.singletonMap("encounter_id", shrEncounterId), String.class);
     }
 

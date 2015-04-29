@@ -30,21 +30,26 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     @Override
     public void process(Resource resource, EncounterComposition composition) {
         observationValueMapper = new ObservationValueMapper();
-        Procedure procedure = (Procedure) resource;
-        org.sharedhealth.datasense.model.Procedure dataSenseProcedure = new org.sharedhealth.datasense.model.Procedure();
-        dataSenseProcedure.setPatientHid(composition.getPatientReference().getValue().getHid());
-        dataSenseProcedure.setEncounterId(composition.getEncounterReference().getValue().getEncounterId());
-        dataSenseProcedure.setEncounterDate(composition.getEncounterReference().getValue().getEncounterDateTime());
-        setStartAndEndDate(dataSenseProcedure, procedure);
-        setProcedureType(dataSenseProcedure, procedure);
-        setProcedureDiagnosis(dataSenseProcedure, procedure, composition);
+        Procedure procedureResource = (Procedure) resource;
+        org.sharedhealth.datasense.model.Procedure procedure = new org.sharedhealth.datasense.model.Procedure();
+        procedure.setPatientHid(composition.getPatientReference().getValue().getHid());
+        procedure.setEncounterId(composition.getEncounterReference().getValue().getEncounterId());
+        procedure.setEncounterDate(composition.getEncounterReference().getValue().getEncounterDateTime());
+        setStartAndEndDate(procedure, procedureResource);
+        setProcedureType(procedure, procedureResource);
+        setProcedureDiagnosis(procedure, procedureResource, composition);
 
-        procedureDao.save(dataSenseProcedure);
+        procedureDao.save(procedure);
     }
 
-    private void setProcedureDiagnosis(org.sharedhealth.datasense.model.Procedure dataSenseProcedure,
-                                       Procedure procedure, EncounterComposition composition) {
-        List<ResourceReference> diagnosisReportReference = procedure.getReport();
+    @Override
+    public void deleteExisting(EncounterComposition composition) {
+        procedureDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+    }
+
+    private void setProcedureDiagnosis(org.sharedhealth.datasense.model.Procedure procedure,
+                                       Procedure procedureResource, EncounterComposition composition) {
+        List<ResourceReference> diagnosisReportReference = procedureResource.getReport();
         if (diagnosisReportReference.size() == 0) {
             return;
         }
@@ -68,17 +73,17 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
                 break;
             }
             if (isConceptUrl(code.getSystemSimple())) {
-                dataSenseProcedure.setDiagnosisUuid(code.getCodeSimple());
+                procedure.setDiagnosisUuid(code.getCodeSimple());
                 isUuidSet = true;
             } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                dataSenseProcedure.setDiagnosisCode(code.getCodeSimple());
+                procedure.setDiagnosisCode(code.getCodeSimple());
                 isCodeSet = true;
             }
         }
     }
 
-    private void setProcedureType(org.sharedhealth.datasense.model.Procedure dataSenseProcedure, Procedure procedure) {
-        CodeableConcept codeableConcept = procedure.getType();
+    private void setProcedureType(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
+        CodeableConcept codeableConcept = procedureResource.getType();
         if (codeableConcept == null) {
             return;
         }
@@ -90,25 +95,25 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
                 break;
             }
             if (isConceptUrl(code.getSystemSimple())) {
-                dataSenseProcedure.setProcedureUuid(code.getCodeSimple());
+                procedure.setProcedureUuid(code.getCodeSimple());
                 isUuidSet = true;
             } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                dataSenseProcedure.setProcedureCode(code.getCodeSimple());
+                procedure.setProcedureCode(code.getCodeSimple());
                 isCodeSet = true;
             }
         }
     }
 
-    private void setStartAndEndDate(org.sharedhealth.datasense.model.Procedure dataSenseProcedure, Procedure procedure) {
-        Period period = procedure.getDate();
+    private void setStartAndEndDate(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
+        Period period = procedureResource.getDate();
         if (period != null) {
             String startDate = observationValueMapper.getObservationValue(period.getStart());
             if (startDate != null) {
-                dataSenseProcedure.setStartDate(DateUtil.parseDate(startDate));
+                procedure.setStartDate(DateUtil.parseDate(startDate));
             }
             String endDate = observationValueMapper.getObservationValue(period.getEnd());
             if (endDate != null) {
-                dataSenseProcedure.setEndDate(DateUtil.parseDate(endDate));
+                procedure.setEndDate(DateUtil.parseDate(endDate));
             }
         }
     }

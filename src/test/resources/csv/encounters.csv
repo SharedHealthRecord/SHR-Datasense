@@ -1,4 +1,4 @@
-encounter_id,encounter_datetime,encounter_type,visit_type,patient_hid,patient_age_years,patient_age_months,patient_age_days,encounter_location_id,facility_id
+encounter_id,encounter_datetime,encounter_type,visit_type,patient_hid,patient_age_years,patient_age_months,patient_age_days,encounter_location_id,facility_id,created_at
 100,2014-12-23,REG,outpatient,129,7,1,20,302618,1000
 103,2014-12-23,Consultation,outpatient,129,7,1,20,302618,1000
 110,2014-12-23,REG,outpatient,122,6,1,20,302618,1000

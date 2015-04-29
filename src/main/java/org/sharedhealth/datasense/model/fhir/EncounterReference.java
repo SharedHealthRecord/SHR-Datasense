@@ -21,6 +21,10 @@ public class EncounterReference {
         return value;
     }
 
+    public String getEncounterId(){
+        return this.getValue().getEncounterId();
+    }
+
     public org.hl7.fhir.instance.model.Encounter getEncounterReferenceValue() {
         return encounterReferenceValue;
     }

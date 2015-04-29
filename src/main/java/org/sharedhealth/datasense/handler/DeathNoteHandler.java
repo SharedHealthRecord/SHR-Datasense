@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.instance.model.CodeableConcept;
 import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.DateAndTime;
 import org.hl7.fhir.instance.model.Observation;
 import org.hl7.fhir.instance.model.Resource;
 import org.sharedhealth.datasense.config.DatasenseProperties;
@@ -18,9 +17,7 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.DateUtil.getDays;
-import static org.sharedhealth.datasense.util.DateUtil.getMonths;
-import static org.sharedhealth.datasense.util.DateUtil.getYears;
+import static org.sharedhealth.datasense.util.DateUtil.*;
 import static org.sharedhealth.datasense.util.TrUrl.isConceptUrl;
 import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 
@@ -62,7 +59,13 @@ public class DeathNoteHandler implements FhirResourceHandler {
         mapDateOfDeathAndPatientAge(patientDeathDetails, composition, deathNoteObservation, encounter);
         patientDeathDetails.setCircumstancesOfDeath(getCircumstancesOfDeath(composition, deathNoteObservation));
         mapCauseOfDeath(patientDeathDetails, composition, deathNoteObservation);
+
         patientDeathDetailsDao.save(patientDeathDetails);
+    }
+
+    @Override
+    public void deleteExisting(EncounterComposition composition) {
+        patientDeathDetailsDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
     }
 
     private void mapCauseOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {

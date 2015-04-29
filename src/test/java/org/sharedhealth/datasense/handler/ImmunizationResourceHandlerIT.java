@@ -72,7 +72,7 @@ public class ImmunizationResourceHandlerIT {
         bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
-        patient.setHid("5955445961621766145");
+        patient.setHid("5960610240356417537");
         composition.getPatientReference().setValue(patient);
         Encounter encounter = new Encounter();
         encounter.setEncounterId(shrEncounterId);
@@ -95,7 +95,7 @@ public class ImmunizationResourceHandlerIT {
         Medication medication = getMedication();
         assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
-        assertEquals("5955445961621766145", medication.getPatient().getHid());
+        assertEquals("5960610240356417537", medication.getPatient().getHid());
     }
 
     @Test
@@ -132,6 +132,7 @@ public class ImmunizationResourceHandlerIT {
     private Medication getMedication() {
         List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(medications.isEmpty());
+        assertEquals(1, medications.size());
         return medications.get(0);
     }
 

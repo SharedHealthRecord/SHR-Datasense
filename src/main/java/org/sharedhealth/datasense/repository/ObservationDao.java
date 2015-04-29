@@ -38,4 +38,13 @@ public class ObservationDao {
         String sql = "update observation set parent_id = :parent_id where observation_id = :observation_id";
         jdbcTemplate.update(sql, new MapSqlParameterSource(map));
     }
+
+    public void deleteExisting(String healthId, String encounterId){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+        map.put("encounter_id", encounterId);
+
+        jdbcTemplate.update("delete from observation where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
+
+    }
 }

@@ -50,6 +50,14 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         mapObservation(composition, observation, resource);
     }
 
+    @Override
+    public void deleteExisting(EncounterComposition composition) {
+        String encounterId = composition.getEncounterReference().getValue().getEncounterId();
+        String healthId = composition.getPatientReference().getHealthId();
+        observationDao.deleteExisting(healthId, encounterId);
+
+    }
+
     private void mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir
             .instance.model.Observation fhirObservation) {
         for (ObservationRelatedComponent relatedComponent : fhirObservation.getRelated()) {

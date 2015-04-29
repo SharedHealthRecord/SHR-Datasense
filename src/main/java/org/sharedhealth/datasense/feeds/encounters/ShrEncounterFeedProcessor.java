@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.instance.formats.ParserBase;
 import org.hl7.fhir.instance.formats.XmlParser;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
@@ -80,7 +81,7 @@ public class ShrEncounterFeedProcessor {
                 throw new RuntimeException("Unable to parse XML", e);
             }
             EncounterBundle encounterBundle = new EncounterBundle();
-            encounterBundle.setEncounterId(event.getId());
+            encounterBundle.setEncounterId(getSHREncounterId(event.getTitle()));
             encounterBundle.setTitle(event.getTitle());
             encounterBundle.addContent(resource);
             encounterEventWorker.process(encounterBundle);
@@ -89,5 +90,10 @@ public class ShrEncounterFeedProcessor {
         @Override
         public void cleanUp(Event event) {
         }
+    }
+
+    //Title -> Encounter:shrEncounterId
+    private String getSHREncounterId(String eventTitle) {
+        return StringUtils.substringAfter(eventTitle, "Encounter:");
     }
 }

@@ -30,4 +30,13 @@ public class ProcedureDao {
                 ":diagnosis_uuid, :diagnosis_code)";
         jdbcTemplate.update(sql, map);
     }
+
+    public void deleteExisting(String healthId, String encounterId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+        map.put("encounter_id", encounterId);
+
+        jdbcTemplate.update("delete from procedures where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
+
+    }
 }

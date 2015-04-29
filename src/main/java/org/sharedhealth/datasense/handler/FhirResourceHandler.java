@@ -6,4 +6,5 @@ import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 public interface FhirResourceHandler {
     boolean canHandle(Resource resource);
     void process(Resource resource, EncounterComposition composition);
+    void deleteExisting(EncounterComposition composition);
 }

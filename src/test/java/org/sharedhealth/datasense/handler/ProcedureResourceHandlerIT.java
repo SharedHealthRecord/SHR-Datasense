@@ -80,7 +80,9 @@ public class ProcedureResourceHandlerIT {
     @Test
     public void shouldProcessProcedures() throws Exception {
         procedureResourceHandler.process(procedureResource, composition);
-        Procedure procedure = findByEncounterId(SHR_ENCOUNTER_ID);
+        List<Procedure> procedures = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(1, procedures.size());
+        Procedure procedure = procedures.get(0);
         assertEquals(PATIENT_HID, procedure.getPatientHid());
         shouldProcessProcedureDates(procedure);
         shouldProcessProcedureType(procedure);
@@ -105,7 +107,7 @@ public class ProcedureResourceHandlerIT {
     }
 
 
-    private Procedure findByEncounterId(String shrEncounterId) {
+    private List<Procedure> findByEncounterId(String shrEncounterId) {
         String sql = "select patient_hid, encounter_id, date, start_date, end_date, procedure_uuid, procedure_code, " +
                 "diagnosis_uuid, diagnosis_code from procedures where encounter_id = :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
@@ -127,6 +129,6 @@ public class ProcedureResourceHandlerIT {
                 return procedure;
             }
         });
-        return procedures.isEmpty() ? null : procedures.get(0);
+        return procedures.isEmpty() ? null : procedures;
     }
 }

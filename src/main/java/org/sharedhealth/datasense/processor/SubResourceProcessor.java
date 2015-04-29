@@ -19,6 +19,7 @@ public class SubResourceProcessor implements ResourceProcessor {
     public void process(EncounterComposition composition) {
         for (Resource resource : composition.getParentResources()) {
             for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
+                fhirResourceHandler.deleteExisting(composition);
                 if (fhirResourceHandler.canHandle(resource)) {
                     fhirResourceHandler.process(resource, composition);
                 }

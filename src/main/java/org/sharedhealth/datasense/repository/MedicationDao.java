@@ -23,4 +23,13 @@ public class MedicationDao {
                 "values(:patient_hid, :encounter_id, :datetime, :status,  :drug_id, :uuid)";
         jdbcTemplate.update(sql, map);
     }
+
+    public void deleteExisting(String healthId, String encounterId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+        map.put("encounter_id", encounterId);
+
+        String sql = "delete from medication where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        jdbcTemplate.update(sql, map);
+    }
 }

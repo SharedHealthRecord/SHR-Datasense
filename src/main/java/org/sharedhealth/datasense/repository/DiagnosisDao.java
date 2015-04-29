@@ -13,7 +13,7 @@ public class DiagnosisDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    public void save(final Diagnosis diagnosis) {
+    public void save(Diagnosis diagnosis) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", diagnosis.getPatient().getHid());
         map.put("encounter_id", diagnosis.getEncounter().getEncounterId());
@@ -25,5 +25,13 @@ public class DiagnosisDao {
         jdbcTemplate.update("insert into diagnosis(patient_hid, encounter_id, diagnosis_datetime, " +
                 "diagnosis_code, diagnosis_concept_id, diagnosis_status, uuid) values " +
                 "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status, :uuid)", map);
+    }
+
+    public void delete(String healthId, String encounterId){
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+        map.put("encounter_id", encounterId);
+
+        jdbcTemplate.update("delete from diagnosis where patient_hid=:patient_hid and encounter_id=:encounter_id", map);
     }
 }

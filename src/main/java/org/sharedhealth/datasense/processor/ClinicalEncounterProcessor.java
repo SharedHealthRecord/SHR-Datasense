@@ -10,13 +10,10 @@ import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
-import static org.sharedhealth.datasense.util.DateUtil.getDays;
-import static org.sharedhealth.datasense.util.DateUtil.getMonths;
-import static org.sharedhealth.datasense.util.DateUtil.getYears;
+import static org.sharedhealth.datasense.util.DateUtil.*;
 
 @Component("clinicalEncounterProcessor")
 public class ClinicalEncounterProcessor implements ResourceProcessor {
@@ -35,8 +32,9 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounterReference()
                 .getEncounterReferenceValue();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
-        encounterDao.save(encounter);
         composition.getEncounterReference().setValue(encounter);
+        encounterDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        encounterDao.save(encounter);
         if (nextProcessor != null) {
             nextProcessor.process(composition);
         }
