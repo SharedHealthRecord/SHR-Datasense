@@ -9,6 +9,7 @@ body{
 #container{
     width: 1000px;
     margin: 0px auto;
+    border: 1px solid;
 }
 
 #container div{
@@ -20,11 +21,19 @@ input{
     font-size : 14px;
 }
 
+optgroup{
+    font-size : 14px;
+}
+
 input.job_name{
     width: 250px;
 }
 
 input.parameter{
+    width: 150px;
+}
+
+input.expression{
     width: 150px;
 }
 

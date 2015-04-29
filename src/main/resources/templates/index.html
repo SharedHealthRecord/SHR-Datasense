@@ -2,6 +2,8 @@
 <head>
     <title>Manage Scheduler</title>
     <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/scripts/jquery-2.1.3.min.js"/>
+    <script src="/scripts/script.js"/>
 </head>
 <body>
 <div id="container">
@@ -25,8 +27,23 @@
         <section class="block stopped_jobs" th:each="job: ${stoppedJobs}">
             <form action="/scheduler/start" method="post">
                 <input class="job_name" th:value="${job.name}" name="reportName" type="text" readonly="true"/>
-                <input th:value="${job.cronExpression}" name="expression" type="text" placeholder="Enter Cron Expression" required="true"/>
-                <input class="parameter" th:value="${job.paramKey}" name="paramKey" type="text" placeholder="Enter Parameter Key" readonly="true"/>
+                <select class="interval_value">
+                    <optgroup>
+                        <option value="1">1</option>
+                        <option value="5">5</option>
+                        <option value="10">10</option>
+                    </optgroup>
+                </select>
+                <select class="interval_unit">
+                    <optgroup>
+                        <option value="HOURS">Hours</option>
+                        <option value="DAYS">Days</option>
+                    </optgroup>
+                </select>
+                <input class="expression" th:value="${job.cronExpression}" name="expression" type="text"
+                       placeholder="Cron Expression" required="true"/>
+                <input class="parameter" th:value="${job.paramKey}" name="paramKey" type="text"
+                       placeholder="Enter Parameter Key" readonly="true"/>
                 <input class="parameter" th:value="${job.paramValue}" name="paramValue" type="date" required="true"/>
                 <button class="button" type="submit">Start Job</button>
             </form>
