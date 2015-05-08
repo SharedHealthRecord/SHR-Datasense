@@ -17,13 +17,19 @@ public class SubResourceProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
+        deleteExistingEncounter(composition);
         for (Resource resource : composition.getParentResources()) {
             for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
-                fhirResourceHandler.deleteExisting(composition);
                 if (fhirResourceHandler.canHandle(resource)) {
                     fhirResourceHandler.process(resource, composition);
                 }
             }
+        }
+    }
+
+    private void deleteExistingEncounter(EncounterComposition composition) {
+        for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
+            fhirResourceHandler.deleteExisting(composition);
         }
     }
 
