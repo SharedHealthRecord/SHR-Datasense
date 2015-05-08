@@ -391,4 +391,8 @@
             <column name="created_at" type="datetime" defaultValueComputed="now()"/>
         </addColumn>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150508-1900" author="angshu">
+        <comment>Change reference_term.name size to varchar 255</comment>
+        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
+    </changeSet>
 </databaseChangeLog>
