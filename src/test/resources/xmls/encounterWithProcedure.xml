@@ -18,7 +18,7 @@
                 <date value="2015-02-04T12:13:54+05:30" />
                 <status value="final" />
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537" />
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537" />
                     <display value="5960610240356417537" />
                 </subject>
                 <encounter>
@@ -64,7 +64,7 @@
                     <text value="DISCHARGE" />
                 </type>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537" />
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537" />
                     <display value="5960610240356417537" />
                 </subject>
                 <participant>
@@ -101,7 +101,7 @@
                 <status value="final" />
                 <issued value="2015-02-04T12:13:54+05:30" />
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537" />
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537" />
                     <display value="5960610240356417537" />
                 </subject>
                 <performer>
@@ -142,7 +142,7 @@
                     <value value="urn:9f582d08-1245-4c5a-a4b0-8d021298ac61" />
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537" />
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537" />
                     <display value="5960610240356417537" />
                 </subject>
                 <type>

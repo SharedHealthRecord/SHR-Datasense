@@ -19,7 +19,7 @@
                 <date value="2015-01-14T15:04:57+05:30"/>
                 <status value="final"/>
                 <subject>
-                    <reference value="http://localhost:9997/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://localhost:9997/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <encounter>
@@ -60,7 +60,7 @@
                     <text value="Consultation"/>
                 </type>
                 <subject>
-                    <reference value="http://localhost:9997/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://localhost:9997/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <participant>
@@ -100,7 +100,7 @@
                     </coding>
                 </vaccineType>
                 <subject>
-                    <reference value="http://localhost:9997/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://localhost:9997/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <refusedIndicator value="false"/>

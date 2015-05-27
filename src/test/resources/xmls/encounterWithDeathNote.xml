@@ -19,7 +19,7 @@
                 <date value="2015-01-20T11:10:53+05:30"/>
                 <status value="final"/>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <encounter>
@@ -77,7 +77,7 @@
                     <text value="Consultation"/>
                 </type>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <participant>
@@ -118,7 +118,7 @@
                     <value value="urn:dcd89f72-8e07-4b6d-af52-8575c1b9c72b"/>
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
             </Observation>
@@ -151,7 +151,7 @@
                     <value value="urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2"/>
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
                 <related>
@@ -210,7 +210,7 @@
                     <value value="urn:879ed6b7-56ae-41f2-bad0-a797446175e6"/>
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
             </Observation>
@@ -240,7 +240,7 @@
                     <value value="urn:d5ee301c-9bd9-4660-846b-4b224cabe1e2"/>
                 </identifier>
                 <subject>
-                    <reference value="http://172.18.46.56:8081/api/v1/patients/5960610240356417537"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/5960610240356417537"/>
                     <display value="5960610240356417537"/>
                 </subject>
             </Observation>

@@ -72,7 +72,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
                         .withStatus(200)
                         .withBody(response)));
         
-        givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
+        givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -108,7 +108,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     public void shouldUpdateAnExistingEncounter() throws Exception {
         EncounterBundle bundle = new EncounterBundle();
         String healthId = "5960610240356417537";
-        givenThat(get(urlEqualTo("/api/v1/patients/" + healthId))
+        givenThat(get(urlEqualTo("/api/default/patients/" + healthId))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")

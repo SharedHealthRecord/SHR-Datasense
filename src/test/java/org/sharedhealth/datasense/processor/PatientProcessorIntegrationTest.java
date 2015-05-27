@@ -73,7 +73,7 @@ public class PatientProcessorIntegrationTest {
                         .withStatus(200)
                         .withBody(response)));
 
-        givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
+        givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -89,7 +89,7 @@ public class PatientProcessorIntegrationTest {
 
     @Test(expected = RuntimeException.class)
     public void shouldThrowRuntimeExceptionIfIncorrectUrl() throws Exception {
-        givenThat(get(urlEqualTo("/api/v1/patients/" + VALID_HEALTH_ID))
+        givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(404)));
         ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
