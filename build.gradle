@@ -61,14 +61,15 @@ ext.libraries = [
         liquibase            : "org.liquibase:liquibase-core:3.1.1",
         atomfeed_client      : "org.ict4h:atomfeed-client:1.5",
         atomfeed_commons     : "org.ict4h:atomfeed-commons:1.5",
-        rome                 : "rome:rome:1.0",
+        rome                 : 'com.rometools:rome:1.5.0',
         apache_httpclient    : "org.apache.httpcomponents:httpclient:4.3.5",
         apache_commons_codec : "commons-codec:commons-codec:1.9",
         apache_commons_dbcp  : "commons-dbcp:commons-dbcp:1.4",
         spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE",
         joda                 : "joda-time:joda-time:2.5",
         thymeleaf            : "org.thymeleaf:thymeleaf-spring3:2.1.4.RELEASE",
-        free_marker          : "org.freemarker:freemarker:2.3.21"
+        free_marker          : "org.freemarker:freemarker:2.3.21",
+        spring_web           : "org.springframework:spring-web:4.1.0.RELEASE",
 ]
 
 ext.testLibraries = [
@@ -82,13 +83,17 @@ ext.testLibraries = [
 dependencies {
     compile('org.springframework.boot:spring-boot-starter-web:1.1.8.RELEASE') {
         exclude group: 'org.springframework.boot', module: 'spring-boot-starter-logging'
+        exclude module: "logback-classic"
+    }
+    compile ('org.springframework.boot:spring-boot-starter-security:1.2.0.RELEASE') {
+        exclude module: "logback-classic"
     }
     compile group: "org.ict4h", name: "aggregate-query-service", version: "1.0-SNAPSHOT", changing: true
     compile group: 'me.fhir', name:'fhir-0.12', version: '0.3'
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
-            libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda, libraries.free_marker,libraries.thymeleaf
+            libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda, libraries.free_marker,libraries.thymeleaf, libraries.spring_web
 
     testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.mysql_connector, testLibraries.h2_database

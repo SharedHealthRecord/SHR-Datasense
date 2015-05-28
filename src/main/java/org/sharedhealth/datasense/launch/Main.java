@@ -33,7 +33,7 @@ import static java.lang.Integer.valueOf;
 import static java.lang.System.getenv;
 
 @Configuration
-@Import({DatabaseConfig.class, ScheduleConfig.class, ApplicationConfig.class})
+@Import({DatabaseConfig.class, ScheduleConfig.class, ApplicationConfig.class, SecurityConfig.class})
 @ComponentScan(basePackages = {"org.sharedhealth.datasense.config",
         "org.sharedhealth.datasense.processor",
         "org.sharedhealth.datasense.feeds",

@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.controller;
 import org.quartz.SchedulerException;
 import org.sharedhealth.datasense.service.SchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -24,8 +25,9 @@ public class SchedulerController {
     }
 
     @RequestMapping(value = "/manage", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView manageScheduler() throws SchedulerException {
-        ModelAndView modelAndView = new ModelAndView("index");
+        ModelAndView modelAndView = new ModelAndView("reports");
         modelAndView.addObject("runningJobs", schedulerService.getRunningJobs());
         modelAndView.addObject("stoppedJobs", schedulerService.getStoppedJobs());
         return modelAndView;

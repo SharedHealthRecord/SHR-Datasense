@@ -59,6 +59,7 @@ public class DatasenseProperties implements EnvironmentAware {
 
     private String maxFailedEvents;
 
+    private String idpServerUserInfoUrl;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -87,17 +88,20 @@ public class DatasenseProperties implements EnvironmentAware {
         this.facilityRegistryUrl = env.getProperty("FACILITY_REGISTRY_URL");
         this.providerRegistryUrl = env.getProperty("PROVIDER_REGISTRY_URL");
         this.idpServerLoginUrl = env.getProperty("IDP_SERVER_LOGIN_URL");
+        this.idpServerUserInfoUrl = env.getProperty("IDP_SERVER_USERINFO_URL");
         this.maxFailedEvents = env.getProperty("MAX_FAILED_EVENTS");
+
     }
+
 
     public String getShrBaseUrl() {
         return shrServerUrl.trim();
     }
 
-
     public String getMciPatientUrl() {
         return mciServerPatientUrl.trim();
     }
+
 
     public String getIdentityServerLoginUrl() {
         return idpServerLoginUrl.trim();
@@ -185,6 +189,10 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getFacilityRegistryUrl() {
         return facilityRegistryUrl.trim();
+    }
+
+    public String getIdpServerUserInfoUrl() {
+        return idpServerUserInfoUrl.trim();
     }
 
     private String getBaseUrl(String scheme, String host, String port) {
