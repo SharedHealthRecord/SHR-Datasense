@@ -58,7 +58,7 @@ ext.libraries = [
         spring_boot_logging  : "org.springframework.boot:spring-boot-starter-log4j:1.1.1.RELEASE",
         quartz_scheduler     : "org.quartz-scheduler:quartz:2.2.1",
         mysql_connector      : "mysql:mysql-connector-java:5.1.33",
-        liquibase            : "org.liquibase:liquibase-core:3.1.1",
+        liquibase            : "org.liquibase:liquibase-core:3.3.1",
         atomfeed_client      : "org.ict4h:atomfeed-client:1.5",
         atomfeed_commons     : "org.ict4h:atomfeed-commons:1.5",
         rome                 : 'com.rometools:rome:1.5.0',
