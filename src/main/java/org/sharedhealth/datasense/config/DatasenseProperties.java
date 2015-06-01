@@ -60,6 +60,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String maxFailedEvents;
 
     private String idpServerUserInfoUrl;
+    private String dhisBaseUrl;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -90,6 +91,8 @@ public class DatasenseProperties implements EnvironmentAware {
         this.idpServerLoginUrl = env.getProperty("IDP_SERVER_LOGIN_URL");
         this.idpServerUserInfoUrl = env.getProperty("IDP_SERVER_USERINFO_URL");
         this.maxFailedEvents = env.getProperty("MAX_FAILED_EVENTS");
+        this.dhisBaseUrl = env.getProperty("DHIS_BASE_URL");
+
 
     }
 
@@ -212,5 +215,9 @@ public class DatasenseProperties implements EnvironmentAware {
     @Bean
     public static PropertySourcesPlaceholderConfigurer propertyPlaceholderConfigurer() {
         return new PropertySourcesPlaceholderConfigurer();
+    }
+
+    public String getDhisBaseUrl() {
+        return dhisBaseUrl.trim();
     }
 }

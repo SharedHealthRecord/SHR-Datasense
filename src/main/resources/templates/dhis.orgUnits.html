@@ -34,27 +34,23 @@
     <div>
         <h2>&nbsp;</h2>
     </div>
-    <div th:if="!${availableReports.isEmpty()}">
-        <h2>Available Reports</h2>
+    <div th:if="!${allOrgUnits.isEmpty()}">
+        <h2>Facilities</h2>
         <table class="table">
             <thead>
             <tr>
-                <th>Report to Submit</th>
-                <th>Dataset Name</th>
+                <th>Facility</th>
+                <th>Organization Unit</th>
                 <th>Action</th>
             </tr>
             </thead>
             <tbody>
-            <tr th:class="${report.datasetName}? 'success' : 'info' " th:each="report: ${availableReports}">
-                <td th:text="${report.name}">Configuration name</td>
-                <td th:text="${report.datasetName}">Dataset Name</td>
+            <tr th:class="${orgUnit.orgUnitId}? 'success' : 'info' " th:each="orgUnit: ${allOrgUnits}">
+                <td th:text="${orgUnit.facilityName}">Configuration name</td>
+                <td th:text="${orgUnit.orgUnitName}">Dataset Name</td>
                 <td>
-                    <a th:href="|/dhis2/reports/configure?reportName=${report.name}|" >
+                    <a th:href="|/dhis2/orgUnits/configure?facilityId=${orgUnit.facilityId}|" >
                         <img src="/images/configure.png" alt="Configure" class="button-in-td"/>
-                    </a>
-                    <a th:class="${report.datasetName}? 'show' : 'hidden' "
-                       th:href="|/dhis2/reports/schedule?reportName=${report.name}|" >
-                        <img src="/images/schedule.png" alt="Schedule"/>
                     </a>
                 </td>
             </tr>

@@ -58,4 +58,8 @@ public class FacilityDao {
             }
         };
     }
+
+    public List<Facility> fetchAll() {
+        return jdbcTemplate.query("select " + ALL_FIELDS + " from facility", getRowMapperForFacility());
+    }
 }

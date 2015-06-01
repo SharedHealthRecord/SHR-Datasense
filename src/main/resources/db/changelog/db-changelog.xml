@@ -420,4 +420,29 @@
         <comment>Change facility.type size to varchar 255</comment>
         <modifyDataType tableName="facility" columnName="type" newDataType="varchar(255)" />
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150529-1205" author="angshu" context="setup">
+        <comment>creating mapping table for datasense report to dhis2 datasets</comment>
+        <createTable tableName="dhis_dataset_map">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="name" type="varchar(255)" />
+            <column name="config_file" type="varchar(255)" />
+            <column name="dataset_id" type="varchar(20)" />
+            <column name="dataset_name" type="varchar(255)" />
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150530-1253" author="angshu" context="setup">
+        <comment>creating mapping table for datasense facility to dhis2 org unit</comment>
+        <createTable tableName="dhis_orgunit_map">
+            <column name="id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true" />
+            </column>
+            <column name="facility_id" type="varchar(20)" />
+            <column name="org_unit_id" type="varchar(20)" />
+            <column name="org_unit_name" type="varchar(255)" />
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+        </createTable>
+    </changeSet>
 </databaseChangeLog>

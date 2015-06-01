@@ -41,3 +41,8 @@ input.expression{
     width: 100px;
     font-size : 14px;
 }
+
+.button-in-td {
+ float: left;
+ margin-right: 5px;
+}

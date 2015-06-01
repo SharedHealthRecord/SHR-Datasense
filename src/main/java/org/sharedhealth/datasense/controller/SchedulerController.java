@@ -27,7 +27,7 @@ public class SchedulerController {
     @RequestMapping(value = "/manage", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView manageScheduler() throws SchedulerException {
-        ModelAndView modelAndView = new ModelAndView("reports");
+        ModelAndView modelAndView = new ModelAndView("index");
         modelAndView.addObject("runningJobs", schedulerService.getRunningJobs());
         modelAndView.addObject("stoppedJobs", schedulerService.getStoppedJobs());
         return modelAndView;
