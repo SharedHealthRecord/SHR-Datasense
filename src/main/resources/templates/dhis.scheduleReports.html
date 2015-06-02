@@ -36,14 +36,14 @@
     <div th:if="!${orgUnits.isEmpty()}">
         <h3>Select Facilities and schedule submission</h3>
 
-        <div class="list-group" th:each="org: ${orgUnits}">
-            <div class="checkbox list-group-item">
+        <form role="form">
+            <div class="checkbox" th:each="org: ${orgUnits}">
                 <label>
-                    <input type="checkbox" th:value="${org.facilityId}"/>
+                    <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}"/>
                     <span th:utext="${org.facilityName}">name</span>
                 </label>
             </div>
-        </div>
+        </form>
 
         <div class="row">
             <div class="col-md-2">
@@ -51,6 +51,8 @@
             </div>
             <div class="col-md-2">
                 <input id="runOn" type="text" class="form-control" placeholder="Run on"/>
+            </div>
+            <div class="col-md-2">
                 <button class="configure-btn btn">Schedule</button>
             </div>
         </div>

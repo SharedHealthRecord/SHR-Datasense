@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 public class HomeController {
-    @RequestMapping(value = {"/home" }, method = RequestMethod.GET)
+    @RequestMapping(value = {"/home", "/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public String home() {
         return "home";
