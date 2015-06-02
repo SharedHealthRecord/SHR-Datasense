@@ -17,7 +17,7 @@ function searchDHISDataset(searchTxt) {
 
 function configureDatasetForReport(e) {
   var dhisDatasetId = $(e.target).attr("data-datasetId");
-  var dhisDatasetName = $("div[data-datasetId="+dhisDatasetId).text().trim();
+  var dhisDatasetName = $("div[data-datasetId="+dhisDatasetId+"]").text().trim();
   var dsReportName = $("#dsReportName").val().trim();
   var dsConfigFile = $("#dsConfigFile").val().trim();
 
@@ -55,7 +55,7 @@ function searchDHISOrgUnit(searchTxt) {
 
 function configureOrgUnitForFacility(e) {
   var dhisOrgUnitId = $(e.target).attr("data-orgUnitId");
-  var dhisOrgUnitName = $("div[data-orgUnitId="+dhisOrgUnitId).text().trim();
+  var dhisOrgUnitName = $("div[data-orgUnitId="+dhisOrgUnitId+"]").text().trim();
   var dsFacilityId = $("#dsFacilityId").val().trim();
 
   var postData = {"facilityId": dsFacilityId, "orgUnitId": dhisOrgUnitId, "orgUnitName": dhisOrgUnitName };
