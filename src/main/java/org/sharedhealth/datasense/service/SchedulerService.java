@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.service;
 
 import org.apache.log4j.Logger;
 import org.quartz.*;
+import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISDailyOPDIPDPostJob;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyColposcopyPostJob;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISMonthlyEPIInfantPostJob;
@@ -176,4 +177,6 @@ public class SchedulerService {
         jobDetailFactoryBean.afterPropertiesSet();
         return jobDetailFactoryBean.getObject();
     }
+
+
 }

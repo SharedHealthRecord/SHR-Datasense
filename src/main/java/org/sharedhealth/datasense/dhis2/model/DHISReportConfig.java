@@ -7,6 +7,7 @@ public class DHISReportConfig {
     private String configFile;
     private String datasetName;
     private String datasetId;
+    private String periodType;
 
     public DHISReportConfig() {
     }
@@ -16,12 +17,13 @@ public class DHISReportConfig {
         this.configFile = configFile;
     }
 
-    public DHISReportConfig(int id, String name, String configFile, String datasetName, String datasetId) {
+    public DHISReportConfig(int id, String name, String configFile, String datasetName, String datasetId, String periodType) {
         this.id = id;
         this.name = name;
         this.configFile = configFile;
         this.datasetName = datasetName;
         this.datasetId = datasetId;
+        this.periodType = periodType;
     }
 
     public String getName() {
@@ -62,5 +64,13 @@ public class DHISReportConfig {
 
     public void setDatasetId(String datasetId) {
         this.datasetId = datasetId;
+    }
+
+    public String getPeriodType() {
+        return periodType;
+    }
+
+    public void setPeriodType(String periodType) {
+        this.periodType = periodType;
     }
 }

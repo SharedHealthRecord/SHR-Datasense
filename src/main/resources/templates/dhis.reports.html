@@ -53,7 +53,7 @@
                         <img src="/images/configure.png" alt="Configure" class="button-in-td"/>
                     </a>
                     <a th:class="${report.datasetName}? 'show' : 'hidden' "
-                       th:href="|/dhis2/reports/schedule?reportName=${report.name}|" >
+                       th:href="|/dhis2/reports/schedule/${report.datasetId}" >
                         <img src="/images/schedule.png" alt="Schedule"/>
                     </a>
                 </td>

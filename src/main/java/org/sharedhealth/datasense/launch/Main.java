@@ -4,14 +4,17 @@ package org.sharedhealth.datasense.launch;
 import org.apache.log4j.Logger;
 import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
+import org.sharedhealth.datasense.export.dhis.reports.DHISDynamicReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyColposcopyReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyEPIInfantReport;
+import org.sharedhealth.datasense.scheduler.AutowiringSpringBeanJobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
 import org.springframework.boot.context.embedded.tomcat.TomcatEmbeddedServletContainerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -63,6 +66,12 @@ public class Main {
     @Autowired
     private DHISMonthlyColposcopyReport dhisMonthlyColposcopyReport;
 
+    @Autowired
+    private DHISDynamicReport dhisDynamicReport;
+
+    @Autowired
+    private ApplicationContext applicationContext;
+
     Logger log = Logger.getLogger(Main.class);
 
     @Bean
@@ -86,31 +95,35 @@ public class Main {
 
     @Bean
     public SchedulerFactoryBean scheduler() {
-        SchedulerFactoryBean schedulerFactoryBean = new SchedulerFactoryBean();
-        schedulerFactoryBean.setDataSource(dataSource);
-        schedulerFactoryBean.setTransactionManager(txmanager);
+        SchedulerFactoryBean quartzScheduler = new SchedulerFactoryBean();
+        quartzScheduler.setDataSource(dataSource);
+        quartzScheduler.setTransactionManager(txmanager);
+        //quartzScheduler.setOverwriteExistingJobs(true);
+        quartzScheduler.setSchedulerName("datasense-scheduler");
 
-        schedulerFactoryBean.setConfigLocation(new ClassPathResource("db/quartz.properties"));
-        schedulerFactoryBean.setJobFactory(jobFactory());
-
+        quartzScheduler.setJobFactory(jobFactory());
+        quartzScheduler.setConfigLocation(new ClassPathResource("db/quartz.properties"));
 
 //        schedulerFactoryBean.setApplicationContextSchedulerContextKey("applicationContext");
-        schedulerFactoryBean.setSchedulerContextAsMap(schedulerContextMap());
-        schedulerFactoryBean.setWaitForJobsToCompleteOnShutdown(false);
+        quartzScheduler.setSchedulerContextAsMap(schedulerContextMap());
+        quartzScheduler.setWaitForJobsToCompleteOnShutdown(false);
         try {
-            schedulerFactoryBean.afterPropertiesSet();
+            quartzScheduler.afterPropertiesSet();
         } catch (Exception e) {
             log.error("Cannot start scheduler");
             //:todo this should be thrown
             throw new RuntimeException("Cannot start scheduler:-", e);
         }
-        return schedulerFactoryBean;
+        return quartzScheduler;
     }
 
 
     @Bean
     public JobFactory jobFactory() {
-        SpringBeanJobFactory springBeanJobFactory = new SpringBeanJobFactory();
+        //SpringBeanJobFactory springBeanJobFactory = new SpringBeanJobFactory();
+        // custom job factory of spring with DI support for @Autowired!
+        AutowiringSpringBeanJobFactory springBeanJobFactory = new AutowiringSpringBeanJobFactory();
+        springBeanJobFactory.setApplicationContext(applicationContext);
         return springBeanJobFactory;
     }
 
@@ -120,6 +133,7 @@ public class Main {
         ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
         ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
         ctx.put("dhisMonthlyColposcopyReport", dhisMonthlyColposcopyReport);
+        ctx.put("dhisDynamicReport", dhisDynamicReport);
         return ctx;
     }
 

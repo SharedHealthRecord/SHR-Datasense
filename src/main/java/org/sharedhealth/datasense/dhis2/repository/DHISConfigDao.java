@@ -16,16 +16,19 @@ import java.util.HashMap;
 import java.util.List;
 
 @Repository
-public class DHISDatasetMapDao {
+public class DHISConfigDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private String DATASET_CFG_ALL_FIELDS = "id, name, config_file, dataset_name, dataset_id";
+    private String DATASET_CFG_ALL_FIELDS = "id, name, config_file, dataset_name, dataset_id, period_type";
 
     private final String qryOrgUnitInclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
             "left outer join dhis_orgunit_map ou on f.facility_id=ou.facility_id";
 
     private final String qryOrgUnitExclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
             "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id";
+
+    private final String qryOrgUnitByFacilityId = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
+            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where f.facility_id = :facility_id";
 
 
     public java.util.List<DHISReportConfig> findAllMappedDatasets() {
@@ -43,7 +46,8 @@ public class DHISDatasetMapDao {
                         rs.getString("name"),
                         rs.getString("config_file"),
                         rs.getString("dataset_name"),
-                        rs.getString("dataset_id"));
+                        rs.getString("dataset_id"),
+                        rs.getString("period_type"));
             }
         };
     }
@@ -67,8 +71,9 @@ public class DHISDatasetMapDao {
         map.put("config_file", config.getConfigFile());
         map.put("dataset_name", config.getDatasetName());
         map.put("dataset_id", config.getDatasetId());
-        String query = "insert into dhis_dataset_map (name, config_file, dataset_name, dataset_id) " +
-                "values (:name, :config_file, :dataset_name, :dataset_id)";
+        map.put("period_type", config.getPeriodType());
+        String query = "insert into dhis_dataset_map (name, config_file, dataset_name, dataset_id, period_type) " +
+                "values (:name, :config_file, :dataset_name, :dataset_id, :period_type)";
         jdbcTemplate.update(query, map);
     }
 
@@ -105,5 +110,21 @@ public class DHISDatasetMapDao {
         String query = "insert into dhis_orgunit_map (facility_id, org_unit_id, org_unit_name) " +
                 "values (:facility_id, :org_unit_id, :org_unit_name)";
         jdbcTemplate.update(query, map);
+    }
+
+    public DHISReportConfig getMappedConfigForDataset(String datasetId) {
+        List<DHISReportConfig> configs = jdbcTemplate.query(
+                String.format("select %s from dhis_dataset_map where dataset_id=:dataset_id", DATASET_CFG_ALL_FIELDS),
+                Collections.singletonMap("dataset_id", datasetId),
+                rowMapperForDataset());
+        return configs.isEmpty() ? null : configs.get(0);
+    }
+
+    public DHISOrgUnitConfig findOrgUnitConfigFor(String facilityId) {
+        List<DHISOrgUnitConfig> orgUnitConfigs = jdbcTemplate.query(qryOrgUnitByFacilityId,
+                Collections.singletonMap("facility_id", facilityId),
+                rowMapperForOrgUnit());
+
+        return orgUnitConfigs.isEmpty() ? null : orgUnitConfigs.get(0);
     }
 }

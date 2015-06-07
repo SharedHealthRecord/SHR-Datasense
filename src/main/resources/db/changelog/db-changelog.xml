@@ -445,4 +445,10 @@
             <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150602-1405" author="angshu" context="setup">
+        <comment>adding column dhis_dataset_map.period_type</comment>
+        <addColumn tableName="dhis_dataset_map">
+            <column name="period_type" type="varchar(25)"></column>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

@@ -17,11 +17,12 @@ function searchDHISDataset(searchTxt) {
 
 function configureDatasetForReport(e) {
   var dhisDatasetId = $(e.target).attr("data-datasetId");
+  var periodType = $(e.target).attr("data-periodType");
   var dhisDatasetName = $("div[data-datasetId="+dhisDatasetId+"]").text().trim();
   var dsReportName = $("#dsReportName").val().trim();
   var dsConfigFile = $("#dsConfigFile").val().trim();
 
-  var postData = {"name": dsReportName, "configFile": dsConfigFile, "datasetName": dhisDatasetName, "datasetId": dhisDatasetId };
+  var postData = {"name": dsReportName, "configFile": dsConfigFile, "datasetName": dhisDatasetName, "datasetId": dhisDatasetId, "periodType": periodType };
 
   $.ajax({
     type: "POST",

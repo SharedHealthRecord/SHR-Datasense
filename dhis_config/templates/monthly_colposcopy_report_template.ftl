@@ -1,8 +1,8 @@
 {
-"dataSet": "Ty54bZ7blXk",
-"period": "${period}",
-"orgUnit": "${orgUnit}",
-"dataValues": [
+  "dataSet": "Ty54bZ7blXk",
+  "period": "${paramReportingPeriod}",
+  "orgUnit": "${paramOrgUnitId}",
+  "dataValues": [
         <#list Colposcopy_CIN_I as row>
                 {   "dataElement": "Kax6MfVu7rl", "categoryOptionCombo": "dCWAvZ8hcrs",
                         "value": "${row.v1}"
@@ -58,5 +58,5 @@
                         "value": "${row.v1}"
                 }
         </#list>
-]
+  ]
 }

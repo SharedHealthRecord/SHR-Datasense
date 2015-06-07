@@ -1,8 +1,8 @@
 {
-"dataSet": "yChWWiTkK6i",
-"period": "${period}",
-"orgUnit": "${orgUnit}",
-"dataValues": [
+  "dataSet": "yChWWiTkK6i",
+  "period": "${paramReportingPeriod}",
+  "orgUnit": "${paramOrgUnitId}",
+  "dataValues": [
         <#list BCG_0_to_11_months as row>
             {   "dataElement": "nbQTnNFs1I8", "categoryOptionCombo": "dCWAvZ8hcrs",
                 "value": "${row.v1}"

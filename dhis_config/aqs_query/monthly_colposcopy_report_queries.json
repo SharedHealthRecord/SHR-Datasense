@@ -4,47 +4,47 @@
     "queries": [
       {
         "queryName": "Colposcopy_CIN_I",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.0' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.0' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Colposcopy_CIN_II",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.1' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.1' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Colposcopy_CIN_III",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.2' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'N87.2' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Colposcopy_CA_CERVIX",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'C53' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Colposcopy' and pr.diagnosis_code= 'C53' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Management_LEEP",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'LEEP' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'LEEP' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Management_Cold_Coagulation",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Cold coagulation' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Cold coagulation' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Management_Cryotherapy",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Cryotherapy' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Cryotherapy' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Histopathology_CIN_I",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.0' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.0' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Histopathology_CIN_II",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.1' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.1' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Histopathology_CIN_III",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.2' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'N87.2' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       },
       {
         "queryName": "Histopathology_CA_CERVIX",
-        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'C53' and month(pr.start_date) = :MONTH: and year(pr.start_date) = :YEAR: and e.facility_id = :FACILITY:;"
+        "query": "select count(distinct pr.patient_hid) as v1 from procedures pr, concept c, patient p, encounter e where pr.procedure_uuid = c.concept_uuid and pr.patient_hid = p.patient_hid and pr.encounter_id = e.encounter_id and p.gender = 'F' and c.name = 'Histopathology' and pr.diagnosis_code= 'C53' and month(pr.start_date) = month(':paramStartDate:') and year(pr.start_date) = year(':paramStartDate:') and e.facility_id = ':paramFacilityId:';"
       }
     ]
   }

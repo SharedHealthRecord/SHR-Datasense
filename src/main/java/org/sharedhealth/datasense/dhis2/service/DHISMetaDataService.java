@@ -4,7 +4,7 @@ import liquibase.util.file.FilenameUtils;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
-import org.sharedhealth.datasense.dhis2.repository.DHISDatasetMapDao;
+import org.sharedhealth.datasense.dhis2.repository.DHISConfigDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
@@ -25,14 +25,14 @@ public class DHISMetaDataService {
     DatasenseProperties properties;
 
     @Autowired
-    DHISDatasetMapDao dhisDatasetMapDao;
+    DHISConfigDao dhisConfigDao;
 
     public List<DHISReportConfig> getConfiguredReports() {
         return getReportMappings();
     }
 
     private List<DHISReportConfig> getReportMappings() {
-        List<DHISReportConfig> mappedDatasets = dhisDatasetMapDao.findAllMappedDatasets();
+        List<DHISReportConfig> mappedDatasets = dhisConfigDao.findAllMappedDatasets();
         List<DHISReportConfig> allReports = mergeWithConfiguredReports(mappedDatasets);
         for (DHISReportConfig configuredReport : allReports) {
 
@@ -71,14 +71,18 @@ public class DHISMetaDataService {
 
     @Transactional
     public void save(DHISReportConfig config) {
-        dhisDatasetMapDao.save(config);
+        dhisConfigDao.save(config);
     }
 
     public List<DHISOrgUnitConfig> getAvailableOrgUnits(boolean includeNotConfigured) {
-        return dhisDatasetMapDao.findAllOrgUnits(includeNotConfigured);
+        return dhisConfigDao.findAllOrgUnits(includeNotConfigured);
     }
 
     public void save(DHISOrgUnitConfig config) {
-        dhisDatasetMapDao.save(config);
+        dhisConfigDao.save(config);
+    }
+
+    public DHISReportConfig getReportConfigForDataset(String datasetId) {
+        return dhisConfigDao.getMappedConfigForDataset(datasetId);
     }
 }

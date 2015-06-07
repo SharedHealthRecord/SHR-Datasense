@@ -1,7 +1,7 @@
 {
-  "dataSet": "iUz0yoVeeiZ",
-  "period": "${period}",
-  "orgUnit": "${orgUnit}",
+  "dataSet": "${paramDatasetId}",
+  "period": "${paramReportingPeriod}",
+  "orgUnit": "${paramOrgUnitId}",
   "dataValues": [
 <#list ip_male_0_to_4 as row>
     { "dataElement": "AiPqHCbJQJ1", "categoryOptionCombo": "u2QXNMacZLt",
