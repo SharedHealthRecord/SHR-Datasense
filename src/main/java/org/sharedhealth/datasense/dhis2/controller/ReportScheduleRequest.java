@@ -16,7 +16,7 @@ public class ReportScheduleRequest {
     public static final String DAILY_PERIOD_TYPE = "Daily";
     public static final String MONTHLY_PERIOD_TYPE = "Monthly";
     public static final String YEARLY_PERIOD_TYPE = "Yearly";
-
+    private static final String WEEKLY_PERIOD_TYPE = "Weekly";
     public static final String[] SUPPORTED_PERIOD_TYPES = {DAILY_PERIOD_TYPE, MONTHLY_PERIOD_TYPE, YEARLY_PERIOD_TYPE};
 
     private List<String> selectedFacilities = new ArrayList<String>();
@@ -131,6 +131,10 @@ public class ReportScheduleRequest {
         if (periodType.equalsIgnoreCase(YEARLY_PERIOD_TYPE)) {
             return new YearlyReportPeriod(startDate);
         }
+
+        if (periodType.equalsIgnoreCase(WEEKLY_PERIOD_TYPE)) {
+            return new WeeklyReportPeriod(startDate);
+        }
         return new NotImplementedPeriod(startDate);
     }
 
@@ -220,6 +224,35 @@ public class ReportScheduleRequest {
         @Override
         public String endDate() {
             return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 12, 31);
+        }
+    }
+
+    public class WeeklyReportPeriod extends ReportPeriod {
+        public WeeklyReportPeriod(String reportStartDate) {
+            super(reportStartDate);
+        }
+
+        @Override
+        public String period() {
+            return String.format("%04dW%d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.WEEK_OF_YEAR));
+        }
+        @Override
+        public String startDate() {
+            Calendar first = (Calendar) reportCalendar.clone();
+            first.setFirstDayOfWeek(Calendar.MONDAY);
+            first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            //return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 1, 1);
+            return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(first.getTime());
+        }
+        @Override
+        public String endDate() {
+            Calendar first = (Calendar) reportCalendar.clone();
+            first.setFirstDayOfWeek(Calendar.MONDAY);
+            first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            Calendar last = (Calendar) first.clone();
+            last.setFirstDayOfWeek(Calendar.MONDAY);
+            last.add(Calendar.DAY_OF_YEAR, 6);
+            return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(last.getTime());
         }
     }
 

@@ -69,7 +69,7 @@ public class JobSchedulerService {
             String triggerName = jobName + "-TRIGGER";
             SimpleTrigger trigger = (SimpleTrigger) newTrigger()
                                         .withIdentity(triggerName, datasetName)
-                                        .startAt(afterSecs(5*60)).build();
+                                        .startAt(afterSecs(10)).build();
             //CronTrigger trigger = getTrigger(triggerName, cronExpression, jobDetail);
             try {
                 if (!scheduler.checkExists(trigger.getKey())) {

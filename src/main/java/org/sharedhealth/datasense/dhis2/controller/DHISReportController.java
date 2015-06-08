@@ -95,8 +95,12 @@ public class DHISReportController {
     public ModelAndView scheduleReportSubmission(ReportScheduleRequest scheduleRequest) {
         String[] formErrors = new String[] {"Error Occurred."};
         try {
-            jobScheduler.scheduleJob(scheduleRequest);
-            return new ModelAndView("redirect:/dhis2/reports");
+            if (!scheduleRequest.getSelectedFacilities().isEmpty()) {
+                jobScheduler.scheduleJob(scheduleRequest);
+                return new ModelAndView("redirect:/dhis2/reports");
+            } else {
+                formErrors[0] = "Please select a facility/Organization Unit";
+            }
         } catch (Exception e) {
             e.printStackTrace();
             formErrors[0] = e.getMessage();

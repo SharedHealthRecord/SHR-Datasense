@@ -28,14 +28,20 @@ public class IdPAuthProvider implements AuthenticationProvider {
             IdentityToken tokenForUser = idPService.authenticateUser(principal, credentials);
             if (tokenForUser != null) {
                 UserInfo userInfo = idPService.getUserInfo(tokenForUser);
-                if (userInfo != null) {
-                    return new TokenAuthentication(userInfo, grantedAuthorities(userInfo), true);
+                if (hasDatasenseRoles(userInfo)) {
+                    if (userInfo != null) {
+                        return new TokenAuthentication(userInfo, grantedAuthorities(userInfo), true);
+                    }
                 }
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private boolean hasDatasenseRoles(UserInfo userInfo) {
+        return userInfo.getProperties().getGroups().contains("ROLE_SHR System Admin");
     }
 
     private List<? extends GrantedAuthority> grantedAuthorities(UserInfo userInfo) {
