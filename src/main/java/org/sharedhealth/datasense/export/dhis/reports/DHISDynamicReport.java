@@ -60,10 +60,13 @@ public class DHISDynamicReport {
 
         logger.info(String.format("Posting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
         try {
-            postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams, postHeaders);
+            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams, postHeaders);
             logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
+            logger.debug("result:" + result);
         } catch (Exception e) {
-            e.printStackTrace();
+            logger.error(
+                    String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate),
+                    e);
         }
     }
 
