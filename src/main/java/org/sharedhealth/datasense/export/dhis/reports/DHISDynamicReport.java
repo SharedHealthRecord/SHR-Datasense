@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
 import aggregatequeryservice.postservice;
+import clojure.lang.LazySeq;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
@@ -62,7 +63,14 @@ public class DHISDynamicReport {
         try {
             Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams, postHeaders);
             logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
-            logger.debug("result:" + result);
+            if (result instanceof clojure.lang.LazySeq) {
+                LazySeq seq = (LazySeq) result;
+                if (!seq.isEmpty()) {
+                    logger.debug("result:" + seq.get(0));
+                }
+            } else {
+                logger.debug("result:" + result.toString());
+            }
         } catch (Exception e) {
             logger.error(
                     String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate),
