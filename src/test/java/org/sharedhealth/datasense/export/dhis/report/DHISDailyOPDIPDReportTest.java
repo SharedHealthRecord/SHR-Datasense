@@ -1,9 +1,9 @@
 package org.sharedhealth.datasense.export.dhis.report;
 
 import org.junit.After;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -21,13 +21,12 @@ import java.util.Map;
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class DHISDailyOPDIPDReportTest {
-    @Autowired
-    private DHISDailyOPDIPDReport dailyOPDIPDReport;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     @Test
+    @Ignore
     public void shouldPostDataForEachFacility() {
         jdbcTemplate.update("Insert into facility select * from CSVREAD('classpath:/csv/facility.csv')", new EmptySqlParameterSource());
         jdbcTemplate.update("Insert into patient select * from CSVREAD('classpath:/csv/patients.csv')", new EmptySqlParameterSource());

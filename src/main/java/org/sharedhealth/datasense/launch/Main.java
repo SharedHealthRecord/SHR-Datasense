@@ -3,10 +3,7 @@ package org.sharedhealth.datasense.launch;
 
 import org.apache.log4j.Logger;
 import org.quartz.spi.JobFactory;
-import org.sharedhealth.datasense.export.dhis.reports.DHISDailyOPDIPDReport;
 import org.sharedhealth.datasense.export.dhis.reports.DHISDynamicReport;
-import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyColposcopyReport;
-import org.sharedhealth.datasense.export.dhis.reports.DHISMonthlyEPIInfantReport;
 import org.sharedhealth.datasense.scheduler.AutowiringSpringBeanJobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.PropertiesFactoryBean;
@@ -22,7 +19,6 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.quartz.SchedulerFactoryBean;
-import org.springframework.scheduling.quartz.SpringBeanJobFactory;
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.ServletContext;
