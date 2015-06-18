@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
-    <script src="/scripts/dhisDataSet.js"></script>
+    <script src="/scripts/dhisSearch.js"></script>
     <script src="/scripts/mustache.min.js"></script>
     <script src="/scripts/script.js"/>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
@@ -75,8 +75,11 @@
 <script id="template_search_results" type="x-tmpl-mustache">
     {{#.}}
     <div class="row">
-        <div class="col-md-10" data-datasetId="{{ id }}">
+        <div class="col-md-6" data-datasetId="{{ id }}">
             {{ name }}
+        </div>
+        <div class="col-md-4">
+            {{ id }}
         </div>
         <div class="col-md-2">
             <button data-datasetId="{{ id }}" data-periodType="{{ periodType }}" class="configure-btn btn">Configure</button>

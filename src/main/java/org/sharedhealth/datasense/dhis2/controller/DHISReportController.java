@@ -25,7 +25,7 @@ import java.util.List;
 public class DHISReportController {
 
 
-
+    public static final String DHIS_DATASET_SEARCH_FORMAT = "/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType";
     @Autowired
     DHISMetaDataService metaDataService;
 
@@ -80,7 +80,7 @@ public class DHISReportController {
     public @ResponseBody
     DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) {
         String searchUri =
-                String.format("/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType", name);
+                String.format(DHIS_DATASET_SEARCH_FORMAT, name);
         return dhis2Client.get(searchUri);
     }
 

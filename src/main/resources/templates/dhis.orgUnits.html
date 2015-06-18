@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
-    <script src="/scripts/dhisDataSet.js"></script>
+    <script src="/scripts/dhisSearch.js"></script>
     <script src="/scripts/script.js"/>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
@@ -46,8 +46,8 @@
             </thead>
             <tbody>
             <tr th:class="${orgUnit.orgUnitId}? 'success' : 'info' " th:each="orgUnit: ${allOrgUnits}">
-                <td th:text="${orgUnit.facilityName}">Configuration name</td>
-                <td th:text="${orgUnit.orgUnitName}">Dataset Name</td>
+                <td th:text="${orgUnit.facilityName} + ' (' + ${orgUnit.facilityId} + ')'">Configuration name</td>
+                <td th:text="${orgUnit.orgUnitName} != null ? ${orgUnit.orgUnitName} + ' (' + ${orgUnit.orgUnitId} + ')' : ''">Organization Name</td>
                 <td>
                     <a th:href="|/dhis2/orgUnits/configure?facilityId=${orgUnit.facilityId}|" >
                         <img src="/images/configure.png" alt="Configure" class="button-in-td"/>

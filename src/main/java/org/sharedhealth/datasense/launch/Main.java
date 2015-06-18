@@ -58,15 +58,6 @@ public class Main {
     private DataSourceTransactionManager txmanager;
 
     @Autowired
-    private DHISDailyOPDIPDReport dhisDailyOPDIPDReport;
-
-    @Autowired
-    private DHISMonthlyEPIInfantReport dhisMonthlyEPIInfantReport;
-
-    @Autowired
-    private DHISMonthlyColposcopyReport dhisMonthlyColposcopyReport;
-
-    @Autowired
     private DHISDynamicReport dhisDynamicReport;
 
     @Autowired
@@ -130,9 +121,6 @@ public class Main {
     @Bean
     public Map<String, Object> schedulerContextMap() {
         HashMap<String, Object> ctx = new HashMap<>();
-        ctx.put("dhisDailyOPDIPDReport", dhisDailyOPDIPDReport);
-        ctx.put("dhisMonthlyEPIInfantReport", dhisMonthlyEPIInfantReport);
-        ctx.put("dhisMonthlyColposcopyReport", dhisMonthlyColposcopyReport);
         ctx.put("dhisDynamicReport", dhisDynamicReport);
         return ctx;
     }

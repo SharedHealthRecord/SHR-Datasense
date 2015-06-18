@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
-    <script src="/scripts/dhisDataSet.js"></script>
+    <script src="/scripts/dhisSearch.js"></script>
     <script src="/scripts/script.js"/>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
@@ -47,7 +47,7 @@
             <tbody>
             <tr th:class="${report.datasetName}? 'success' : 'info' " th:each="report: ${availableReports}">
                 <td th:text="${report.name}">Configuration name</td>
-                <td th:text="${report.datasetName}">Dataset Name</td>
+                <td th:text="${report.datasetId} != null ? ${report.datasetName} + ' (' + ${report.datasetId} + ')' : ''">Dataset Name</td>
                 <td>
                     <a th:href="|/dhis2/reports/configure?reportName=${report.name}|" >
                         <img src="/images/configure.png" alt="Configure" class="button-in-td"/>
