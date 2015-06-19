@@ -108,7 +108,7 @@ public class ProcedureResourceHandlerIT {
 
 
     private List<Procedure> findByEncounterId(String shrEncounterId) {
-        String sql = "select patient_hid, encounter_id, date, start_date, end_date, procedure_uuid, procedure_code, " +
+        String sql = "select patient_hid, encounter_id, datetime, start_date, end_date, procedure_uuid, procedure_code, " +
                 "diagnosis_uuid, diagnosis_code from procedures where encounter_id = :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
@@ -119,7 +119,7 @@ public class ProcedureResourceHandlerIT {
 
                 procedure.setPatientHid(rs.getString("patient_hid"));
                 procedure.setEncounterId(rs.getString("encounter_id"));
-                procedure.setEncounterDate(rs.getTimestamp("date"));
+                procedure.setEncounterDate(rs.getTimestamp("datetime"));
                 procedure.setStartDate(rs.getTimestamp("start_date"));
                 procedure.setEndDate(rs.getTimestamp("end_date"));
                 procedure.setProcedureUuid(rs.getString("procedure_uuid"));

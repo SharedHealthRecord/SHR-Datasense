@@ -13,10 +13,7 @@ import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
-import org.sharedhealth.datasense.model.Encounter;
-import org.sharedhealth.datasense.model.Medication;
-import org.sharedhealth.datasense.model.MedicationStatus;
-import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.model.*;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.util.DateUtil;
@@ -96,6 +93,8 @@ public class ImmunizationResourceHandlerIT {
         assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
         assertEquals("5960610240356417537", medication.getPatient().getHid());
+        List<ImmunizationReason> reasons = findImmunizationReasonsByEncounterId("shrEncounterId");
+        assertTrue(reasons.size() > 0);
     }
 
     @Test
@@ -110,7 +109,7 @@ public class ImmunizationResourceHandlerIT {
     public void shouldSaveImmunizationStatusAndUuid() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
-        assertEquals("A", medication.getStatus().getValue());
+        assertEquals("AI", medication.getStatus().getValue());
         assertNotNull(medication.getUuid());
     }
 
@@ -159,11 +158,31 @@ public class ImmunizationResourceHandlerIT {
 
                         Patient patient = new Patient();
                         patient.setHid(rs.getString("patient_hid"));
+                        String status = rs.getString("status");
+                        medication.setStatus(MedicationStatus.getMedicationStatus(status));
                         medication.setPatient(patient);
                         medication.setDrugId(rs.getString("drug_id"));
                         medication.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
                         medication.setUuid(rs.getString("uuid"));
                         return medication;
+                    }
+                });
+    }
+
+    private List<ImmunizationReason> findImmunizationReasonsByEncounterId(String shrEncounterId) {
+        String sql = "select patient_hid, encounter_id, descr, code, uuid, incident_uuid from immunization_reason where encounter_id= :encounter_id";
+        return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
+                RowMapper<ImmunizationReason>() {
+                    @Override
+                    public ImmunizationReason mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        ImmunizationReason reason = new ImmunizationReason();
+                        reason.setHid(rs.getString("patient_hid"));
+                        reason.setEncounterId(rs.getString("encounter_id"));
+                        reason.setDescr(rs.getString("descr"));
+                        reason.setCode(rs.getString("code"));
+                        reason.setUuid(rs.getString("uuid"));
+                        reason.setIncidentUuid(rs.getString("incident_uuid"));
+                        return reason;
                     }
                 });
     }

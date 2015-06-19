@@ -16,7 +16,7 @@ public class ProcedureDao {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", procedure.getPatientHid());
         map.put("encounter_id", procedure.getEncounterId());
-        map.put("date", procedure.getEncounterDate());
+        map.put("datetime", procedure.getEncounterDate());
         map.put("start_date", procedure.getStartDate());
         map.put("end_date", procedure.getEndDate());
         map.put("procedure_uuid", procedure.getProcedureUuid());
@@ -24,9 +24,9 @@ public class ProcedureDao {
         map.put("diagnosis_uuid", procedure.getDiagnosisUuid());
         map.put("diagnosis_code", procedure.getDiagnosisCode());
 
-        String sql = "insert into procedures (patient_hid, encounter_id, date, start_date, end_date, procedure_uuid, " +
+        String sql = "insert into procedures (patient_hid, encounter_id, datetime, start_date, end_date, procedure_uuid, " +
                 "procedure_code, diagnosis_uuid, diagnosis_code) " +
-                "values(:patient_hid, :encounter_id, :date, :start_date, :end_date, :procedure_uuid, :procedure_code, " +
+                "values(:patient_hid, :encounter_id, :datetime, :start_date, :end_date, :procedure_uuid, :procedure_code, " +
                 ":diagnosis_uuid, :diagnosis_code)";
         jdbcTemplate.update(sql, map);
     }
