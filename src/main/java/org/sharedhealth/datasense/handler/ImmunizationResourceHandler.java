@@ -48,7 +48,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         }
         Immunization immunization = (Immunization) resource;
         Medication medication = new Medication();
-        medication.setStatus(MedicationStatus.AdministeredImmunization);
+        medication.setStatus(MedicationStatus.ImmunizationAdministered);
         Encounter encounter = composition.getEncounterReference().getValue();
         medication.setEncounter(encounter);
         medication.setPatient(composition.getPatientReference().getValue());

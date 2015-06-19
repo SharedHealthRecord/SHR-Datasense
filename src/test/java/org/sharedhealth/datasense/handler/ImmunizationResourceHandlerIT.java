@@ -109,7 +109,7 @@ public class ImmunizationResourceHandlerIT {
     public void shouldSaveImmunizationStatusAndUuid() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
-        assertEquals("AI", medication.getStatus().getValue());
+        assertEquals("IA", medication.getStatus().getValue());
         assertNotNull(medication.getUuid());
     }
 
