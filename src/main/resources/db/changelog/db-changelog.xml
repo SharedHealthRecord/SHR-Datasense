@@ -546,40 +546,10 @@
             <column name="diagnosis_code" type="varchar(10)"/>
         </createIndex>
     </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1257-4" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_diagnosis_diagnosis_concept_id"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_diagnosis_diagnosis_concept_id" tableName="diagnosis">
-            <column name="diagnosis_concept_id" type="varchar(50)"/>
-        </createIndex>
-    </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1303" author="sharedhealth" context="setup">
         <comment>Change drug.reference_term_uuid column size to 50 from 255 and drug name to 100</comment>
         <modifyDataType tableName="drug" columnName="reference_term_uuid" newDataType="varchar(50)" />
         <modifyDataType tableName="drug" columnName="name" newDataType="varchar(100)" />
-    </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1309-1" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_drug_drug_uuid"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_drug_drug_uuid" tableName="drug">
-            <column name="drug_uuid" type="varchar(50)"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1309-2" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_drug_concept_uuid"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_drug_concept_uuid" tableName="drug">
-            <column name="concept_uuid" type="varchar(50)"/>
-        </createIndex>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1309-3" author="sharedhealth" context="setup">
         <preConditions onFail="MARK_RAN">
@@ -671,26 +641,6 @@
             <column name="datetime" type="datetime"/>
         </createIndex>
     </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1441-2" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_observation_concept_id"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_observation_concept_id" tableName="observation">
-            <column name="concept_id" type="varchar(50)"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1441-3" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_observation_code"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_observation_code" tableName="observation">
-            <column name="code" type="varchar(10)"/>
-        </createIndex>
-    </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1442" author="sharedhealth" context="setup">
         <preConditions onFail="MARK_RAN">
             <columnExists columnName="date" tableName="procedures"/>
@@ -709,26 +659,6 @@
         </preConditions>
         <createIndex indexName="idx_procedures_datetime" tableName="procedures">
             <column name="datetime" type="datetime"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1443-2" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_procedures_procedure_code"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_procedures_procedure_code" tableName="procedures">
-            <column name="procedure_code" type="varchar(50)"/>
-        </createIndex>
-    </changeSet>
-    <changeSet id="sharedhealth-datasense-20150619-1443-3" author="sharedhealth" context="setup">
-        <preConditions onFail="MARK_RAN">
-            <not>
-                <indexExists indexName="idx_procedures_diagnosis_code"/>
-            </not>
-        </preConditions>
-        <createIndex indexName="idx_procedures_diagnosis_code" tableName="procedures">
-            <column name="diagnosis_code" type="varchar(50)"/>
         </createIndex>
     </changeSet>
 </databaseChangeLog>
