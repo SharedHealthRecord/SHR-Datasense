@@ -164,9 +164,3 @@ task dist(type: Rpm, dependsOn: ['build', 'zip']) {
         into 'var'
     }
 }
-
-task zip(type: Zip) {
-    from("dhis_config")
-    archiveName "dhis_config.zip"
-    into("dhis_config")
-}
