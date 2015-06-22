@@ -31,8 +31,8 @@ public class MedicationDao {
         map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        String sql = "delete from medication where patient_hid = :patient_hid and encounter_id = :encounter_id";
-        jdbcTemplate.update(sql, map);
+        String medicationSql = "delete from medication where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        jdbcTemplate.update(medicationSql, map);
     }
 
     public void save(List<ImmunizationReason> immunizationReasons) {
@@ -48,5 +48,15 @@ public class MedicationDao {
             params.put("incident_uuid", reason.getIncidentUuid());
             jdbcTemplate.update(insertStatement, params);
         }
+    }
+
+    public void deleteExistingImmunizationReasons(String healthId, String encounterId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+        map.put("encounter_id", encounterId);
+
+        String immunizationSql = "delete from immunization_reason where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        jdbcTemplate.update(immunizationSql, map);
+
     }
 }

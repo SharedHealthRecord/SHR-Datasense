@@ -87,7 +87,10 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        medicationDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        String healthId = composition.getPatientReference().getHealthId();
+        String encounterId = composition.getEncounterReference().getEncounterId();
+        medicationDao.deleteExisting(healthId, encounterId);
+        medicationDao.deleteExistingImmunizationReasons(healthId, encounterId);
     }
 
     private void setMedicationCodes(Immunization immunization, Medication medication) {
