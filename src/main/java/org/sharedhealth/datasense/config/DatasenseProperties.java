@@ -198,11 +198,6 @@ public class DatasenseProperties implements EnvironmentAware {
         return idpServerUserInfoUrl.trim();
     }
 
-    private String getBaseUrl(String scheme, String host, String port) {
-        String path = scheme + SCHEME_SEPARATOR + host;
-        return port != null ? path + PORT_SEPARATOR + port : path;
-    }
-
     public List<String> getCloudHostedFacilityIds() {
         if (StringUtils.isBlank(cloudHostedFacilityIds)) return new ArrayList<>();
         return asList(cloudHostedFacilityIds.trim().split(","));
@@ -219,5 +214,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getDhisBaseUrl() {
         return dhisBaseUrl.trim();
+    }
+
+    public String getDhisDataValueSetsUrl() {
+        return StringUtil.ensureSuffix(dhisBaseUrl.trim(), "/") + "api/dataValueSets";
     }
 }

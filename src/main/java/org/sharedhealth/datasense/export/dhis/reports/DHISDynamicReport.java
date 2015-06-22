@@ -11,9 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashMap;
 
 import static org.sharedhealth.datasense.util.HeaderUtil.getDhisHeaders;
@@ -41,7 +38,7 @@ public class DHISDynamicReport {
         String datasetId = (String) mergedJobDataMap.get("paramDatasetId");
 
         queryParams.put("paramStartDate", reportingStartDate);
-        queryParams.put("paramEndDate",   reportingEndDate);
+        queryParams.put("paramEndDate", reportingEndDate);
         queryParams.put("paramPeriodType", (String) mergedJobDataMap.get("paramPeriodType"));
         queryParams.put("paramFacilityId", facilityId);
         queryParams.put("paramDatasetId", datasetId);
@@ -61,8 +58,10 @@ public class DHISDynamicReport {
 
         logger.info(String.format("Posting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
         try {
-            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams, postHeaders);
-            logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
+            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams,
+                    postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
+            logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId,
+                    reportingStartDate));
             if (result instanceof clojure.lang.LazySeq) {
                 LazySeq seq = (LazySeq) result;
                 if (!seq.isEmpty()) {
@@ -75,7 +74,8 @@ public class DHISDynamicReport {
             }
         } catch (Exception e) {
             logger.error(
-                    String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate),
+                    String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId,
+                            reportingStartDate),
                     e);
         }
     }
