@@ -1,7 +1,11 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
 import aggregatequeryservice.postservice;
+import clojure.lang.IPersistentMap;
+import clojure.lang.Keyword;
 import clojure.lang.LazySeq;
+import clojure.lang.PersistentArrayMap;
+import clojure.lang.Symbol;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
@@ -66,29 +70,44 @@ public class DHISDynamicReport {
                 LazySeq seq = (LazySeq) result;
                 if (!seq.isEmpty()) {
                     Object response = seq.get(0);
-                    logger.debug("result:" + response);
-                    logWhenErroredOut(response);
+                    if (response instanceof PersistentArrayMap) {
+                        PersistentArrayMap responseMap = (PersistentArrayMap) response;
+                        String status = getValueFromMap(responseMap, "status");
+                        String dhisResponse = getValueFromMap(responseMap, "response");
+                        logWhenErroredOut(status, dhisResponse);
+                    } else {
+                        logger.debug("result:" + response.toString());
+                    }
                 }
             } else {
                 logger.debug("result:" + result.toString());
             }
         } catch (Exception e) {
-            logger.error(
-                    String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId,
-                            reportingStartDate),
-                    e);
+            logger.error(String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]",
+                            facilityId, datasetId, reportingStartDate), e);
         }
     }
 
-    private void logWhenErroredOut(Object response) {
-        if (response instanceof String) {
-            String responseString = ((String) response).toUpperCase();
-            if (!StringUtils.isBlank(responseString)) {
-                if (responseString.toUpperCase().contains("ERROR")) {
-                    logger.error("DHIS Submission failed. Response:" + responseString);
+    private String getValueFromMap(IPersistentMap map,String key){
+        Object value=map.valAt(Keyword.intern(Symbol.create(key)));
+        if (value == null) {
+            return null;
+        }
+        return String.valueOf(value);
+    }
+
+    private void logWhenErroredOut(String status, String dhisResponse) {
+        if ((status != null) && (status.equalsIgnoreCase("200") || status.equalsIgnoreCase("201")) ) {
+            if (!StringUtils.isBlank(dhisResponse)) {
+                if (dhisResponse.toUpperCase().contains("ERROR")) {
+                    logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
                 }
             }
         }
+        else {
+            logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
+        }
+
     }
 
 }
