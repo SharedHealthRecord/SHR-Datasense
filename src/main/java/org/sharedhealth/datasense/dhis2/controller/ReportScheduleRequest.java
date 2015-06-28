@@ -17,7 +17,8 @@ public class ReportScheduleRequest {
     public static final String MONTHLY_PERIOD_TYPE = "Monthly";
     public static final String YEARLY_PERIOD_TYPE = "Yearly";
     private static final String WEEKLY_PERIOD_TYPE = "Weekly";
-    public static final String[] SUPPORTED_PERIOD_TYPES = {DAILY_PERIOD_TYPE, MONTHLY_PERIOD_TYPE, YEARLY_PERIOD_TYPE};
+    private static final String QUARTERLY_PERIOD_TYPE = "Quarterly";
+    public static final String[] SUPPORTED_PERIOD_TYPES = {DAILY_PERIOD_TYPE, MONTHLY_PERIOD_TYPE, QUARTERLY_PERIOD_TYPE, YEARLY_PERIOD_TYPE};
 
     private List<String> selectedFacilities = new ArrayList<String>();
     private String periodType;
@@ -134,6 +135,10 @@ public class ReportScheduleRequest {
 
         if (periodType.equalsIgnoreCase(WEEKLY_PERIOD_TYPE)) {
             return new WeeklyReportPeriod(startDate);
+        }
+
+        if (periodType.equalsIgnoreCase(QUARTERLY_PERIOD_TYPE)) {
+            return new QuarterlyReportPeriod(startDate);
         }
         return new NotImplementedPeriod(startDate);
     }
@@ -256,7 +261,37 @@ public class ReportScheduleRequest {
         }
     }
 
+    public class QuarterlyReportPeriod extends ReportPeriod {
+        public QuarterlyReportPeriod(String reportStartDate) {
+            super(reportStartDate);
+        }
 
+        @Override
+        public String period() {
+            int quarterNumber = getQuarterNumber();
+            return String.format("%04dQ%d", reportCalendar.get(Calendar.YEAR), quarterNumber);
+        }
 
+        private int getQuarterNumber() {
+            int month = reportCalendar.get(Calendar.MONTH);
+            return month/3 + 1;
+        }
 
+        @Override
+        public String startDate() {
+            Calendar first = (Calendar) reportCalendar.clone();
+            int quarterNumber = getQuarterNumber();
+            int startMonth = quarterNumber*3 - 2;
+            return String.format("%04d-%02d-%02d", first.get(Calendar.YEAR), startMonth, 1);
+        }
+        @Override
+        public String endDate() {
+            Calendar last = (Calendar) reportCalendar.clone();
+            int quarterNumber = getQuarterNumber();
+            int endMonth = quarterNumber * 3;
+            last.set(Calendar.MONTH, endMonth - 1);
+            int endDayOfMonth = last.getActualMaximum(Calendar.DAY_OF_MONTH);
+            return String.format("%04d-%02d-%02d", last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, endDayOfMonth);
+        }
+    }
 }

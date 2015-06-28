@@ -54,6 +54,8 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
                 result = validateMonthlyReportingPeriod(inputDate);
             } else if (periodValue === "Yearly") {
                 result = validateYearlyReportingPeriod(inputDate);
+            } else if (periodValue === "Quarterly") {
+               result = validateQuarterlyReportingPeriod(inputDate);
             }
             return result;
        }
@@ -64,7 +66,7 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
         var currentYear = currentDate.getFullYear();
         var reportingYear = reportingDate.getFullYear();
         if (reportingYear >= currentYear) {
-            alert("Please select a valid year. Reporting period must be in the past.");
+            alert("Please select a valid date of past years. Reporting period must be in the past.");
             return false;
         }
         $(displayPeriodId).text("Reporting Period:" + reportingYear);
@@ -88,13 +90,13 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
 
         var reportingYear = reportingDate.getFullYear();
         if (reportingYear > currentYear) {
-            alert("Please select a valid year. Reporting period must be in the past.");
+            alert("Please select a valid date of past months. Reporting period must be in the past.");
             return false;
         }
 
         var reportingMonth = reportingDate.getMonth() + 1;
         if (reportingMonth >= currentMonth) {
-            alert("Please select a valid month. Reporting period must be in the past.");
+            alert("Please select a valid date of past months. Reporting period must be in the past.");
             return false;
         }
 
@@ -103,6 +105,25 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
         }
         var text = reportingMonth + "/" + reportingYear;
         $(displayPeriodId).text("Reporting Period:" + text);
+        return true;
+   };
+
+   var validateQuarterlyReportingPeriod = function(reportingDate) {
+        var quarterNumber = parseInt(reportingDate.getMonth() / 3) + 1;
+        var lastMonth = quarterNumber*3;
+        var lastDateOfQuarter = new Date(reportingDate.getFullYear(), lastMonth, 0);
+
+        var today = new Date();
+        today.setHours(0,0,0,0);
+
+        if (lastDateOfQuarter >= today ) {
+            alert("Please select a valid date of past quarters. Reporting period must be in the past");
+            return false;
+        }
+
+        var text = lastDateOfQuarter.getFullYear() + "Q" + quarterNumber;
+        $(displayPeriodId).text("Reporting Period:" + text);
+
         return true;
    };
 

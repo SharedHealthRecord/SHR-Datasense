@@ -83,6 +83,7 @@ public class DHISDynamicReport {
                 logger.debug("result:" + result.toString());
             }
         } catch (Exception e) {
+            System.out.println(e);
             logger.error(String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]",
                             facilityId, datasetId, reportingStartDate), e);
         }
