@@ -66,7 +66,9 @@ public class DHISDynamicReport {
                     postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
             logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId,
                     reportingStartDate));
-            if (result instanceof clojure.lang.LazySeq) {
+            if (!(result instanceof LazySeq)) {
+                logger.debug("result:" + result.toString());
+            } else {
                 LazySeq seq = (LazySeq) result;
                 if (!seq.isEmpty()) {
                     Object response = seq.get(0);
@@ -79,8 +81,6 @@ public class DHISDynamicReport {
                         logger.debug("result:" + response.toString());
                     }
                 }
-            } else {
-                logger.debug("result:" + result.toString());
             }
         } catch (Exception e) {
             System.out.println(e);

@@ -47,7 +47,7 @@ public class ReportScheduleRequestTest {
         request.setPeriodType("Weekly");
         request.setStartDate("09/01/2015");
         ReportScheduleRequest.ReportPeriod reportPeriod = request.reportPeriod();
-        assertEquals("2014W2", reportPeriod.period());
+        assertEquals("2015W2", reportPeriod.period());
         assertEquals("2015-01-05", reportPeriod.startDate());
         assertEquals("2015-01-11", reportPeriod.endDate());
     }
