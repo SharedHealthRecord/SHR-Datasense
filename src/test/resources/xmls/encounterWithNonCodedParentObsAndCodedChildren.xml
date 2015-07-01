@@ -1,0 +1,371 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<feed xmlns="http://www.w3.org/2005/Atom">
+    <title>Encounter</title>
+    <id>urn:08eac6a4-3de4-4926-8b52-283f1611f013</id>
+    <updated>2015-07-01T14:59:01+05:30</updated>
+    <author>
+        <uri>http://hrmtest.dghs.gov.bd/api/1.0/facilities/10018686.json</uri>
+    </author>
+    <entry>
+        <title>Composition</title>
+        <id>urn:d50104d4-089f-4e0f-a10f-1d94a718425f</id>
+        <updated>2015-07-01T14:59:12.133+05:30</updated>
+        <content type="text/xml">
+            <Composition xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:d50104d4-089f-4e0f-a10f-1d94a718425f"/>
+                </identifier>
+                <date value="2015-07-01T14:59:01+05:30"/>
+                <status value="final"/>
+                <confidentiality>
+                    <system value="http://hl7.org/fhir/v3/Confidentiality"/>
+                    <code value="N"/>
+                </confidentiality>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+                <author>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10018686.json"/>
+                </author>
+                <encounter>
+                    <reference value="urn:99c71d15-86f1-4a8e-ac9f-acee51a74369"/>
+                    <display value="Encounter"/>
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:99c71d15-86f1-4a8e-ac9f-acee51a74369"/>
+                        <display value="Encounter"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:25c3c0e9-d570-4855-a7ce-b3e730a65d1c"/>
+                        <display value="Place of delivery"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:3fdd526b-c35e-4c4d-af40-b08f1b800de4"/>
+                        <display value="Delivered by"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:771a6e9d-a0a7-4f6c-8326-a62000755036"/>
+                        <display value="Type of delivery"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce"/>
+                        <display value="Delivery Information"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:d884b0eb-f632-4b02-9174-966a2d4761a4"/>
+                        <display value="Birth weight"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:6f434bec-9c9b-44c7-963b-871a6dad79ce"/>
+                        <display value="Newborn care received"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:77fe2495-22e4-496d-88a1-f6ce5b099954"/>
+                        <display value="Newborn Care"/>
+                    </content>
+                </section>
+            </Composition>
+        </content>
+    </entry>
+    <entry>
+        <title>Encounter</title>
+        <id>urn:99c71d15-86f1-4a8e-ac9f-acee51a74369</id>
+        <updated>2015-07-01T14:59:12.133+05:30</updated>
+        <content type="text/xml">
+            <Encounter xmlns="http://hl7.org/fhir">
+                <identifier>
+                    <value value="urn:99c71d15-86f1-4a8e-ac9f-acee51a74369"/>
+                </identifier>
+                <status value="finished"/>
+                <class value="field"/>
+                <type>
+                    <text value="FIELD"/>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/113085.json"/>
+                    </individual>
+                </participant>
+                <indication>
+                    <reference value="urn:99c71d15-86f1-4a8e-ac9f-acee51a74369"/>
+                    <display value="Encounter"/>
+                </indication>
+                <serviceProvider>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10018686.json"/>
+                </serviceProvider>
+            </Encounter>
+        </content>
+    </entry>
+    <entry>
+        <title>Place of delivery</title>
+        <id>urn:25c3c0e9-d570-4855-a7ce-b3e730a65d1c</id>
+        <updated>2015-07-01T14:59:12.182+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b3aaa6d8-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="b3aaa6d8-1e48-11e5-b5a9-00505682700b"/>
+                        <display value="Place of delivery"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b3b989cf-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="b3b989cf-1e48-11e5-b5a9-00505682700b"/>
+                        <display value="Medical college hospital"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:25c3c0e9-d570-4855-a7ce-b3e730a65d1c"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Delivered by</title>
+        <id>urn:3fdd526b-c35e-4c4d-af40-b08f1b800de4</id>
+        <updated>2015-07-01T14:59:12.182+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b3c85348-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="b3c85348-1e48-11e5-b5a9-00505682700b"/>
+                        <display value="Delivered by"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/c1e71e45-1e46-11e5-b5a9-00505682700b"/>
+                        <code value="c1e71e45-1e46-11e5-b5a9-00505682700b"/>
+                        <display value="Doctor"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:3fdd526b-c35e-4c4d-af40-b08f1b800de4"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Type of delivery</title>
+        <id>urn:771a6e9d-a0a7-4f6c-8326-a62000755036</id>
+        <updated>2015-07-01T14:59:12.182+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b3c94d09-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="b3c94d09-1e48-11e5-b5a9-00505682700b"/>
+                        <display value="Type of delivery"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/b3d39f88-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="302383004"/>
+                        <display value="Forcep"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/b3d0c904-1e48-11e5-b5a9-00505682700b"/>
+                        <code value="b3d0c904-1e48-11e5-b5a9-00505682700b"/>
+                        <display value="Forcep"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:771a6e9d-a0a7-4f6c-8326-a62000755036"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Delivery Information</title>
+        <id>urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce</id>
+        <updated>2015-07-01T14:59:12.182+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <display value="Delivery Information"/>
+                    </coding>
+                </name>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:25c3c0e9-d570-4855-a7ce-b3e730a65d1c"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:3fdd526b-c35e-4c4d-af40-b08f1b800de4"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:771a6e9d-a0a7-4f6c-8326-a62000755036"/>
+                    </target>
+                </related>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Birth weight</title>
+        <id>urn:d884b0eb-f632-4b02-9174-966a2d4761a4</id>
+        <updated>2015-07-01T14:59:12.216+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/8a9b911a-1e49-11e5-b5a9-00505682700b"/>
+                        <code value="364589006"/>
+                        <display value="Birth weight"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/8a9af98b-1e49-11e5-b5a9-00505682700b"/>
+                        <code value="8a9af98b-1e49-11e5-b5a9-00505682700b"/>
+                        <display value="Birth weight"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/8a9e9b24-1e49-11e5-b5a9-00505682700b"/>
+                        <code value="17621005"/>
+                        <display value="Normal"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/8a9e1c28-1e49-11e5-b5a9-00505682700b"/>
+                        <code value="8a9e1c28-1e49-11e5-b5a9-00505682700b"/>
+                        <display value="Normal"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:d884b0eb-f632-4b02-9174-966a2d4761a4"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Newborn care received</title>
+        <id>urn:6f434bec-9c9b-44c7-963b-871a6dad79ce</id>
+        <updated>2015-07-01T14:59:12.216+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/8aa22d67-1e49-11e5-b5a9-00505682700b"/>
+                        <code value="8aa22d67-1e49-11e5-b5a9-00505682700b"/>
+                        <display value="Newborn care received"/>
+                    </coding>
+                </name>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/8a6419d7-1e4d-11e5-b5a9-00505682700b"/>
+                        <code value="8a6419d7-1e4d-11e5-b5a9-00505682700b"/>
+                        <display value="Delayed bathing (after 72 hours)"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:6f434bec-9c9b-44c7-963b-871a6dad79ce"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+            </Observation>
+        </content>
+    </entry>
+    <entry>
+        <title>Newborn Care</title>
+        <id>urn:77fe2495-22e4-496d-88a1-f6ce5b099954</id>
+        <updated>2015-07-01T14:59:12.216+05:30</updated>
+        <content type="text/xml">
+            <Observation xmlns="http://hl7.org/fhir">
+                <name>
+                    <coding>
+                        <display value="Newborn Care"/>
+                    </coding>
+                </name>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:77fe2495-22e4-496d-88a1-f6ce5b099954"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/v1/patients/99034600669"/>
+                    <display value="99034600669"/>
+                </subject>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:d884b0eb-f632-4b02-9174-966a2d4761a4"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:6f434bec-9c9b-44c7-963b-871a6dad79ce"/>
+                    </target>
+                </related>
+            </Observation>
+        </content>
+    </entry>
+</feed>

@@ -58,14 +58,14 @@ public class ObservationResourceHandler implements FhirResourceHandler {
 
     }
 
-    private void mapRelatedComponents(EncounterComposition composition, Observation observation, org.hl7.fhir
+    private void mapRelatedComponents(EncounterComposition composition, String parentObsUUID, org.hl7.fhir
             .instance.model.Observation fhirObservation) {
         for (ObservationRelatedComponent relatedComponent : fhirObservation.getRelated()) {
             Resource resource = composition.getContext().getResourceByReferenceFromFeed(relatedComponent.getTarget());
             Observation childObservation;
             childObservation = new Observation();
             mapObservation(composition, childObservation, resource);
-            childObservation.setParentId(observation.getUuid());
+            childObservation.setParentId(parentObsUUID);
             observationDao.updateParentId(childObservation);
         }
     }
@@ -77,18 +77,21 @@ public class ObservationResourceHandler implements FhirResourceHandler {
 
         List<Coding> codings = fhirObservation.getName().getCoding();
         String conceptId = getConceptId(codings);
-        if (conceptId == null) return;
-        observation.setConceptId(conceptId);
-        observation.setReferenceCode(getReferenceCode(codings));
+        String parentObsUUID = null;
+        if (conceptId != null) {
+            observation.setConceptId(conceptId);
+            observation.setReferenceCode(getReferenceCode(codings));
 
-        Encounter encounter = composition.getEncounterReference().getValue();
-        observation.setEncounter(encounter);
-        observation.setPatient(composition.getPatientReference().getValue());
-        observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
+            Encounter encounter = composition.getEncounterReference().getValue();
+            observation.setEncounter(encounter);
+            observation.setPatient(composition.getPatientReference().getValue());
+            observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
 
-        observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
+            observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
 
-        observation.setObservationId(observationDao.save(observation));
-        mapRelatedComponents(composition, observation, fhirObservation);
+            observation.setObservationId(observationDao.save(observation));
+            parentObsUUID = observation.getUuid();
+        }
+        mapRelatedComponents(composition, parentObsUUID, fhirObservation);
     }
 }

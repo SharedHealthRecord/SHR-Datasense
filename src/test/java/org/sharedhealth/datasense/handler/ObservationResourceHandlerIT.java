@@ -51,12 +51,16 @@ public class ObservationResourceHandlerIT {
     public void setUp() throws Exception {
         ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithVitalsObservation.xml");
         vitalsBundleContext = new BundleContext(resourceOrFeed.getFeed(), SHR_ENCOUNTER_ID);
-        EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
+        setEncounterReference(vitalsBundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
+    }
+
+    private void setEncounterReference(BundleContext bundleContext, String healthId, String encounterId) {
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
-        patient.setHid(HEALTH_ID);
+        patient.setHid(healthId);
         composition.getPatientReference().setValue(patient);
         Encounter encounter = new Encounter();
-        encounter.setEncounterId(SHR_ENCOUNTER_ID);
+        encounter.setEncounterId(encounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-20T11:10:53+05:30"));
         composition.getEncounterReference().setValue(encounter);
     }
@@ -118,6 +122,34 @@ public class ObservationResourceHandlerIT {
         assertEquals(vitalsObservation.getUuid(), bloodPressureObservation.getParentId());
         assertEquals(vitalsObservation.getUuid(), pulseObservation.getParentId());
         assertEquals(bloodPressureObservation.getUuid(), diastolicObservation.getParentId());
+    }
+
+    @Test
+    public void shouldSaveObservationIfParentObsIsNonCoded() throws Exception {
+        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithNonCodedParentObsAndCodedChildren.xml");
+        String encounterId = "urn:99c71d15-86f1-4a8e-ac9f-acee51a74369";
+        String healthId = "99034600669";
+        BundleContext bundleContext = new BundleContext(resourceOrFeed.getFeed(), encounterId);
+        setEncounterReference(bundleContext, healthId, encounterId);
+
+
+        String parentObsRef = "urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce";
+        ResourceReference obsReference = new ResourceReference().setReferenceSimple(parentObsRef);
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        observationResourceHandler.process(bundleContext.getResourceByReferenceFromFeed(obsReference),
+                composition);
+        List<Observation> observations = findByEncounterId(bundleContext.getShrEncounterId());
+        assertFalse(observations.isEmpty());
+        assertEquals(3, observations.size());
+
+        Observation child1 = findObservationByConceptId(observations, "b3aaa6d8-1e48-11e5-b5a9-00505682700b");
+        Observation child2 = findObservationByConceptId(observations, "b3c85348-1e48-11e5-b5a9-00505682700b");
+        Observation child3 = findObservationByConceptId(observations, "b3c94d09-1e48-11e5-b5a9-00505682700b");
+
+        assertNull(child1.getParentId());
+        assertNull(child2.getParentId());
+        assertNull(child3.getParentId());
+
     }
 
     private Observation findObservationByConceptId(List<Observation> observations, final String conceptId) {
