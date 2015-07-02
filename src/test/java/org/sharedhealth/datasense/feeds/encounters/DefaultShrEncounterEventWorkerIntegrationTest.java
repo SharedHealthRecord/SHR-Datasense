@@ -161,6 +161,29 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         assertEquals(0, getPatientDeathList(shrEncounterId).size());
     }
 
+    @Test
+    public void shouldProcessEncounterWithObservationNested() throws Exception {
+        EncounterBundle bundle = new EncounterBundle();
+        String healthId = "5960610240356417537";
+        givenThat(get(urlEqualTo("/api/default/patients/" + healthId))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/P" + healthId + ".json"))));
+
+        bundle.setHealthId(healthId);
+        bundle.addContent(loadFromXmlFile("xmls/encounterWithObsNestedAtMultiLevel.xml"));
+        String shrEncounterId = "urn:bb5e6156-477f-464c-a5ef-0285fcee1cb7";
+        bundle.setEncounterId(shrEncounterId);
+        encounterEventWorker.process(bundle);
+
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(4, getObservationIdList(shrEncounterId).size());
+
+
+
+    }
+
     private List<Integer> getProcedureIdList(String shrEncounterId) {
         return jdbcTemplate.queryForList(
                 "select procedure_id from procedures where encounter_id= :encounter_id",

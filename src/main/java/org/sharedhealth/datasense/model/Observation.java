@@ -16,7 +16,7 @@ public class Observation extends BaseResource {
         this.observationId = observationId;
     }
 
-    public int getObservationId() {
+    public Integer getObservationId() {
         return observationId;
     }
 

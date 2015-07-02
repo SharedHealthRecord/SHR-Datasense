@@ -87,7 +87,7 @@ public class ObservationResourceHandlerIT {
     }
 
     @Test
-    public void shouldSaveObservationWithoutRelatedComponents() throws Exception {
+    public void shouldSaveSimpleObservation() throws Exception {
         ResourceReference dateOfDeathReference = new ResourceReference().setReferenceSimple(PULSE_RESOURCE_REFERENCE);
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(dateOfDeathReference), composition);
@@ -105,10 +105,10 @@ public class ObservationResourceHandlerIT {
     }
 
     @Test
-    public void shouldSaveObservationAlongWithRelatedObservations() throws Exception {
-        ResourceReference deathNoteReference = new ResourceReference().setReferenceSimple(VITALS_RESOURCE_REFERENCE);
+    public void shouldSaveNestedObservationAlongWithRelatedObservations() throws Exception {
+        ResourceReference vitalReference = new ResourceReference().setReferenceSimple(VITALS_RESOURCE_REFERENCE);
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(deathNoteReference),
+        observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(vitalReference),
                 composition);
         List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
@@ -149,7 +149,6 @@ public class ObservationResourceHandlerIT {
         assertNull(child1.getParentId());
         assertNull(child2.getParentId());
         assertNull(child3.getParentId());
-
     }
 
     private Observation findObservationByConceptId(List<Observation> observations, final String conceptId) {
