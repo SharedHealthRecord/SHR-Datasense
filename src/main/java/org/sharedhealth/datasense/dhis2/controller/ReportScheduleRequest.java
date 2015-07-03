@@ -20,7 +20,7 @@ public class ReportScheduleRequest {
     private static final String QUARTERLY_PERIOD_TYPE = "Quarterly";
     public static final String[] SUPPORTED_PERIOD_TYPES = {DAILY_PERIOD_TYPE, MONTHLY_PERIOD_TYPE, QUARTERLY_PERIOD_TYPE, YEARLY_PERIOD_TYPE};
 
-    private List<String> selectedFacilities = new ArrayList<String>();
+    private List<String> selectedFacilities = new ArrayList<>();
     private String periodType;
     private String startDate;
     private String datasetId;

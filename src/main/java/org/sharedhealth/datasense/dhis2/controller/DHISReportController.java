@@ -35,20 +35,6 @@ public class DHISReportController {
     @Autowired
     private JobSchedulerService jobScheduler;
 
-    @Autowired
-    private Scheduler scheduler;
-
-    private List<DHISReportConfig> datasetList = new ArrayList<>();
-    private List<DHISOrgUnitConfig> orgUnitList = new ArrayList<>();
-
-    public DHISReportController() {
-        datasetList.add(new DHISReportConfig("Daily Opd Ipd Report", "opdreport"));
-        datasetList.add(new DHISReportConfig("Monthly Colposcopy Report", "colreport"));
-
-        orgUnitList.add(new DHISOrgUnitConfig("Dohar UHC", "DUHC"));
-        orgUnitList.add(new DHISOrgUnitConfig("Amtali UHC", "AUHC"));
-    }
-
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView showReportsList() {

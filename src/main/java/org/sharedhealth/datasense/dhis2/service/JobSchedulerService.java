@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.dhis2.service;
 import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
@@ -25,12 +26,14 @@ public class JobSchedulerService {
     private static final Logger logger = Logger.getLogger(JobSchedulerService.class);
     private Scheduler scheduler;
     private DHISConfigDao dhisMapDao;
+    private DatasenseProperties datasenseProperties;
 
 
     @Autowired
-    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao) {
+    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao, DatasenseProperties datasenseProperties) {
         this.scheduler = scheduler;
         this.dhisMapDao = dhisMapDao;
+        this.datasenseProperties = datasenseProperties;
     }
 
     public void scheduleJob(ReportScheduleRequest scheduleRequest) throws SchedulerException {
@@ -62,6 +65,8 @@ public class JobSchedulerService {
             jobDetail.getJobDataMap().put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
             jobDetail.getJobDataMap().put("paramConfigFile", configForDataset.getConfigFile());
             jobDetail.getJobDataMap().put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
+            jobDetail.getJobDataMap().put("pncGivenWithin48HoursUUID", datasenseProperties.getPncGivenWithin48HoursUuid());
+            jobDetail.getJobDataMap().put("newBornCareReceived", datasenseProperties.getNewBornCareReceivedUuid());
 
             String datasetName =  scheduleRequest.getDatasetName();
 
