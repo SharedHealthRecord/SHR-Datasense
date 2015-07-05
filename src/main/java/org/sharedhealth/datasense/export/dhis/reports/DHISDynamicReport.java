@@ -41,7 +41,7 @@ public class DHISDynamicReport {
         String orgUnitId = (String) mergedJobDataMap.get("paramOrgUnitId");
         String datasetId = (String) mergedJobDataMap.get("paramDatasetId");
         String pncGivenWithin48HoursUUID = (String) mergedJobDataMap.get("pncGivenWithin48HoursUUID");
-        String newBornCareReceivedUUID = (String) mergedJobDataMap.get("newBornCareReceived");
+        String newBornCareUUID = (String) mergedJobDataMap.get("newBornCare");
 
         queryParams.put("paramStartDate", reportingStartDate);
         queryParams.put("paramEndDate", reportingEndDate);
@@ -50,7 +50,7 @@ public class DHISDynamicReport {
         queryParams.put("paramDatasetId", datasetId);
         queryParams.put("paramOrgUnitId", orgUnitId);
         queryParams.put("pncGivenWithin48HoursUUID", pncGivenWithin48HoursUUID);
-        queryParams.put("newBornCareReceived", newBornCareReceivedUUID);
+        queryParams.put("newBornCare", newBornCareUUID);
 
         String configFile = (String) mergedJobDataMap.get("paramConfigFile");
 

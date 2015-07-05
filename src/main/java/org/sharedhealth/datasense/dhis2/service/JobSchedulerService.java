@@ -66,7 +66,7 @@ public class JobSchedulerService {
             jobDetail.getJobDataMap().put("paramConfigFile", configForDataset.getConfigFile());
             jobDetail.getJobDataMap().put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
             jobDetail.getJobDataMap().put("pncGivenWithin48HoursUUID", datasenseProperties.getPncGivenWithin48HoursUuid());
-            jobDetail.getJobDataMap().put("newBornCareReceived", datasenseProperties.getNewBornCareReceivedUuid());
+            jobDetail.getJobDataMap().put("newBornCare", datasenseProperties.getNewBornCareUuid());
 
             String datasetName =  scheduleRequest.getDatasetName();
 
