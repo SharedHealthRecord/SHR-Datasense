@@ -63,6 +63,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String dhisBaseUrl;
     private String pncGivenWithin48Hours;
     private String newBornCareUuid;
+    private String pentaThreeDrugUuid;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -86,6 +87,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.causeOfDeath = env.getProperty("CAUSE_OF_DEATH_UUID");
         this.pncGivenWithin48Hours = env.getProperty("PNC_GIVEN_WITHIN_48_HOURS_AFTER_BIRTH_UUID");
         this.newBornCareUuid = env.getProperty("NEW_BORN_CARE_UUID");
+        this.pentaThreeDrugUuid = env.getProperty("PENTA_THREE_DRUG_UUID");
         this.cloudHostedFacilityIds = env.getProperty("CLOUD_HOSTED_FACILITY_IDs");
         this.shrServerUrl = env.getProperty("SHR_SERVER_URL");
         this.mciServerPatientUrl = env.getProperty("MCI_SERVER_PATIENT_URL");
@@ -230,5 +232,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getNewBornCareUuid() {
         return newBornCareUuid;
+    }
+
+    public String getPentaThreeDrugUuid() {
+        return pentaThreeDrugUuid;
     }
 }
