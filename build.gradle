@@ -88,7 +88,7 @@ dependencies {
     compile ('org.springframework.boot:spring-boot-starter-security:1.2.0.RELEASE') {
         exclude module: "logback-classic"
     }
-    compile group: "org.ict4h", name: "aggregate-query-service", version: "1.0.4-SNAPSHOT", changing: true
+    compile group: "org.ict4h", name: "aggregate-query-service", version: "1.0.5-SNAPSHOT", changing: true
     compile group: 'me.fhir', name:'fhir-0.12', version: '0.3'
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
