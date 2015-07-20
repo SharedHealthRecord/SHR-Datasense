@@ -1,5 +1,7 @@
 package org.sharedhealth.datasense.repository;
 
+import org.apache.commons.lang3.StringUtils;
+import org.sharedhealth.datasense.feeds.patients.PatientUpdate;
 import org.sharedhealth.datasense.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,10 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 @Repository
 public class PatientDao {
@@ -44,5 +43,27 @@ public class PatientDao {
         map.put("present_location_id", patient.getPresentLocationCode());
         jdbcTemplate.update("insert into patient (patient_hid, dob, gender, present_location_id) values" +
                 "(:patient_hid, :dob, :gender, :present_location_id)", map);
+    }
+
+    public void update(PatientUpdate patientUpdate) {
+        HashMap<String, Object> map = new HashMap<>();
+        Map<String, String> changes = patientUpdate.getChangeSet().getChanges();
+
+        StringBuilder query = new StringBuilder();
+        query.append("update patient set ");
+
+        for (String key : changes.keySet()) {
+            query.append(String.format("%s = :%s,", key, key));
+            map.put(key, changes.get(key));
+        }
+
+        String updateClause = StringUtils.chop(query.toString());
+        String whereClause = " where patient_hid=:patient_hid";
+
+        String updatePatientClause = updateClause + whereClause;
+        map.put("patient_hid", patientUpdate.getHealthId());
+
+
+        jdbcTemplate.update(updatePatientClause, map);
     }
 }

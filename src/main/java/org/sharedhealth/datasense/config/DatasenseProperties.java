@@ -64,6 +64,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String pncGivenWithin48Hours;
     private String newBornCareUuid;
     private String pentaThreeDrugUuid;
+    private String mciServerPatientUpdateFeedUrl;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -91,6 +92,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.cloudHostedFacilityIds = env.getProperty("CLOUD_HOSTED_FACILITY_IDs");
         this.shrServerUrl = env.getProperty("SHR_SERVER_URL");
         this.mciServerPatientUrl = env.getProperty("MCI_SERVER_PATIENT_URL");
+        this.mciServerPatientUpdateFeedUrl = env.getProperty("MCI_SERVER_PATIENT_UPDATE_FEED_URL");
         this.trServerUrl = env.getProperty("TR_SERVER_URL");
         this.facilityRegistryUrl = env.getProperty("FACILITY_REGISTRY_URL");
         this.providerRegistryUrl = env.getProperty("PROVIDER_REGISTRY_URL");
@@ -111,6 +113,9 @@ public class DatasenseProperties implements EnvironmentAware {
         return mciServerPatientUrl.trim();
     }
 
+    public String getMciPatientUpdateFeedUrl() {
+        return mciServerPatientUpdateFeedUrl.trim();
+    }
 
     public String getIdentityServerLoginUrl() {
         return idpServerLoginUrl.trim();

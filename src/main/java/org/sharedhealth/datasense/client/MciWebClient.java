@@ -35,6 +35,23 @@ public class MciWebClient {
         return null;
     }
 
+    public String get(URI url) throws URISyntaxException, IOException {
+        log.debug("Reading from " + url);
+        Map<String, String> headers = getHrmAccessTokenHeaders(identityServiceClient.getOrCreateToken(), properties);
+        headers.put("Accept", "application/atom+xml");
+        String response = null;
+        try {
+            response = new WebClient().get(url, headers);
+        } catch (ConnectionException e) {
+            log.error(String.format("Could not fetch. Exception: %s", e));
+            if (e.getErrorCode() == 401) {
+                log.error("Unauthorized, clearing token.");
+                identityServiceClient.clearToken();
+            }
+        }
+        return response;
+    }
+
     private String getResponse(final String healthId) throws URISyntaxException, IOException {
         URI mciURI = getMciURI(healthId);
         log.info("Reading from " + mciURI);
