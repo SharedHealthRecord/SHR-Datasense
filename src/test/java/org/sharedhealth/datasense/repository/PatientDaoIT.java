@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -39,7 +40,37 @@ public class PatientDaoIT {
     private PatientDao patientDao;
 
     @Test
-    public void shouldUpdatePatientDetailsBasedOnChangeSet() throws Exception {
+    public void shouldUpdatePatientDob() throws Exception {
+        final Patient patient = new Patient();
+        String hid = "1234567";
+        patient.setHid(hid);
+
+        Map<String, Object> fields = new HashMap<String, Object>(){{
+            put("dob", "1990-02-14T00:00:00.000+05:30");
+            put("gender", "M");
+            put("address", new Address("","30","26","15",null,null, null,null));
+        }};
+
+        setFields(patient, fields);
+        patientDao.save(patient);
+
+        Map<String, Object> updatedFields = new HashMap(){{
+            put("dob", "1990-02-06T00:00:00.000+05:30");
+        }};
+
+        Map<String, Object> expectedFields = new HashMap<>(fields);
+        expectedFields.putAll(updatedFields);
+
+        PatientUpdate patientUpdate = getPatientUpdate(fields, updatedFields, hid);
+        patientDao.update(patientUpdate);
+
+        setFields(patient, expectedFields);
+        assertPatient(patient, hid);
+
+    }
+
+    @Test
+    public void shouldUpdatePatientGender() throws Exception {
         final Patient patient = new Patient();
         String hid = "1234567";
         patient.setHid(hid);
@@ -53,21 +84,52 @@ public class PatientDaoIT {
         setFields(patient, fields);
         patientDao.save(patient);
 
-        Map<String, Object> updatedFields = new HashMap<>(fields);
-        updatedFields.put("dob", "2014-11-10");
-        updatedFields.put("address", new Address("","20","22","",null,null, null,null));
+        Map<String, Object> updatedFields = new HashMap(){{
+            put("gender", "F");
+        }};
 
-        PatientUpdate patientUpdate = getPatientUpdate(fields, updatedFields);
-        patientUpdate.setHealthId(hid);
+        Map<String, Object> expectedFields = new HashMap<>(fields);
+        expectedFields.putAll(updatedFields);
+
+        PatientUpdate patientUpdate = getPatientUpdate(fields, updatedFields, hid);
         patientDao.update(patientUpdate);
 
-        // gender and address updated
-        setFields(patient, updatedFields);
+        setFields(patient, expectedFields);
         assertPatient(patient, hid);
 
     }
 
-    private PatientUpdate getPatientUpdate(Map<String, Object> fields, Map<String, Object> updatedFields){
+    @Test
+    public void shouldUpdatePatientAddress() throws Exception {
+        final Patient patient = new Patient();
+        String hid = "1234567";
+        patient.setHid(hid);
+
+        Map<String, Object> fields = new HashMap<String, Object>(){{
+            put("dob", "2015-01-01");
+            put("gender", "M");
+            put("address", new Address("","30","26","15",null,null, null,null));
+        }};
+
+        setFields(patient, fields);
+        patientDao.save(patient);
+
+        Map<String, Object> updatedFields = new HashMap(){{
+            put("address", new Address("","20","22","16",null,null, null,null));
+        }};
+
+        Map<String, Object> expectedFields = new HashMap<>(fields);
+        expectedFields.putAll(updatedFields);
+
+        PatientUpdate patientUpdate = getPatientUpdate(fields, updatedFields, hid);
+        patientDao.update(patientUpdate);
+
+        setFields(patient, expectedFields);
+        assertPatient(patient, hid);
+
+    }
+
+    private PatientUpdate getPatientUpdate(Map<String, Object> fields, Map<String, Object> updatedFields, String healthId){
         PatientUpdate patientUpdate= new PatientUpdate();
         PatientData patientData = new PatientData();
         if(updatedFields.get("gender") != null){
@@ -81,6 +143,7 @@ public class PatientDaoIT {
         }
 
         patientUpdate.setChangeSetMap(patientData);
+        patientUpdate.setHealthId(healthId);
         return patientUpdate;
     }
 
@@ -97,6 +160,7 @@ public class PatientDaoIT {
                 assertEquals(patient.getDateOfBirth(), rs.getDate("dob"));
                 assertEquals(patient.getGender(), rs.getString("gender"));
                 assertEquals(patient.getPresentLocationCode(), rs.getString("present_location_id"));
+                assertTrue(rs.getTimestamp("updated_at").after(rs.getTimestamp("created_at")));
                 return rs;
             }
         });

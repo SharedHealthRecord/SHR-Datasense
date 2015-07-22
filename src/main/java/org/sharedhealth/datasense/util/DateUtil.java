@@ -61,6 +61,11 @@ public class DateUtil {
         return format.format(parsedDate);
     }
 
+    public static String format(Date date) {
+        SimpleDateFormat format = new SimpleDateFormat(SIMPLE_DATE_WITH_SECS_FORMAT);
+        return format.format(date);
+    }
+
     public static String toUTCString(Date date) {
         SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_IN_MILLIS_FORMAT);
         //dateFormat.setTimeZone(TimeZone.getTimeZone("UTC"));

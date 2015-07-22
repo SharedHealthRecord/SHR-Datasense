@@ -4,7 +4,9 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Maps;
+import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.model.Address;
+import org.sharedhealth.datasense.util.DateUtil;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -55,7 +57,7 @@ public class PatientData {
         HashMap<String, String> changes = new HashMap<>();
         changes.put(GENDER, getGenderChange());
         changes.put(PRESENT_LOCATION_ID, getLocationCodeChange());
-        changes.put(DOB, getDobChange());
+        changes.put(DOB, getFormattedDobChange());
 
         return Maps.filterValues(changes, new Predicate<Object>() {
             @Override
@@ -67,5 +69,10 @@ public class PatientData {
 
     private String getLocationCodeChange() {
         return getAddressChange()!= null ? getAddressChange().getLocationCode() : null;
+    }
+
+    private String getFormattedDobChange(){
+        String dobChange = getDobChange();
+        return StringUtils.isEmpty(dobChange) ? null : DateUtil.format(DateUtil.parseDate(dobChange));
     }
 }

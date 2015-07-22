@@ -21,7 +21,9 @@ public class DatasenseProperties implements EnvironmentAware {
     private final static String SCHEME_SEPARATOR = "://";
 
     //MCI Server Properties
-    private String mciServerPatientUrl;
+    private String mciServerUrl;
+    private String mciServerPatientUri;
+    private String mciServerPatientUpdateFeedUri;
     //SHR Server Properties
     private String shrServerUrl;
     //TR Server Properties
@@ -64,7 +66,6 @@ public class DatasenseProperties implements EnvironmentAware {
     private String pncGivenWithin48Hours;
     private String newBornCareUuid;
     private String pentaThreeDrugUuid;
-    private String mciServerPatientUpdateFeedUrl;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -91,8 +92,9 @@ public class DatasenseProperties implements EnvironmentAware {
         this.pentaThreeDrugUuid = env.getProperty("PENTA_THREE_DRUG_UUID");
         this.cloudHostedFacilityIds = env.getProperty("CLOUD_HOSTED_FACILITY_IDs");
         this.shrServerUrl = env.getProperty("SHR_SERVER_URL");
-        this.mciServerPatientUrl = env.getProperty("MCI_SERVER_PATIENT_URL");
-        this.mciServerPatientUpdateFeedUrl = env.getProperty("MCI_SERVER_PATIENT_UPDATE_FEED_URL");
+        this.mciServerUrl = env.getProperty("MCI_SERVER_URL");
+        this.mciServerPatientUri = env.getProperty("MCI_SERVER_PATIENT_URI");
+        this.mciServerPatientUpdateFeedUri = env.getProperty("MCI_SERVER_PATIENT_UPDATE_FEED_URI");
         this.trServerUrl = env.getProperty("TR_SERVER_URL");
         this.facilityRegistryUrl = env.getProperty("FACILITY_REGISTRY_URL");
         this.providerRegistryUrl = env.getProperty("PROVIDER_REGISTRY_URL");
@@ -108,13 +110,16 @@ public class DatasenseProperties implements EnvironmentAware {
     public String getShrBaseUrl() {
         return shrServerUrl.trim();
     }
+    public String getMciBaseUrl() {
+        return mciServerUrl.trim();
+    }
 
     public String getMciPatientUrl() {
-        return mciServerPatientUrl.trim();
+        return StringUtil.ensureSuffix(getMciBaseUrl(), URL_SEPARATOR) + StringUtil.removePrefix(mciServerPatientUri, URL_SEPARATOR);
     }
 
     public String getMciPatientUpdateFeedUrl() {
-        return mciServerPatientUpdateFeedUrl.trim();
+        return StringUtil.ensureSuffix(getMciBaseUrl(), URL_SEPARATOR) + StringUtil.removePrefix(mciServerPatientUpdateFeedUri, URL_SEPARATOR);
     }
 
     public String getIdentityServerLoginUrl() {

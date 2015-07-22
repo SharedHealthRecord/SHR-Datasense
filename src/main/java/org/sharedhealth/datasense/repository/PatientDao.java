@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.repository;
 
-import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.feeds.patients.PatientUpdate;
 import org.sharedhealth.datasense.model.Patient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,13 +56,13 @@ public class PatientDao {
             map.put(key, changes.get(key));
         }
 
-        String updateClause = StringUtils.chop(query.toString());
-        String whereClause = " where patient_hid=:patient_hid";
+        query.append("updated_at = :updated_at ")
+            .append("where patient_hid = :patient_hid");
 
-        String updatePatientClause = updateClause + whereClause;
         map.put("patient_hid", patientUpdate.getHealthId());
+        map.put("updated_at", new Date());
 
 
-        jdbcTemplate.update(updatePatientClause, map);
+        jdbcTemplate.update(query.toString(), map);
     }
 }

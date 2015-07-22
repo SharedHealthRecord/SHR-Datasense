@@ -32,11 +32,11 @@ public class PatientUpdateCrawlerJob {
         String feedUrl = properties.getMciPatientUpdateFeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
 
-        MciFeedProcessor feedProcessor = new MciFeedProcessor(feedUrl, transactionManager, mciWebClient, patientUpdateEventWorker);
+        MciFeedProcessor feedProcessor = new MciFeedProcessor(feedUrl, transactionManager, mciWebClient, patientUpdateEventWorker, properties);
         try {
             feedProcessor.process();
         } catch (URISyntaxException e) {
-            String errorMessage = String.format("Unable to process encounter catchment feed [%s]", feedUrl);
+            String errorMessage = String.format("Unable to process patient update feed [%s]", feedUrl);
             log.error(errorMessage);
             throw new RuntimeException(errorMessage, e);
         }

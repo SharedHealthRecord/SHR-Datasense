@@ -661,4 +661,11 @@
             <column name="datetime" type="datetime"/>
         </createIndex>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150722-1147" author="sanjana">
+        <comment>Adding metadata columns to patient table</comment>
+        <addColumn tableName="patient">
+            <column name="created_at" type="datetime" defaultValueComputed="now()"/>
+            <column name="updated_at" type="datetime" defaultValueComputed="now()"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>

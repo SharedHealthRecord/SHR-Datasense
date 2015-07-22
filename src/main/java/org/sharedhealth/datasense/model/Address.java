@@ -192,12 +192,12 @@ public class Address {
 
     public String getLocationCode() {
         StringBuilder locationBuilder = new StringBuilder();
-        locationBuilder.append(divisionId.trim());
-        locationBuilder.append(districtId.trim());
-        locationBuilder.append(upazilaId.trim());
+        if (StringUtils.isNotBlank(divisionId)) locationBuilder.append(divisionId.trim());
+        if (StringUtils.isNotBlank(districtId)) locationBuilder.append(districtId.trim());
+        if (StringUtils.isNotBlank(upazilaId)) locationBuilder.append(upazilaId.trim());
         if (StringUtils.isNotBlank(cityCorporationId)) locationBuilder.append(cityCorporationId.trim());
         if (StringUtils.isNotBlank(unionId)) locationBuilder.append(unionId.trim());
         if (StringUtils.isNotBlank(unionOrUrbanWardId)) locationBuilder.append(unionOrUrbanWardId.trim());
-        return locationBuilder.toString();
+        return StringUtils.isNotBlank(locationBuilder.toString()) ? locationBuilder.toString() : null;
     }
 }
