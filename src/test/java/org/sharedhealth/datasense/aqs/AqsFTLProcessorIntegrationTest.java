@@ -29,6 +29,7 @@ public class AqsFTLProcessorIntegrationTest {
     DHIS2Client dhis2Client;
 
     @Test
+    @Ignore
     public void shouldProcessResultsUsingTemplate() throws IOException {
         Map<String, Object> params = new HashMap<String, Object>() {{
             put("paramFacilityId", 10005);
@@ -37,8 +38,6 @@ public class AqsFTLProcessorIntegrationTest {
             put("paramReportingPeriod", "20150701");
             put("paramOrgUnitId", "nRm6mKjJsaE");
         }};
-        //AqsExecutor executor = new AqsExecutor(jdbcTemplate);
-//        AqsFTLProcessor processor = new AqsFTLProcessor(executor);
         String content = processor.process("test_opd_ipd_report.json", params);
         System.out.println(content);
 //        DHISResponse dhisResponse = dhis2Client.post(content);
