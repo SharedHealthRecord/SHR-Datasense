@@ -10,8 +10,9 @@ import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.io.*;
+import java.io.File;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -29,16 +30,26 @@ public class AqsFTLProcessor implements AqsTemplateProcessor {
         this.datasenseProperties = datasenseProperties;
     }
 
-    @PostConstruct
-    public void initialize() throws IOException {
-        Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
-        cfg.setDirectoryForTemplateLoading(new File(StringUtil.removeSuffix(datasenseProperties.getAqsTemplateLocationPath(), "/")));
-        cfg.setDefaultEncoding("UTF-8");
-        cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
-        this.cfg = cfg;
+    private void initializeConfiguration() throws IOException {
+        if(cfg == null){
+            synchronized (Configuration.class) {
+                if(cfg == null){
+                    Configuration cfg = new Configuration(Configuration.VERSION_2_3_21);
+                    cfg.setDirectoryForTemplateLoading(new File(StringUtil.removeSuffix(datasenseProperties.getAqsTemplateLocationPath(), "/")));
+                    cfg.setDefaultEncoding("UTF-8");
+                    cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
+                    this.cfg = cfg;
+                }
+            }
+        }
     }
 
     public String process(String aqsConfigFile, Map<String, Object> params) {
+        try {
+            initializeConfiguration();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         try (StringWriter writer = new StringWriter()) {
             AqsConfig aqsConfig = executor.loadAqsConfig(aqsConfigFile);
             HashMap<String, Object> results = executor.fetchResults(aqsConfig, params);
@@ -58,4 +69,5 @@ public class AqsFTLProcessor implements AqsTemplateProcessor {
         }
         return null;
     }
+
 }

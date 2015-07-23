@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.aqs;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.client.DHIS2Client;
@@ -38,7 +39,6 @@ public class AqsFTLProcessorIntegrationTest {
         }};
         //AqsExecutor executor = new AqsExecutor(jdbcTemplate);
 //        AqsFTLProcessor processor = new AqsFTLProcessor(executor);
-//        processor.initialize();
         String content = processor.process("test_opd_ipd_report.json", params);
         System.out.println(content);
 //        DHISResponse dhisResponse = dhis2Client.post(content);
