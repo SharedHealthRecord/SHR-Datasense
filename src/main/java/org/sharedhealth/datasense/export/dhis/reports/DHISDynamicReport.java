@@ -96,8 +96,8 @@ public class DHISDynamicReport {
         try {
             DHISResponse dhisResponse = dhis2Client.post(content);
             logger.debug(dhisResponse.getValue());
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
+        } catch (Exception e) {
+            logger.error("Error occurred while posting data to DHIS2", e);
         }
     }
 

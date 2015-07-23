@@ -1,7 +1,5 @@
 package org.sharedhealth.datasense.dhis2.model;
 
-import java.util.Date;
-
 public class DatasetJobSchedule {
 
     private String datasetName;
