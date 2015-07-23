@@ -44,7 +44,8 @@ import static java.lang.System.getenv;
         "org.sharedhealth.datasense.util",
         "org.sharedhealth.datasense.scheduler.jobs",
         "org.sharedhealth.datasense.service",
-        "org.sharedhealth.datasense.controller"
+        "org.sharedhealth.datasense.controller",
+        "org.sharedhealth.datasense.aqs"
 })
 public class Main {
     @Autowired

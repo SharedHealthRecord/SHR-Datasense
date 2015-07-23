@@ -20,7 +20,9 @@ import javax.sql.DataSource;
         "org.sharedhealth.datasense.handler",
         "org.sharedhealth.datasense.export.dhis",
         "org.sharedhealth.datasense.security",
-        "org.sharedhealth.datasense.util","org.sharedhealth.datasense.scheduler.jobs"})
+        "org.sharedhealth.datasense.util",
+        "org.sharedhealth.datasense.scheduler.jobs",
+        "org.sharedhealth.datasense.aqs"})
 public class TestConfig {
 
     @Autowired

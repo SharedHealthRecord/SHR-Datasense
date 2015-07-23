@@ -44,7 +44,7 @@ public class DHISMetaDataService {
     private List<DHISReportConfig> mergeWithConfiguredReports(final List<DHISReportConfig> mappedDatasets) {
         List<DHISReportConfig> dataSets = new ArrayList<>();
         try {
-            Resource[] resources = context.getResources("file://"+properties.getDhisAqsConfigPath() + "*.json");
+            Resource[] resources = context.getResources("file://"+properties.getAqsConfigLocationPath() + "*.json");
             for (Resource resource : resources) {
                 String filename = resource.getFilename();
                 DHISReportConfig mds = findInMapped(mappedDatasets, filename);
