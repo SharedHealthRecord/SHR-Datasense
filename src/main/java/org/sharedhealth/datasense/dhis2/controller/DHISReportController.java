@@ -26,6 +26,7 @@ public class DHISReportController {
 
 
     public static final String DHIS_DATASET_SEARCH_FORMAT = "/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType";
+    private static final String DHIS_DATASET_ORGUNIT_FORMAT = "/api/dataSets/%s?fields=id,name,organisationUnits";
     @Autowired
     DHISMetaDataService metaDataService;
 
@@ -69,6 +70,16 @@ public class DHISReportController {
                 String.format(DHIS_DATASET_SEARCH_FORMAT, name);
         return dhis2Client.get(searchUri);
     }
+
+    @RequestMapping(value = "/{datasetId}/applicableOrgUnits", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public @ResponseBody
+    DHISResponse getOrgUnits(@PathVariable String datasetId) {
+        String searchUri = String.format(DHIS_DATASET_ORGUNIT_FORMAT, datasetId);
+        return dhis2Client.get(searchUri);
+    }
+
+
 
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")

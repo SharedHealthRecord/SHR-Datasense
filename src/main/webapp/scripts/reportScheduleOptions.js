@@ -1,6 +1,7 @@
 function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
    var periodId = "#periodType", startDtId = "#startDate", displayPeriodId =  "#reportingPeriod";
    var dtCh= "/",  minYear=1900, maxYear=2100;
+   var applicableOrgUnits = [];
 
    var self = this;
    $(periodId).change(function() {
@@ -23,6 +24,8 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
        }
    });
 
+
+
    $("#loadScheduleStatus").bind("click", function() {
        var datasetId = $("#datasetIdEl").val();
        var targetUrl = "/dhis2/reports/schedule/" + datasetId + "/jobs";
@@ -32,6 +35,22 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
            var rendered = Mustache.render(template, results);
            $('#reportScheduleStatus tbody').html(rendered);
        });
+   });
+
+   $("input[name=selectedFacilities]").bind("click", function(e) {
+        var orgUnitId = $(e.target).attr("data-orgunit");
+        var arrayLength = self.applicableOrgUnits.length;
+        var found = false;
+        for (var i = 0; i < arrayLength; i++) {
+            var orgUnit = self.applicableOrgUnits[i];
+            if (orgUnit.id === orgUnitId) {
+                found = true;
+            }
+        }
+        if (!found)  {
+            alert("The selected organization is not applicable for this report.");
+            e.preventDefault();
+        }
    });
 
    this.validateInput = function(periodValue) {
@@ -137,6 +156,20 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
        }
        return null;
    };
+
+   var fetchOrgUnits = function() {
+       var datasetId = $("#datasetIdEl").val();
+       var targetUrl = "/dhis2/reports/" + datasetId + "/applicableOrgUnits";
+       $.get(targetUrl).done(function(results) {
+           if (results) {
+              if (results.hasOwnProperty('organisationUnits')) {
+                 self.applicableOrgUnits = results.organisationUnits;
+              }
+           }
+       });
+   };
+
+   fetchOrgUnits();
 
 }
 

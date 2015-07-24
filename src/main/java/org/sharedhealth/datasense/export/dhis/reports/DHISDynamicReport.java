@@ -18,7 +18,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.io.UnsupportedEncodingException;
 import java.util.HashMap;
 
 import static org.sharedhealth.datasense.util.HeaderUtil.getDhisHeaders;
@@ -28,17 +27,18 @@ public class DHISDynamicReport {
 
     private static final Logger logger = Logger.getLogger(DHISDynamicReport.class);
 
-    @Autowired
-    DataSource dataSource;
+    final DataSource dataSource;
+    final DatasenseProperties datasenseProperties;
+    final AqsFTLProcessor aqsFTLProcessor;
+    final DHIS2Client dhis2Client;
 
     @Autowired
-    DatasenseProperties datasenseProperties;
-
-    @Autowired
-    AqsFTLProcessor aqsFTLProcessor;
-
-    @Autowired
-    DHIS2Client dhis2Client;
+    public DHISDynamicReport(DataSource dataSource, DatasenseProperties datasenseProperties, AqsFTLProcessor aqsFTLProcessor, DHIS2Client dhis2Client) {
+        this.dataSource = dataSource;
+        this.datasenseProperties = datasenseProperties;
+        this.aqsFTLProcessor = aqsFTLProcessor;
+        this.dhis2Client = dhis2Client;
+    }
 
     public void process(JobDataMap mergedJobDataMap) {
 
@@ -84,44 +84,8 @@ public class DHISDynamicReport {
     }
 
     private void postToDHIS2(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-        postUsingFTLProcessor(configFile, queryParams, extraParams);
-        //postUsingAqsClj(configFile, queryParams, extraParams);
-    }
-
-    private void postUsingFTLProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-        HashMap<String, Object> params = new HashMap<>();
-        params.putAll(queryParams);
-        params.putAll(extraParams);
-        String content = aqsFTLProcessor.process(configFile, params);
-        try {
-            DHISResponse dhisResponse = dhis2Client.post(content);
-            logger.debug(dhisResponse.getValue());
-        } catch (Exception e) {
-            logger.error("Error occurred while posting data to DHIS2", e);
-        }
-    }
-
-    private void postUsingAqsClj(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-        String configFilePath = StringUtil.ensureSuffix(datasenseProperties.getAqsConfigLocationPath(), "/") + configFile;
-        HashMap<String, String> postHeaders = getDhisHeaders(datasenseProperties);
-        Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams,
-                postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
-        if (!(result instanceof LazySeq)) {
-            logger.debug("result:" + result.toString());
-        } else {
-            LazySeq seq = (LazySeq) result;
-            if (!seq.isEmpty()) {
-                Object response = seq.get(0);
-                if (response instanceof PersistentArrayMap) {
-                    PersistentArrayMap responseMap = (PersistentArrayMap) response;
-                    String status = getValueFromMap(responseMap, "status");
-                    String dhisResponse = getValueFromMap(responseMap, "response");
-                    logWhenErroredOut(status, dhisResponse);
-                } else {
-                    logger.debug("result:" + response.toString());
-                }
-            }
-        }
+        new JProcessor(configFile, queryParams, extraParams).invoke();
+        //new CljProcessor(configFile, queryParams, extraParams).invoke();
     }
 
     private String getValueFromMap(IPersistentMap map,String key){
@@ -146,4 +110,71 @@ public class DHISDynamicReport {
 
     }
 
+    private class JProcessor {
+        private String configFile;
+        private HashMap<String, String> queryParams;
+        private HashMap<String, String> extraParams;
+
+        public JProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+            this.configFile = configFile;
+            this.queryParams = queryParams;
+            this.extraParams = extraParams;
+        }
+
+        public void invoke() {
+            postUsingFTLProcessor(configFile, queryParams, extraParams);
+        }
+
+        private void postUsingFTLProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+            HashMap<String, Object> params = new HashMap<>();
+            params.putAll(queryParams);
+            params.putAll(extraParams);
+            String content = aqsFTLProcessor.process(configFile, params);
+            try {
+                DHISResponse dhisResponse = dhis2Client.post(content);
+                logger.debug(dhisResponse.getValue());
+            } catch (Exception e) {
+                logger.error("Error occurred while posting data to DHIS2", e);
+            }
+        }
+    }
+
+    private class CljProcessor {
+        private String configFile;
+        private HashMap<String, String> queryParams;
+        private HashMap<String, String> extraParams;
+
+        public CljProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+            this.configFile = configFile;
+            this.queryParams = queryParams;
+            this.extraParams = extraParams;
+        }
+
+        public void invoke() {
+            postUsingAqsClj(configFile, queryParams, extraParams);
+        }
+
+        private void postUsingAqsClj(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+            String configFilePath = StringUtil.ensureSuffix(datasenseProperties.getAqsConfigLocationPath(), "/") + configFile;
+            HashMap<String, String> postHeaders = getDhisHeaders(datasenseProperties);
+            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams,
+                    postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
+            if (!(result instanceof LazySeq)) {
+                logger.debug("result:" + result.toString());
+            } else {
+                LazySeq seq = (LazySeq) result;
+                if (!seq.isEmpty()) {
+                    Object response = seq.get(0);
+                    if (response instanceof PersistentArrayMap) {
+                        PersistentArrayMap responseMap = (PersistentArrayMap) response;
+                        String status = getValueFromMap(responseMap, "status");
+                        String dhisResponse = getValueFromMap(responseMap, "response");
+                        logWhenErroredOut(status, dhisResponse);
+                    } else {
+                        logger.debug("result:" + response.toString());
+                    }
+                }
+            }
+        }
+    }
 }

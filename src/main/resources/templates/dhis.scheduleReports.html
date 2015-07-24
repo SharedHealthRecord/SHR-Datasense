@@ -44,8 +44,8 @@
         <h2>&nbsp;</h2>
     </div>
     <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#createScheduledJobs">Schedule</a></li>
-        <li><a data-toggle="tab" href="#viewScheduledJobs">Status</a></li>
+        <li class="active"><a data-toggle="tab" href="#createScheduledJobs" id="tabCreateScheduledJobs">Schedule</a></li>
+        <li><a data-toggle="tab" href="#viewScheduledJobs" id="tabViewScheduledJobs">Status</a></li>
     </ul>
 
     <div class="tab-content">
@@ -63,7 +63,7 @@
                     </div>
                     <div class="checkbox" th:each="org: ${orgUnits}">
                         <label>
-                            <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}"/>
+                            <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}" th:attr="data-orgunit=${org.orgUnitId}"/>
                             <span th:utext="${org.facilityName}">name</span>
                         </label>
                     </div>
