@@ -18,8 +18,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
       shr.vm.provision "ansible" do |ansible|
         ansible.inventory_path = "../FreeSHR-Playbooks/local"
         ansible.playbook =  "../FreeSHR-Playbooks/all.yml"
-        # ansible.tags = ["setup", "datasense", "identity-server"]
-        ansible.tags = ["datasense"]
+        ansible.tags = ["setup", "datasense"]
         ansible.vault_password_file = "~/.vaultpass.txt"
       end
   end
