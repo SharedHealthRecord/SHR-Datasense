@@ -33,11 +33,11 @@ public class AqsExecutorIntegrationTest {
     public void shouldExecuteMultipleQueriesAndReturnResults() throws ExecutionException, InterruptedException {
         QueryDefinition admissionsMale = new QueryDefinition();
         admissionsMale.setQueryName("ipd_male_0_to_4");
-        admissionsMale.setQueryString("select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=':paramFacilityId:' and e.patient_hid=p.patient_hid and e.patient_age_years >= 0 and e.patient_age_years < 5 and p.gender='M' and LOWER(e.visit_type)='inpatient' and e.encounter_datetime =':paramStartDate:';");
+        admissionsMale.setQueryString("select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=':paramFacilityId:' and e.patient_hid=p.patient_hid and TIMESTAMPDIFF(YEAR, p.dob, e.encounter_datetime) between 0 and 5 and p.gender='M' and LOWER(e.visit_type)='inpatient' and e.encounter_datetime =':paramStartDate:';");
 
         QueryDefinition emergencyVisitsFemale = new QueryDefinition();
         emergencyVisitsFemale.setQueryName("emergency_female_15_to_24");
-        emergencyVisitsFemale.setQueryString("select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=':paramFacilityId:' and e.patient_hid=p.patient_hid and e.patient_age_years >= 15 and e.patient_age_years < 25 and p.gender='F' and LOWER(e.visit_type)='emergency' and e.encounter_datetime=':paramStartDate:';");
+        emergencyVisitsFemale.setQueryString("select count(distinct e.patient_hid) as v1 from encounter e, patient p where facility_id=':paramFacilityId:' and e.patient_hid=p.patient_hid and TIMESTAMPDIFF(YEAR, p.dob, e.encounter_datetime) between 15 and 25 and p.gender='F' and LOWER(e.visit_type)='emergency' and e.encounter_datetime=':paramStartDate:';");
 
 
         Map<String, Object> params = new HashMap<String, Object>() {{

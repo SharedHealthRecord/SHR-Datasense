@@ -17,7 +17,6 @@ import org.springframework.stereotype.Component;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.DateUtil.*;
 import static org.sharedhealth.datasense.util.TrUrl.isConceptUrl;
 import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 
@@ -95,9 +94,6 @@ public class DeathNoteHandler implements FhirResourceHandler {
         Observation dateOfDeathObs = findObservation(composition, deathNoteObservation, datasenseProperties.getDateOfDeathUuid());
         Date dateOfDeath = getDateValue(encounter, dateOfDeathObs);
         patientDeathDetails.setDateOfDeath(dateOfDeath);
-        patientDeathDetails.setPatientAgeInYears(getYears(patientDeathDetails.getPatient().getDateOfBirth(), dateOfDeath));
-        patientDeathDetails.setPatientAgeInMonths(getMonths(patientDeathDetails.getPatient().getDateOfBirth(), dateOfDeath));
-        patientDeathDetails.setPatientAgeInDays(getDays(patientDeathDetails.getPatient().getDateOfBirth(), dateOfDeath));
     }
 
     private Date getDateValue(Encounter encounter, Observation dateOfDeathObs) {

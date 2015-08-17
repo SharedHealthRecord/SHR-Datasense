@@ -12,9 +12,6 @@ public class Encounter {
     private Patient patient;
     private Date encounterDateTime;
     private String locationCode;
-    private int patientAgeInYears;
-    private int patientAgeInMonths;
-    private int patientAgeInDays;
 
     public void setEncounterType(String encounterType) {
         this.encounterType = encounterType;
@@ -67,30 +64,6 @@ public class Encounter {
             return facility.getFacilityLocationCode();
         }
         return null;
-    }
-
-    public int getPatientAgeInYears() {
-        return patientAgeInYears;
-    }
-
-    public void setPatientAgeInYears(int patientAgeInYears) {
-        this.patientAgeInYears = patientAgeInYears;
-    }
-
-    public int getPatientAgeInMonths() {
-        return patientAgeInMonths;
-    }
-
-    public void setPatientAgeInMonths(int patientAgeInMonths) {
-        this.patientAgeInMonths = patientAgeInMonths;
-    }
-
-    public int getPatientAgeInDays() {
-        return patientAgeInDays;
-    }
-
-    public void setPatientAgeInDays(int patientAgeInDays) {
-        this.patientAgeInDays = patientAgeInDays;
     }
 
     public String getEncounterId() {

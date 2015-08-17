@@ -91,15 +91,6 @@ public class DeathNoteHandlerIT {
     }
 
     @Test
-    public void shouldSavePatientAgeFromDateOfDeathObservationResource() {
-        deathNoteHandler.process(deathNoteResource, composition);
-        PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals(1, patientDeathDetails.getPatientAgeInYears());
-        assertEquals(12, patientDeathDetails.getPatientAgeInMonths());
-        assertEquals(365, patientDeathDetails.getPatientAgeInDays());
-    }
-
-    @Test
     public void shouldSaveCircumstancesOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
@@ -115,7 +106,7 @@ public class DeathNoteHandlerIT {
     }
 
     private PatientDeathDetails findByEncounterId(String shrEncounterId) {
-        String sql = "select patient_hid, encounter_id, date_of_death, patient_age_years, patient_age_months, patient_age_days, " +
+        String sql = "select patient_hid, encounter_id, date_of_death, " +
                 "circumstances_of_death, cause_concept_uuid, cause_code, uuid " +
                 "from patient_death_details where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
@@ -133,9 +124,6 @@ public class DeathNoteHandlerIT {
                 patientDeathDetails.setEncounter(encounter);
 
                 patientDeathDetails.setDateOfDeath(rs.getTimestamp("date_of_death"));
-                patientDeathDetails.setPatientAgeInYears(rs.getInt("patient_age_years"));
-                patientDeathDetails.setPatientAgeInMonths(rs.getInt("patient_age_months"));
-                patientDeathDetails.setPatientAgeInDays(rs.getInt("patient_age_days"));
                 patientDeathDetails.setCircumstancesOfDeath(rs.getString("circumstances_of_death"));
                 patientDeathDetails.setCauseOfDeathConceptUuid(rs.getString("cause_concept_uuid"));
                 patientDeathDetails.setCauseOfDeathCode(rs.getString("cause_code"));

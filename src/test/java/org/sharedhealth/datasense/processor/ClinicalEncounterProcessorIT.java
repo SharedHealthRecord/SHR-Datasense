@@ -85,7 +85,7 @@ public class ClinicalEncounterProcessorIT {
     private Encounter findEncounterById(String encounterId) {
         List<Encounter> encounters = jdbcTemplate.query(
                 "select encounter_id ,encounter_datetime, encounter_type, visit_type, patient_hid, " +
-                        "patient_age_years, patient_age_months, patient_age_days,encounter_location_id, facility_id " +
+                        "encounter_location_id, facility_id " +
                         "from encounter where encounter_id= :encounter_id", Collections.singletonMap("encounter_id",
                         encounterId),
                 new RowMapper<Encounter>() {
@@ -96,9 +96,6 @@ public class ClinicalEncounterProcessorIT {
                         encounter.setEncounterDateTime(new Date(rs.getTimestamp("encounter_datetime").getTime()));
                         encounter.setEncounterType(rs.getString("encounter_type"));
                         encounter.setEncounterVisitType(rs.getString("visit_type"));
-                        encounter.setPatientAgeInYears(rs.getInt("patient_age_years"));
-                        encounter.setPatientAgeInMonths(rs.getInt("patient_age_months"));
-                        encounter.setPatientAgeInDays(rs.getInt("patient_age_days"));
                         encounter.setLocationCode(rs.getString("encounter_location_id"));
 
                         Patient patient = new Patient();

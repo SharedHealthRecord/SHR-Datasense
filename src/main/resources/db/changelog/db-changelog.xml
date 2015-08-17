@@ -668,4 +668,16 @@
             <column name="updated_at" type="datetime" defaultValueComputed="now()"/>
         </addColumn>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20150818-1513" author="sanjana" context="setup">
+        <comment>Dropping patient age columns in encounter table</comment>
+        <dropColumn columnName="patient_age_years" tableName="encounter"/>
+        <dropColumn columnName="patient_age_months" tableName="encounter"/>
+        <dropColumn columnName="patient_age_days" tableName="encounter"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20150818-1520" author="sanjana" context="setup">
+        <comment>Dropping patient age columns in encounter table</comment>
+        <dropColumn columnName="patient_age_years" tableName="patient_death_details"/>
+        <dropColumn columnName="patient_age_months" tableName="patient_death_details"/>
+        <dropColumn columnName="patient_age_days" tableName="patient_death_details"/>
+    </changeSet>
 </databaseChangeLog>

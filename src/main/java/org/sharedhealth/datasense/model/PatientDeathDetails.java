@@ -6,9 +6,6 @@ public class PatientDeathDetails extends BaseResource {
     private Patient patient;
     private Encounter encounter;
     private Date dateOfDeath;
-    private int patientAgeInYears;
-    private int patientAgeInMonths;
-    private int patientAgeInDays;
     private String circumstancesOfDeath;
     private String causeOfDeathCode;
     private String causeOfDeathConceptUuid;
@@ -36,30 +33,6 @@ public class PatientDeathDetails extends BaseResource {
 
     public void setDateOfDeath(Date dateOfDeath) {
         this.dateOfDeath = dateOfDeath;
-    }
-
-    public int getPatientAgeInYears() {
-        return patientAgeInYears;
-    }
-
-    public void setPatientAgeInYears(int patientAgeInYears) {
-        this.patientAgeInYears = patientAgeInYears;
-    }
-
-    public int getPatientAgeInMonths() {
-        return patientAgeInMonths;
-    }
-
-    public void setPatientAgeInMonths(int patientAgeInMonths) {
-        this.patientAgeInMonths = patientAgeInMonths;
-    }
-
-    public int getPatientAgeInDays() {
-        return patientAgeInDays;
-    }
-
-    public void setPatientAgeInDays(int patientAgeInDays) {
-        this.patientAgeInDays = patientAgeInDays;
     }
 
     public String getCircumstancesOfDeath() {

@@ -21,17 +21,12 @@ public class EncounterDao {
         map.put("encounter_type", encounter.getEncounterType());
         map.put("visit_type", encounter.getEncounterVisitType());
         map.put("patient_hid", encounter.getPatient().getHid());
-        map.put("patient_age_years", encounter.getPatientAgeInYears());
-        map.put("patient_age_months", encounter.getPatientAgeInMonths());
-        map.put("patient_age_days", encounter.getPatientAgeInDays());
         map.put("location_id", encounter.getLocationCode());
         map.put("facility_id", encounter.getFacility().getFacilityId());
         jdbcTemplate.update("insert into encounter (encounter_id, encounter_datetime, encounter_type, visit_type, " +
-                "patient_hid, " +
-                "patient_age_years, patient_age_months, patient_age_days, encounter_location_id, facility_id) " +
+                "patient_hid, encounter_location_id, facility_id) " +
                 "values(:encounter_id, :encounter_datetime, :encounter_type , :visit_type , :patient_hid, " +
-                ":patient_age_years, :patient_age_months," +
-                " :patient_age_days , :location_id, :facility_id)", map);
+                ":location_id, :facility_id)", map);
     }
 
     public void deleteExisting(String healthId, String encounterId){

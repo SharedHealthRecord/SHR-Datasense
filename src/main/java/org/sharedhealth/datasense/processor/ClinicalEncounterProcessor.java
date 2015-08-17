@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
-import static org.sharedhealth.datasense.util.DateUtil.*;
-
 @Component("clinicalEncounterProcessor")
 public class ClinicalEncounterProcessor implements ResourceProcessor {
     private EncounterDao encounterDao;
@@ -57,7 +55,6 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         String encounterDate = composition.getComposition().getDateSimple().toString();
         Date encounterDateTime = DateUtil.parseDate(encounterDate);
         encounter.setEncounterDateTime(encounterDateTime);
-        setPatientAge(patient.getDateOfBirth(), encounterDateTime, encounter);
         return encounter;
     }
 
@@ -66,9 +63,4 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         this.nextProcessor = nextProcessor;
     }
 
-    public void setPatientAge(Date birthDate, Date encounterDate, Encounter encounter) {
-        encounter.setPatientAgeInYears(getYears(birthDate, encounterDate));
-        encounter.setPatientAgeInMonths(getMonths(birthDate, encounterDate));
-        encounter.setPatientAgeInDays(getDays(birthDate, encounterDate));
-    }
 }
