@@ -48,7 +48,7 @@ test {
 jar.dependsOn 'checkStyle'
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '1.12'
+    gradleVersion = '2.6'
 }
 
 ext.libraries = [
