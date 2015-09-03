@@ -1,6 +1,10 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import org.hl7.fhir.instance.model.*;
+
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Composition;
+import ca.uhn.fhir.model.dstu2.resource.Encounter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -17,26 +21,26 @@ public class EncounterComposition {
     public EncounterComposition(Composition composition, BundleContext context) {
         this.composition = composition;
         this.context = context;
-        encounterReference = new EncounterReference(composition.getEncounter(),
-                (Encounter) context.getResourceByReferenceFromFeed(composition.getEncounter()));
-        patientReference = new PatientReference(encounterReference.getEncounterReferenceValue().getSubject());
+        Encounter encounter = (Encounter) context.getResourceForReference(composition.getEncounter());
+        encounterReference = new EncounterReference(composition.getEncounter(), encounter);
+        patientReference = new PatientReference(encounterReference.getResource().getPatient());
         serviceProviderReference = new ServiceProviderReference();
-        ResourceReference serviceProvider = encounterReference.getEncounterReferenceValue().getServiceProvider();
+        ResourceReferenceDt serviceProvider = encounterReference.getResource().getServiceProvider();
         if (serviceProvider != null) {
             serviceProviderReference.setServiceProvider(serviceProvider);
         }
         providerReference = new ProviderReference();
-        List<Encounter.EncounterParticipantComponent> participants = encounterReference.getEncounterReferenceValue().getParticipant();
+        List<Encounter.Participant> participants = encounterReference.getResource().getParticipant();
         if(!participants.isEmpty()) {
-            for (Encounter.EncounterParticipantComponent participant : participants) {
+            for (Encounter.Participant participant : participants) {
                 providerReference.addReference(participant.getIndividual());
             }
         }
     }
 
-    public ArrayList<Resource> loadResourcesFromComposition() {
-        ArrayList<Resource> resources = new ArrayList<>();
-        for (Composition.SectionComponent sectionComponent : composition.getSection()) {
+    public ArrayList<IResource> loadResourcesFromComposition() {
+        ArrayList<IResource> resources = new ArrayList<>();
+        for (Composition.Section section : composition.getSection()) {
             if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
                 resources.add(context.getResourceByReferenceFromFeed(sectionComponent.getContent()));
             }

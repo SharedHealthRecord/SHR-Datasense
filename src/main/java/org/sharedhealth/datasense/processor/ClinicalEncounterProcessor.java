@@ -1,20 +1,23 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.valueset.EncounterTypeEnum;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ServiceProviderReference;
 import org.sharedhealth.datasense.repository.EncounterDao;
-import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
+import java.util.List;
 
 @Component("clinicalEncounterProcessor")
 public class ClinicalEncounterProcessor implements ResourceProcessor {
+    public static final String UNKNOWN_ENCOUNTER_TYPE = "unknown";
     private EncounterDao encounterDao;
     private ResourceProcessor nextProcessor;
 
@@ -27,8 +30,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        org.hl7.fhir.instance.model.Encounter fhirEncounter = composition.getEncounterReference()
-                .getEncounterReferenceValue();
+        ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = composition.getEncounterReference().getResource();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         composition.getEncounterReference().setValue(encounter);
         encounterDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
@@ -38,12 +40,12 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         }
     }
 
-    private Encounter mapEncounterFields(org.hl7.fhir.instance.model.Encounter fhirEncounter, EncounterComposition
+    private Encounter mapEncounterFields(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter, EncounterComposition
             composition) {
         Encounter encounter = new Encounter();
-        encounter.setEncounterType(fhirEncounter.getType().get(0).getTextSimple());
+        encounter.setEncounterType(getEncounterType(fhirEncounter));
         encounter.setEncounterId(composition.getContext().getShrEncounterId());
-        encounter.setEncounterVisitType(fhirEncounter.getClass_().getValue().toCode());
+        encounter.setEncounterVisitType(getVisitType(fhirEncounter));
         Patient patient = composition.getPatientReference().getValue();
         encounter.setPatient(patient);
         ServiceProviderReference facilityReference = composition.getServiceProviderReference();
@@ -52,10 +54,22 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
             encounter.setFacility(facility);
             encounter.setLocationCode(facility.getFacilityLocationCode());
         }
-        String encounterDate = composition.getComposition().getDateSimple().toString();
-        Date encounterDateTime = DateUtil.parseDate(encounterDate);
-        encounter.setEncounterDateTime(encounterDateTime);
+        Date encounterDate = composition.getComposition().getDate();
+        encounter.setEncounterDateTime(encounterDate);
         return encounter;
+    }
+
+    private String getVisitType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
+        return fhirEncounter.getClass_().getValue().toCode();
+    }
+
+    private String getEncounterType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
+        List<BoundCodeableConceptDt<EncounterTypeEnum>> types = fhirEncounter.getType();
+        if (types.isEmpty()) {
+            return UNKNOWN_ENCOUNTER_TYPE;
+        }
+        //TODO - check for codeable concept what values we get, especially when not enum, as this is example
+        return types.get(0).getText();
     }
 
     @Override

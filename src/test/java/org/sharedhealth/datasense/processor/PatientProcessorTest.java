@@ -37,7 +37,7 @@ public class PatientProcessorTest {
         String healthId = "5942395046400622593";
         EncounterBundle bundle = new EncounterBundle();
         bundle.addContent(loadFromXmlFile("xmls/sampleEncounter.xml"));
-        BundleContext context = new BundleContext(bundle.getResourceOrFeed().getFeed(), "shrEncounterId");
+        BundleContext context = new BundleContext(bundle.getBundle().getFeed(), "shrEncounterId");
         Patient patient = new Patient();
         when(webClient.identifyPatient(healthId)).thenReturn(patient);
         PatientProcessor processor = new PatientProcessor(null, webClient, patientDao);

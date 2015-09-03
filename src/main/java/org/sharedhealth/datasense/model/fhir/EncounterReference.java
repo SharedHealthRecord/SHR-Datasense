@@ -1,16 +1,16 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import org.hl7.fhir.instance.model.ResourceReference;
 import org.sharedhealth.datasense.model.Encounter;
 
 public class EncounterReference {
     private Encounter value;
-    private ResourceReference encounterReference;
-    private org.hl7.fhir.instance.model.Encounter encounterReferenceValue;
+    private ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt encounterReference;
+    private ca.uhn.fhir.model.dstu2.resource.Encounter resource;
 
-    public EncounterReference(ResourceReference encounterReference, org.hl7.fhir.instance.model.Encounter encounter) {
+    public EncounterReference(ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt encounterReference,
+                              ca.uhn.fhir.model.dstu2.resource.Encounter encounter) {
         this.encounterReference = encounterReference;
-        this.encounterReferenceValue = encounter;
+        this.resource = encounter;
     }
 
     public void setValue(Encounter value) {
@@ -25,7 +25,7 @@ public class EncounterReference {
         return this.getValue().getEncounterId();
     }
 
-    public org.hl7.fhir.instance.model.Encounter getEncounterReferenceValue() {
-        return encounterReferenceValue;
+    public ca.uhn.fhir.model.dstu2.resource.Encounter getResource() {
+        return resource;
     }
 }

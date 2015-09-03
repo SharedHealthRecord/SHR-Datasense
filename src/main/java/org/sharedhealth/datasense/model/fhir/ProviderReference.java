@@ -1,28 +1,28 @@
 package org.sharedhealth.datasense.model.fhir;
 
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import org.apache.commons.lang3.StringUtils;
-import org.hl7.fhir.instance.model.ResourceReference;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class ProviderReference {
-    private List<ResourceReference> references;
+    private List<ResourceReferenceDt> references;
 
     public ProviderReference() {
         this.references = new ArrayList<>();
     }
 
-    public List<ResourceReference> getReferences() {
+    public List<ResourceReferenceDt> getReferences() {
         return references;
     }
 
-    public void addReference(ResourceReference individual) {
+    public void addReference(ResourceReferenceDt individual) {
         references.add(individual);
     }
 
-    public String getProviderId(ResourceReference reference) {
-        return parseUrl(reference.getReferenceSimple());
+    public String getProviderId(ResourceReferenceDt resourceRef) {
+        return parseUrl(resourceRef.getReference().getValue());
     }
 
     public static String parseUrl(String referenceUrl) {

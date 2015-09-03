@@ -70,7 +70,11 @@ ext.libraries = [
         thymeleaf            : "org.thymeleaf:thymeleaf-spring3:2.1.4.RELEASE",
         free_marker          : "org.freemarker:freemarker:2.3.21",
         spring_web           : "org.springframework:spring-web:4.1.0.RELEASE",
-        guava                : "com.google.guava:guava:18.0"
+        guava                : "com.google.guava:guava:18.0",
+        hapi_fhir_base       : 'ca.uhn.hapi.fhir:hapi-fhir-base:1.1',
+        hapi_fhir_structures : 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu2:1.1',
+        phloc_schematron       : 'com.phloc:phloc-schematron:2.7.1',
+        phloc_commons          : 'com.phloc:phloc-commons:4.3.6'
 ]
 
 ext.testLibraries = [
@@ -90,12 +94,13 @@ dependencies {
         exclude module: "logback-classic"
     }
     compile group: "org.ict4h", name: "aggregate-query-service", version: "1.0.5-SNAPSHOT", changing: true
-    compile group: 'me.fhir', name:'fhir-0.12', version: '0.3'
     compile libraries.spring_boot_logging, libraries.quartz_scheduler, libraries.spring_framework, libraries.mysql_connector,
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda, libraries.free_marker,libraries.thymeleaf, libraries.spring_web,
-            libraries.guava
+            libraries.guava,
+            libraries.hapi_fhir_base, libraries.hapi_fhir_structures,
+            libraries.phloc_schematron, libraries.phloc_commons
 
     testCompile testLibraries.junit, testLibraries.mockito, testLibraries.spring_test, testLibraries.wiremock,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.mysql_connector, testLibraries.h2_database

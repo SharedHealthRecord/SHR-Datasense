@@ -6,6 +6,7 @@ import org.ict4h.atomfeed.client.repository.jdbc.AllMarkersJdbcImpl;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.encounters.EncounterEventWorker;
+import org.sharedhealth.datasense.feeds.encounters.FhirBundleUtil;
 import org.sharedhealth.datasense.feeds.encounters.ShrEncounterFeedProcessor;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.util.StringUtil;
@@ -26,6 +27,8 @@ public class CatchmentEncounterCrawlerJob {
     private ShrWebClient shrWebClient;
     @Autowired
     private EncounterEventWorker encounterEventWorker;
+    @Autowired
+    FhirBundleUtil bundleUtil;
 
     Logger log = Logger.getLogger(CatchmentEncounterCrawlerJob.class);
 
@@ -40,7 +43,7 @@ public class CatchmentEncounterCrawlerJob {
                             encounterEventWorker, feedUrl,
                             new AllMarkersJdbcImpl(transactionManager),
                             new AllFailedEventsJdbcImpl(transactionManager),
-                            transactionManager, shrWebClient, properties);
+                            transactionManager, shrWebClient, properties, bundleUtil);
             try {
                 feedCrawler.process();
             } catch (URISyntaxException e) {

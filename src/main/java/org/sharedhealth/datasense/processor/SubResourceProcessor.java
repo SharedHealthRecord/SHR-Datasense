@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.processor;
 
-import org.hl7.fhir.instance.model.Resource;
 import org.sharedhealth.datasense.handler.FhirResourceHandler;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.springframework.beans.factory.annotation.Autowired;

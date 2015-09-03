@@ -1,47 +1,38 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import org.hl7.fhir.instance.model.*;
+
+import ca.uhn.fhir.model.api.IElement;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Composition;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 
 public class BundleContext {
-    private AtomFeed feed;
+    private Bundle bundle;
     private String shrEncounterId;
     private ArrayList<EncounterComposition> encounterCompositions;
 
-    public BundleContext(AtomFeed feed, String shrEncounterId) {
-        this.feed = feed;
+    public BundleContext(Bundle bundle, String shrEncounterId) {
+        this.bundle = bundle;
         this.shrEncounterId = shrEncounterId;
     }
 
-    public List<Resource> getResourcesOfType(ResourceType type) {
-        ArrayList<Resource> resources = new ArrayList<>();
-        for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
-            if (entry.getResource().getResourceType().equals(type)) {
-                resources.add(entry.getResource());
-            }
-        }
-        return resources;
-    }
-
-    public Resource getResourceByReferenceFromFeed(ResourceReference resourceReference) {
-        for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
-            if (entry.getId().equals(resourceReference.getReferenceSimple())) {
-                return entry.getResource();
-            }
-        }
-        return null;
+    public <T extends IElement> List<T> getResourcesOfType(Class<T> type) {
+        ArrayList<T> resources = new ArrayList<>();
+        List<T> list = bundle.getAllPopulatedChildElementsOfType(type);
+        return list;
     }
 
     public List<EncounterComposition> getEncounterCompositions() {
         if (encounterCompositions == null) {
-            List<Resource> compositions = getResourcesOfType(ResourceType.Composition);
+            List<Composition> compositions = getResourcesOfType(Composition.class);
             encounterCompositions = new ArrayList<>();
             //TODO process only compositions of type encounter
-            for (Resource composition : compositions) {
-                encounterCompositions.add(new EncounterComposition((Composition) composition, this));
+            for (Composition composition : compositions) {
+                encounterCompositions.add(new EncounterComposition(composition, this));
             }
         }
         return encounterCompositions;
@@ -51,13 +42,13 @@ public class BundleContext {
         return shrEncounterId;
     }
 
-    public AtomEntry<? extends Resource> getAtomEntryFromFeed(ResourceReference resourceReference) {
-        for (AtomEntry<? extends Resource> entry : feed.getEntryList()) {
-            if (entry.getId().equals(resourceReference.getReferenceSimple())) {
-                return entry;
+
+    public IResource getResourceForReference(ResourceReferenceDt resourceRef) {
+        for (Bundle.Entry entry : bundle.getEntry()) {
+            if (entry.getResource().getId().getValue().equals(resourceRef.getReference().getValue())) {
+                return entry.getResource();
             }
         }
         return null;
     }
-
 }

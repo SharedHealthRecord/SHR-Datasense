@@ -46,7 +46,7 @@ public class ShrEncounterFeedProcessorTest {
         EncounterEventWorker encounterEventWorker = new EncounterEventWorker() {
             @Override
             public void process(EncounterBundle encounterBundle) {
-                ParserBase.ResourceOrFeed resourceOrFeed = encounterBundle.getResourceOrFeed();
+                ParserBase.ResourceOrFeed resourceOrFeed = encounterBundle.getBundle();
             }
         };
         String feedUrl = getFeedUrl();
@@ -55,7 +55,7 @@ public class ShrEncounterFeedProcessorTest {
                         feedUrl,
                         new AllMarkersInMemoryImpl(),
                         new AllFailedEventsInMemoryImpl(),
-                        new AtomFeedSpringTransactionManager(txMgr), shrWebClient, properties);
+                        new AtomFeedSpringTransactionManager(txMgr), shrWebClient, properties, null);
         feedCrawler.process();
     }
 

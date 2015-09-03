@@ -1,8 +1,7 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.lang3.StringUtils;
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.formats.XmlParser;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
@@ -14,7 +13,6 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.model.EncounterBundle;
 
-import java.io.ByteArrayInputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
 
@@ -27,13 +25,15 @@ public class ShrEncounterFeedProcessor {
     private AtomFeedSpringTransactionManager transactionManager;
     private ShrWebClient shrWebClient;
     private DatasenseProperties properties;
+    private FhirBundleUtil fhirBundleUtil;
 
     public ShrEncounterFeedProcessor(EncounterEventWorker encounterEventWorker,
                                      String feedUrl,
                                      AllMarkers markers,
                                      AllFailedEvents failedEvents,
                                      AtomFeedSpringTransactionManager transactionManager,
-                                     ShrWebClient shrWebClient, DatasenseProperties properties) {
+                                     ShrWebClient shrWebClient,
+                                     DatasenseProperties properties, FhirBundleUtil fhirBundleUtil) {
         this.encounterEventWorker = encounterEventWorker;
         this.feedUrl = feedUrl;
         this.markers = markers;
@@ -41,6 +41,7 @@ public class ShrEncounterFeedProcessor {
         this.transactionManager = transactionManager;
         this.shrWebClient = shrWebClient;
         this.properties = properties;
+        this.fhirBundleUtil = fhirBundleUtil;
     }
 
     public void process() throws URISyntaxException {
@@ -74,16 +75,16 @@ public class ShrEncounterFeedProcessor {
         @Override
         public void process(Event event) {
             String content = event.getContent();
-            ParserBase.ResourceOrFeed resource;
+            Bundle bundle;
             try {
-                resource = new XmlParser(true).parseGeneral(new ByteArrayInputStream(content.getBytes()));
+                bundle = fhirBundleUtil.parseBundle(content, "xml");
             } catch (Exception e) {
                 throw new RuntimeException("Unable to parse XML", e);
             }
             EncounterBundle encounterBundle = new EncounterBundle();
             encounterBundle.setEncounterId(getSHREncounterId(event.getTitle()));
             encounterBundle.setTitle(event.getTitle());
-            encounterBundle.addContent(resource);
+            encounterBundle.addContent(bundle);
             encounterEventWorker.process(encounterBundle);
         }
 

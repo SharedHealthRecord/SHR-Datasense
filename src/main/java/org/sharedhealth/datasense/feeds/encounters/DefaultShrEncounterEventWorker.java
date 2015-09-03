@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import org.hl7.fhir.instance.model.AtomFeed;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
@@ -20,8 +20,8 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
 
     @Override
     public void process(EncounterBundle encounterBundle) {
-        AtomFeed feed = encounterBundle.getResourceOrFeed().getFeed();
-        BundleContext context = new BundleContext(feed, encounterBundle.getEncounterId());
+        Bundle bundle = encounterBundle.getBundle();
+        BundleContext context = new BundleContext(bundle, encounterBundle.getEncounterId());
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         for (EncounterComposition encounterComposition : encounterCompositions) {
             firstProcessor.process(encounterComposition);
