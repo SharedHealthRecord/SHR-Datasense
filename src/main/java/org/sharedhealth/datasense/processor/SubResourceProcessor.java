@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.api.IResource;
 import org.sharedhealth.datasense.handler.FhirResourceHandler;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +18,14 @@ public class SubResourceProcessor implements ResourceProcessor {
     @Override
     public void process(EncounterComposition composition) {
         deleteExistingEncounter(composition);
-        for (Resource resource : composition.getParentResources()) {
-            for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
-                if (fhirResourceHandler.canHandle(resource)) {
-                    fhirResourceHandler.process(resource, composition);
-                }
-            }
-        }
+        //TODO
+//        for (IResource resource : composition.getParentResources()) {
+//            for (FhirResourceHandler fhirResourceHandler : fhirResourceHandlers) {
+//                if (fhirResourceHandler.canHandle(resource)) {
+//                    fhirResourceHandler.process(resource, composition);
+//                }
+//            }
+//        }
     }
 
     private void deleteExistingEncounter(EncounterComposition composition) {

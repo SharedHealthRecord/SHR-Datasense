@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.Resource;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
@@ -13,7 +13,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 
-import static org.hl7.fhir.instance.model.Observation.ObservationRelatedComponent;
 import static org.sharedhealth.datasense.util.FhirCodeLookup.getConceptId;
 import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
 
@@ -31,12 +30,13 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public boolean canHandle(Resource resource) {
-        if (!(resource instanceof org.hl7.fhir.instance.model.Observation)) {
+    public boolean canHandle(IResource resource) {
+        if (!(resource instanceof ca.uhn.fhir.model.dstu2.resource.Observation)) {
             return false;
         } else {
-            for (Coding coding : ((org.hl7.fhir.instance.model.Observation) resource).getName().getCoding()) {
-                if (datasenseProperties.getDeathCodes().contains(coding.getCodeSimple())) {
+            List<CodingDt> codingDts = ((ca.uhn.fhir.model.dstu2.resource.Observation) resource).getCode().getCoding();
+            for (CodingDt coding : codingDts) {
+                if (datasenseProperties.getDeathCodes().contains(coding.getCode())) {
                     return false;
                 }
             }
@@ -45,7 +45,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
+    public void process(IResource resource, EncounterComposition composition) {
         Observation observation = new Observation();
         mapObservation(composition, observation, resource);
     }
@@ -58,10 +58,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
 
     }
 
-    private void mapRelatedComponents(EncounterComposition composition, String parentObsUUID, org.hl7.fhir
-            .instance.model.Observation fhirObservation) {
-        for (ObservationRelatedComponent relatedComponent : fhirObservation.getRelated()) {
-            Resource resource = composition.getContext().getResourceByReferenceFromFeed(relatedComponent.getTarget());
+    private void mapRelatedComponents(EncounterComposition composition, String parentObsUUID,
+                                      ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation) {
+
+        List<ca.uhn.fhir.model.dstu2.resource.Observation.Related> relatedObservations = fhirObservation.getRelated();
+        for (ca.uhn.fhir.model.dstu2.resource.Observation.Related relatedObservation : relatedObservations) {
+            IResource resource = composition.getContext().getResourceForReference(relatedObservation.getTarget());
             Observation childObservation;
             childObservation = new Observation();
             mapObservation(composition, childObservation, resource);
@@ -70,12 +72,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         }
     }
 
-    private void mapObservation(EncounterComposition composition, Observation observation, Resource
+    private void mapObservation(EncounterComposition composition, Observation observation, IResource
             resource) {
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation)
-                resource;
+        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation =
+                (ca.uhn.fhir.model.dstu2.resource.Observation) resource;
 
-        List<Coding> codings = fhirObservation.getName().getCoding();
+        List<CodingDt> codings = fhirObservation.getCode().getCoding();
         String conceptId = getConceptId(codings);
         String parentObsUUID = null;
         if (conceptId != null) {

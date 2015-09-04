@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.codec.binary.Base64;
-import org.hl7.fhir.instance.formats.ParserBase;
 import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
 import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.Ignore;
@@ -46,7 +46,7 @@ public class ShrEncounterFeedProcessorTest {
         EncounterEventWorker encounterEventWorker = new EncounterEventWorker() {
             @Override
             public void process(EncounterBundle encounterBundle) {
-                ParserBase.ResourceOrFeed resourceOrFeed = encounterBundle.getBundle();
+                Bundle bundle = encounterBundle.getBundle();
             }
         };
         String feedUrl = getFeedUrl();

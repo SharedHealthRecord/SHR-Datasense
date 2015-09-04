@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceReference;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,15 +43,15 @@ public class DeathNoteHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private EncounterComposition composition;
-    private Resource deathNoteResource;
+    private IResource deathNoteResource;
 
     private static final String PATIENT_HID = "patientHid";
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
 
     @Before
     public void setUp() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
-        BundleContext bundleContext = new BundleContext(resourceOrFeed.getFeed(), SHR_ENCOUNTER_ID);
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
+        BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
         patient.setDateOfBirth(new SimpleDateFormat("yyyy-MM-dd").parse("2013-12-28"));
@@ -60,8 +60,8 @@ public class DeathNoteHandlerIT {
         encounter.setEncounterId(SHR_ENCOUNTER_ID);
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
-        ResourceReference resourceReference = new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
-        deathNoteResource = bundleContext.getResourceByReferenceFromFeed(resourceReference);
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        deathNoteResource = bundleContext.getResourceForReference(resourceReference);
     }
 
     @After

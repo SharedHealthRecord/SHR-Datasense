@@ -27,7 +27,7 @@ public class EncounterComposition {
         serviceProviderReference = new ServiceProviderReference();
         ResourceReferenceDt serviceProvider = encounterReference.getResource().getServiceProvider();
         if (serviceProvider != null) {
-            serviceProviderReference.setServiceProvider(serviceProvider);
+            serviceProviderReference.setReference(serviceProvider);
         }
         providerReference = new ProviderReference();
         List<Encounter.Participant> participants = encounterReference.getResource().getParticipant();
@@ -41,60 +41,21 @@ public class EncounterComposition {
     public ArrayList<IResource> loadResourcesFromComposition() {
         ArrayList<IResource> resources = new ArrayList<>();
         for (Composition.Section section : composition.getSection()) {
-            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
-                resources.add(context.getResourceByReferenceFromFeed(sectionComponent.getContent()));
+            IResource resourceForReference = context.getResourceForReference(section.getContent());
+            if (!(resourceForReference instanceof Encounter)) {
+                resources.add(resourceForReference);
             }
+//            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
+//                resources.add(context.getResourceByReferenceFromFeed(sectionComponent.getContent()));
+//            }
         }
         return resources;
     }
 
-    private ArrayList<AtomEntry<? extends Resource>> loadAtomEntriesFromComposition() {
-        ArrayList<AtomEntry<? extends Resource>> atomEntries = new ArrayList<>();
-        for (Composition.SectionComponent sectionComponent : composition.getSection()) {
-            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
-                atomEntries.add(context.getAtomEntryFromFeed(sectionComponent.getContent()));
-            }
-        }
-        return atomEntries;
-    }
-
-    public ArrayList<Resource> getParentResources() {
-        HashSet<String> references = getChildResourceReferences();
-        return getParentResources(references);
-    }
-
-    private ArrayList<Resource> getParentResources(HashSet<String> references) {
-        ArrayList<Resource> parentResources = new ArrayList<>();
-        for (AtomEntry<? extends Resource> atomEntry : loadAtomEntriesFromComposition()) {
-            if(!references.contains(atomEntry.getId())) {
-                parentResources.add(atomEntry.getResource());
-            }
-        }
-        return parentResources;
-    }
-
-    private HashSet<String> getChildResourceReferences() {
-        HashSet<String> references = new HashSet<>();
-        for (Resource resource : loadResourcesFromComposition()) {
-            List<Property> children = resource.children();
-            addResourceReferences(children, references);
-        }
-        return references;
-    }
-
-    private void addResourceReferences(List<Property> children, HashSet<String> references) {
-        for (Property child : children) {
-            if(child.hasValues()) {
-                for (Element element : child.getValues()) {
-                    if((element instanceof ResourceReference)) {
-                        references.add(((ResourceReference) element).getReferenceSimple());
-                    } else {
-                        addResourceReferences(element.children(), references);
-                    }
-                }
-            }
-        }
-    }
+//    public ArrayList<IResource> getParentResources() {
+//        HashSet<String> references = getChildResourceReferences();
+//        return getParentResources(references);
+//    }
 
     public EncounterReference getEncounterReference() {
         return encounterReference;
@@ -119,4 +80,47 @@ public class EncounterComposition {
     public Composition getComposition() {
         return composition;
     }
+
+////    private ArrayList<AtomEntry<? extends Resource>> loadAtomEntriesFromComposition() {
+////        ArrayList<AtomEntry<? extends Resource>> atomEntries = new ArrayList<>();
+////        for (Composition.SectionComponent sectionComponent : composition.getSection()) {
+////            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
+////                atomEntries.add(context.getAtomEntryFromFeed(sectionComponent.getContent()));
+////            }
+////        }
+////        return atomEntries;
+////    }
+////
+//    private ArrayList<IResource> getParentResources(HashSet<String> references) {
+//        ArrayList<IResource> parentResources = new ArrayList<>();
+//        for (AtomEntry<? extends Resource> atomEntry : loadAtomEntriesFromComposition()) {
+//            if(!references.contains(atomEntry.getId())) {
+//                parentResources.add(atomEntry.getResource());
+//            }
+//        }
+//        return parentResources;
+//    }
+
+//    private HashSet<String> getChildResourceReferences() {
+//        HashSet<String> references = new HashSet<>();
+//        for (Resource resource : loadResourcesFromComposition()) {
+//            List<Property> children = resource.children();
+//            addResourceReferences(children, references);
+//        }
+//        return references;
+//    }
+
+//    private void addResourceReferences(List<Property> children, HashSet<String> references) {
+//        for (Property child : children) {
+//            if(child.hasValues()) {
+//                for (Element element : child.getValues()) {
+//                    if((element instanceof ResourceReference)) {
+//                        references.add(((ResourceReference) element).getReferenceSimple());
+//                    } else {
+//                        addResourceReferences(element.children(), references);
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

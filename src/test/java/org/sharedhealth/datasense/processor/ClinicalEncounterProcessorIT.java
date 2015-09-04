@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
-import org.hl7.fhir.instance.formats.ParserBase;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -55,9 +55,9 @@ public class ClinicalEncounterProcessorIT {
 
     @Test
     public void shouldSaveEncounter() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
         String shrEncounterId = "shrEncounterId";
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
+        BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         Patient patient = new Patient();
         Date dob = new SimpleDateFormat("yyyy-MM-dd").parse("1999-10-22");

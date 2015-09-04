@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -72,8 +72,8 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldDownloadAndSaveFacility() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
                 .willReturn(aResponse()
@@ -94,8 +94,8 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldNotDownloadFacilityIfAlreadyPresent() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
@@ -113,8 +113,8 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldFetchFacilityFromProviderIfNotPresentInEncounter() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithProvider.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithProvider.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
 //
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
@@ -133,8 +133,8 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldDownloadProviderFacilityIfNotPresent() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithProvider.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithProvider.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
                 .willReturn(aResponse()
@@ -157,8 +157,8 @@ public class ServiceProviderProcessorIT {
     @Test
     public void shouldFetchFacilityOfProviderWhenServiceProviderIsBahmniOnCloud() throws Exception {
         String facilityIdOfProvider = "10000059";
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithServiceProviderAsBahmniCloud.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithServiceProviderAsBahmniCloud.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + facilityIdOfProvider + ".json"))
                 .willReturn(aResponse()

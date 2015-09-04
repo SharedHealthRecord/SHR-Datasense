@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -78,8 +78,8 @@ public class PatientProcessorIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
         Patient patient = patientDao.findPatientById(VALID_HEALTH_ID);
         assertEquals(VALID_HEALTH_ID, patient.getHid());
@@ -92,8 +92,8 @@ public class PatientProcessorIntegrationTest {
         givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(404)));
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
     }
 }

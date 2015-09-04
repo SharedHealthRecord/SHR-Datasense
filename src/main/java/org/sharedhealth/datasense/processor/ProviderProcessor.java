@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
-import org.hl7.fhir.instance.model.ResourceReference;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import org.sharedhealth.datasense.client.ProviderWebClient;
 import org.sharedhealth.datasense.model.Provider;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
@@ -27,7 +27,7 @@ public class ProviderProcessor {
     public String process(EncounterComposition composition) {
         ProviderReference providerReference = composition.getProviderReference();
         if (providerReference != null && !providerReference.getReferences().isEmpty()) {
-            for (ResourceReference resourceReference : providerReference.getReferences()) {
+            for (ResourceReferenceDt resourceReference : providerReference.getReferences()) {
                 String providerId = providerReference.getProviderId(resourceReference);
                 if (providerId != null) {
                     Provider provider = providerDao.findProviderById(providerId);

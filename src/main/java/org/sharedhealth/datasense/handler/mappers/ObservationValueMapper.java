@@ -1,6 +1,9 @@
 package org.sharedhealth.datasense.handler.mappers;
 
-import org.hl7.fhir.instance.model.*;
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.primitive.*;
 import org.sharedhealth.datasense.util.DateUtil;
 
 import java.util.List;
@@ -9,22 +12,27 @@ import static org.sharedhealth.datasense.util.FhirCodeLookup.getConceptId;
 import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
 
 public class ObservationValueMapper {
-    public String getObservationValue(Type value) {
-        if (value instanceof String_) {
-            return ((String_) value).getValue();
-        } else if (value instanceof Decimal) {
-            return ((Decimal) value).getValue().toString();
-        } else if (value instanceof Date) {
-            return DateUtil.parseToString(((Date) value).getValue());
-        } else if (value instanceof DateTime) {
-            return DateUtil.parseToString(((DateTime) value).getValue());
-        } else if (value instanceof org.hl7.fhir.instance.model.Boolean) {
-            return ((org.hl7.fhir.instance.model.Boolean) value).getStringValue();
+    /**
+     * Use this only for observation values
+     * @param value
+     * @return
+     */
+    public String getObservationValue(IDatatype value) {
+        if (value instanceof StringDt) {
+            return ((StringDt) value).getValue();
+        } else if (value instanceof DecimalDt) {
+            return ((DecimalDt) value).getValue().toString();
+        } else if (value instanceof DateDt) {
+            return null;
+        } else if (value instanceof DateTimeDt) {
+            return DateUtil.parseToString(((DateTimeDt) value).getValue());
+        } else if (value instanceof BooleanDt) {
+            return ((BooleanDt) value).getValue().toString();
         }
         //TODO : Codeable concept should point to concept synced from TR (Can be done after we sync all concepts from
         // TR).
-        else if (value instanceof CodeableConcept) {
-            List<Coding> codings = ((CodeableConcept) value).getCoding();
+        else if (value instanceof CodeableConceptDt) {
+            List<CodingDt> codings = ((CodeableConceptDt) value).getCoding();
             String referenceCode = getReferenceCode(codings);
             if (referenceCode != null) {
                 return referenceCode;

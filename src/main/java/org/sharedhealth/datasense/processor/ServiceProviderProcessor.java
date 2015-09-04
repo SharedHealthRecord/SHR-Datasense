@@ -47,7 +47,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         String facilityId = null;
         Facility facility = null;
         ServiceProviderReference serviceProviderReference = composition.getServiceProviderReference();
-        if (serviceProviderReference != null && serviceProviderReference.getServiceProvider() != null) {
+        if (serviceProviderReference != null && serviceProviderReference.getReference() != null) {
             facilityId = serviceProviderReference.getFacilityId();
         }
         if (!isBahmniCloud(facilityId)) {

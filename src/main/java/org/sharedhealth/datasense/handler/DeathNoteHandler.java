@@ -1,9 +1,9 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.CodeableConcept;
-import org.hl7.fhir.instance.model.Coding;
-import org.hl7.fhir.instance.model.Observation;
-import org.hl7.fhir.instance.model.Resource;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.resource.Observation;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
@@ -36,11 +36,11 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     @Override
-    public boolean canHandle(Resource resource) {
-        if (resource instanceof org.hl7.fhir.instance.model.Observation) {
-            List<Coding> codings = ((Observation) resource).getName().getCoding();
-            for (Coding coding : codings) {
-                if (datasenseProperties.getDeathCodes().contains(coding.getCodeSimple())) {
+    public boolean canHandle(IResource resource) {
+        if (resource instanceof Observation) {
+            List<CodingDt> codings = ((Observation) resource).getCode().getCoding();
+            for (CodingDt coding : codings) {
+                if (datasenseProperties.getDeathCodes().contains(coding.getCode())) {
                     return true;
                 }
             }
@@ -49,7 +49,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
+    public void process(IResource resource, EncounterComposition composition) {
         Observation deathNoteObservation = (Observation) resource;
         PatientDeathDetails patientDeathDetails = new PatientDeathDetails();
         patientDeathDetails.setPatient(composition.getPatientReference().getValue());
@@ -70,12 +70,12 @@ public class DeathNoteHandler implements FhirResourceHandler {
     private void mapCauseOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
         Observation causeOfDeathObservation = findObservation(composition, deathNoteObservation, datasenseProperties.getCauseOfDeath());
         if (causeOfDeathObservation != null && causeOfDeathObservation.getValue() != null) {
-            CodeableConcept codeableConcept = (CodeableConcept) causeOfDeathObservation.getValue();
-            for (Coding code : codeableConcept.getCoding()) {
-                if (isConceptUrl(code.getSystemSimple())) {
-                    patientDeathDetails.setCauseOfDeathConceptUuid(code.getCodeSimple());
-                } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                    patientDeathDetails.setCauseOfDeathCode(code.getCodeSimple());
+            CodeableConceptDt codeableConcept = (CodeableConceptDt) causeOfDeathObservation.getValue();
+            for (CodingDt code : codeableConcept.getCoding()) {
+                if (isConceptUrl(code.getSystem())) {
+                    patientDeathDetails.setCauseOfDeathConceptUuid(code.getCode());
+                } else if (isReferenceTermUrl(code.getSystem())) {
+                    patientDeathDetails.setCauseOfDeathCode(code.getCode());
                 }
             }
         }
@@ -105,20 +105,20 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private Observation findObservation(EncounterComposition composition, Observation deathNoteObservation, String conceptUuid) {
-        for (Observation.ObservationRelatedComponent observationRelatedComponent : deathNoteObservation.getRelated()) {
-            Observation childObservation = (Observation) composition.getContext().getResourceByReferenceFromFeed(observationRelatedComponent.getTarget());
-            if (isConcept(childObservation.getName(), conceptUuid)) {
+        for (Observation.Related observationRelatedComponent : deathNoteObservation.getRelated()) {
+            Observation childObservation = (Observation) composition.getContext().getResourceForReference(observationRelatedComponent.getTarget());
+            if (isConcept(childObservation.getCode(), conceptUuid)) {
                 return childObservation;
             }
         }
         return null;
     }
 
-    private boolean isConcept(CodeableConcept nameConcepts, String conceptUuid) {
-        List<Coding> codings = nameConcepts.getCoding();
-        for (Coding code : codings) {
-            if (isConceptUrl(code.getSystemSimple())) {
-                if (conceptUuid.equals(code.getCodeSimple())) {
+    private boolean isConcept(CodeableConceptDt nameConcepts, String conceptUuid) {
+        List<CodingDt> codings = nameConcepts.getCoding();
+        for (CodingDt code : codings) {
+            if (isConceptUrl(code.getSystem())) {
+                if (conceptUuid.equals(code.getCode())) {
                     return true;
                 }
             }

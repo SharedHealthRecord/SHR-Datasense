@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceReference;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,15 +43,15 @@ public class ProcedureResourceHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private EncounterComposition composition;
-    private Resource procedureResource;
+    private IResource procedureResource;
 
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
     private static final String PATIENT_HID = "patientHid";
 
     @Before
     public void setUp() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithProcedure.xml");
-        BundleContext bundleContext = new BundleContext(resourceOrFeed.getFeed(), SHR_ENCOUNTER_ID);
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithProcedure.xml");
+        BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
 
         Patient patient = new Patient();
@@ -62,8 +62,8 @@ public class ProcedureResourceHandlerIT {
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
 
-        ResourceReference resourceReference = new ResourceReference().setReferenceSimple("urn:9f582d08-1245-4c5a-a4b0-8d021298ac61");
-        procedureResource = bundleContext.getResourceByReferenceFromFeed(resourceReference);
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:9f582d08-1245-4c5a-a4b0-8d021298ac61");
+        procedureResource = bundleContext.getResourceForReference(resourceReference);
 
     }
 

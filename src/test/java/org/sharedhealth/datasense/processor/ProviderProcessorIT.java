@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ParserBase;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -45,8 +45,8 @@ public class ProviderProcessorIT {
 
     @Before
     public void setUp() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithProvider.xml");
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), "shrEncounterId");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithProvider.xml");
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
         encounterComposition = context.getEncounterCompositions().get(0);
     }
 

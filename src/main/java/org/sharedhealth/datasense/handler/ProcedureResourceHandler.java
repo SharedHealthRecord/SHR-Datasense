@@ -1,10 +1,16 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.*;
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
+import ca.uhn.fhir.model.dstu2.resource.Procedure;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.ProcedureDao;
-import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,12 +29,12 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     private ObservationValueMapper observationValueMapper;
 
     @Override
-    public boolean canHandle(Resource resource) {
-        return resource.getResourceType().equals(ResourceType.Procedure);
+    public boolean canHandle(IResource resource) {
+        return resource instanceof Procedure;
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
+    public void process(IResource resource, EncounterComposition composition) {
         observationValueMapper = new ObservationValueMapper();
         Procedure procedureResource = (Procedure) resource;
         org.sharedhealth.datasense.model.Procedure procedure = new org.sharedhealth.datasense.model.Procedure();
@@ -49,71 +55,72 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
 
     private void setProcedureDiagnosis(org.sharedhealth.datasense.model.Procedure procedure,
                                        Procedure procedureResource, EncounterComposition composition) {
-        List<ResourceReference> diagnosisReportReference = procedureResource.getReport();
-        if (diagnosisReportReference.size() == 0) {
+        List<ResourceReferenceDt> diagnosisReportReferences = procedureResource.getReport();
+        if (diagnosisReportReferences.size() == 0) {
             return;
         }
-        ResourceReference resourceReference = diagnosisReportReference.get(0);
-        Resource resource = composition.getContext().getResourceByReferenceFromFeed(resourceReference);
-        if (resource == null || !(resource instanceof DiagnosticReport)) {
+        ResourceReferenceDt resourceReference = diagnosisReportReferences.get(0);
+        IResource report = composition.getContext().getResourceForReference(resourceReference);
+        if (report == null || !(report instanceof DiagnosticReport)) {
             return;
         }
 
-        DiagnosticReport diagnosticReport = (DiagnosticReport) resource;
-        List<CodeableConcept> codeableConcepts = diagnosticReport.getCodedDiagnosis();
+        DiagnosticReport diagnosticReport = (DiagnosticReport) report;
+        List<CodeableConceptDt> codeableConcepts = diagnosticReport.getCodedDiagnosis();
         if (codeableConcepts.size() == 0 ) {
             return;
         }
-        CodeableConcept codeableConcept = codeableConcepts.get(0);
-        List<Coding> codings = codeableConcept.getCoding();
+        CodeableConceptDt codeableConcept = codeableConcepts.get(0);
+        List<CodingDt> codings = codeableConcept.getCoding();
         boolean isUuidSet = false;
         boolean isCodeSet = false;
-        for (Coding code : codings) {
+        for (CodingDt code : codings) {
             if (isUuidSet && isCodeSet) {
                 break;
             }
-            if (isConceptUrl(code.getSystemSimple())) {
-                procedure.setDiagnosisUuid(code.getCodeSimple());
+            if (isConceptUrl(code.getSystem())) {
+                procedure.setDiagnosisUuid(code.getCode());
                 isUuidSet = true;
-            } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                procedure.setDiagnosisCode(code.getCodeSimple());
+            } else if (isReferenceTermUrl(code.getSystem())) {
+                procedure.setDiagnosisCode(code.getCode());
                 isCodeSet = true;
             }
         }
     }
 
     private void setProcedureType(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
-        CodeableConcept codeableConcept = procedureResource.getType();
+        CodeableConceptDt codeableConcept = procedureResource.getType();
         if (codeableConcept == null) {
             return;
         }
-        List<Coding> codings = codeableConcept.getCoding();
+        List<CodingDt> codings = codeableConcept.getCoding();
         boolean isUuidSet = false;
         boolean isCodeSet = false;
-        for (Coding code : codings) {
+        for (CodingDt code : codings) {
             if (isUuidSet && isCodeSet) {
                 break;
             }
-            if (isConceptUrl(code.getSystemSimple())) {
-                procedure.setProcedureUuid(code.getCodeSimple());
+            if (isConceptUrl(code.getSystem())) {
+                procedure.setProcedureUuid(code.getCode());
                 isUuidSet = true;
-            } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                procedure.setProcedureCode(code.getCodeSimple());
+            } else if (isReferenceTermUrl(code.getSystem())) {
+                procedure.setProcedureCode(code.getCode());
                 isCodeSet = true;
             }
         }
     }
 
     private void setStartAndEndDate(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
-        Period period = procedureResource.getDate();
-        if (period != null) {
-            String startDate = observationValueMapper.getObservationValue(period.getStart());
-            if (startDate != null) {
-                procedure.setStartDate(DateUtil.parseDate(startDate));
-            }
-            String endDate = observationValueMapper.getObservationValue(period.getEnd());
-            if (endDate != null) {
-                procedure.setEndDate(DateUtil.parseDate(endDate));
+        IDatatype performed = procedureResource.getPerformed();
+        if (performed instanceof PeriodDt) {
+            PeriodDt period = (PeriodDt) performed;
+            if (period != null) {
+                if (period.getStart() != null) {
+                    procedure.setStartDate(period.getStart());
+                }
+                if (period.getEnd() != null) {
+                    procedure.setEndDate(period.getEnd());
+                }
             }
         }
     }

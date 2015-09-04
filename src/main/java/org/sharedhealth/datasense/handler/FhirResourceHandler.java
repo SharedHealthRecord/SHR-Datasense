@@ -1,10 +1,10 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.Resource;
+import ca.uhn.fhir.model.api.IResource;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 
 public interface FhirResourceHandler {
-    boolean canHandle(Resource resource);
-    void process(Resource resource, EncounterComposition composition);
+    boolean canHandle(IResource resource);
+    void process(IResource resource, EncounterComposition composition);
     void deleteExisting(EncounterComposition composition);
 }

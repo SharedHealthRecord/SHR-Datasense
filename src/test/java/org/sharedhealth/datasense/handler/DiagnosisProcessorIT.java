@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -60,9 +60,9 @@ public class DiagnosisProcessorIT {
 
     @Test
     public void shouldSaveDiagnosis() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
         String shrEncounterId = "shrEncounterId";
-        BundleContext context = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
+        BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         Encounter encounter = new Encounter();
         encounter.setEncounterId(shrEncounterId);
@@ -71,9 +71,9 @@ public class DiagnosisProcessorIT {
         String hid = "5942395046400622593";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
-        ResourceReference resourceReference = new ResourceReference();
-        resourceReference.setReferenceSimple("urn:2801e2b9-3886-4bf5-919f-ce9268fdc317");
-        processor.process(context.getResourceByReferenceFromFeed(resourceReference), composition);
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt();
+        resourceReference.setReference("urn:uuid:2801e2b9-3886-4bf5-919f-ce9268fdc317");
+        processor.process(context.getResourceForReference(resourceReference), composition);
         List<Diagnosis> diagnosises = findByEncounterId(shrEncounterId);
         assertEquals(1, diagnosises.size());
         Diagnosis diagnosis = diagnosises.get(0);

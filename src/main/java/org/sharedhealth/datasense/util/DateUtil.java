@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.util;
 
 import org.apache.log4j.Logger;
-import org.hl7.fhir.instance.model.DateAndTime;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
 import org.joda.time.PeriodType;
@@ -55,10 +54,9 @@ public class DateUtil {
         }
     }
 
-    public static String parseToString(DateAndTime dateAndTime) {
-        Date parsedDate = parseDate(dateAndTime.toString());
+    public static String parseToString(Date date) {
         SimpleDateFormat format = new SimpleDateFormat(SIMPLE_DATE_WITH_SECS_FORMAT);
-        return format.format(parsedDate);
+        return format.format(date);
     }
 
     public static String format(Date date) {

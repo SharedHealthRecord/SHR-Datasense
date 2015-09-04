@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.log4j.Logger;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +36,10 @@ public class PatientProcessorTest {
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
 
         String healthId = "5942395046400622593";
-        EncounterBundle bundle = new EncounterBundle();
-        bundle.addContent(loadFromXmlFile("xmls/sampleEncounter.xml"));
-        BundleContext context = new BundleContext(bundle.getBundle().getFeed(), "shrEncounterId");
+        EncounterBundle encBundle = new EncounterBundle();
+        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        encBundle.addContent(bundle);
+        BundleContext context = new BundleContext(bundle, "shrEncounterId");
         Patient patient = new Patient();
         when(webClient.identifyPatient(healthId)).thenReturn(patient);
         PatientProcessor processor = new PatientProcessor(null, webClient, patientDao);

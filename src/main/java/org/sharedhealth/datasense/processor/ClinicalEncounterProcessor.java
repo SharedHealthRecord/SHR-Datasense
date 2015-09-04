@@ -60,7 +60,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     }
 
     private String getVisitType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
-        return fhirEncounter.getClass_().getValue().toCode();
+        return fhirEncounter.getClassElement();
     }
 
     private String getEncounterType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {

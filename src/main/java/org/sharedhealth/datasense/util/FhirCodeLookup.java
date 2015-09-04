@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.util;
 
-import org.hl7.fhir.instance.model.Coding;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 
 import java.util.List;
 
@@ -9,18 +9,18 @@ import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 
 public class FhirCodeLookup {
 
-    public static String getReferenceCode(List<Coding> codings) {
-        for (Coding coding : codings) {
-            if (coding.getSystemSimple() != null && isReferenceTermUrl(coding.getSystemSimple()))
-                return coding.getCodeSimple();
+    public static String getReferenceCode(List<CodingDt> codings) {
+        for (CodingDt coding : codings) {
+            if (coding.getSystem() != null && isReferenceTermUrl(coding.getSystem()))
+                return coding.getCode();
         }
         return null;
     }
 
-    public static String getConceptId(List<Coding> codings) {
-        for (Coding coding : codings) {
-            if (coding.getSystemSimple() != null && isConceptUrl(coding.getSystemSimple()))
-                return coding.getCodeSimple();
+    public static String getConceptId(List<CodingDt> codings) {
+        for (CodingDt coding : codings) {
+            if (coding.getSystem() != null && isConceptUrl(coding.getSystem()))
+                return coding.getCode();
         }
         return null;
     }

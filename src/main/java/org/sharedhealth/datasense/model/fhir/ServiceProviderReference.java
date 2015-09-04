@@ -7,7 +7,7 @@ import org.sharedhealth.datasense.model.Facility;
 
 public class ServiceProviderReference {
     public static final String EXTENSION = ".json";
-    private ResourceReferenceDt serviceProvider;
+    private ResourceReferenceDt referenceDt;
     private Facility value;
 
     public String getFacilityId() {
@@ -15,7 +15,8 @@ public class ServiceProviderReference {
     }
 
     private String parseUrl() {
-        String s = StringUtils.substringAfterLast(serviceProvider.getReference().getValue(), "/");
+        if (referenceDt == null) return null;
+        String s = StringUtils.substringAfterLast(referenceDt.getReference().getValue(), "/");
         return StringUtils.substringBefore(s, EXTENSION);
     }
 
@@ -27,11 +28,11 @@ public class ServiceProviderReference {
         return value;
     }
 
-    public void setServiceProvider(ResourceReferenceDt serviceProvider) {
-        this.serviceProvider = serviceProvider;
+    public void setReference(ResourceReferenceDt serviceProvider) {
+        this.referenceDt = serviceProvider;
     }
 
-    public ResourceReferenceDt getServiceProvider() {
-        return serviceProvider;
+    public ResourceReferenceDt getReference() {
+        return referenceDt;
     }
 }

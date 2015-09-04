@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.ResourceReference;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -49,8 +49,8 @@ public class ObservationResourceHandlerIT {
 
     @Before
     public void setUp() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithVitalsObservation.xml");
-        vitalsBundleContext = new BundleContext(resourceOrFeed.getFeed(), SHR_ENCOUNTER_ID);
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithVitalsObservation.xml");
+        vitalsBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(vitalsBundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
     }
 
@@ -72,25 +72,25 @@ public class ObservationResourceHandlerIT {
 
     @Test
     public void shouldNotHandleDeathNoteObservations() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
-        BundleContext deathNoteBundleContext = new BundleContext(resourceOrFeed.getFeed(), SHR_ENCOUNTER_ID);
-        ResourceReference deathReference = new ResourceReference().setReferenceSimple("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) deathNoteBundleContext.getResourceByReferenceFromFeed(deathReference);
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
+        BundleContext deathNoteBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
+        ResourceReferenceDt deathReference = new ResourceReferenceDt().setReference("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) deathNoteBundleContext.getResourceForReference(deathReference);
         assertFalse(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
     public void shouldHandleFHIRObservations() throws Exception {
-        ResourceReference vitalsReference = new ResourceReference().setReferenceSimple(VITALS_RESOURCE_REFERENCE);
-        org.hl7.fhir.instance.model.Observation fhirObservation = (org.hl7.fhir.instance.model.Observation) vitalsBundleContext.getResourceByReferenceFromFeed(vitalsReference);
+        ResourceReferenceDt vitalsReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
+        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) vitalsBundleContext.getResourceForReference(vitalsReference);
         assertTrue(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
     public void shouldSaveSimpleObservation() throws Exception {
-        ResourceReference dateOfDeathReference = new ResourceReference().setReferenceSimple(PULSE_RESOURCE_REFERENCE);
+        ResourceReferenceDt dateOfDeathReference = new ResourceReferenceDt().setReference(PULSE_RESOURCE_REFERENCE);
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(dateOfDeathReference), composition);
+        observationResourceHandler.process(vitalsBundleContext.getResourceForReference(dateOfDeathReference), composition);
         List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
         assertEquals(1, observations.size());
@@ -106,9 +106,9 @@ public class ObservationResourceHandlerIT {
 
     @Test
     public void shouldSaveNestedObservationAlongWithRelatedObservations() throws Exception {
-        ResourceReference vitalReference = new ResourceReference().setReferenceSimple(VITALS_RESOURCE_REFERENCE);
+        ResourceReferenceDt vitalReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
         EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(vitalsBundleContext.getResourceByReferenceFromFeed(vitalReference),
+        observationResourceHandler.process(vitalsBundleContext.getResourceForReference(vitalReference),
                 composition);
         List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
@@ -126,17 +126,17 @@ public class ObservationResourceHandlerIT {
 
     @Test
     public void shouldSaveObservationIfParentObsIsNonCoded() throws Exception {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithNonCodedParentObsAndCodedChildren.xml");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithNonCodedParentObsAndCodedChildren.xml");
         String encounterId = "urn:99c71d15-86f1-4a8e-ac9f-acee51a74369";
         String healthId = "99034600669";
-        BundleContext bundleContext = new BundleContext(resourceOrFeed.getFeed(), encounterId);
+        BundleContext bundleContext = new BundleContext(bundle, encounterId);
         setEncounterReference(bundleContext, healthId, encounterId);
 
 
         String parentObsRef = "urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce";
-        ResourceReference obsReference = new ResourceReference().setReferenceSimple(parentObsRef);
+        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(parentObsRef);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(bundleContext.getResourceByReferenceFromFeed(obsReference),
+        observationResourceHandler.process(bundleContext.getResourceForReference(obsReference),
                 composition);
         List<Observation> observations = findByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());

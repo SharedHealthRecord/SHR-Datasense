@@ -1,6 +1,9 @@
 package org.sharedhealth.datasense.handler;
 
-import org.hl7.fhir.instance.model.*;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.resource.Condition;
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
@@ -25,11 +28,12 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public boolean canHandle(Resource resource) {
-        if (resource.getResourceType().equals(ResourceType.Condition)) {
+    public boolean canHandle(IResource resource) {
+        if (resource instanceof Condition) {
             Condition condition = (Condition) resource;
-            for (Coding coding : condition.getCategory().getCoding()) {
-                if (coding.getCodeSimple().equalsIgnoreCase("Diagnosis")) {
+            CodeableConceptDt category = condition.getCategory();
+            for (CodingDt coding : category.getCoding()) {
+                if (coding.getCode().equalsIgnoreCase("Diagnosis")) {
                     return true;
                 }
             }
@@ -38,17 +42,16 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(Resource resource, EncounterComposition composition) {
+    public void process(IResource resource, EncounterComposition composition) {
         Condition fhirDiagnosis = (Condition) resource;
         Diagnosis diagnosis = new Diagnosis();
         diagnosis.setPatient(composition.getPatientReference().getValue());
         diagnosis.setEncounter(composition.getEncounterReference().getValue());
         populateDiagnosisCodes(diagnosis, fhirDiagnosis.getCode().getCoding());
-        DateAndTime dateAsserted = fhirDiagnosis.getDateAssertedSimple();
-        Date date = dateAsserted != null ? DateUtil.parseDate(dateAsserted.toString()) :
-                composition.getEncounterReference().getValue().getEncounterDateTime();
+        Date dateAsserted = fhirDiagnosis.getDateAsserted();
+        Date date = dateAsserted != null ? dateAsserted : composition.getEncounterReference().getValue().getEncounterDateTime();
         diagnosis.setDiagnosisDateTime(date);
-        diagnosis.setDiagnosisStatus(fhirDiagnosis.getStatus().getValue().toCode());
+        diagnosis.setDiagnosisStatus(fhirDiagnosis.getClinicalStatus());
         diagnosisDao.save(diagnosis);
     }
 
@@ -57,12 +60,12 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
         diagnosisDao.delete(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
     }
 
-    private void populateDiagnosisCodes(Diagnosis diagnosis, List<Coding> coding) {
-        for (Coding code : coding) {
-            if (isConceptUrl(code.getSystemSimple())) {
-                diagnosis.setDiagnosisConceptId(code.getCodeSimple());
-            } else if (isReferenceTermUrl(code.getSystemSimple())) {
-                diagnosis.setDiagnosisCode(code.getCodeSimple());
+    private void populateDiagnosisCodes(Diagnosis diagnosis, List<CodingDt> coding) {
+        for (CodingDt code : coding) {
+            if (isConceptUrl(code.getSystem())) {
+                diagnosis.setDiagnosisConceptId(code.getCode());
+            } else if (isReferenceTermUrl(code.getSystem())) {
+                diagnosis.setDiagnosisCode(code.getCode());
             }
         }
     }

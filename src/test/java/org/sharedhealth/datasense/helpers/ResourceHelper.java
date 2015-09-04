@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.helpers;
 
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.formats.XmlParser;
+import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -10,6 +10,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ResourceHelper {
+    private static FhirContext context = FhirContext.forDstu2();
+
     public static String asString(String fileName) throws IOException {
         InputStream resourceAsStream = ResourceHelper.class.getClassLoader().getResourceAsStream(fileName);
         if (resourceAsStream != null) {
@@ -25,14 +27,8 @@ public class ResourceHelper {
         return null;
     }
 
-    public static ParserBase.ResourceOrFeed loadFromXmlFile(String fileName) throws IOException {
+    public static Bundle loadFromXmlFile(String fileName) throws IOException {
         String content = asString(fileName);
-        ParserBase.ResourceOrFeed resource;
-        try {
-             resource = new XmlParser(true).parseGeneral(new ByteArrayInputStream(content.getBytes()));
-        } catch (Exception e) {
-            throw new RuntimeException("Unable to parse XML", e);
-        }
-        return resource;
+        return (Bundle) context.newXmlParser().parseResource(content);
     }
 }

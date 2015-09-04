@@ -1,10 +1,12 @@
 package org.sharedhealth.datasense.handler;
 
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import ca.uhn.fhir.model.dstu2.resource.Immunization;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.hl7.fhir.instance.formats.ParserBase;
-import org.hl7.fhir.instance.model.Immunization;
-import org.hl7.fhir.instance.model.Resource;
-import org.hl7.fhir.instance.model.ResourceReference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -48,7 +50,7 @@ public class ImmunizationResourceHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private BundleContext bundleContext;
-    private Resource immunizationResource;
+    private IResource immunizationResource;
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
@@ -64,9 +66,9 @@ public class ImmunizationResourceHandlerIT {
     }
 
     private void loadBundleContext() throws IOException {
-        ParserBase.ResourceOrFeed resourceOrFeed = loadFromXmlFile("xmls/encounterWithImmunization.xml");
+        Bundle bundle = loadFromXmlFile("xmls/encounterWithImmunization.xml");
         String shrEncounterId = "shrEncounterId";
-        bundleContext = new BundleContext(resourceOrFeed.getFeed(), shrEncounterId);
+        bundleContext = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
         patient.setHid("5960610240356417537");
@@ -75,8 +77,8 @@ public class ImmunizationResourceHandlerIT {
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
         composition.getEncounterReference().setValue(encounter);
-        ResourceReference resourceReference = new ResourceReference().setReferenceSimple("urn:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35");
-        immunizationResource = bundleContext.getResourceByReferenceFromFeed(resourceReference);
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35");
+        immunizationResource = bundleContext.getResourceForReference(resourceReference);
     }
 
     @Test
@@ -122,7 +124,9 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldNotSaveNonCodedImmunization() throws Exception {
-        ((Immunization) immunizationResource).getVaccineType().getCoding().get(0).setSystemSimple(null);
+        CodeableConceptDt vaccineType = ((Immunization) immunizationResource).getVaccineType();
+        CodingDt codingDt = vaccineType.getCoding().get(0);
+        codingDt.setSystem((String) null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
         assertTrue(medications.isEmpty());
