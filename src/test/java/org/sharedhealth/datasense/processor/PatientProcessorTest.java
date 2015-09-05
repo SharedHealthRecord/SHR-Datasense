@@ -11,6 +11,7 @@ import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.repository.PatientDao;
 
+import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
@@ -34,16 +35,16 @@ public class PatientProcessorTest {
 
     @Test
     public void shouldDownloadAndSavePatientIfNotPresent() throws Exception {
-
-        String healthId = "5942395046400622593";
+        String healthId = "98001046534";
         EncounterBundle encBundle = new EncounterBundle();
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
         encBundle.addContent(bundle);
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         Patient patient = new Patient();
         when(webClient.identifyPatient(healthId)).thenReturn(patient);
         PatientProcessor processor = new PatientProcessor(null, webClient, patientDao);
         processor.process(context.getEncounterCompositions().get(0));
+        verify(webClient, times(1)).identifyPatient(healthId);
         verify(patientDao).findPatientById(healthId);
         verify(patientDao).save(patient);
     }

@@ -38,24 +38,58 @@ public class EncounterComposition {
         }
     }
 
-    public ArrayList<IResource> loadResourcesFromComposition() {
+    public ArrayList<IResource> getCompositionRefResources() {
         ArrayList<IResource> resources = new ArrayList<>();
         for (Composition.Section section : composition.getSection()) {
             IResource resourceForReference = context.getResourceForReference(section.getContent());
             if (!(resourceForReference instanceof Encounter)) {
                 resources.add(resourceForReference);
             }
-//            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
-//                resources.add(context.getResourceByReferenceFromFeed(sectionComponent.getContent()));
-//            }
         }
         return resources;
     }
 
-//    public ArrayList<IResource> getParentResources() {
-//        HashSet<String> references = getChildResourceReferences();
-//        return getParentResources(references);
-//    }
+    public List<IResource> getTopLevelResources() {
+        return identifyTopLevelResourcesByExclusion();
+    }
+
+    public ArrayList<IResource> getOnlyParents() {
+        ArrayList<IResource> compositionRefResources = getCompositionRefResources();
+        for (IResource compositionRefResource : compositionRefResources) {
+            //
+        }
+        return null;
+    }
+
+
+
+    private List<IResource> identifyTopLevelResourcesByExclusion() {
+        ArrayList<IResource> compositionRefResources = getCompositionRefResources();
+        List<ResourceReferenceDt> childResourceReferences = new ArrayList<>();
+        for (IResource compositionRefResource : compositionRefResources) {
+             childResourceReferences.addAll(compositionRefResource.getAllPopulatedChildElementsOfType(ResourceReferenceDt.class));
+        }
+        HashSet<ResourceReferenceDt> childRef = new HashSet<>();
+        childRef.addAll(childResourceReferences);
+
+        ArrayList<IResource> topLevelResources = new ArrayList<>();
+
+        for (IResource compositionRefResource : compositionRefResources) {
+            if(!isChildReference(childRef, compositionRefResource.getId().getValue())) {
+                topLevelResources.add(compositionRefResource);
+            }
+        }
+        return topLevelResources;
+    }
+
+    private boolean isChildReference(HashSet<ResourceReferenceDt> childReferenceDts, String resourceRef) {
+        for (ResourceReferenceDt childRef : childReferenceDts) {
+            if(!childRef.getReference().isEmpty() && childRef.getReference().getValue().equals(resourceRef)) {
+                return true;
+            }
+        }
+        return false;
+    }
 
     public EncounterReference getEncounterReference() {
         return encounterReference;
@@ -81,6 +115,22 @@ public class EncounterComposition {
         return composition;
     }
 
+    public ArrayList<IResource> getParentResources(String referenceId) {
+        ArrayList<IResource> refResources = getCompositionRefResources();
+        ArrayList<IResource> parentRefs = new ArrayList<>();
+        for (IResource refResource : refResources) {
+            if (!refResource.getId().getValue().equals(referenceId)) {
+                List<ResourceReferenceDt> childReferences = refResource.getAllPopulatedChildElementsOfType(ResourceReferenceDt.class);
+                for (ResourceReferenceDt childReference : childReferences) {
+                    if (childReference.getReference().getValue().equals(referenceId)) {
+                        parentRefs.add(refResource);
+                    }
+                }
+            }
+        }
+        return parentRefs;
+    }
+
 ////    private ArrayList<AtomEntry<? extends Resource>> loadAtomEntriesFromComposition() {
 ////        ArrayList<AtomEntry<? extends Resource>> atomEntries = new ArrayList<>();
 ////        for (Composition.SectionComponent sectionComponent : composition.getSection()) {
@@ -91,7 +141,7 @@ public class EncounterComposition {
 ////        return atomEntries;
 ////    }
 ////
-//    private ArrayList<IResource> getParentResources(HashSet<String> references) {
+//    private ArrayList<IResource> getTopLevelResources(HashSet<String> references) {
 //        ArrayList<IResource> parentResources = new ArrayList<>();
 //        for (AtomEntry<? extends Resource> atomEntry : loadAtomEntriesFromComposition()) {
 //            if(!references.contains(atomEntry.getId())) {
@@ -103,7 +153,7 @@ public class EncounterComposition {
 
 //    private HashSet<String> getChildResourceReferences() {
 //        HashSet<String> references = new HashSet<>();
-//        for (Resource resource : loadResourcesFromComposition()) {
+//        for (Resource resource : getCompositionRefResources()) {
 //            List<Property> children = resource.children();
 //            addResourceReferences(children, references);
 //        }

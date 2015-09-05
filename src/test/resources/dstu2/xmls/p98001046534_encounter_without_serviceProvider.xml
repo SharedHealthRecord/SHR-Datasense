@@ -1,0 +1,69 @@
+<Bundle xmlns="http://hl7.org/fhir">
+    <id value="7d439ec2-8b63-402f-8b4c-1dc0ce8118c3"/>
+    <meta>
+        <lastUpdated value="2015-09-04T12:34:46.000+05:30"/>
+    </meta>
+    <type value="collection"/>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Composition xmlns="http://hl7.org/fhir">
+                <id value="71163479-0fa6-4179-83dc-b6f9ab235914"/>
+                <identifier>
+                    <value value="urn:uuid:71163479-0fa6-4179-83dc-b6f9ab235914"/>
+                </identifier>
+                <date value="2015-09-04T12:34:46.000+05:30"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
+                        <code value="51899-3"/>
+                        <display value="Details Document"/>
+                    </coding>
+                </type>
+                <status value="final"/>
+                <confidentiality value="N"/>
+                <subject>
+                    <reference value="http://localhost:9997/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <author>
+                    <reference value="http://172.18.46.199:8080/api/1.0/facilities/10019841.json"/>
+                </author>
+                <encounter>
+                    <reference value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
+                        <display value="Encounter"/>
+                    </content>
+                </section>
+            </Composition>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Encounter xmlns="http://hl7.org/fhir">
+                <id value="39f1810a-b437-430f-9318-e6d9208e3df9"/>
+                <identifier>
+                    <value value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
+                </identifier>
+                <status value="finished"/>
+                <class value="outpatient"/>
+                <type>
+                    <text value="REG"/>
+                </type>
+                <patient>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </patient>
+                <participant>
+                    <individual>
+                        <reference value="http://172.18.46.199:8080/api/1.0/providers/19.json"/>
+                    </individual>
+                </participant>
+            </Encounter>
+        </resource>
+    </entry>
+</Bundle>

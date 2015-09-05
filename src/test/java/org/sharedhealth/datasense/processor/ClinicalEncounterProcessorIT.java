@@ -55,17 +55,17 @@ public class ClinicalEncounterProcessorIT {
 
     @Test
     public void shouldSaveEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         Patient patient = new Patient();
         Date dob = new SimpleDateFormat("yyyy-MM-dd").parse("1999-10-22");
         patient.setDateOfBirth(dob);
-        String hid = "5942395046400622593";
+        String hid = "98001046534";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
-        String facilityId = "10000059";
+        String facilityId = "10019841";
         String facilityLocation = "3013";
         Facility facility = new Facility();
         facility.setFacilityId(facilityId);
@@ -77,8 +77,8 @@ public class ClinicalEncounterProcessorIT {
         assertEquals(hid, encounter.getPatient().getHid());
         assertEquals(facilityId, encounter.getFacility().getFacilityId());
         assertEquals(facilityLocation, encounter.getLocationCode());
-        assertEquals(DateUtil.parseDate("2014-12-09T10:59:27.000+0530"), encounter.getEncounterDateTime());
-        assertEquals("Consultation", encounter.getEncounterType());
+        assertEquals(DateUtil.parseDate("2015-09-04T12:34:46.000+05:30"), encounter.getEncounterDateTime());
+        assertEquals("REG", encounter.getEncounterType());
         assertEquals("outpatient", encounter.getEncounterVisitType());
     }
 

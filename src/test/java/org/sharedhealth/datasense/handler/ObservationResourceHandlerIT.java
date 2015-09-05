@@ -30,6 +30,7 @@ import java.util.List;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertFalse;
+import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 
@@ -38,20 +39,20 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ObservationResourceHandlerIT {
     private final String SHR_ENCOUNTER_ID = "shrEncounterId";
-    private final String HEALTH_ID = "5960610240356417537";
-    private final String VITALS_RESOURCE_REFERENCE = "urn:10b4fdd0-0507-4063-8259-ee50fff7ad6e";
-    private final String PULSE_RESOURCE_REFERENCE = "urn:2bfe946c-95cd-4543-8122-ec8619e56296";
+    private final String HEALTH_ID = "98001046534";
+    private final String VITALS_RESOURCE_REFERENCE = "urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1";
+    private final String PULSE_RESOURCE_REFERENCE = "urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336";
     @Autowired
     private ObservationResourceHandler observationResourceHandler;
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
-    private BundleContext vitalsBundleContext;
+    private BundleContext bundleContext;
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithVitalsObservation.xml");
-        vitalsBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
-        setEncounterReference(vitalsBundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml");
+        bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
+        setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
     }
 
     private void setEncounterReference(BundleContext bundleContext, String healthId, String encounterId) {
@@ -72,83 +73,73 @@ public class ObservationResourceHandlerIT {
 
     @Test
     public void shouldNotHandleDeathNoteObservations() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
         BundleContext deathNoteBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
-        ResourceReferenceDt deathReference = new ResourceReferenceDt().setReference("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        String deathNoteObsResId = "urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c";
+        ResourceReferenceDt deathReference = new ResourceReferenceDt().setReference(deathNoteObsResId);
         ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) deathNoteBundleContext.getResourceForReference(deathReference);
         assertFalse(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
-    public void shouldHandleFHIRObservations() throws Exception {
+    public void shouldHandleVitalsObservations() throws Exception {
         ResourceReferenceDt vitalsReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
-        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) vitalsBundleContext.getResourceForReference(vitalsReference);
+        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) bundleContext.getResourceForReference(vitalsReference);
         assertTrue(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
     public void shouldSaveSimpleObservation() throws Exception {
-        ResourceReferenceDt dateOfDeathReference = new ResourceReferenceDt().setReference(PULSE_RESOURCE_REFERENCE);
-        EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(vitalsBundleContext.getResourceForReference(dateOfDeathReference), composition);
-        List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
+        ResourceReferenceDt pulseResourceReference = new ResourceReferenceDt().setReference(PULSE_RESOURCE_REFERENCE);
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        observationResourceHandler.process(bundleContext.getResourceForReference(pulseResourceReference), composition);
+        List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
         assertEquals(1, observations.size());
         Observation observation = observations.get(0);
-        assertEquals("72.0", observation.getValue());
+        assertEquals("70.0", observation.getValue());
         assertEquals(DateUtil.parseDate("2015-01-20T11:10:53+05:30"), observation.getDateTime());
         assertEquals(SHR_ENCOUNTER_ID, observation.getEncounter().getEncounterId());
         assertEquals(HEALTH_ID, observation.getPatient().getHid());
         assertNotNull(observation.getUuid());
-        assertEquals("22a952b6-cc36-45e8-8b52-ff5a90fa7c4f", observation.getConceptId());
-        assertNull(observation.getReferenceCode());
+        assertEquals("07b4c2f5-5206-11e5-ae6d-0050568225ca", observation.getConceptId());
+        assertEquals("78564009", observation.getReferenceCode());
     }
 
     @Test
     public void shouldSaveNestedObservationAlongWithRelatedObservations() throws Exception {
         ResourceReferenceDt vitalReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
-        EncounterComposition composition = vitalsBundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(vitalsBundleContext.getResourceForReference(vitalReference),
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        observationResourceHandler.process(bundleContext.getResourceForReference(vitalReference),
                 composition);
-        List<Observation> observations = findByEncounterId(vitalsBundleContext.getShrEncounterId());
+        List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
-        assertEquals(4, observations.size());
+        assertEquals(5, observations.size());
 
-        Observation bloodPressureObservation = findObservationByConceptId(observations, "e69ef886-6914-4ed7-93a8-7b951dbf7139");
-        Observation diastolicObservation = findObservationByConceptId(observations, "af747d2f-8946-4ca2-93ec-5eb76986aff8");
-        Observation pulseObservation = findObservationByConceptId(observations, "22a952b6-cc36-45e8-8b52-ff5a90fa7c4f");
-        Observation vitalsObservation = findObservationByConceptId(observations, "44c245dd-d234-4991-a8b2-3c4a54d5092b");
+        Observation systolicObservation = findObservationByConceptId(observations, "07b01ede-5206-11e5-ae6d-0050568225ca");
+        Observation pulseObservation = findObservationByConceptId(observations, "07b4c2f5-5206-11e5-ae6d-0050568225ca");
+        Observation vitalsObservation = findObservationByConceptId(observations, "XYZ38225-5206-11e5-ae6d-005056822123");
 
-        assertEquals(vitalsObservation.getUuid(), bloodPressureObservation.getParentId());
         assertEquals(vitalsObservation.getUuid(), pulseObservation.getParentId());
-        assertEquals(bloodPressureObservation.getUuid(), diastolicObservation.getParentId());
+        assertNotNull(systolicObservation.getUuid());
     }
 
     @Test
     public void shouldSaveObservationIfParentObsIsNonCoded() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithNonCodedParentObsAndCodedChildren.xml");
-        String encounterId = "urn:99c71d15-86f1-4a8e-ac9f-acee51a74369";
-        String healthId = "99034600669";
-        BundleContext bundleContext = new BundleContext(bundle, encounterId);
-        setEncounterReference(bundleContext, healthId, encounterId);
-
-
-        String parentObsRef = "urn:539dac5f-626a-4631-8fe5-8e2d0a08c8ce";
-        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(parentObsRef);
+        String bloodPressureObsRef = "urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad";
+        ResourceReferenceDt bpReference = new ResourceReferenceDt().setReference(bloodPressureObsRef);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        observationResourceHandler.process(bundleContext.getResourceForReference(obsReference),
+        observationResourceHandler.process(bundleContext.getResourceForReference(bpReference),
                 composition);
-        List<Observation> observations = findByEncounterId(bundleContext.getShrEncounterId());
+        List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
         assertFalse(observations.isEmpty());
-        assertEquals(3, observations.size());
+        assertEquals(2, observations.size());
 
-        Observation child1 = findObservationByConceptId(observations, "b3aaa6d8-1e48-11e5-b5a9-00505682700b");
-        Observation child2 = findObservationByConceptId(observations, "b3c85348-1e48-11e5-b5a9-00505682700b");
-        Observation child3 = findObservationByConceptId(observations, "b3c94d09-1e48-11e5-b5a9-00505682700b");
+        Observation systolicBpObs = findObservationByConceptId(observations, "07b01ede-5206-11e5-ae6d-0050568225ca");
+        Observation diastolicBpObs = findObservationByConceptId(observations, "07b25cc6-5206-11e5-ae6d-0050568225ca");
 
-        assertNull(child1.getParentId());
-        assertNull(child2.getParentId());
-        assertNull(child3.getParentId());
+        assertNull(systolicBpObs.getParentId());
+        assertNull(diastolicBpObs.getParentId());
     }
 
     private Observation findObservationByConceptId(List<Observation> observations, final String conceptId) {
@@ -160,7 +151,7 @@ public class ObservationResourceHandlerIT {
         return null;
     }
 
-    private List<Observation> findByEncounterId(String shrEncounterId) {
+    private List<Observation> findObsByEncounterId(String shrEncounterId) {
         String sql = "select observation_id, patient_hid, encounter_id, concept_id, code, datetime, parent_id, value," +
                 " uuid from observation where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new

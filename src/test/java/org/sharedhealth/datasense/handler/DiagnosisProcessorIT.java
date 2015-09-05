@@ -60,7 +60,7 @@ public class DiagnosisProcessorIT {
 
     @Test
     public void shouldSaveDiagnosis() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnoses.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);
@@ -68,21 +68,21 @@ public class DiagnosisProcessorIT {
         encounter.setEncounterId(shrEncounterId);
         composition.getEncounterReference().setValue(encounter);
         Patient patient = new Patient();
-        String hid = "5942395046400622593";
+        String hid = "98001046534";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
         ResourceReferenceDt resourceReference = new ResourceReferenceDt();
-        resourceReference.setReference("urn:uuid:2801e2b9-3886-4bf5-919f-ce9268fdc317");
+        resourceReference.setReference("urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b");
         processor.process(context.getResourceForReference(resourceReference), composition);
-        List<Diagnosis> diagnosises = findByEncounterId(shrEncounterId);
-        assertEquals(1, diagnosises.size());
-        Diagnosis diagnosis = diagnosises.get(0);
+        List<Diagnosis> diagnoses = findByEncounterId(shrEncounterId);
+        assertEquals(1, diagnoses.size());
+        Diagnosis diagnosis = diagnoses.get(0);
         assertNotNull(diagnosis.getUuid());
         assertEquals(shrEncounterId, diagnosis.getEncounter().getEncounterId());
-        assertEquals("J19.513891", diagnosis.getDiagnosisCode());
-        assertEquals("12722059-401d-4ef1-83c7-ebc3fb32bf80", diagnosis.getDiagnosisConcept());
+        assertEquals("A90", diagnosis.getDiagnosisCode());
+        assertEquals("07952dc2-5206-11e5-ae6d-0050568225ca", diagnosis.getDiagnosisConcept());
         assertEquals("confirmed", diagnosis.getDiagnosisStatus());
-        assertTrue(DateUtil.parseDate("2014-12-09T10:59:28+05:30").equals(diagnosis.getDiagnosisDateTime()));
+        assertTrue(DateUtil.parseDate("2015-09-04").equals(diagnosis.getDiagnosisDateTime()));
         assertEquals(hid, diagnosis.getPatient().getHid());
     }
 

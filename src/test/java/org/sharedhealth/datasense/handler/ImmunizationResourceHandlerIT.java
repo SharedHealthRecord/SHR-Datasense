@@ -43,6 +43,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ImmunizationResourceHandlerIT {
 
+    public static final String HEALTH_ID = "98001046534";
     private final String TR_DRUG_UUID = "28c3c784-c0bf-4cae-bd26-ca76a384085a";
     @Autowired
     private ImmunizationResourceHandler immunizationResourceHandler;
@@ -66,18 +67,18 @@ public class ImmunizationResourceHandlerIT {
     }
 
     private void loadBundleContext() throws IOException {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithImmunization.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml");
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
-        patient.setHid("5960610240356417537");
+        patient.setHid(HEALTH_ID);
         composition.getPatientReference().setValue(patient);
         Encounter encounter = new Encounter();
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
         composition.getEncounterReference().setValue(encounter);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:9b6bd490-f9d5-4d8f-9d08-ac0083ff9d35");
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be");
         immunizationResource = bundleContext.getResourceForReference(resourceReference);
     }
 
@@ -92,9 +93,9 @@ public class ImmunizationResourceHandlerIT {
         immunizationResourceHandler.process(immunizationResource,
                 bundleContext.getEncounterCompositions().get(0));
         Medication medication = getMedication();
-        assertEquals(DateUtil.parseDate("2015-01-06T11:00:00+05:30"), medication.getDateTime());
+        assertEquals(DateUtil.parseDate("2015-09-03T00:00:00.000+05:30"), medication.getDateTime());
         assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
-        assertEquals("5960610240356417537", medication.getPatient().getHid());
+        assertEquals(HEALTH_ID, medication.getPatient().getHid());
         List<ImmunizationReason> reasons = findImmunizationReasonsByEncounterId("shrEncounterId");
         assertTrue(reasons.size() > 0);
     }
@@ -128,12 +129,12 @@ public class ImmunizationResourceHandlerIT {
         CodingDt codingDt = vaccineType.getCoding().get(0);
         codingDt.setSystem((String) null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
+        List<Medication> medications = findMedicationsFor(bundleContext.getShrEncounterId());
         assertTrue(medications.isEmpty());
     }
 
     private Medication getMedication() {
-        List<Medication> medications = findByEncounterId(bundleContext.getShrEncounterId());
+        List<Medication> medications = findMedicationsFor(bundleContext.getShrEncounterId());
         assertFalse(medications.isEmpty());
         assertEquals(1, medications.size());
         return medications.get(0);
@@ -144,7 +145,7 @@ public class ImmunizationResourceHandlerIT {
         DatabaseHelper.clearDatasenseTables(jdbcTemplate);
     }
 
-    private List<Medication> findByEncounterId(String shrEncounterId) {
+    private List<Medication> findMedicationsFor(String shrEncounterId) {
         String sql = "select datetime, encounter_id, patient_hid, status, drug_id, uuid from " +
                 "medication where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new

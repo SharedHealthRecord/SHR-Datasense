@@ -1,0 +1,49 @@
+{
+  "name": "Test",
+  "url": "http://hrmtest.dghs.gov.bd/api/1.0/providers/11104.json",
+  "id": 19,
+  "active": 1,
+  "createdAt": "-0001-11-30",
+  "updatedAt": "2014-11-27",
+  "birthDate": "1999-11-30",
+  "gender": "",
+  "organization": {
+    "reference": "http://hrmtest.dghs.gov.bd/api/1.0/facilities/1302.json",
+    "display": "Bhurungamari Upazila Health Complex"
+  },
+  "identifiers": [
+    {
+      "system": "DGHS",
+      "value": 19
+    },
+    {
+      "system": "NationalId",
+      "value": null
+    },
+    {
+      "system": "PDS",
+      "value": ""
+    }
+  ],
+  "telecom": [
+    {
+      "system": "phone",
+      "value": null
+    },
+    {
+      "system": "email",
+      "value": ""
+    }
+  ],
+  "address": {
+    "text": ""
+  },
+  "properties": {
+    "postingOption": null,
+    "maritalStatus": "",
+    "qualification": "",
+    "category": "",
+    "discipline": "N/A",
+    "department": null
+  }
+}

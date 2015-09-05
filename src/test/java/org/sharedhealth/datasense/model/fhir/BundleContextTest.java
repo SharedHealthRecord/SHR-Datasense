@@ -13,12 +13,12 @@ public class BundleContextTest {
 
     @Test
     public void shouldParseFeedAndIdentifyEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());
         EncounterComposition encounterComposition = encounterCompositions.get(0);
         assertNotNull(encounterComposition.getEncounterReference().getResource());
-        assertEquals(7, encounterComposition.loadResourcesFromComposition().size());
+        assertEquals(1, encounterComposition.getCompositionRefResources().size());
     }
 }

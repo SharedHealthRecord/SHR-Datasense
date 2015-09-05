@@ -46,11 +46,11 @@ public class ProcedureResourceHandlerIT {
     private IResource procedureResource;
 
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
-    private static final String PATIENT_HID = "patientHid";
+    private static final String PATIENT_HID = "98001046534";
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithProcedure.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_procedure.xml");
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
 
@@ -62,7 +62,7 @@ public class ProcedureResourceHandlerIT {
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
 
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:9f582d08-1245-4c5a-a4b0-8d021298ac61");
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb");
         procedureResource = bundleContext.getResourceForReference(resourceReference);
 
     }
@@ -91,19 +91,19 @@ public class ProcedureResourceHandlerIT {
 
     private void shouldProcessProcedureDates(Procedure procedure) {
         assertEquals(DateUtil.parseDate("2015-02-02T00:00:00+05:30"), procedure.getEncounterDate());
-        assertEquals(DateUtil.parseDate("2015-02-03T00:00:00+05:30"), procedure.getStartDate());
-        assertEquals(DateUtil.parseDate("2015-02-04T00:00:00+05:30"), procedure.getEndDate());
+        assertEquals(DateUtil.parseDate("2015-08-31T00:00:00.000+05:30"), procedure.getStartDate());
+        assertEquals(DateUtil.parseDate("2015-09-02T00:00:00.000+05:30"), procedure.getEndDate());
     }
 
 
     private void shouldProcessProcedureType(Procedure procedure) throws Exception {
-        assertEquals("b1b46bb3-c956-4e1c-84df-12f03f33b7f5", procedure.getProcedureUuid());
-        assertEquals("7W00X0Z", procedure.getProcedureCode());
+        assertEquals("079f6b0e-5206-11e5-ae6d-0050568225ca", procedure.getProcedureUuid());
+        assertEquals("392003006", procedure.getProcedureCode());
     }
 
     private void shouldProcessDiagnosis(Procedure procedure) throws Exception {
-        assertEquals("maleria", procedure.getDiagnosisCode());
-        assertEquals("e8816d09-9735-4f08-ad05-471c1f7b4b88", procedure.getDiagnosisUuid());
+        assertEquals("A00.0", procedure.getDiagnosisCode());
+        assertEquals("067c248c-5206-11e5-ae6d-0050568225ca", procedure.getDiagnosisUuid());
     }
 
 

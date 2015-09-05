@@ -79,10 +79,11 @@ public class ObservationResourceHandler implements FhirResourceHandler {
 
         List<CodingDt> codings = fhirObservation.getCode().getCoding();
         String conceptId = getConceptId(codings);
+        String code = getReferenceCode(codings);
         String parentObsUUID = null;
-        if (conceptId != null) {
+        if ( (conceptId != null) || (code != null)) {
             observation.setConceptId(conceptId);
-            observation.setReferenceCode(getReferenceCode(codings));
+            observation.setReferenceCode(code);
 
             Encounter encounter = composition.getEncounterReference().getValue();
             observation.setEncounter(encounter);

@@ -31,7 +31,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
 public class ProviderProcessorIT {
-    private static final String VALID_PROVIDER_ID = "11104";
+    private static final String VALID_PROVIDER_ID = "19";
     @Autowired
     private ProviderProcessor providerProcessor;
     @Autowired
@@ -45,7 +45,7 @@ public class ProviderProcessorIT {
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithProvider.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         encounterComposition = context.getEncounterCompositions().get(0);
     }
@@ -57,7 +57,7 @@ public class ProviderProcessorIT {
 
     @Test
     public void shouldProcessAndSaveProvider() throws Exception {
-        givenThat(get(urlEqualTo("/api/1.0/providers/11104.json"))
+        givenThat(get(urlEqualTo("/api/1.0/providers/" + VALID_PROVIDER_ID + ".json"))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
@@ -71,7 +71,7 @@ public class ProviderProcessorIT {
 
     @Test
     public void shouldFetchFromDatabaseIfProviderAlreadyPresent() throws Exception {
-        jdbcTemplate.update("insert into provider (id, name, facility_id) values ('11104', 'Some Test Name', 'Some Facility');", new EmptySqlParameterSource());
+        jdbcTemplate.update("insert into provider (id, name, facility_id) values ('19', 'Some Test Name', 'Some Facility');", new EmptySqlParameterSource());
         String facilityId = providerProcessor.process(encounterComposition);
         assertEquals("Some Facility", facilityId);
         Provider provider = providerDao.findProviderById(VALID_PROVIDER_ID);
@@ -81,7 +81,7 @@ public class ProviderProcessorIT {
 
     @Test
     public void shouldReturnNullIfNoProviderFound() throws Exception {
-        givenThat(get(urlEqualTo("/api/1.0/providers/11104.json"))
+        givenThat(get(urlEqualTo("/api/1.0/providers/19.json"))
                 .willReturn(aResponse()
                         .withStatus(404)));
         String facilityId = providerProcessor.process(encounterComposition);

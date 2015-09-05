@@ -44,7 +44,7 @@ public class PatientProcessorIntegrationTest {
     private PatientDao patientDao;
     private PatientProcessor processor;
 
-    private final String VALID_HEALTH_ID = "5942395046400622593";
+    private final String VALID_HEALTH_ID = "98001046534";
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
@@ -78,7 +78,7 @@ public class PatientProcessorIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
         Patient patient = patientDao.findPatientById(VALID_HEALTH_ID);
@@ -92,7 +92,7 @@ public class PatientProcessorIntegrationTest {
         givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(404)));
-        Bundle bundle = loadFromXmlFile("xmls/sampleEncounter.xml");
+        Bundle bundle = loadFromXmlFile("dstu1/xmls/sampleEncounter.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
     }

@@ -1,0 +1,330 @@
+<Bundle xmlns="http://hl7.org/fhir">
+    <id value="01eccd68-fa2b-429c-8f92-69a861982569"/>
+    <meta>
+        <lastUpdated value="2015-09-04T15:13:53.000+05:30"/>
+    </meta>
+    <type value="collection"/>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Composition xmlns="http://hl7.org/fhir">
+                <id value="210d4435-bdf4-4824-82bd-f0ea477a8c82"/>
+                <identifier>
+                    <value value="urn:uuid:210d4435-bdf4-4824-82bd-f0ea477a8c82"/>
+                </identifier>
+                <date value="2015-09-04T15:13:53.000+05:30"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
+                        <code value="51899-3"/>
+                        <display value="Details Document"/>
+                    </coding>
+                </type>
+                <status value="final"/>
+                <confidentiality value="N"/>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <author>
+                    <reference value="http://172.18.46.199:8080/api/1.0/facilities/10000069.json"/>
+                </author>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                        <display value="Encounter"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
+                        <display value="Systolic blood pressure"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
+                        <display value="Diastolic blood pressure"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
+                        <display value="Blood Pressure"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
+                        <display value="Pulse"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
+                        <display value="Temperature"/>
+                    </content>
+                </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
+                        <display value="Vitals"/>
+                    </content>
+                </section>
+            </Composition>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Encounter xmlns="http://hl7.org/fhir">
+                <id value="b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                <identifier>
+                    <value value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </identifier>
+                <status value="finished"/>
+                <class value="outpatient"/>
+                <type>
+                    <text value="OPD"/>
+                </type>
+                <patient>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </patient>
+                <participant>
+                    <individual>
+                        <reference value="http://172.18.46.199:8080/api/1.0/providers/19.json"/>
+                    </individual>
+                </participant>
+                <serviceProvider>
+                    <reference value="http://localhost:9997/api/1.0/facilities/10000069.json"/>
+                </serviceProvider>
+            </Encounter>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="711f3351-20ba-49f2-9774-954fa812d3a4"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07b0bde0-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="271649006"/>
+                        <display value="Systolic blood pressure"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/07b01ede-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="07b01ede-5206-11e5-ae6d-0050568225ca"/>
+                        <display value="Systolic blood pressure"/>
+                    </coding>
+                </code>
+                <valueQuantity>
+                    <value value="80.0"/>
+                </valueQuantity>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="f9519c6e-7e18-48fe-8e26-903da844586d"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07b0bde0-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="271649006"/>
+                        <display value="Diastolic blood pressure"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/07b25cc6-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="07b25cc6-5206-11e5-ae6d-0050568225ca"/>
+                        <display value="Diastolic blood pressure"/>
+                    </coding>
+                </code>
+                <valueQuantity>
+                    <value value="69.0"/>
+                </valueQuantity>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="cb144010-c38c-4fcc-975e-ab831ab991ad"/>
+                <code>
+                    <coding>
+                        <display value="Blood Pressure"/>
+                    </coding>
+                </code>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
+                    </target>
+                </related>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07b53c16-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="78564009"/>
+                        <display value="Pulse"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/07b4c2f5-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="07b4c2f5-5206-11e5-ae6d-0050568225ca"/>
+                        <display value="Pulse"/>
+                    </coding>
+                </code>
+                <valueQuantity>
+                    <value value="70.0"/>
+                </valueQuantity>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="52d4c865-c7d6-450e-9103-d786be461cda"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07b41655-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="386725007"/>
+                        <display value="Temperature"/>
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/07b38225-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="07b38225-5206-11e5-ae6d-0050568225ca"/>
+                        <display value="Temperature"/>
+                    </coding>
+                </code>
+                <valueQuantity>
+                    <value value="98.0"/>
+                </valueQuantity>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/XYZ38225-5206-11e5-ae6d-005056822123"/>
+                        <code value="XYZ38225-5206-11e5-ae6d-005056822123"/>
+                        <display value="Vitals"/>
+                    </coding>
+                </code>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
+                </encounter>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
+                    </target>
+                </related>
+                <related>
+                    <type value="has-component"/>
+                    <target>
+                        <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
+                    </target>
+                </related>
+            </Observation>
+        </resource>
+    </entry>
+</Bundle>

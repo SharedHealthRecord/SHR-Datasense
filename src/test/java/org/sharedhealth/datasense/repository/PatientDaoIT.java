@@ -160,7 +160,7 @@ public class PatientDaoIT {
                 assertEquals(patient.getDateOfBirth(), rs.getDate("dob"));
                 assertEquals(patient.getGender(), rs.getString("gender"));
                 assertEquals(patient.getPresentLocationCode(), rs.getString("present_location_id"));
-                assertTrue(rs.getTimestamp("updated_at").after(rs.getTimestamp("created_at")));
+                assertTrue(!rs.getTimestamp("updated_at").before(rs.getTimestamp("created_at")));
                 return rs;
             }
         });

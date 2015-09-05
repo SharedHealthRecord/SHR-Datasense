@@ -15,6 +15,7 @@ import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
@@ -23,6 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
@@ -54,7 +56,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
 
-    private static String VALID_HEALTH_ID = "5942395046400622593";
+    private static String VALID_HEALTH_ID = "98001046534";
     private static String VALID_FACILITY_ID = "10000069";
 
     @Before
@@ -89,7 +91,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     public void shouldParseAndStoreEncounters() throws IOException {
         EncounterBundle bundle = new EncounterBundle();
         bundle.setHealthId(VALID_HEALTH_ID);
-        bundle.addContent(loadFromXmlFile("xmls/sampleEncounter.xml"));
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_all_resources.xml"));
         String shrEncounterId = "shrEncounterId";
         bundle.setEncounterId(shrEncounterId);
         encounterEventWorker.process(bundle);
@@ -102,31 +104,42 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
 
         assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(5, getObservationIdList(shrEncounterId).size());
+        assertEquals(1, getPatientDeathList(shrEncounterId).size());
+        assertEquals(1, getProcedureIdList(shrEncounterId).size());
+        assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(1, getMedicationIdList(shrEncounterId).size());
     }
 
     @Test
     public void shouldUpdateAnExistingEncounter() throws Exception {
         EncounterBundle bundle = new EncounterBundle();
-        String healthId = "5960610240356417537";
-        givenThat(get(urlEqualTo("/api/default/patients/" + healthId))
+        givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(asString("jsons/P" + healthId + ".json"))));
+                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
 
-        bundle.setHealthId(healthId);
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithVitalsObservation.xml"));
+
+        givenThat(get(urlEqualTo("/api/1.0/facilities/10019841.json"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/F10019841.json"))));
+
+        bundle.setHealthId(VALID_HEALTH_ID);
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml"));
         String shrEncounterId = "shrEncounterId";
         bundle.setEncounterId(shrEncounterId);
         encounterEventWorker.process(bundle);
 
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
-        assertEquals(4, getObservationIdList(shrEncounterId).size());
+        assertEquals(5, getObservationIdList(shrEncounterId).size());
         assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
 
 
         //update encounter with procedure
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithProcedure.xml"));
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_procedure.xml"));
         encounterEventWorker.process(bundle);
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
         assertEquals(1, getProcedureIdList(shrEncounterId).size());
@@ -134,24 +147,16 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
 
         //update encounter with diagnosis
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithDiagnosis.xml"));
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnoses.xml"));
         encounterEventWorker.process(bundle);
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
         assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
         assertEquals(0, getObservationIdList(shrEncounterId).size());
         assertEquals(0, getProcedureIdList(shrEncounterId).size());
 
-        //update encounter with death note
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithDeathNote.xml"));
-        encounterEventWorker.process(bundle);
-        assertEquals(1, getEncounterIdList(shrEncounterId).size());
-        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
-        assertEquals(0, getObservationIdList(shrEncounterId).size());
-        assertEquals(0, getProcedureIdList(shrEncounterId).size());
-        assertEquals(1, getPatientDeathList(shrEncounterId).size());
 
         //update encounter with immunization
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithImmunization.xml"));
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml"));
         encounterEventWorker.process(bundle);
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
         assertEquals(1, getMedicationIdList(shrEncounterId).size());
@@ -159,26 +164,42 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
         assertEquals(0, getObservationIdList(shrEncounterId).size());
         assertEquals(0, getProcedureIdList(shrEncounterId).size());
         assertEquals(0, getPatientDeathList(shrEncounterId).size());
+
+        //update encounter with death note
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml"));
+        encounterEventWorker.process(bundle);
+        assertEquals(1, getEncounterIdList(shrEncounterId).size());
+        assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
+        assertEquals(0, getObservationIdList(shrEncounterId).size());
+        assertEquals(0, getProcedureIdList(shrEncounterId).size());
+        assertEquals(1, getPatientDeathList(shrEncounterId).size());
     }
 
     @Test
     public void shouldProcessEncounterWithObservationNested() throws Exception {
         EncounterBundle bundle = new EncounterBundle();
-        String healthId = "5960610240356417537";
-        givenThat(get(urlEqualTo("/api/default/patients/" + healthId))
+        givenThat(get(urlEqualTo("/api/default/patients/" + VALID_HEALTH_ID))
                 .willReturn(aResponse()
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
-                        .withBody(asString("jsons/P" + healthId + ".json"))));
+                        .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
 
-        bundle.setHealthId(healthId);
-        bundle.addContent(loadFromXmlFile("xmls/encounterWithObsNestedAtMultiLevel.xml"));
-        String shrEncounterId = "urn:bb5e6156-477f-464c-a5ef-0285fcee1cb7";
+        givenThat(get(urlEqualTo("api/1.0/facilities/10000069.json"))
+                .willReturn(aResponse()
+                        .withStatus(200)
+                        .withHeader("Content-Type", "application/json")
+                        .withBody(asString("jsons/F10000069.json"))));
+
+
+
+        bundle.setHealthId(VALID_HEALTH_ID);
+        bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml"));
+        String shrEncounterId = "shrEncounterId";
         bundle.setEncounterId(shrEncounterId);
         encounterEventWorker.process(bundle);
 
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
-        assertEquals(4, getObservationIdList(shrEncounterId).size());
+        assertEquals(5, getObservationIdList(shrEncounterId).size());
 
 
 
@@ -220,6 +241,19 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     private List<String> getObservationIdList(String shrEncounterId){
         return jdbcTemplate.queryForList("select observation_id from observation where encounter_id = :encounter_id",
                 Collections.singletonMap("encounter_id", shrEncounterId), String.class);
+    }
+
+    private void showObsDetails(String shrEncounterId, String table, String ... fields) {
+        List<Map<String, Object>> maps = jdbcTemplate.queryForList(
+                String.format("select * from %s where encounter_id = '%s'", table, shrEncounterId), new EmptySqlParameterSource());
+
+        for (Map<String, Object> map : maps) {
+            StringBuilder sb = new StringBuilder();
+            for (String field : fields) {
+                sb.append(String.format("%s=%s, ", field, map.get(field)));
+            }
+            System.out.printf(sb.toString());
+        }
     }
 
     @After

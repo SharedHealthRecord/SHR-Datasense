@@ -45,12 +45,12 @@ public class DeathNoteHandlerIT {
     private EncounterComposition composition;
     private IResource deathNoteResource;
 
-    private static final String PATIENT_HID = "patientHid";
+    private static final String PATIENT_HID = "98001046534";
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("xmls/encounterWithDeathNote.xml");
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
@@ -60,7 +60,7 @@ public class DeathNoteHandlerIT {
         encounter.setEncounterId(SHR_ENCOUNTER_ID);
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:9d3f2b4e-2f83-4d60-930c-5a7cfafbcaf2");
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c");
         deathNoteResource = bundleContext.getResourceForReference(resourceReference);
     }
 
@@ -87,22 +87,22 @@ public class DeathNoteHandlerIT {
     public void shouldSaveDateOfDeathFromDateOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals(DateUtil.parseDate("2014-12-28T00:00:00+05:30"), patientDeathDetails.getDateOfDeath());
+        assertEquals(DateUtil.parseDate("2015-09-04 02:02:00"), patientDeathDetails.getDateOfDeath());
     }
 
     @Test
     public void shouldSaveCircumstancesOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals("killed.", patientDeathDetails.getCircumstancesOfDeath());
+        assertEquals("died in hospital", patientDeathDetails.getCircumstancesOfDeath());
     }
 
     @Test
     public void shouldSaveCauseOfDeath() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals("J19", patientDeathDetails.getCauseOfDeathCode());
-        assertEquals("03d43153-4d18-4195-a033-6a32792a00e7", patientDeathDetails.getCauseOfDeathConceptUuid());
+        assertEquals("A90", patientDeathDetails.getCauseOfDeathCode());
+        assertEquals("07952dc2-5206-11e5-ae6d-0050568225ca", patientDeathDetails.getCauseOfDeathConceptUuid());
     }
 
     private PatientDeathDetails findByEncounterId(String shrEncounterId) {
