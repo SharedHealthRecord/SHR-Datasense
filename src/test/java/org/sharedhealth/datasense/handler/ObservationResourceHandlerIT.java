@@ -1,7 +1,11 @@
 package org.sharedhealth.datasense.handler;
 
+import ca.uhn.fhir.model.api.IDatatype;
+import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,6 +18,7 @@ import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
+import org.sharedhealth.datasense.model.tr.CodeableConcept;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
@@ -28,11 +33,10 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
-import static junit.framework.Assert.assertEquals;
-import static junit.framework.Assert.assertFalse;
-import static junit.framework.Assert.assertNotNull;
 import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
+import static org.sharedhealth.datasense.helpers.ResourceHelper.loadResourceFromXmlFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -53,17 +57,6 @@ public class ObservationResourceHandlerIT {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml");
         bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
-    }
-
-    private void setEncounterReference(BundleContext bundleContext, String healthId, String encounterId) {
-        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        Patient patient = new Patient();
-        patient.setHid(healthId);
-        composition.getPatientReference().setValue(patient);
-        Encounter encounter = new Encounter();
-        encounter.setEncounterId(encounterId);
-        encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-20T11:10:53+05:30"));
-        composition.getEncounterReference().setValue(encounter);
     }
 
     @After
@@ -140,6 +133,37 @@ public class ObservationResourceHandlerIT {
 
         assertNull(systolicBpObs.getParentId());
         assertNull(diastolicBpObs.getParentId());
+    }
+
+    @Test
+    public void shouldGetValueBooleanFromObservation() throws Exception {
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_observations.xml");
+        bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
+        setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
+        String obsRef4PncWithin48HoursAfterBirth = "urn:uuid:68b6c450-4dec-41d3-aa05-464c2bdaeb98";
+        //String obsRef4PncWithin48HoursAfterBirth = "PNC Within 48 Hours After Birth";
+        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(obsRef4PncWithin48HoursAfterBirth);
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        IResource obsResource = bundleContext.getResourceForReference(obsReference);
+        IDatatype obsValue = ((ca.uhn.fhir.model.dstu2.resource.Observation) obsResource).getValue();
+        assertTrue(obsValue instanceof CodeableConceptDt);
+        observationResourceHandler.process(obsResource, composition);
+        List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
+        assertEquals(1, observations.size());
+        assertEquals("true", observations.get(0).getValue());
+
+
+    }
+
+    private void setEncounterReference(BundleContext bundleContext, String healthId, String encounterId) {
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        Patient patient = new Patient();
+        patient.setHid(healthId);
+        composition.getPatientReference().setValue(patient);
+        Encounter encounter = new Encounter();
+        encounter.setEncounterId(encounterId);
+        encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-20T11:10:53+05:30"));
+        composition.getEncounterReference().setValue(encounter);
     }
 
     private Observation findObservationByConceptId(List<Observation> observations, final String conceptId) {

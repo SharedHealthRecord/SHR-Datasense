@@ -13,6 +13,10 @@ import static org.sharedhealth.datasense.util.FhirCodeLookup.getConceptId;
 import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
 
 public class ObservationValueMapper {
+
+    public static final String HL7_FHIR_VS_URL_FOR_BOOLEAN = "http://hl7.org/fhir/v2/0136";
+    public static final String HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN = "http://hl7.org/fhir/v2/vs/0136";
+
     /**
      * Use this only for observation values
      *
@@ -37,6 +41,9 @@ public class ObservationValueMapper {
         // TR).
         else if (value instanceof CodeableConceptDt) {
             List<CodingDt> codings = ((CodeableConceptDt) value).getCoding();
+            if (isValueBoolean(codings)) {
+                return getValueBoolean(codings);
+            }
             String referenceCode = getReferenceCode(codings);
             if (referenceCode != null) {
                 return referenceCode;
@@ -46,4 +53,24 @@ public class ObservationValueMapper {
         }
         return null;
     }
+
+    private boolean isValueBoolean(List<CodingDt> codings) {
+        if (!codings.isEmpty()) {
+            String system = codings.get(0).getSystem();
+            return system.equalsIgnoreCase(HL7_FHIR_VS_URL_FOR_BOOLEAN) || system.equalsIgnoreCase(HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN);
+        }
+        return false;
+    }
+
+    private String getValueBoolean(List<CodingDt> codings) {
+        if (!codings.isEmpty()) {
+            CodingDt coding = codings.get(0);
+            String system = coding.getSystem();
+            if (system.equalsIgnoreCase(HL7_FHIR_VS_URL_FOR_BOOLEAN) || system.equalsIgnoreCase(HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN)) {
+                return String.valueOf(coding.getCode().equalsIgnoreCase("Y"));
+            }
+        }
+        return "false";
+    }
+
 }

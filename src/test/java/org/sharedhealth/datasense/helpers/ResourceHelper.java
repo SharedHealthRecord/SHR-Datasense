@@ -1,7 +1,9 @@
 package org.sharedhealth.datasense.helpers;
 
 import ca.uhn.fhir.context.FhirContext;
+import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import org.hl7.fhir.instance.model.api.IBaseResource;
 
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
@@ -28,7 +30,11 @@ public class ResourceHelper {
     }
 
     public static Bundle loadFromXmlFile(String fileName) throws IOException {
-        String content = asString(fileName);
-        return (Bundle) context.newXmlParser().parseResource(content);
+        return (Bundle) loadResourceFromXmlFile(fileName);
+    }
+
+    public static IBaseResource loadResourceFromXmlFile(String filename) throws IOException {
+        String content = asString(filename);
+        return context.newXmlParser().parseResource(content);
     }
 }

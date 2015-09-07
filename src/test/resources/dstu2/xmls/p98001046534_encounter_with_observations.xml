@@ -68,6 +68,12 @@
                         <display value="Discharge Summary"/>
                     </content>
                 </section>
+                <section>
+                    <content>
+                        <reference value="urn:uuid:68b6c450-4dec-41d3-aa05-464c2bdaeb98"/>
+                        <display value="Is PNC Within 48 Hours After Birth"/>
+                    </content>
+                </section>
             </Composition>
         </resource>
     </entry>
@@ -249,6 +255,40 @@
                         <reference value="urn:uuid:5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
                     </target>
                 </related>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <base value="urn:uuid:"/>
+        <resource>
+            <Observation xmlns="http://hl7.org/fhir">
+                <id value="68b6c450-4dec-41d3-aa05-464c2bdaeb98"/>
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/079df550-5206-11e5-ae6d-0050568225ca"/>
+                        <code value="079df550-5206-11e5-ae6d-0050568225ca"/>
+                        <display value="Is PNC Within 48 Hours After Birth"/>
+                    </coding>
+                </code>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://hl7.org/fhir/v2/0136"/>
+                        <code value="Y"/>
+                        <display value="Yes"/>
+                    </coding>
+                </valueCodeableConcept>
+                <status value="final"/>
+                <reliability value="ok"/>
+                <identifier>
+                    <value value="urn:uuid:68b6c450-4dec-41d3-aa05-464c2bdaeb98"/>
+                </identifier>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001095960"/>
+                    <display value="98001095960"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:96829039-74bb-4e08-84a8-5c3c3aa60c7d"/>
+                </encounter>
             </Observation>
         </resource>
     </entry>
