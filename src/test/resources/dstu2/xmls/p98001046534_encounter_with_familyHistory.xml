@@ -100,6 +100,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>
@@ -145,6 +146,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>
@@ -189,6 +191,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>

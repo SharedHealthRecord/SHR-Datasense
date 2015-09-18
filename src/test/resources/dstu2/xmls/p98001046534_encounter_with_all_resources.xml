@@ -5,6 +5,7 @@
     </meta>
     <type value="collection"/>
     <entry>
+        <fullUrl value="urn:uuid:206a6d95-454f-48c8-9a7b-d73756652c8d"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="206a6d95-454f-48c8-9a7b-d73756652c8d"/>
@@ -420,6 +421,7 @@
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
+                <status value="preliminary"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad55052-464f-11e5-b9e5-0050568225ca"/>
@@ -428,7 +430,6 @@
                     </coding>
                 </code>
                 <valueDateTime value="2015-09-04T02:02:00.000+05:30"/>
-                <status value="final"/>
                 <identifier>
                     <value value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
                 </identifier>
@@ -447,6 +448,7 @@
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
+                <status value="preliminary"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad597a4-464f-11e5-b9e5-0050568225ca"/>
@@ -466,7 +468,6 @@
                         <display value="Dengue Fever"/>
                     </coding>
                 </valueCodeableConcept>
-                <status value="final"/>
                 <identifier>
                     <value value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
                 </identifier>
@@ -493,7 +494,7 @@
                     </coding>
                 </code>
                 <valueString value="died in hospital"/>
-                <status value="final"/>
+                <status value="preliminary"/>
                 <identifier>
                     <value value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
                 </identifier>
@@ -722,6 +723,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>
@@ -767,6 +769,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>
@@ -811,6 +814,7 @@
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
                 </patient>
+                <status value="partial"/>
                 <relationship>
                     <coding>
                         <system value="http://hl7.org/fhir/v3/RoleCode"/>
@@ -844,6 +848,7 @@
                 <identifier>
                     <value value="urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be"/>
                 </identifier>
+                <status value="completed"/>
                 <date value="2015-09-03T00:00:00.000+05:30"/>
                 <vaccineCode>
                     <coding>
@@ -941,7 +946,6 @@
                 </code>
                 <valueString value="visit again"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:f48c1755-d850-458f-9974-15f3f0d35214"/>
                 </identifier>
@@ -967,7 +971,6 @@
                 </code>
                 <valueDateTime value="2015-09-20"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
                 </identifier>
