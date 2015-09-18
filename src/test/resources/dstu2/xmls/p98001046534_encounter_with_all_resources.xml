@@ -5,7 +5,6 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="206a6d95-454f-48c8-9a7b-d73756652c8d"/>
@@ -20,6 +19,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,196 +33,196 @@
                     <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:e461943b-7ad6-4b41-9730-70b8fc452f45"/>
                         <display value="complaint"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:6c764a45-175e-485b-b8d5-12ad7fb6bb08"/>
                         <display value="complaint"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:1aa84947-6807-4822-826f-7163b3db0300"/>
                         <display value="complaint"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:0b4c6d17-a3c4-4de3-8078-751fbf69ae26"/>
                         <display value="complaint"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
                         <display value="Date of death"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
                         <display value="Cause of Death"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
                         <display value="Circumstances of Death"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
                         <display value="Place of Death"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
                         <display value="Death Note"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b"/>
                         <display value="Diagnosis"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:42a6d58c-4da6-4656-ac0a-172a928da9e5"/>
                         <display value="Diagnostic Order"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:06472534-b4a2-4893-9c2f-a44bebfca5cb"/>
                         <display value="Specimen"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:3d614625-4358-487c-96e9-a775df9579f3"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:7b78ac79-7607-46fd-aff8-03c0c115857a"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be"/>
                         <display value="Immunization"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:92100c03-1da1-45a0-903a-2aefedca18bf"/>
                         <display value="Hospital course"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:12f203b8-dd7b-4d32-9381-e4db7dbba7a7"/>
                         <display value="History and examination notes"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:f48c1755-d850-458f-9974-15f3f0d35214"/>
                         <display value="Additional advice"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
                         <display value="Follow up date"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:621cdaee-bc78-40a2-9e04-870d5aae2118"/>
                         <display value="Discharge Summary"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
                         <display value="Creatinine [Mass/time] in 24 hour Urine"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:5c44d7a6-ed3b-4304-9917-dbd9c1074062"/>
                         <display value="Diagnostic Report"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb"/>
                         <display value="Procedure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                         <display value="Systolic blood pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                         <display value="Diastolic blood pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                         <display value="Blood Pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                         <display value="Pulse"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
                         <display value="Temperature"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
                         <display value="Vitals"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
@@ -250,7 +250,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:e461943b-7ad6-4b41-9730-70b8fc452f45"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="e461943b-7ad6-4b41-9730-70b8fc452f45"/>
@@ -267,7 +267,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06cd41af-5206-11e5-ae6d-0050568225ca"/>
@@ -288,6 +288,7 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="provisional"/>
                 <onsetPeriod>
                     <start value="2015-08-30T14:12:35.000+05:30"/>
                     <end value="2015-09-04T14:12:35.000+05:30"/>
@@ -296,7 +297,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:6c764a45-175e-485b-b8d5-12ad7fb6bb08"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="6c764a45-175e-485b-b8d5-12ad7fb6bb08"/>
@@ -313,7 +314,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06cf6309-5206-11e5-ae6d-0050568225ca"/>
@@ -334,11 +335,12 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="provisional"/>
             </Condition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:1aa84947-6807-4822-826f-7163b3db0300"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="1aa84947-6807-4822-826f-7163b3db0300"/>
@@ -355,7 +357,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <display value="cough"/>
@@ -369,6 +371,7 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="provisional"/>
                 <onsetPeriod>
                     <start value="2015-09-04T02:12:35.000+05:30"/>
                     <end value="2015-09-04T14:12:35.000+05:30"/>
@@ -377,7 +380,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:0b4c6d17-a3c4-4de3-8078-751fbf69ae26"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="0b4c6d17-a3c4-4de3-8078-751fbf69ae26"/>
@@ -394,7 +397,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <display value="dizzyness"/>
@@ -408,11 +411,12 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="provisional"/>
             </Condition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
@@ -425,7 +429,6 @@
                 </code>
                 <valueDateTime value="2015-09-04T02:02:00.000+05:30"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
                 </identifier>
@@ -440,7 +443,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
@@ -464,7 +467,6 @@
                     </coding>
                 </valueCodeableConcept>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
                 </identifier>
@@ -479,7 +481,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="e230f2da-f347-429d-b659-3c944ab66333"/>
@@ -492,7 +494,6 @@
                 </code>
                 <valueString value="died in hospital"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
                 </identifier>
@@ -507,7 +508,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="00f4adcf-8191-4905-ba55-91074a5ac909"/>
@@ -520,7 +521,6 @@
                 </code>
                 <valueString value="hospital"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
                 </identifier>
@@ -535,7 +535,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
@@ -552,7 +552,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
                 </identifier>
@@ -564,25 +563,25 @@
                     <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
                     </target>
@@ -591,7 +590,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="04e9f317-680c-4ff1-9942-bcb5e2b5243b"/>
@@ -608,7 +607,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/19.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/0795c231-5206-11e5-ae6d-0050568225ca"/>
@@ -629,11 +628,12 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="provisional"/>
             </Condition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:42a6d58c-4da6-4656-ac0a-172a928da9e5"/>
         <resource>
             <DiagnosticOrder xmlns="http://hl7.org/fhir">
                 <id value="42a6d58c-4da6-4656-ac0a-172a928da9e5"/>
@@ -691,7 +691,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:06472534-b4a2-4893-9c2f-a44bebfca5cb"/>
         <resource>
             <Specimen xmlns="http://hl7.org/fhir">
                 <id value="06472534-b4a2-4893-9c2f-a44bebfca5cb"/>
@@ -711,7 +711,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:3d614625-4358-487c-96e9-a775df9579f3"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="3d614625-4358-487c-96e9-a775df9579f3"/>
@@ -731,7 +731,7 @@
                 </relationship>
                 <bornDate value="1954-02-23"/>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06bee5a3-5206-11e5-ae6d-0050568225ca"/>
                             <code value="B54"/>
@@ -742,19 +742,21 @@
                             <code value="06be5b95-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Malaria fever"/>
                         </coding>
-                    </type>
-                    <onsetAge>
+                    </code>
+                    <onsetQuantity>
                         <value value="10.0"/>
-                        <units value="a"/>
+                        <unit value="a"/>
                         <system value="http://unitsofmeasure.org"/>
-                    </onsetAge>
-                    <note value="had fever"/>
+                    </onsetQuantity>
+                    <note>
+                        <text value="had fever"/>
+                    </note>
                 </condition>
             </FamilyMemberHistory>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
@@ -773,7 +775,7 @@
                     </coding>
                 </relationship>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/0795c231-5206-11e5-ae6d-0050568225ca"/>
                             <code value="A90"/>
@@ -784,19 +786,21 @@
                             <code value="07952dc2-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Dengue Fever"/>
                         </coding>
-                    </type>
-                    <onsetAge>
+                    </code>
+                    <onsetQuantity>
                         <value value="30.0"/>
-                        <units value="a"/>
+                        <unit value="a"/>
                         <system value="http://unitsofmeasure.org"/>
-                    </onsetAge>
-                    <note value="had fever"/>
+                    </onsetQuantity>
+                    <note>
+                       <text value="had fever"/>
+                    </note>
                 </condition>
             </FamilyMemberHistory>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:7b78ac79-7607-46fd-aff8-03c0c115857a"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="7b78ac79-7607-46fd-aff8-03c0c115857a"/>
@@ -816,7 +820,7 @@
                 </relationship>
                 <bornDate value="1994-06-14"/>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06bdd78b-5206-11e5-ae6d-0050568225ca"/>
                             <code value="J00"/>
@@ -827,13 +831,13 @@
                             <code value="06bd368a-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Cough and cold"/>
                         </coding>
-                    </type>
+                    </code>
                 </condition>
             </FamilyMemberHistory>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be"/>
         <resource>
             <Immunization xmlns="http://hl7.org/fhir">
                 <id value="554e13d9-25f9-4802-8f21-669249bf51be"/>
@@ -841,13 +845,13 @@
                     <value value="urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be"/>
                 </identifier>
                 <date value="2015-09-03T00:00:00.000+05:30"/>
-                <vaccineType>
+                <vaccineCode>
                     <coding>
                         <system value="http://localhost:9997/openmrs/ws/rest/v1/tr/drugs/28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
                         <code value="28c3c784-c0bf-4cae-bd26-ca76a384085a"/>
                         <display value="BCG"/>
                     </coding>
-                </vaccineType>
+                </vaccineCode>
                 <patient>
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
@@ -876,7 +880,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:92100c03-1da1-45a0-903a-2aefedca18bf"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="92100c03-1da1-45a0-903a-2aefedca18bf"/>
@@ -887,7 +891,6 @@
                 </code>
                 <valueString value="operation done"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:92100c03-1da1-45a0-903a-2aefedca18bf"/>
                 </identifier>
@@ -902,7 +905,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:12f203b8-dd7b-4d32-9381-e4db7dbba7a7"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="12f203b8-dd7b-4d32-9381-e4db7dbba7a7"/>
@@ -913,7 +916,6 @@
                 </code>
                 <valueString value="all fine now"/>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:12f203b8-dd7b-4d32-9381-e4db7dbba7a7"/>
                 </identifier>
@@ -928,7 +930,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f48c1755-d850-458f-9974-15f3f0d35214"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="f48c1755-d850-458f-9974-15f3f0d35214"/>
@@ -954,7 +956,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
@@ -980,7 +982,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:621cdaee-bc78-40a2-9e04-870d5aae2118"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="621cdaee-bc78-40a2-9e04-870d5aae2118"/>
@@ -990,7 +992,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:621cdaee-bc78-40a2-9e04-870d5aae2118"/>
                 </identifier>
@@ -1002,25 +1003,25 @@
                     <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:92100c03-1da1-45a0-903a-2aefedca18bf"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:12f203b8-dd7b-4d32-9381-e4db7dbba7a7"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:f48c1755-d850-458f-9974-15f3f0d35214"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:5fe5b0ca-c338-4397-90c1-d88d319b33c2"/>
                     </target>
@@ -1029,7 +1030,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
@@ -1049,7 +1050,6 @@
                     <value value="100.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
                 </identifier>
@@ -1064,11 +1064,11 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:5c44d7a6-ed3b-4304-9917-dbd9c1074062"/>
         <resource>
             <DiagnosticReport xmlns="http://hl7.org/fhir">
                 <id value="5c44d7a6-ed3b-4304-9917-dbd9c1074062"/>
-                <name>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07adc374-5206-11e5-ae6d-0050568225ca"/>
                         <code value="2162-6"/>
@@ -1079,7 +1079,7 @@
                         <code value="07accf29-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Creatinine [Mass/time] in 24 hour Urine"/>
                     </coding>
-                </name>
+                </code>
                 <status value="final"/>
                 <issued value="2015-09-04T15:09:13.000+05:30"/>
                 <subject>
@@ -1095,7 +1095,7 @@
                 <identifier>
                     <value value="urn:uuid:5c44d7a6-ed3b-4304-9917-dbd9c1074062"/>
                 </identifier>
-                <diagnosticDateTime value="2015-09-04T15:09:13.000+05:30"/>
+                <effectiveDateTime value="2015-09-04T15:09:13.000+05:30"/>
                 <result>
                     <reference value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca" />
                 </result>
@@ -1115,19 +1115,19 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb"/>
         <resource>
             <Procedure xmlns="http://hl7.org/fhir">
                 <id value="4db65ed8-4cc4-428b-895d-da81d20b82fb"/>
                 <identifier>
                     <value value="urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb"/>
                 </identifier>
-                <patient>
+                <subject>
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
-                </patient>
+                </subject>
                 <status value="completed"/>
-                <type>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/079ffd65-5206-11e5-ae6d-0050568225ca"/>
                         <code value="392003006"/>
@@ -1138,7 +1138,7 @@
                         <code value="079f6b0e-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Colposcopy"/>
                     </coding>
-                </type>
+                </code>
                 <performedPeriod>
                     <start value="2015-08-31T00:00:00.000+05:30"/>
                     <end value="2015-09-02T00:00:00.000+05:30"/>
@@ -1154,7 +1154,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
@@ -1174,7 +1174,6 @@
                     <value value="70.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                 </identifier>
@@ -1189,7 +1188,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
@@ -1201,7 +1200,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
                 </identifier>
@@ -1213,19 +1211,19 @@
                     <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
                     </target>
@@ -1234,7 +1232,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="711f3351-20ba-49f2-9774-954fa812d3a4"/>
@@ -1254,7 +1252,6 @@
                     <value value="80.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                 </identifier>
@@ -1269,7 +1266,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="f9519c6e-7e18-48fe-8e26-903da844586d"/>
@@ -1289,7 +1286,6 @@
                     <value value="69.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                 </identifier>
@@ -1304,7 +1300,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="cb144010-c38c-4fcc-975e-ab831ab991ad"/>
@@ -1314,7 +1310,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                 </identifier>
@@ -1326,13 +1321,13 @@
                     <reference value="urn:uuid:34ba3e1c-55c0-434d-b74b-b1bfe6472d4c"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                     </target>
@@ -1341,7 +1336,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="52d4c865-c7d6-450e-9103-d786be461cda"/>
@@ -1361,7 +1356,6 @@
                     <value value="98.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
                 </identifier>

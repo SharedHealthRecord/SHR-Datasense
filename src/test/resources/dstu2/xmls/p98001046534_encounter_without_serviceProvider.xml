@@ -5,7 +5,7 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:71163479-0fa6-4179-83dc-b6f9ab235914"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="71163479-0fa6-4179-83dc-b6f9ab235914"/>
@@ -20,6 +20,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,16 +34,16 @@
                     <reference value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:39f1810a-b437-430f-9318-e6d9208e3df9"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="39f1810a-b437-430f-9318-e6d9208e3df9"/>

@@ -5,7 +5,6 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="e51cc578-c55f-4a8b-a938-777cb0ff8a90"/>
@@ -20,6 +19,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,22 +33,21 @@
                     <reference value="urn:uuid:dd4d51ac-d4b6-42e4-8b50-fa88af41a3e3"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:dd4d51ac-d4b6-42e4-8b50-fa88af41a3e3"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b"/>
                         <display value="Diagnosis"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="dd4d51ac-d4b6-42e4-8b50-fa88af41a3e3"/>
@@ -76,7 +75,6 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
         <resource>
             <Condition xmlns="http://hl7.org/fhir">
                 <id value="04e9f317-680c-4ff1-9942-bcb5e2b5243b"/>
@@ -93,7 +91,7 @@
                 <asserter>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/19.json"/>
                 </asserter>
-                <dateAsserted value="2015-09-04"/>
+                <dateRecorded value="2015-09-04"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/0795c231-5206-11e5-ae6d-0050568225ca"/>
@@ -114,6 +112,7 @@
                     </coding>
                 </category>
                 <clinicalStatus value="confirmed"/>
+                <verificationStatus value="confirmed"/>
             </Condition>
         </resource>
     </entry>

@@ -5,7 +5,7 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f642cb40-5810-43b6-81c7-9f800ce78221"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="f642cb40-5810-43b6-81c7-9f800ce78221"/>
@@ -20,6 +20,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,64 +34,64 @@
                     <reference value="urn:uuid:cfd88241-3af9-4f5b-892a-980a70506f20"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:cfd88241-3af9-4f5b-892a-980a70506f20"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
                         <display value="Creatinine [Mass/volume] in Urine"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:e5854b63-b71a-4590-96d9-d4f3bef4c80a"/>
                         <display value="Diagnostic Report"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:b0a674b5-486a-4975-af43-60fe74b6ed8e"/>
                         <display value="Hemoglobin [Mass/volume] in Blood"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:86571847-d982-4af9-887c-ee8d0fccfde5"/>
                         <display value="Diagnostic Report"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:b85dfe53-6b31-4613-81b4-0af2f3d11c0b"/>
                         <display value="Leukocytes [#/volume] in Blood by Automated count"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:d43c825c-3ec6-4f26-9f4b-a9fb4943dbf8"/>
                         <display value="Diagnostic Report"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:a16ca5a8-eb34-4b1f-b531-987618758c5d"/>
                         <display value="Erythrocytes [#/volume] in Blood by Automated count"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:9ffab950-a760-4119-99f9-91a563c47263"/>
                         <display value="Diagnostic Report"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:cfd88241-3af9-4f5b-892a-980a70506f20"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="cfd88241-3af9-4f5b-892a-980a70506f20"/>
@@ -118,7 +119,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
@@ -138,7 +139,6 @@
                     <value value="60.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
                 </identifier>
@@ -153,11 +153,11 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:e5854b63-b71a-4590-96d9-d4f3bef4c80a"/>
         <resource>
             <DiagnosticReport xmlns="http://hl7.org/fhir">
                 <id value="e5854b63-b71a-4590-96d9-d4f3bef4c80a"/>
-                <name>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07af84be-5206-11e5-ae6d-0050568225ca"/>
                         <code value="2161-8"/>
@@ -168,7 +168,7 @@
                         <code value="07ae6c22-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Creatinine [Mass/volume] in Urine"/>
                     </coding>
-                </name>
+                </code>
                 <status value="final"/>
                 <issued value="2015-09-04T15:17:08.000+05:30"/>
                 <subject>
@@ -184,11 +184,10 @@
                 <identifier>
                     <value value="urn:uuid:e5854b63-b71a-4590-96d9-d4f3bef4c80a"/>
                 </identifier>
-                <requestDetail>
-                    <reference
-                            value="http://172.18.46.156:8081/patients/98001046534/encounters/5c2714ce-3b5a-43e3-afd8-50fbb4c32fa4"/>
-                </requestDetail>
-                <diagnosticDateTime value="2015-09-04T15:15:17.000+05:30"/>
+                <request>
+                    <reference value="http://172.18.46.156:8081/patients/98001046534/encounters/5c2714ce-3b5a-43e3-afd8-50fbb4c32fa4"/>
+                </request>
+                <effectiveDateTime value="2015-09-04T15:15:17.000+05:30"/>
                 <result>
                     <reference value="urn:uuid:394cb368-745f-43cd-a83a-7ea3417eb1ca"/>
                 </result>
@@ -196,7 +195,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:b0a674b5-486a-4975-af43-60fe74b6ed8e"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="b0a674b5-486a-4975-af43-60fe74b6ed8e"/>
@@ -216,7 +215,6 @@
                     <value value="80.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:b0a674b5-486a-4975-af43-60fe74b6ed8e"/>
                 </identifier>
@@ -231,11 +229,11 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:86571847-d982-4af9-887c-ee8d0fccfde5"/>
         <resource>
             <DiagnosticReport xmlns="http://hl7.org/fhir">
                 <id value="86571847-d982-4af9-887c-ee8d0fccfde5"/>
-                <name>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07aac57a-5206-11e5-ae6d-0050568225ca"/>
                         <code value="718-7"/>
@@ -246,7 +244,7 @@
                         <code value="07a9e3a1-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Hemoglobin [Mass/volume] in Blood"/>
                     </coding>
-                </name>
+                </code>
                 <status value="final"/>
                 <issued value="2015-09-04T15:17:08.000+05:30"/>
                 <subject>
@@ -262,11 +260,11 @@
                 <identifier>
                     <value value="urn:uuid:86571847-d982-4af9-887c-ee8d0fccfde5"/>
                 </identifier>
-                <requestDetail>
+                <request>
                     <reference
                             value="http://172.18.46.156:8081/patients/98001046534/encounters/5c2714ce-3b5a-43e3-afd8-50fbb4c32fa4"/>
-                </requestDetail>
-                <diagnosticDateTime value="2015-09-04T15:15:17.000+05:30"/>
+                </request>
+                <effectiveDateTime value="2015-09-04T15:15:17.000+05:30"/>
                 <result>
                     <reference value="urn:uuid:b0a674b5-486a-4975-af43-60fe74b6ed8e"/>
                 </result>
@@ -274,7 +272,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:b85dfe53-6b31-4613-81b4-0af2f3d11c0b"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="b85dfe53-6b31-4613-81b4-0af2f3d11c0b"/>
@@ -294,7 +292,6 @@
                     <value value="75.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:b85dfe53-6b31-4613-81b4-0af2f3d11c0b"/>
                 </identifier>
@@ -309,11 +306,11 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:d43c825c-3ec6-4f26-9f4b-a9fb4943dbf8"/>
         <resource>
             <DiagnosticReport xmlns="http://hl7.org/fhir">
                 <id value="d43c825c-3ec6-4f26-9f4b-a9fb4943dbf8"/>
-                <name>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07a7ac4f-5206-11e5-ae6d-0050568225ca"/>
                         <code value="6690-2"/>
@@ -324,7 +321,7 @@
                         <code value="07a6218b-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Leukocytes [#/volume] in Blood by Automated count"/>
                     </coding>
-                </name>
+                </code>
                 <status value="final"/>
                 <issued value="2015-09-04T15:17:08.000+05:30"/>
                 <subject>
@@ -340,11 +337,11 @@
                 <identifier>
                     <value value="urn:uuid:d43c825c-3ec6-4f26-9f4b-a9fb4943dbf8"/>
                 </identifier>
-                <requestDetail>
+                <request>
                     <reference
                             value="http://172.18.46.156:8081/patients/98001046534/encounters/5c2714ce-3b5a-43e3-afd8-50fbb4c32fa4"/>
-                </requestDetail>
-                <diagnosticDateTime value="2015-09-04T15:15:17.000+05:30"/>
+                </request>
+                <effectiveDateTime value="2015-09-04T15:15:17.000+05:30"/>
                 <result>
                     <reference value="urn:uuid:b85dfe53-6b31-4613-81b4-0af2f3d11c0b"/>
                 </result>
@@ -352,7 +349,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:a16ca5a8-eb34-4b1f-b531-987618758c5d"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="a16ca5a8-eb34-4b1f-b531-987618758c5d"/>
@@ -372,7 +369,6 @@
                     <value value="70.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:a16ca5a8-eb34-4b1f-b531-987618758c5d"/>
                 </identifier>
@@ -387,11 +383,11 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:9ffab950-a760-4119-99f9-91a563c47263"/>
         <resource>
             <DiagnosticReport xmlns="http://hl7.org/fhir">
                 <id value="9ffab950-a760-4119-99f9-91a563c47263"/>
-                <name>
+                <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07a93ed4-5206-11e5-ae6d-0050568225ca"/>
                         <code value="789-8"/>
@@ -402,7 +398,7 @@
                         <code value="07a83ca3-5206-11e5-ae6d-0050568225ca"/>
                         <display value="Erythrocytes [#/volume] in Blood by Automated count"/>
                     </coding>
-                </name>
+                </code>
                 <status value="final"/>
                 <issued value="2015-09-04T15:17:08.000+05:30"/>
                 <subject>
@@ -418,11 +414,11 @@
                 <identifier>
                     <value value="urn:uuid:9ffab950-a760-4119-99f9-91a563c47263"/>
                 </identifier>
-                <requestDetail>
+                <request>
                     <reference
                             value="http://172.18.46.156:8081/patients/98001046534/encounters/5c2714ce-3b5a-43e3-afd8-50fbb4c32fa4"/>
-                </requestDetail>
-                <diagnosticDateTime value="2015-09-04T15:15:17.000+05:30"/>
+                </request>
+                <effectiveDateTime value="2015-09-04T15:15:17.000+05:30"/>
                 <result>
                     <reference value="urn:uuid:a16ca5a8-eb34-4b1f-b531-987618758c5d"/>
                 </result>

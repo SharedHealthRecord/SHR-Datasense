@@ -125,7 +125,7 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldNotSaveNonCodedImmunization() throws Exception {
-        CodeableConceptDt vaccineType = ((Immunization) immunizationResource).getVaccineType();
+        CodeableConceptDt vaccineType = ((Immunization) immunizationResource).getVaccineCode();
         CodingDt codingDt = vaccineType.getCoding().get(0);
         codingDt.setSystem((String) null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));

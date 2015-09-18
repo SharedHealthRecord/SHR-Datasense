@@ -89,7 +89,7 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     }
 
     private void setProcedureType(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
-        CodeableConceptDt codeableConcept = procedureResource.getType();
+        CodeableConceptDt codeableConcept = procedureResource.getCode();
         if (codeableConcept == null) {
             return;
         }

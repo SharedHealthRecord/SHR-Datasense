@@ -5,7 +5,7 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:284bc802-8f5f-4b20-8727-c031d0093a42"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="284bc802-8f5f-4b20-8727-c031d0093a42"/>
@@ -20,6 +20,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,34 +34,34 @@
                     <reference value="urn:uuid:b8d02577-f603-4945-9293-d3e12735b650"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:b8d02577-f603-4945-9293-d3e12735b650"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:3d614625-4358-487c-96e9-a775df9579f3"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:7b78ac79-7607-46fd-aff8-03c0c115857a"/>
                         <display value="Family History"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:b8d02577-f603-4945-9293-d3e12735b650"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="b8d02577-f603-4945-9293-d3e12735b650"/>
@@ -88,7 +89,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:3d614625-4358-487c-96e9-a775df9579f3"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="3d614625-4358-487c-96e9-a775df9579f3"/>
@@ -108,7 +109,7 @@
                 </relationship>
                 <bornDate value="1954-02-23"/>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06bee5a3-5206-11e5-ae6d-0050568225ca"/>
                             <code value="B54"/>
@@ -119,19 +120,21 @@
                             <code value="06be5b95-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Malaria fever"/>
                         </coding>
-                    </type>
-                    <onsetAge>
+                    </code>
+                    <onsetQuantity>
                         <value value="10.0"/>
-                        <units value="a"/>
+                        <unit value="a"/>
                         <system value="http://unitsofmeasure.org"/>
-                    </onsetAge>
-                    <note value="had fever"/>
+                    </onsetQuantity>
+                    <note>
+                        <text value="had fever"/>
+                    </note>
                 </condition>
             </FamilyMemberHistory>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="96798a3e-4f53-4dfb-b8d6-089ff7aaead3"/>
@@ -150,7 +153,7 @@
                     </coding>
                 </relationship>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/0795c231-5206-11e5-ae6d-0050568225ca"/>
                             <code value="A90"/>
@@ -161,19 +164,21 @@
                             <code value="07952dc2-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Dengue Fever"/>
                         </coding>
-                    </type>
-                    <onsetAge>
+                    </code>
+                    <onsetQuantity>
                         <value value="30.0"/>
-                        <units value="a"/>
+                        <unit value="a"/>
                         <system value="http://unitsofmeasure.org"/>
-                    </onsetAge>
-                    <note value="had fever"/>
+                    </onsetQuantity>
+                    <note>
+                       <text value="had fever"/>
+                    </note>
                 </condition>
             </FamilyMemberHistory>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:7b78ac79-7607-46fd-aff8-03c0c115857a"/>
         <resource>
             <FamilyMemberHistory xmlns="http://hl7.org/fhir">
                 <id value="7b78ac79-7607-46fd-aff8-03c0c115857a"/>
@@ -193,7 +198,7 @@
                 </relationship>
                 <bornDate value="1994-06-14"/>
                 <condition>
-                    <type>
+                    <code>
                         <coding>
                             <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/06bdd78b-5206-11e5-ae6d-0050568225ca"/>
                             <code value="J00"/>
@@ -204,7 +209,7 @@
                             <code value="06bd368a-5206-11e5-ae6d-0050568225ca"/>
                             <display value="Cough and cold"/>
                         </coding>
-                    </type>
+                    </code>
                 </condition>
             </FamilyMemberHistory>
         </resource>

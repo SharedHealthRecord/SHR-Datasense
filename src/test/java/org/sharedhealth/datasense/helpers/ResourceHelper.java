@@ -37,4 +37,8 @@ public class ResourceHelper {
         String content = asString(filename);
         return context.newXmlParser().parseResource(content);
     }
+
+    public static FhirContext getFhirContext() {
+        return context;
+    }
 }

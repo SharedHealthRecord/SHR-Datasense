@@ -5,7 +5,7 @@
     </meta>
     <type value="collection"/>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:210d4435-bdf4-4824-82bd-f0ea477a8c82"/>
         <resource>
             <Composition xmlns="http://hl7.org/fhir">
                 <id value="210d4435-bdf4-4824-82bd-f0ea477a8c82"/>
@@ -20,6 +20,7 @@
                         <display value="Details Document"/>
                     </coding>
                 </type>
+                <title value="encounter composition for patient 98001046534"/>
                 <status value="final"/>
                 <confidentiality value="N"/>
                 <subject>
@@ -33,52 +34,52 @@
                     <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
                 </encounter>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
                         <display value="Encounter"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                         <display value="Systolic blood pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                         <display value="Diastolic blood pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                         <display value="Blood Pressure"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                         <display value="Pulse"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
                         <display value="Temperature"/>
-                    </content>
+                    </entry>
                 </section>
                 <section>
-                    <content>
+                    <entry>
                         <reference value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
                         <display value="Vitals"/>
-                    </content>
+                    </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
         <resource>
             <Encounter xmlns="http://hl7.org/fhir">
                 <id value="b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
@@ -106,7 +107,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="711f3351-20ba-49f2-9774-954fa812d3a4"/>
@@ -126,7 +127,6 @@
                     <value value="80.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                 </identifier>
@@ -141,7 +141,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="f9519c6e-7e18-48fe-8e26-903da844586d"/>
@@ -161,7 +161,6 @@
                     <value value="69.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                 </identifier>
@@ -176,7 +175,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="cb144010-c38c-4fcc-975e-ab831ab991ad"/>
@@ -186,7 +185,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                 </identifier>
@@ -198,13 +196,13 @@
                     <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:711f3351-20ba-49f2-9774-954fa812d3a4"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:f9519c6e-7e18-48fe-8e26-903da844586d"/>
                     </target>
@@ -213,7 +211,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
@@ -233,7 +231,6 @@
                     <value value="70.0"/>
                 </valueQuantity>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                 </identifier>
@@ -248,10 +245,14 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="52d4c865-c7d6-450e-9103-d786be461cda"/>
+                <identifier>
+                    <value value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
+                </identifier>
+                <status value="final"/>
                 <code>
                     <coding>
                         <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/07b41655-5206-11e5-ae6d-0050568225ca"/>
@@ -267,11 +268,6 @@
                 <valueQuantity>
                     <value value="98.0"/>
                 </valueQuantity>
-                <status value="final"/>
-                <reliability value="ok"/>
-                <identifier>
-                    <value value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
-                </identifier>
                 <subject>
                     <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
                     <display value="98001046534"/>
@@ -283,7 +279,7 @@
         </resource>
     </entry>
     <entry>
-        <base value="urn:uuid:"/>
+        <fullUrl value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
         <resource>
             <Observation xmlns="http://hl7.org/fhir">
                 <id value="a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
@@ -295,7 +291,6 @@
                     </coding>
                 </code>
                 <status value="final"/>
-                <reliability value="ok"/>
                 <identifier>
                     <value value="urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1"/>
                 </identifier>
@@ -307,19 +302,19 @@
                     <reference value="urn:uuid:b7cd7b5e-5758-4a8a-ba9f-0e3735730aa6"/>
                 </encounter>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:f95dcc54-702b-47b7-ad37-fbff3dcbf336"/>
                     </target>
                 </related>
                 <related>
-                    <type value="has-component"/>
+                    <type value="has-member"/>
                     <target>
                         <reference value="urn:uuid:52d4c865-c7d6-450e-9103-d786be461cda"/>
                     </target>

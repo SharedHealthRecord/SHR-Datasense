@@ -96,7 +96,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     }
 
     private void setMedicationCodes(Immunization immunization, Medication medication) {
-        List<CodingDt> codings = immunization.getVaccineType().getCoding();
+        List<CodingDt> codings = immunization.getVaccineCode().getCoding();
         for (CodingDt coding : codings) {
             String system = coding.getSystem();
             if (system != null && isTrMedicationUrl(system)) {

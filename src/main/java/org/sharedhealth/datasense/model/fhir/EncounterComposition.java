@@ -41,7 +41,11 @@ public class EncounterComposition {
     public ArrayList<IResource> getCompositionRefResources() {
         ArrayList<IResource> resources = new ArrayList<>();
         for (Composition.Section section : composition.getSection()) {
-            IResource resourceForReference = context.getResourceForReference(section.getContent());
+            List<ResourceReferenceDt> entry = section.getEntry();
+            if (entry.isEmpty()) {
+                break;
+            }
+            IResource resourceForReference = context.getResourceForReference(entry.get(0));
             if (!(resourceForReference instanceof Encounter)) {
                 resources.add(resourceForReference);
             }

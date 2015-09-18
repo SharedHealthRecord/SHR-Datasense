@@ -1,9 +1,11 @@
 package org.sharedhealth.datasense.handler;
 
 import ca.uhn.fhir.model.api.IResource;
+import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.resource.Condition;
+import ca.uhn.fhir.model.dstu2.valueset.ConditionCategoryCodesEnum;
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
@@ -31,9 +33,9 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
     public boolean canHandle(IResource resource) {
         if (resource instanceof Condition) {
             Condition condition = (Condition) resource;
-            CodeableConceptDt category = condition.getCategory();
+            BoundCodeableConceptDt<ConditionCategoryCodesEnum> category = condition.getCategory();
             for (CodingDt coding : category.getCoding()) {
-                if (coding.getCode().equalsIgnoreCase("Diagnosis")) {
+                if (coding.getCode().equalsIgnoreCase("diagnosis")) {
                     return true;
                 }
             }
@@ -48,7 +50,7 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
         diagnosis.setPatient(composition.getPatientReference().getValue());
         diagnosis.setEncounter(composition.getEncounterReference().getValue());
         populateDiagnosisCodes(diagnosis, fhirDiagnosis.getCode().getCoding());
-        Date dateAsserted = fhirDiagnosis.getDateAsserted();
+        Date dateAsserted = fhirDiagnosis.getDateRecorded();
         Date date = dateAsserted != null ? dateAsserted : composition.getEncounterReference().getValue().getEncounterDateTime();
         diagnosis.setDiagnosisDateTime(date);
         diagnosis.setDiagnosisStatus(fhirDiagnosis.getClinicalStatus());
