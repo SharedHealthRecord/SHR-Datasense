@@ -2,14 +2,12 @@ package org.sharedhealth.datasense.handler;
 
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.resource.Condition;
 import ca.uhn.fhir.model.dstu2.valueset.ConditionCategoryCodesEnum;
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
-import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -71,4 +69,5 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
             }
         }
     }
+
 }

@@ -101,6 +101,9 @@
                 <requester>
                     <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
                 </requester>
+                <performer>
+                    <reference value="http://172.18.46.199:8080/api/1.0/providers/19.json"/>
+                </performer>
                 <encounter>
                     <reference value="urn:uuid:5ad37e7b-d800-49d7-9c7d-8872c0612ffb"/>
                 </encounter>
