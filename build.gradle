@@ -137,7 +137,7 @@ task debugDatasense(type: JavaExec) {
 
 task dist(type: Rpm, dependsOn: ['build']) {
     packageName = 'datasense'
-    version = '0.1'
+    version = '0.2'
     release = project.hasProperty('release') ? project.release : '1'
     arch = NOARCH
     os = LINUX
