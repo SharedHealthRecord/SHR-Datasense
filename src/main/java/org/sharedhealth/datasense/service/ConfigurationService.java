@@ -8,9 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class ConfigurationService {
+    public static final String EMPTY_STR = "";
     @Autowired
     ConfigurationDao configurationDao;
 
@@ -29,52 +31,52 @@ public class ConfigurationService {
         return configurationDao.parameterById(paramId);
     }
 
-    /**
-     * TODO
-     * Should cache parameters. Invalidate on Save
-     * @param parameter
-     */
+    private ConcurrentHashMap<String, Parameter> parameterCache = new ConcurrentHashMap<>();
+
+    private List<String> parametersInCache = Arrays.asList(CIRCUMSTANCES_OF_DEATH_UUID, CAUSE_OF_DEATH_UUID, DEATH_CODES, DATE_OF_DEATH_UUID);
+
     public void save(Parameter parameter) {
         configurationDao.save(parameter);
+        if (parametersInCache.contains(parameter.getParamName())) {
+            parameterCache.remove(parameter.getParamName());
+        }
     }
 
     public Parameter parameterByName(String paramName) {
         return configurationDao.parameterByName(paramName);
     }
 
-    /**
-     * Should cache parameter. Invalidate during save param
-     * @return
-     */
+    private Parameter findParameter(String paramName) {
+        String nameOfParameter = paramName.trim();
+        if (parametersInCache.contains(nameOfParameter)) {
+            Parameter parameter = parameterCache.get(nameOfParameter);
+            if (parameter == null) {
+                parameter = parameterByName(nameOfParameter);
+                parameterCache.put(nameOfParameter, parameter);
+            }
+            return parameter;
+        } else {
+            return parameterByName(nameOfParameter);
+        }
+    }
+
     public List<String> getDeathCodes() {
-        Parameter deathCodes = parameterByName(DEATH_CODES);
+        Parameter deathCodes = findParameter(DEATH_CODES);
         return Arrays.asList(deathCodes.getParamValue().split(","));
     }
 
-    /**
-     * Should cache parameter. Invalidate during save param
-     * @return
-     */
     public String getDateOfDeathUuid() {
-        Parameter param = parameterByName(DATE_OF_DEATH_UUID);
-        return param.getParamValue();
+        Parameter param = findParameter(DATE_OF_DEATH_UUID);
+        return (param != null) ? param.getParamValue() : EMPTY_STR;
     }
 
-    /**
-     * Should cache parameter. Invalidate during save param
-     * @return
-     */
     public String getCircumstancesOfDeathUuid() {
-        Parameter param = parameterByName(CIRCUMSTANCES_OF_DEATH_UUID);
-        return param.getParamValue();
+        Parameter param = findParameter(CIRCUMSTANCES_OF_DEATH_UUID);
+        return (param != null) ? param.getParamValue() : EMPTY_STR;
     }
 
-    /**
-     * Should cache parameter. Invalidate during save param
-     * @return
-     */
     public String getCauseOfDeath() {
-        Parameter param = parameterByName(CAUSE_OF_DEATH_UUID);
-        return param.getParamValue();
+        Parameter param = findParameter(CAUSE_OF_DEATH_UUID);
+        return (param != null) ? param.getParamValue() : EMPTY_STR;
     }
 }
