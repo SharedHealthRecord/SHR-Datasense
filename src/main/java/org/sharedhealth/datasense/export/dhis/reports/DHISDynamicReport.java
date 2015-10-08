@@ -13,12 +13,15 @@ import org.sharedhealth.datasense.aqs.AqsFTLProcessor;
 import org.sharedhealth.datasense.client.DHIS2Client;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
+import org.sharedhealth.datasense.model.Parameter;
+import org.sharedhealth.datasense.service.ConfigurationService;
 import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.sharedhealth.datasense.util.HeaderUtil.getDhisHeaders;
 
@@ -31,18 +34,23 @@ public class DHISDynamicReport {
     final DatasenseProperties datasenseProperties;
     final AqsFTLProcessor aqsFTLProcessor;
     final DHIS2Client dhis2Client;
+    private ConfigurationService configurationService;
 
     @Autowired
-    public DHISDynamicReport(DataSource dataSource, DatasenseProperties datasenseProperties, AqsFTLProcessor aqsFTLProcessor, DHIS2Client dhis2Client) {
+    public DHISDynamicReport(DataSource dataSource, DatasenseProperties datasenseProperties,
+                             AqsFTLProcessor aqsFTLProcessor, DHIS2Client dhis2Client,
+                             ConfigurationService configurationService) {
         this.dataSource = dataSource;
         this.datasenseProperties = datasenseProperties;
         this.aqsFTLProcessor = aqsFTLProcessor;
         this.dhis2Client = dhis2Client;
+        this.configurationService = configurationService;
     }
 
     public void process(JobDataMap mergedJobDataMap) {
 
         HashMap<String, String> queryParams = new HashMap<>();
+
         String reportingStartDate = (String) mergedJobDataMap.get("paramStartDate");
         String reportingEndDate = (String) mergedJobDataMap.get("paramEndDate");
         String reportingPeriod = (String) mergedJobDataMap.get("paramReportingPeriod");
@@ -50,9 +58,6 @@ public class DHISDynamicReport {
         String facilityId = (String) mergedJobDataMap.get("paramFacilityId");
         String orgUnitId = (String) mergedJobDataMap.get("paramOrgUnitId");
         String datasetId = (String) mergedJobDataMap.get("paramDatasetId");
-        String pncGivenWithin48HoursUUID = (String) mergedJobDataMap.get("pncGivenWithin48HoursUUID");
-        String newBornCareUUID = (String) mergedJobDataMap.get("newBornCare");
-        String pentaThreeDrugUuid = (String) mergedJobDataMap.get("pentaThreeDrugUuid");
 
         queryParams.put("paramStartDate", reportingStartDate);
         queryParams.put("paramEndDate", reportingEndDate);
@@ -60,9 +65,11 @@ public class DHISDynamicReport {
         queryParams.put("paramFacilityId", facilityId);
         queryParams.put("paramDatasetId", datasetId);
         queryParams.put("paramOrgUnitId", orgUnitId);
-        queryParams.put("pncGivenWithin48HoursUUID", pncGivenWithin48HoursUUID);
-        queryParams.put("newBornCare", newBornCareUUID);
-        queryParams.put("pentaThreeDrugUuid", pentaThreeDrugUuid);
+
+        List<Parameter> parameters = configurationService.allParameters();
+        for (Parameter parameter : parameters) {
+            queryParams.put(parameter.getParamName(), parameter.getParamValue());
+        }
 
         String configFile = (String) mergedJobDataMap.get("paramConfigFile");
 

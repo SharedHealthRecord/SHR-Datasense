@@ -1,17 +1,20 @@
 package org.sharedhealth.datasense.dhis2.service;
 
 import org.apache.log4j.Logger;
-import org.quartz.*;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SimpleTrigger;
+import org.quartz.Trigger;
 import org.quartz.impl.matchers.GroupMatcher;
-import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
 import org.sharedhealth.datasense.dhis2.repository.DHISConfigDao;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISQuartzJob;
-import org.sharedhealth.datasense.model.Parameter;
-import org.sharedhealth.datasense.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
@@ -28,16 +31,12 @@ public class JobSchedulerService {
     private static final Logger logger = Logger.getLogger(JobSchedulerService.class);
     private Scheduler scheduler;
     private DHISConfigDao dhisMapDao;
-    private DatasenseProperties datasenseProperties;
-    private ConfigurationService configurationService;
 
 
     @Autowired
-    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao, DatasenseProperties datasenseProperties, ConfigurationService configurationService) {
+    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao) {
         this.scheduler = scheduler;
         this.dhisMapDao = dhisMapDao;
-        this.datasenseProperties = datasenseProperties;
-        this.configurationService = configurationService;
     }
 
     public void scheduleJob(ReportScheduleRequest scheduleRequest) throws SchedulerException {
@@ -71,14 +70,7 @@ public class JobSchedulerService {
             jobDataMap.put("paramConfigFile", configForDataset.getConfigFile());
             jobDataMap.put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
 
-            List<Parameter> parameters = configurationService.allParameters();
-            for (Parameter parameter : parameters) {
-                jobDataMap.put(parameter.getParamName(), parameter.getParamValue());
-            }
-
-
             String datasetName =  scheduleRequest.getDatasetName();
-
 
             String triggerName = jobName + "-TRIGGER";
             SimpleTrigger trigger = (SimpleTrigger) newTrigger()
