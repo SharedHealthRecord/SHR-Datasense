@@ -2,13 +2,13 @@ package org.sharedhealth.datasense.feeds.encounters;
 
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.codec.binary.Base64;
-import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
-import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.feeds.AllFailedEventsInMemoryImpl;
+import org.sharedhealth.datasense.feeds.AllMarkersInMemoryImpl;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.sharedhealth.datasense.model.EncounterBundle;

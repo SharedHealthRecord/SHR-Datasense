@@ -10,6 +10,7 @@ import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.PatientDeathDetails;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.PatientDeathDetailsDao;
+import org.sharedhealth.datasense.service.ConfigurationService;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,15 +24,15 @@ import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 @Component
 public class DeathNoteHandler implements FhirResourceHandler {
 
-    private DatasenseProperties datasenseProperties;
     private PatientDeathDetailsDao patientDeathDetailsDao;
+    private ConfigurationService configurationService;
     private ObservationValueMapper observationValueMapper;
 
 
     @Autowired
-    public DeathNoteHandler(DatasenseProperties datasenseProperties, PatientDeathDetailsDao patientDeathDetailsDao) {
-        this.datasenseProperties = datasenseProperties;
+    public DeathNoteHandler(PatientDeathDetailsDao patientDeathDetailsDao, ConfigurationService configurationService) {
         this.patientDeathDetailsDao = patientDeathDetailsDao;
+        this.configurationService = configurationService;
         this.observationValueMapper = new ObservationValueMapper();
     }
 
@@ -40,7 +41,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
         if (resource instanceof Observation) {
             List<CodingDt> codings = ((Observation) resource).getCode().getCoding();
             for (CodingDt coding : codings) {
-                if (datasenseProperties.getDeathCodes().contains(coding.getCode())) {
+                if (configurationService.getDeathCodes().contains(coding.getCode())) {
                     return true;
                 }
             }
@@ -68,7 +69,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private void mapCauseOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
-        Observation causeOfDeathObservation = findObservation(composition, deathNoteObservation, datasenseProperties.getCauseOfDeath());
+        Observation causeOfDeathObservation = findObservation(composition, deathNoteObservation, configurationService.getCauseOfDeath());
         if (causeOfDeathObservation != null && causeOfDeathObservation.getValue() != null) {
             CodeableConceptDt codeableConcept = (CodeableConceptDt) causeOfDeathObservation.getValue();
             for (CodingDt code : codeableConcept.getCoding()) {
@@ -82,7 +83,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private String getCircumstancesOfDeath(EncounterComposition composition, Observation deathNoteObservation) {
-        Observation circumstancesOfDeathObservation = findObservation(composition, deathNoteObservation, datasenseProperties.getCircumstancesOfDeathUuid());
+        Observation circumstancesOfDeathObservation = findObservation(composition, deathNoteObservation, configurationService.getCircumstancesOfDeathUuid());
         if (circumstancesOfDeathObservation != null && circumstancesOfDeathObservation.getValue() != null) {
             String observationValue = observationValueMapper.getObservationValue(circumstancesOfDeathObservation.getValue());
             return observationValue != null ? observationValue.substring(0, Math.min(observationValue.length(), 500)) : null;
@@ -91,7 +92,7 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private void mapDateOfDeathAndPatientAge(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation, Encounter encounter) {
-        Observation dateOfDeathObs = findObservation(composition, deathNoteObservation, datasenseProperties.getDateOfDeathUuid());
+        Observation dateOfDeathObs = findObservation(composition, deathNoteObservation, configurationService.getDateOfDeathUuid());
         Date dateOfDeath = getDateValue(encounter, dateOfDeathObs);
         patientDeathDetails.setDateOfDeath(dateOfDeath);
     }
@@ -125,4 +126,6 @@ public class DeathNoteHandler implements FhirResourceHandler {
         }
         return false;
     }
+
+
 }

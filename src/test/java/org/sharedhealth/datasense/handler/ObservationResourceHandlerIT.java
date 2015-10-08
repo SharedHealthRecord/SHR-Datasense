@@ -10,6 +10,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.BaseIntegrationTest;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -41,7 +42,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadResourceFrom
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
-public class ObservationResourceHandlerIT {
+public class ObservationResourceHandlerIT extends BaseIntegrationTest {
     private final String SHR_ENCOUNTER_ID = "shrEncounterId";
     private final String HEALTH_ID = "98001046534";
     private final String VITALS_RESOURCE_REFERENCE = "urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1";

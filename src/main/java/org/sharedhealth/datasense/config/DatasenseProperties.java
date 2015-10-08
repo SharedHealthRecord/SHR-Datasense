@@ -53,19 +53,12 @@ public class DatasenseProperties implements EnvironmentAware {
     private String datasenseFacilityId;
     private String datasenseCatchmentList;
     //Tr Reference Code
-    private List<String> deathCodes;
-
-    private String dateOfDeathUuid;
-    private String circumstancesOfDeathUuid;
-    private String causeOfDeath;
     private String cloudHostedFacilityIds;
 
     private String maxFailedEvents;
 
     private String idpServerUserInfoUrl;
     private String dhisBaseUrl;
-    private String pncGivenWithin48Hours;
-    private String newBornCareUuid;
     private String pentaThreeDrugUuid;
 
     @Override
@@ -84,13 +77,6 @@ public class DatasenseProperties implements EnvironmentAware {
         this.trMedicationAtomFeedPath = env.getProperty("TR_MEDICATION_ATOMFEED_PATH");
         this.trUser = env.getProperty("TR_USER");
         this.trPassword = env.getProperty("TR_PASSWORD");
-        this.deathCodes = asList(env.getProperty("DEATH_CODES").split(","));
-        this.dateOfDeathUuid = env.getProperty("DATE_OF_DEATH_UUID");
-        this.circumstancesOfDeathUuid = env.getProperty("CIRCUMSTANCES_OF_DEATH_UUID");
-        this.causeOfDeath = env.getProperty("CAUSE_OF_DEATH_UUID");
-        this.pncGivenWithin48Hours = env.getProperty("PNC_GIVEN_WITHIN_48_HOURS_AFTER_BIRTH_UUID");
-        this.newBornCareUuid = env.getProperty("NEW_BORN_CARE_UUID");
-        this.pentaThreeDrugUuid = env.getProperty("PENTA_THREE_DRUG_UUID");
         this.cloudHostedFacilityIds = env.getProperty("CLOUD_HOSTED_FACILITY_IDs");
         this.shrServerUrl = env.getProperty("SHR_SERVER_URL");
         this.mciServerUrl = env.getProperty("MCI_SERVER_URL");
@@ -187,22 +173,6 @@ public class DatasenseProperties implements EnvironmentAware {
         return dhisAqsConfigPath;
     }
 
-    public List<String> getDeathCodes() {
-        return deathCodes;
-    }
-
-    public String getDateOfDeathUuid() {
-        return dateOfDeathUuid;
-    }
-
-    public String getCircumstancesOfDeathUuid() {
-        return circumstancesOfDeathUuid;
-    }
-
-    public String getCauseOfDeath() {
-        return causeOfDeath;
-    }
-
     public String getPrProviderUrl() {
         return providerRegistryUrl.trim();
     }
@@ -235,18 +205,6 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getDhisDataValueSetsUrl() {
         return StringUtil.ensureSuffix(dhisBaseUrl.trim(), "/") + "api/dataValueSets";
-    }
-
-    public String getPncGivenWithin48HoursUuid() {
-        return pncGivenWithin48Hours;
-    }
-
-    public String getNewBornCareUuid() {
-        return newBornCareUuid;
-    }
-
-    public String getPentaThreeDrugUuid() {
-        return pentaThreeDrugUuid;
     }
 
     public String getAqsQueryLocationPath() {

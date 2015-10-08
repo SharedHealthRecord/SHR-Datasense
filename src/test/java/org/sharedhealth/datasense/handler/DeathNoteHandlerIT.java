@@ -7,6 +7,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.BaseIntegrationTest;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -35,7 +36,7 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
-public class DeathNoteHandlerIT {
+public class DeathNoteHandlerIT extends BaseIntegrationTest {
 
     @Autowired
     private DeathNoteHandler deathNoteHandler;

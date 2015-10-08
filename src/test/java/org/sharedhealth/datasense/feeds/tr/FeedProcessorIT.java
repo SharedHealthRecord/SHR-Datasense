@@ -1,13 +1,13 @@
 package org.sharedhealth.datasense.feeds.tr;
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.ict4h.atomfeed.client.repository.memory.AllFailedEventsInMemoryImpl;
-import org.ict4h.atomfeed.client.repository.memory.AllMarkersInMemoryImpl;
 import org.junit.After;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.feeds.AllFailedEventsInMemoryImpl;
+import org.sharedhealth.datasense.feeds.AllMarkersInMemoryImpl;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;

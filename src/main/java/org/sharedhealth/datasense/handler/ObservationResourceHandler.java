@@ -8,6 +8,7 @@ import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.ObservationDao;
+import org.sharedhealth.datasense.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,12 +21,12 @@ import static org.sharedhealth.datasense.util.FhirCodeLookup.getReferenceCode;
 public class ObservationResourceHandler implements FhirResourceHandler {
     private ObservationDao observationDao;
     private ObservationValueMapper observationValueMapper;
-    private DatasenseProperties datasenseProperties;
+    private ConfigurationService configurationService;
 
     @Autowired
-    public ObservationResourceHandler(ObservationDao observationDao, DatasenseProperties datasenseProperties) {
+    public ObservationResourceHandler(ObservationDao observationDao, ConfigurationService configurationService) {
         this.observationDao = observationDao;
-        this.datasenseProperties = datasenseProperties;
+        this.configurationService = configurationService;
         this.observationValueMapper = new ObservationValueMapper();
     }
 
@@ -36,7 +37,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         } else {
             List<CodingDt> codingDts = ((ca.uhn.fhir.model.dstu2.resource.Observation) resource).getCode().getCoding();
             for (CodingDt coding : codingDts) {
-                if (datasenseProperties.getDeathCodes().contains(coding.getCode())) {
+                if (configurationService.getDeathCodes().contains(coding.getCode())) {
                     return false;
                 }
             }

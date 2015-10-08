@@ -3,7 +3,10 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
+    <script src="/scripts/dhisSearch.js"></script>
+    <script src="/scripts/script.js"/>
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
 </head>
 <body>
@@ -26,31 +29,54 @@
         </div>
     </div>
 </div>
-<div class="container">
-    <h2>dataSense</h2>
-    <ul class="nav nav-tabs">
-        <li class="active"><a data-toggle="tab" href="#home">DHIS 2</a></li>
-        <li><a data-toggle="tab" href="#menuAbout">About</a></li>
-    </ul>
 
-    <div class="tab-content">
-        <div id="home" class="tab-pane fade in active">
-            <h3>DHIS2 Intregration</h3>
-            <ul class="nav nav-pills nav-stacked" role="tablist">
-                <li class="active"><a href="/dhis2/reports">Manage Reports</a></li>
-                <li class="active"><a href="/dhis2/orgUnits">Manage Facilities</a></li>
-                <li class="active"><a href="/config/parameters">Manage Parameters</a></li>
-            </ul>
+<div class="container">
+    <div>
+        <h2>&nbsp;</h2>
+    </div>
+    <div>
+        <h2>Available Parameters</h2>
+        <div>
+            <a href="/config/parameters/define" >
+                Define new Parameter
+            </a>
         </div>
-        <div id="menuAbout" class="tab-pane fade">
-            <h3>Hello there</h3>
-            <p>Welcome to DataSense Admin Console. DataSense is one of the subsystems in HIE, processing information from SHR by catchment(s).</p>
-        </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Type</th>
+                <th>Value</th>
+                <th>Data Type</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="param: ${paramList}">
+                <td th:text="${param.paramName}">Parameter name</td>
+                <td th:text="${param.paramType}">Parameter Type</td>
+                <td th:text="${param.paramValue}">Parameter Value</td>
+                <td th:text="${param.dataType}">Parameter Data type</td>
+                <td>
+                    <a th:href="|/config/parameters/${param.paramId}/edit|" >
+                        <img src="/images/configure.png" alt="Edit" class="button-in-td"/>
+                    </a>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 
-<div class="container">
-    <div th:replace="fragments/footer :: footer"></div>
-</div>
+
+
+
+
+
+<div th:replace="fragments/footer :: footer"></div>
+
+
+
 </body>
 </html>
+

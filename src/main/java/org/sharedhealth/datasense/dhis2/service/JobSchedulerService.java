@@ -10,6 +10,8 @@ import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
 import org.sharedhealth.datasense.dhis2.repository.DHISConfigDao;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISQuartzJob;
+import org.sharedhealth.datasense.model.Parameter;
+import org.sharedhealth.datasense.service.ConfigurationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
@@ -27,13 +29,15 @@ public class JobSchedulerService {
     private Scheduler scheduler;
     private DHISConfigDao dhisMapDao;
     private DatasenseProperties datasenseProperties;
+    private ConfigurationService configurationService;
 
 
     @Autowired
-    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao, DatasenseProperties datasenseProperties) {
+    public JobSchedulerService(Scheduler scheduler, DHISConfigDao dhisMapDao, DatasenseProperties datasenseProperties, ConfigurationService configurationService) {
         this.scheduler = scheduler;
         this.dhisMapDao = dhisMapDao;
         this.datasenseProperties = datasenseProperties;
+        this.configurationService = configurationService;
     }
 
     public void scheduleJob(ReportScheduleRequest scheduleRequest) throws SchedulerException {
@@ -57,17 +61,21 @@ public class JobSchedulerService {
             jobFactory.afterPropertiesSet();
 
             JobDetail jobDetail = jobFactory.getObject();
-            jobDetail.getJobDataMap().put("paramStartDate", scheduleRequest.reportPeriod().startDate());
-            jobDetail.getJobDataMap().put("paramEndDate",   scheduleRequest.reportPeriod().endDate());
-            jobDetail.getJobDataMap().put("paramPeriodType", scheduleRequest.getPeriodType());
-            jobDetail.getJobDataMap().put("paramFacilityId", facilityId);
-            jobDetail.getJobDataMap().put("paramDatasetId", datasetId);
-            jobDetail.getJobDataMap().put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
-            jobDetail.getJobDataMap().put("paramConfigFile", configForDataset.getConfigFile());
-            jobDetail.getJobDataMap().put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
-            jobDetail.getJobDataMap().put("pncGivenWithin48HoursUUID", datasenseProperties.getPncGivenWithin48HoursUuid());
-            jobDetail.getJobDataMap().put("newBornCare", datasenseProperties.getNewBornCareUuid());
-            jobDetail.getJobDataMap().put("pentaThreeDrugUuid", datasenseProperties.getPentaThreeDrugUuid());
+            JobDataMap jobDataMap = jobDetail.getJobDataMap();
+            jobDataMap.put("paramStartDate", scheduleRequest.reportPeriod().startDate());
+            jobDataMap.put("paramEndDate", scheduleRequest.reportPeriod().endDate());
+            jobDataMap.put("paramPeriodType", scheduleRequest.getPeriodType());
+            jobDataMap.put("paramFacilityId", facilityId);
+            jobDataMap.put("paramDatasetId", datasetId);
+            jobDataMap.put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
+            jobDataMap.put("paramConfigFile", configForDataset.getConfigFile());
+            jobDataMap.put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
+
+            List<Parameter> parameters = configurationService.allParameters();
+            for (Parameter parameter : parameters) {
+                jobDataMap.put(parameter.getParamName(), parameter.getParamValue());
+            }
+
 
             String datasetName =  scheduleRequest.getDatasetName();
 

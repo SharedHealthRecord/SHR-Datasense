@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <link rel="stylesheet" href="/css/datepicker.css"/>
+    <script src="/scripts/jquery-2.1.3.min.js"></script>
+    <script src="/scripts/script.js"/>
+    <script src="/scripts/mustache.min.js"></script>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap-datepicker.js"></script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/header.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static header</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+            <div>
+                <h2>&nbsp;</h2>
+            </div>
+            <div>
+                <h3>Define Parameter</h3>
+            </div>
+            <div>
+                <form role="form" method="post" id="configureParameter" action="/config/parameters/define" class="form-horizontal">
+                    <div id="formErrors" class="alert alert-danger" role="alert" th:classappend="${formErrors != null} ? show : hidden"
+                         th:each="errorMessage : ${formErrors}">
+                        <span th:text="${errorMessage}">Error Occurred</span>.
+                    </div>
+                    <input id="paramIdEle" name="paramId" type="hidden" th:value="${configParameter.paramId}" />
+                    <!--
+                    <input id="paramDataTypeEle" name="dataType" type="hidden" value="String" />
+                    -->
+
+                    <div class="form-group">
+                        <label for="paramName" class="control-label col-sm-2">Parameter Name</label>
+                        <div class="col-sm-10">
+                            <input id="paramName" name="paramName" type="text" class="form-control" placeholder="Enter Parameter name" th:value="${configParameter.paramName}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paramValue" class="control-label col-sm-2">Parameter Value</label>
+                        <div class="col-sm-10">
+                            <input id="paramValue" name="paramValue" type="text" class="form-control" placeholder="Enter value for Parameter" th:value="${configParameter.paramValue}"/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="paramType" class="control-label col-sm-2">Parameter Type</label>
+                        <div class="col-sm-10">
+                            <select id="paramType" name="paramType" class="form-control">
+                                <option th:each="supportedParamType : ${supportedParameterTypes}"
+                                        th:value="${supportedParamType}" th:text="${supportedParamType}" th:selected="${supportedParamType.equals(configParameter.paramType)}">
+                                    Select Option
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="dataType" class="control-label col-sm-2">Data Type</label>
+                        <div class="col-sm-10">
+                            <select id="dataType" name="dataType" class="form-control">
+                                <option th:each="supportedDataType : ${supportedParamDataTypes}"
+                                        th:value="${supportedDataType}" th:text="${supportedDataType}" th:selected="${supportedDataType.equals(configParameter.dataType)}">
+                                    String
+                                </option>
+                            </select>
+                            <!--
+                            <input id="dataType" name="dataType" type="text" class="form-control" th:value="${configParameter.dataType}"/>
+                            -->
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <input type="submit" class="btn btn-default" value="Submit"/>
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+</div>
+
+<div class="container">
+    <div th:replace="fragments/footer :: footer"></div>
+</div>
+</body>
+</html>
+

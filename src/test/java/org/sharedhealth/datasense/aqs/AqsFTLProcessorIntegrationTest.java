@@ -1,14 +1,13 @@
 package org.sharedhealth.datasense.aqs;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.client.DHIS2Client;
-import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -27,6 +26,12 @@ public class AqsFTLProcessorIntegrationTest {
 
     @Autowired
     DHIS2Client dhis2Client;
+
+    @Before
+    public void setUp() throws Exception {
+
+
+    }
 
     @Test
     @Ignore

@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.sharedhealth.datasense.BaseIntegrationTest;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
@@ -39,7 +40,7 @@ import static org.sharedhealth.datasense.util.HeaderUtil.CLIENT_ID_KEY;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
-public class DefaultShrEncounterEventWorkerIntegrationTest {
+public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrationTest {
 
     @Autowired
     private EncounterEventWorker encounterEventWorker;
@@ -62,6 +63,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
+        super.loadConfigParameters();
         String authToken = "b7aa1f4001ac4b922dabd6a02a0dabc44cf5af74a0d1b68003ce7ccdb897a1d2";
         UUID token = UUID.randomUUID();
 
