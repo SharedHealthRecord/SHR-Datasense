@@ -46,7 +46,7 @@ public class PatientDaoIT {
         patient.setHid(hid);
 
         Map<String, Object> fields = new HashMap<String, Object>(){{
-            put("dob", "1990-02-14T00:00:00.000+05:30");
+            put("dob", "1990-02-14T14:20:00.000+05:30");
             put("gender", "M");
             put("address", new Address("","30","26","15",null,null, null,null));
         }};
@@ -55,7 +55,7 @@ public class PatientDaoIT {
         patientDao.save(patient);
 
         Map<String, Object> updatedFields = new HashMap(){{
-            put("dob", "1990-02-06T00:00:00.000+05:30");
+            put("dob", "1990-02-06T14:20:00.000+05:30");
         }};
 
         Map<String, Object> expectedFields = new HashMap<>(fields);
@@ -157,7 +157,7 @@ public class PatientDaoIT {
         jdbcTemplate.query(String.format("select * from patient where patient_hid='%s'", healthId), new RowMapper<ResultSet>() {
             @Override
             public ResultSet mapRow(ResultSet rs, int rowNum) throws SQLException {
-                assertEquals(patient.getDateOfBirth(), rs.getDate("dob"));
+                assertEquals(patient.getDateOfBirth(), rs.getTimestamp("dob"));
                 assertEquals(patient.getGender(), rs.getString("gender"));
                 assertEquals(patient.getPresentLocationCode(), rs.getString("present_location_id"));
                 assertTrue(!rs.getTimestamp("updated_at").before(rs.getTimestamp("created_at")));

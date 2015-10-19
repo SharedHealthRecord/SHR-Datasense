@@ -88,7 +88,7 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
     public void shouldSaveDateOfDeathFromDateOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals(DateUtil.parseDate("2015-09-04 02:02:00"), patientDeathDetails.getDateOfDeath());
+        assertEquals(DateUtil.parseDate("2015-09-04T02:02:00.000+05:30"), patientDeathDetails.getDateOfDeath());
     }
 
     @Test
