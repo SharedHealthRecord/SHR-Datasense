@@ -16,9 +16,9 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.define "192.168.33.17" do |shr|
       shr.vm.provision "ansible" do |ansible|
-        ansible.inventory_path = "../FreeSHR-Playbooks/local"
+        ansible.inventory_path = "../FreeSHR-Playbooks/inventories/local"
         ansible.playbook =  "../FreeSHR-Playbooks/all.yml"
-	    ansible.extra_vars= { java_runtime: "jdk" }
+	    ansible.extra_vars= { java_runtime: "jdk", setup_nrpe: "no" }
         ansible.tags = ["setup", "datasense"]
         ansible.vault_password_file = "~/.vaultpass.txt"
       end
