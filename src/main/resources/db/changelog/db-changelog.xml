@@ -744,4 +744,9 @@
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'CAUSE_OF_DEATH_UUID' ) LIMIT 1;
         </sql>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20151026-1818" author="sharedhealth" context="setup">
+        <comment>Change reference term and drug name column size to 255 from 100</comment>
+        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
+        <modifyDataType tableName="drug" columnName="name" newDataType="varchar(255)" />
+    </changeSet>
 </databaseChangeLog>
