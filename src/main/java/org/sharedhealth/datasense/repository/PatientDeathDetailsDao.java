@@ -23,16 +23,19 @@ public class PatientDeathDetailsDao {
         map.put("patient_hid", patientDeathDetails.getPatient().getHid());
         map.put("encounter_id", patientDeathDetails.getEncounter().getEncounterId());
         map.put("date_of_death", patientDeathDetails.getDateOfDeath());
-        map.put("circumstances_of_death", patientDeathDetails.getCircumstancesOfDeath());
+        map.put("circumstance_concept_uuid", patientDeathDetails.getCircumstancesOfDeathUuid());
+        map.put("circumstance_code", patientDeathDetails.getCircumstancesOfDeathCode());
         map.put("cause_concept_uuid", patientDeathDetails.getCauseOfDeathConceptUuid());
         map.put("cause_code", patientDeathDetails.getCauseOfDeathCode());
         map.put("uuid", patientDeathDetails.getUuid());
+        map.put("pod_concept_uuid", patientDeathDetails.getPlaceOfDeathUuid());
+        map.put("pod_code", patientDeathDetails.getPlaceOfDeathCode());
 
 
         String sql = "insert into patient_death_details (patient_hid, encounter_id, date_of_death, " +
-                "circumstances_of_death, cause_concept_uuid, cause_code, uuid) " +
+                "circumstance_concept_uuid, circumstance_code, cause_concept_uuid, cause_code, uuid, pod_concept_uuid, pod_code) " +
                 "values(:patient_hid, :encounter_id, :date_of_death, " +
-                ":circumstances_of_death, :cause_concept_uuid, :cause_code, :uuid)";
+                ":circumstance_concept_uuid, :circumstance_code, :cause_concept_uuid, :cause_code, :uuid, :pod_concept_uuid, :pod_code)";
 
         jdbcTemplate.update(sql, map);
     }

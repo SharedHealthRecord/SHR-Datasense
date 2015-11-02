@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.handler;
 
+import ca.uhn.fhir.model.api.IDatatype;
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
@@ -57,9 +58,9 @@ public class DeathNoteHandler implements FhirResourceHandler {
         Encounter encounter = composition.getEncounterReference().getValue();
         patientDeathDetails.setEncounter(encounter);
         mapDateOfDeathAndPatientAge(patientDeathDetails, composition, deathNoteObservation, encounter);
-        patientDeathDetails.setCircumstancesOfDeath(getCircumstancesOfDeath(composition, deathNoteObservation));
+        mapCircumstanceOfDeath(patientDeathDetails, composition, deathNoteObservation);
         mapCauseOfDeath(patientDeathDetails, composition, deathNoteObservation);
-
+        mapPlaceOfDeath(patientDeathDetails, composition, deathNoteObservation);
         patientDeathDetailsDao.save(patientDeathDetails);
     }
 
@@ -69,10 +70,9 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
     private void mapCauseOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
-        Observation causeOfDeathObservation = findObservation(composition, deathNoteObservation, configurationService.getCauseOfDeath());
-        if (causeOfDeathObservation != null && causeOfDeathObservation.getValue() != null) {
-            CodeableConceptDt codeableConcept = (CodeableConceptDt) causeOfDeathObservation.getValue();
-            for (CodingDt code : codeableConcept.getCoding()) {
+        CodeableConceptDt causeOfDeathConcept = getCodeableConceptValue(findObservation(composition, deathNoteObservation, configurationService.getCauseOfDeath()));
+        if (causeOfDeathConcept != null) {
+            for (CodingDt code : causeOfDeathConcept.getCoding()) {
                 if (isConceptUrl(code.getSystem())) {
                     patientDeathDetails.setCauseOfDeathConceptUuid(code.getCode());
                 } else if (isReferenceTermUrl(code.getSystem())) {
@@ -82,14 +82,40 @@ public class DeathNoteHandler implements FhirResourceHandler {
         }
     }
 
-    private String getCircumstancesOfDeath(EncounterComposition composition, Observation deathNoteObservation) {
-        Observation circumstancesOfDeathObservation = findObservation(composition, deathNoteObservation, configurationService.getCircumstancesOfDeathUuid());
-        if (circumstancesOfDeathObservation != null && circumstancesOfDeathObservation.getValue() != null) {
-            String observationValue = observationValueMapper.getObservationValue(circumstancesOfDeathObservation.getValue());
-            return observationValue != null ? observationValue.substring(0, Math.min(observationValue.length(), 500)) : null;
-        }
-        return null;
+    private CodeableConceptDt getCodeableConceptValue(Observation observation) {
+        if (observation == null) return null;
+        IDatatype value = observation.getValue();
+        return (value instanceof CodeableConceptDt) ? (CodeableConceptDt) value : null;
     }
+
+    private void mapCircumstanceOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
+        CodeableConceptDt circumstancesOfDeathConcept = getCodeableConceptValue(findObservation(composition, deathNoteObservation, configurationService.getCircumstancesOfDeathUuid()));
+        if (circumstancesOfDeathConcept != null) {
+            for (CodingDt code : circumstancesOfDeathConcept.getCoding()) {
+                if (isConceptUrl(code.getSystem())) {
+                    patientDeathDetails.setCircumstancesOfDeathUuid(code.getCode());
+                } else if (isReferenceTermUrl(code.getSystem())) {
+                    patientDeathDetails.setCircumstancesOfDeathCode(code.getCode());
+                }
+            }
+        }
+        //patientDeathDetails.setCircumstancesOfDeath(getCircumstancesOfDeath(composition, deathNoteObservation));
+    }
+
+    private void mapPlaceOfDeath(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation) {
+        CodeableConceptDt placeOfDeathConcept = getCodeableConceptValue(findObservation(composition, deathNoteObservation, configurationService.getPlaceOfDeathConceptUuid()));
+        if (placeOfDeathConcept != null) {
+            for (CodingDt code : placeOfDeathConcept.getCoding()) {
+                if (isConceptUrl(code.getSystem())) {
+                    patientDeathDetails.setPlaceOfDeathUuid(code.getCode());
+                } else if (isReferenceTermUrl(code.getSystem())) {
+                    patientDeathDetails.setPlaceOfDeathCode(code.getCode());
+                }
+            }
+        }
+    }
+
+
 
     private void mapDateOfDeathAndPatientAge(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation, Encounter encounter) {
         Observation dateOfDeathObs = findObservation(composition, deathNoteObservation, configurationService.getDateOfDeathUuid());

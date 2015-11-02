@@ -15,12 +15,13 @@ public class ConfigurationService {
     public static final String EMPTY_STR = "";
     @Autowired
     ConfigurationDao configurationDao;
-
     public static final String CIRCUMSTANCES_OF_DEATH_UUID = "CIRCUMSTANCES_OF_DEATH_UUID";
-    public static final String CAUSE_OF_DEATH_UUID = "CAUSE_OF_DEATH_UUID";
 
+    public static final String CAUSE_OF_DEATH_UUID = "CAUSE_OF_DEATH_UUID";
     public static final String DEATH_CODES = "DEATH_CODES";
+
     public static final String DATE_OF_DEATH_UUID = "DATE_OF_DEATH_UUID";
+    public static final String PLACE_OF_DEATH_UUID = "PLACE_OF_DEATH_UUID";
 
 
     public List<Parameter> allParameters() {
@@ -33,7 +34,7 @@ public class ConfigurationService {
 
     private ConcurrentHashMap<String, Parameter> parameterCache = new ConcurrentHashMap<>();
 
-    private List<String> parametersInCache = Arrays.asList(CIRCUMSTANCES_OF_DEATH_UUID, CAUSE_OF_DEATH_UUID, DEATH_CODES, DATE_OF_DEATH_UUID);
+    private List<String> parametersInCache = Arrays.asList(CIRCUMSTANCES_OF_DEATH_UUID, CAUSE_OF_DEATH_UUID, DEATH_CODES, DATE_OF_DEATH_UUID, PLACE_OF_DEATH_UUID);
 
     public void save(Parameter parameter) {
         configurationDao.save(parameter);
@@ -77,6 +78,11 @@ public class ConfigurationService {
 
     public String getCauseOfDeath() {
         Parameter param = findParameter(CAUSE_OF_DEATH_UUID);
+        return (param != null) ? param.getParamValue() : EMPTY_STR;
+    }
+
+    public String getPlaceOfDeathConceptUuid() {
+        Parameter param = findParameter(PLACE_OF_DEATH_UUID);
         return (param != null) ? param.getParamValue() : EMPTY_STR;
     }
 }

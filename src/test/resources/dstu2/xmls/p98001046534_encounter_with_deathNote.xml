@@ -1,274 +1,354 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <Bundle xmlns="http://hl7.org/fhir">
-    <id value="6b5a3b72-fcd1-4c2d-a147-94b8588b8666"/>
+    <id value="814f43bb-84f8-4895-b63a-06c02f24b83f" />
     <meta>
-        <lastUpdated value="2015-09-04T16:10:27.000+05:30"/>
+        <lastUpdated value="2015-11-02T12:55:35.000+05:30" />
     </meta>
-    <type value="collection"/>
+    <type value="collection" />
     <entry>
-        <fullUrl value="urn:uuid:ee23659f-d3ee-4d35-9045-2519cf7e72c6"/>
+        <fullUrl value="urn:uuid:82af2ff6-be6b-42ba-b0da-09f875a3ef76" />
         <resource>
-            <Composition xmlns="http://hl7.org/fhir">
-                <id value="ee23659f-d3ee-4d35-9045-2519cf7e72c6"/>
+            <Composition>
+                <id value="82af2ff6-be6b-42ba-b0da-09f875a3ef76" />
                 <identifier>
-                    <value value="urn:uuid:ee23659f-d3ee-4d35-9045-2519cf7e72c6"/>
+                    <value value="urn:uuid:82af2ff6-be6b-42ba-b0da-09f875a3ef76" />
                 </identifier>
-                <date value="2015-09-04T16:10:27.000+05:30"/>
+                <date value="2015-11-02T12:55:35.000+05:30" />
                 <type>
                     <coding>
-                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
-                        <code value="51899-3"/>
-                        <display value="Details Document"/>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes" />
+                        <code value="51899-3" />
+                        <display value="Details Document" />
                     </coding>
                 </type>
-                <title value="encounter composition for patient 98001046534"/>
-                <status value="final"/>
-                <confidentiality value="N"/>
+                <title value="Patient Clinical Encounter" />
+                <status value="final" />
+                <confidentiality value="N" />
                 <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </subject>
                 <author>
-                    <reference value="http://172.18.46.199:8080/api/1.0/facilities/10019841.json"/>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10019841.json" />
                 </author>
                 <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </encounter>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
-                        <display value="Encounter"/>
+                        <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
+                        <display value="Encounter" />
                     </entry>
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
-                        <display value="Date of death"/>
+                        <reference value="urn:uuid:7ac915d4-6813-41fe-aa52-8e2cd20c78c1" />
+                        <display value="Additional details about the death" />
                     </entry>
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
-                        <display value="Cause of Death"/>
+                        <reference value="urn:uuid:0e506f7c-8609-4d5b-9d34-8e1ca03bc624" />
+                        <display value="Place of Death" />
                     </entry>
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
-                        <display value="Circumstances of Death"/>
+                        <reference value="urn:uuid:cfa5987e-8040-410b-a477-2ba19d7a5810" />
+                        <display value="Cause of Death" />
                     </entry>
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
-                        <display value="Place of Death"/>
+                        <reference value="urn:uuid:2ffaaaab-bf17-45d4-8536-f4520e1fee73" />
+                        <display value="Date of death" />
                     </entry>
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
-                        <display value="Death Note"/>
+                        <reference value="urn:uuid:f0b7bde2-5e6c-46c0-820a-90be96c5d759" />
+                        <display value="Circumstances of Death" />
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:83504ff9-96bf-46b7-838a-7d042004b4ff" />
+                        <display value="Death Note" />
                     </entry>
                 </section>
             </Composition>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+        <fullUrl value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
         <resource>
-            <Encounter xmlns="http://hl7.org/fhir">
-                <id value="0ab48f1b-9611-4706-8a71-8a694c880933"/>
+            <Encounter>
+                <id value="67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 <identifier>
-                    <value value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <value value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </identifier>
-                <status value="finished"/>
-                <class value="outpatient"/>
+                <status value="finished" />
+                <class value="outpatient" />
                 <type>
-                    <text value="OPD"/>
+                    <text value="Consultation" />
                 </type>
                 <patient>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </patient>
                 <participant>
                     <individual>
-                        <reference value="http://172.18.46.199:8080/api/1.0/providers/18.json"/>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
                     </individual>
                 </participant>
                 <serviceProvider>
-                    <reference value="http://172.18.46.199:8080/api/1.0/facilities/10019841.json"/>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10019841.json" />
                 </serviceProvider>
             </Encounter>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
+        <fullUrl value="urn:uuid:7ac915d4-6813-41fe-aa52-8e2cd20c78c1" />
         <resource>
-            <Observation xmlns="http://hl7.org/fhir">
-                <id value="dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
+            <Observation>
+                <id value="7ac915d4-6813-41fe-aa52-8e2cd20c78c1" />
+                <identifier>
+                    <value value="urn:uuid:7ac915d4-6813-41fe-aa52-8e2cd20c78c1" />
+                </identifier>
+                <status value="preliminary" />
                 <code>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad55052-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="5ad55052-464f-11e5-b9e5-0050568225ca"/>
-                        <display value="Date of death"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/ff14bf7f-ad5f-463a-9fff-8866d051bafc" />
+                        <code value="ff14bf7f-ad5f-463a-9fff-8866d051bafc" />
+                        <display value="Additional details about the death" />
                     </coding>
                 </code>
-                <valueDateTime value="2015-09-04T02:02:00.000+05:30"/>
-                <status value="final"/>
-                <identifier>
-                    <value value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
-                </identifier>
                 <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </subject>
                 <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
+                <valueString value="Too late" />
             </Observation>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
+        <fullUrl value="urn:uuid:0e506f7c-8609-4d5b-9d34-8e1ca03bc624" />
         <resource>
-            <Observation xmlns="http://hl7.org/fhir">
-                <id value="14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
+            <Observation>
+                <id value="0e506f7c-8609-4d5b-9d34-8e1ca03bc624" />
+                <identifier>
+                    <value value="urn:uuid:0e506f7c-8609-4d5b-9d34-8e1ca03bc624" />
+                </identifier>
+                <status value="preliminary" />
                 <code>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad597a4-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="5ad597a4-464f-11e5-b9e5-0050568225ca"/>
-                        <display value="Cause of Death"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/d617aa4d-6734-11e5-84bd-0050568276cf" />
+                        <code value="d617aa4d-6734-11e5-84bd-0050568276cf" />
+                        <display value="Place of Death" />
                     </coding>
                 </code>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
+                </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
                 <valueCodeableConcept>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/0795c231-5206-11e5-ae6d-0050568225ca"/>
-                        <code value="A90"/>
-                        <display value="Dengue Fever"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/eff3c25a-00fb-4b2d-9578-e4867a65a845" />
+                        <code value="183676005" />
+                        <display value="Place of death, In hospital" />
                     </coding>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/07952dc2-5206-11e5-ae6d-0050568225ca"/>
-                        <code value="07952dc2-5206-11e5-ae6d-0050568225ca"/>
-                        <display value="Dengue Fever"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/d68a9335-9fb1-4ed6-b741-5374633d86e2" />
+                        <code value="d68a9335-9fb1-4ed6-b741-5374633d86e2" />
+                        <display value="Place of death, In hospital" />
                     </coding>
                 </valueCodeableConcept>
-                <status value="final"/>
-                <identifier>
-                    <value value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
-                </identifier>
-                <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
-                </subject>
-                <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
-                </encounter>
             </Observation>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
+        <fullUrl value="urn:uuid:cfa5987e-8040-410b-a477-2ba19d7a5810" />
         <resource>
-            <Observation xmlns="http://hl7.org/fhir">
-                <id value="e230f2da-f347-429d-b659-3c944ab66333"/>
+            <Observation>
+                <id value="cfa5987e-8040-410b-a477-2ba19d7a5810" />
+                <identifier>
+                    <value value="urn:uuid:cfa5987e-8040-410b-a477-2ba19d7a5810" />
+                </identifier>
+                <status value="preliminary" />
                 <code>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad5dd9a-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="5ad5dd9a-464f-11e5-b9e5-0050568225ca"/>
-                        <display value="Circumstances of Death"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/fc7e2b5c-66b3-11e5-84bd-0050568276cf" />
+                        <code value="fc7e2b5c-66b3-11e5-84bd-0050568276cf" />
+                        <display value="Cause of Death" />
                     </coding>
                 </code>
-                <valueString value="died in hospital"/>
-                <status value="final"/>
-                <identifier>
-                    <value value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
-                </identifier>
                 <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </subject>
                 <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/c4065368-798e-11e5-b243-0050568276cf" />
+                        <code value="A00" />
+                        <display value="Cholera" />
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/c4060895-798e-11e5-b243-0050568276cf" />
+                        <code value="c4060895-798e-11e5-b243-0050568276cf" />
+                        <display value="Cholera" />
+                    </coding>
+                </valueCodeableConcept>
             </Observation>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
+        <fullUrl value="urn:uuid:2ffaaaab-bf17-45d4-8536-f4520e1fee73" />
         <resource>
-            <Observation xmlns="http://hl7.org/fhir">
-                <id value="00f4adcf-8191-4905-ba55-91074a5ac909"/>
+            <Observation>
+                <id value="2ffaaaab-bf17-45d4-8536-f4520e1fee73" />
+                <identifier>
+                    <value value="urn:uuid:2ffaaaab-bf17-45d4-8536-f4520e1fee73" />
+                </identifier>
+                <status value="preliminary" />
                 <code>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5b1354c4-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="5b1354c4-464f-11e5-b9e5-0050568225ca"/>
-                        <display value="Place of Death"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/fc7de61e-66b3-11e5-84bd-0050568276cf" />
+                        <code value="fc7de61e-66b3-11e5-84bd-0050568276cf" />
+                        <display value="Date of death" />
                     </coding>
                 </code>
-                <valueString value="hospital"/>
-                <status value="final"/>
-                <identifier>
-                    <value value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
-                </identifier>
                 <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </subject>
                 <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
+                <valueDateTime value="2015-11-02T12:12:00.000+05:30" />
             </Observation>
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
+        <fullUrl value="urn:uuid:f0b7bde2-5e6c-46c0-820a-90be96c5d759" />
         <resource>
-            <Observation xmlns="http://hl7.org/fhir">
-                <id value="7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
+            <Observation>
+                <id value="f0b7bde2-5e6c-46c0-820a-90be96c5d759" />
+                <identifier>
+                    <value value="urn:uuid:f0b7bde2-5e6c-46c0-820a-90be96c5d759" />
+                </identifier>
+                <status value="preliminary" />
                 <code>
                     <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/referenceterms/5ad47865-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="419620001"/>
-                        <display value="Death Note"/>
-                    </coding>
-                    <coding>
-                        <system value="http://172.18.46.199:9080/openmrs/ws/rest/v1/tr/concepts/5ad35d32-464f-11e5-b9e5-0050568225ca"/>
-                        <code value="5ad35d32-464f-11e5-b9e5-0050568225ca"/>
-                        <display value="Death Note"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/fc7e6cf4-66b3-11e5-84bd-0050568276cf" />
+                        <code value="fc7e6cf4-66b3-11e5-84bd-0050568276cf" />
+                        <display value="Circumstances of Death" />
                     </coding>
                 </code>
-                <status value="final"/>
-                <identifier>
-                    <value value="urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c"/>
-                </identifier>
                 <subject>
-                    <reference value="http://172.18.46.199:8081/api/default/patients/98001046534"/>
-                    <display value="98001046534"/>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
                 </subject>
                 <encounter>
-                    <reference value="urn:uuid:0ab48f1b-9611-4706-8a71-8a694c880933"/>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
                 </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
+                <valueCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/4d8c5c9e-801d-4562-8aca-24167cf54e58" />
+                        <code value="63238001" />
+                        <display value="Dead on arrival at hospital" />
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/d23c9fb7-9aa4-4705-9027-d1feaecc3cc8" />
+                        <code value="d23c9fb7-9aa4-4705-9027-d1feaecc3cc8" />
+                        <display value="Dead on arrival at hospital" />
+                    </coding>
+                </valueCodeableConcept>
+            </Observation>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:83504ff9-96bf-46b7-838a-7d042004b4ff" />
+        <resource>
+            <Observation>
+                <id value="83504ff9-96bf-46b7-838a-7d042004b4ff" />
+                <identifier>
+                    <value value="urn:uuid:83504ff9-96bf-46b7-838a-7d042004b4ff" />
+                </identifier>
+                <status value="preliminary" />
+                <code>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/referenceterms/fc7cfbb8-66b3-11e5-84bd-0050568276cf" />
+                        <code value="419620001" />
+                        <display value="Death Note" />
+                    </coding>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/concepts/fc7c6c5e-66b3-11e5-84bd-0050568276cf" />
+                        <code value="fc7c6c5e-66b3-11e5-84bd-0050568276cf" />
+                        <display value="Death Note" />
+                    </coding>
+                </code>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534" />
+                    <display value="98000176175" />
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:67306d8f-5de8-4a7b-8c1e-5353a90b18ad" />
+                </encounter>
+                <performer>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/44641.json" />
+                </performer>
                 <related>
-                    <type value="has-member"/>
+                    <type value="has-member" />
                     <target>
-                        <reference value="urn:uuid:dc4aba4b-0239-4c47-b62a-af30a0b574fa"/>
+                        <reference value="urn:uuid:7ac915d4-6813-41fe-aa52-8e2cd20c78c1" />
                     </target>
                 </related>
                 <related>
-                    <type value="has-member"/>
+                    <type value="has-member" />
                     <target>
-                        <reference value="urn:uuid:14933d63-e11a-4358-8a7a-fbc8ca6c726a"/>
+                        <reference value="urn:uuid:0e506f7c-8609-4d5b-9d34-8e1ca03bc624" />
                     </target>
                 </related>
                 <related>
-                    <type value="has-member"/>
+                    <type value="has-member" />
                     <target>
-                        <reference value="urn:uuid:e230f2da-f347-429d-b659-3c944ab66333"/>
+                        <reference value="urn:uuid:cfa5987e-8040-410b-a477-2ba19d7a5810" />
                     </target>
                 </related>
                 <related>
-                    <type value="has-member"/>
+                    <type value="has-member" />
                     <target>
-                        <reference value="urn:uuid:00f4adcf-8191-4905-ba55-91074a5ac909"/>
+                        <reference value="urn:uuid:2ffaaaab-bf17-45d4-8536-f4520e1fee73" />
+                    </target>
+                </related>
+                <related>
+                    <type value="has-member" />
+                    <target>
+                        <reference value="urn:uuid:f0b7bde2-5e6c-46c0-820a-90be96c5d759" />
                     </target>
                 </related>
             </Observation>

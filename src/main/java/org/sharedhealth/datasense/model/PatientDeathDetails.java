@@ -6,9 +6,12 @@ public class PatientDeathDetails extends BaseResource {
     private Patient patient;
     private Encounter encounter;
     private Date dateOfDeath;
-    private String circumstancesOfDeath;
     private String causeOfDeathCode;
     private String causeOfDeathConceptUuid;
+    private String circumstancesOfDeathUuid;
+    private String circumstancesOfDeathCode;
+    private String placeOfDeathUuid;
+    private String placeOfDeathCode;
 
     public Patient getPatient() {
         return patient;
@@ -35,14 +38,6 @@ public class PatientDeathDetails extends BaseResource {
         this.dateOfDeath = dateOfDeath;
     }
 
-    public String getCircumstancesOfDeath() {
-        return circumstancesOfDeath;
-    }
-
-    public void setCircumstancesOfDeath(String circumstancesOfDeath) {
-        this.circumstancesOfDeath = circumstancesOfDeath;
-    }
-
     public String getCauseOfDeathCode() {
         return causeOfDeathCode;
     }
@@ -57,5 +52,37 @@ public class PatientDeathDetails extends BaseResource {
 
     public void setCauseOfDeathConceptUuid(String causeOfDeathConceptUuid) {
         this.causeOfDeathConceptUuid = causeOfDeathConceptUuid;
+    }
+
+    public void setCircumstancesOfDeathUuid(String circumstancesOfDeathUuid) {
+        this.circumstancesOfDeathUuid = circumstancesOfDeathUuid;
+    }
+
+    public String getCircumstancesOfDeathUuid() {
+        return circumstancesOfDeathUuid;
+    }
+
+    public void setCircumstancesOfDeathCode(String circumstancesOfDeathCode) {
+        this.circumstancesOfDeathCode = circumstancesOfDeathCode;
+    }
+
+    public String getCircumstancesOfDeathCode() {
+        return circumstancesOfDeathCode;
+    }
+
+    public void setPlaceOfDeathUuid(String placeOfDeathUuid) {
+        this.placeOfDeathUuid = placeOfDeathUuid;
+    }
+
+    public String getPlaceOfDeathUuid() {
+        return placeOfDeathUuid;
+    }
+
+    public void setPlaceOfDeathCode(String placeOfDeathCode) {
+        this.placeOfDeathCode = placeOfDeathCode;
+    }
+
+    public String getPlaceOfDeathCode() {
+        return placeOfDeathCode;
     }
 }

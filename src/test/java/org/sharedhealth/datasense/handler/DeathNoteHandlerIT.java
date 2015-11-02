@@ -51,6 +51,7 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
+        super.loadConfigParameters();
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
@@ -61,7 +62,7 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
         encounter.setEncounterId(SHR_ENCOUNTER_ID);
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c");
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:83504ff9-96bf-46b7-838a-7d042004b4ff");
         deathNoteResource = bundleContext.getResourceForReference(resourceReference);
     }
 
@@ -88,27 +89,27 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
     public void shouldSaveDateOfDeathFromDateOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals(DateUtil.parseDate("2015-09-04T02:02:00.000+05:30"), patientDeathDetails.getDateOfDeath());
+        assertEquals(DateUtil.parseDate("2015-11-02T12:12:00.000+05:30"), patientDeathDetails.getDateOfDeath());
     }
 
     @Test
     public void shouldSaveCircumstancesOfDeathObservationResource() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals("died in hospital", patientDeathDetails.getCircumstancesOfDeath());
+        assertEquals("63238001", patientDeathDetails.getCircumstancesOfDeathCode());
     }
 
     @Test
     public void shouldSaveCauseOfDeath() {
         deathNoteHandler.process(deathNoteResource, composition);
         PatientDeathDetails patientDeathDetails = findByEncounterId("shrEncounterId");
-        assertEquals("A90", patientDeathDetails.getCauseOfDeathCode());
-        assertEquals("07952dc2-5206-11e5-ae6d-0050568225ca", patientDeathDetails.getCauseOfDeathConceptUuid());
+        assertEquals("A00", patientDeathDetails.getCauseOfDeathCode());
+        assertEquals("c4060895-798e-11e5-b243-0050568276cf", patientDeathDetails.getCauseOfDeathConceptUuid());
     }
 
     private PatientDeathDetails findByEncounterId(String shrEncounterId) {
         String sql = "select patient_hid, encounter_id, date_of_death, " +
-                "circumstances_of_death, cause_concept_uuid, cause_code, uuid " +
+                "circumstance_concept_uuid, circumstance_code, cause_concept_uuid, cause_code, uuid, pod_concept_uuid, pod_code " +
                 "from patient_death_details where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
@@ -125,9 +126,12 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
                 patientDeathDetails.setEncounter(encounter);
 
                 patientDeathDetails.setDateOfDeath(rs.getTimestamp("date_of_death"));
-                patientDeathDetails.setCircumstancesOfDeath(rs.getString("circumstances_of_death"));
+                patientDeathDetails.setCircumstancesOfDeathUuid(rs.getString("circumstance_concept_uuid"));
+                patientDeathDetails.setCircumstancesOfDeathCode(rs.getString("circumstance_code"));
                 patientDeathDetails.setCauseOfDeathConceptUuid(rs.getString("cause_concept_uuid"));
                 patientDeathDetails.setCauseOfDeathCode(rs.getString("cause_code"));
+                patientDeathDetails.setPlaceOfDeathUuid(rs.getString("pod_concept_uuid"));
+                patientDeathDetails.setPlaceOfDeathCode(rs.getString("pod_code"));
                 patientDeathDetails.setUuid(rs.getString("uuid"));
                 return patientDeathDetails;
             }

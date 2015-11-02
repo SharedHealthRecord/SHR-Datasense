@@ -66,6 +66,21 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
     }
 
     @Test
+    public void shouldHandleTSObservations() throws Exception {
+        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals_with_somelocalconcepts.xml");
+        bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
+        setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
+        String topLevelVitalsObs = "urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1";
+        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(topLevelVitalsObs);
+        EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
+        IResource obsResource = bundleContext.getResourceForReference(obsReference);
+        observationResourceHandler.process(obsResource, composition);
+        List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
+        assertEquals(4, observations.size()); //should find Systolic, Diastolic, Pulse and Temperature
+    }
+
+
+    @Test
     public void shouldNotHandleDeathNoteObservations() throws Exception {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
         BundleContext deathNoteBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
