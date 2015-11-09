@@ -15,8 +15,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
-
 @Component
 public class CatchmentEncounterCrawlerJob {
     @Autowired
@@ -46,7 +44,7 @@ public class CatchmentEncounterCrawlerJob {
                             transactionManager, shrWebClient, properties, bundleUtil);
             try {
                 feedCrawler.process();
-            } catch (URISyntaxException e) {
+            } catch (Exception e) {
                 String errorMessage = String.format("Unable to process encounter catchment feed [%s]", feedUrl);
                 log.error(errorMessage);
                 throw new RuntimeException(errorMessage, e);

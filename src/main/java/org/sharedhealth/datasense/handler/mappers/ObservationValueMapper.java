@@ -57,7 +57,7 @@ public class ObservationValueMapper {
     private boolean isValueBoolean(List<CodingDt> codings) {
         if (!codings.isEmpty()) {
             String system = codings.get(0).getSystem();
-            return system.equalsIgnoreCase(HL7_FHIR_VS_URL_FOR_BOOLEAN) || system.equalsIgnoreCase(HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN);
+            return HL7_FHIR_VS_URL_FOR_BOOLEAN.equalsIgnoreCase(system) || HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN.equalsIgnoreCase(system);
         }
         return false;
     }
