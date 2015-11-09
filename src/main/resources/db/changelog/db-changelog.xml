@@ -749,6 +749,7 @@
         <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
         <modifyDataType tableName="drug" columnName="name" newDataType="varchar(255)" />
     </changeSet>
+<<<<<<< HEAD
     <changeSet id="sharedhealth-datasense-20151102-1948" author="angshu" context="setup">
         <renameColumn columnDataType="varchar(50)"
                       newColumnName="circumstance_concept_uuid"
@@ -779,5 +780,9 @@
             INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'PLACE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'PLACE_OF_DEATH_UUID' ) LIMIT 1;
         </sql>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20151109-1818" author="sharedhealth" context="setup">
+        <comment>Change event content column type</comment>
+        <modifyDataType tableName="failed_events" columnName="event_content" newDataType="mediumtext" />
     </changeSet>
 </databaseChangeLog>
