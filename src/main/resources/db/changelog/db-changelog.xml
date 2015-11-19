@@ -785,4 +785,8 @@
         <comment>Change event content column type</comment>
         <modifyDataType tableName="failed_events" columnName="event_content" newDataType="mediumtext" />
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20151119-1718" author="sharedhealth" context="setup">
+        <comment>Change event content column type for failed_event_retry_log</comment>
+        <modifyDataType tableName="failed_event_retry_log" columnName="event_content" newDataType="mediumtext" />
+    </changeSet>
 </databaseChangeLog>
