@@ -1,11 +1,5 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
-import aggregatequeryservice.postservice;
-import clojure.lang.IPersistentMap;
-import clojure.lang.Keyword;
-import clojure.lang.LazySeq;
-import clojure.lang.PersistentArrayMap;
-import clojure.lang.Symbol;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
@@ -15,7 +9,6 @@ import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.model.Parameter;
 import org.sharedhealth.datasense.service.ConfigurationService;
-import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +16,6 @@ import javax.sql.DataSource;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.HeaderUtil.getDhisHeaders;
 
 @Component
 public class DHISDynamicReport {
@@ -95,13 +87,13 @@ public class DHISDynamicReport {
         //new CljProcessor(configFile, queryParams, extraParams).invoke();
     }
 
-    private String getValueFromMap(IPersistentMap map,String key){
-        Object value=map.valAt(Keyword.intern(Symbol.create(key)));
-        if (value == null) {
-            return null;
-        }
-        return String.valueOf(value);
-    }
+//    private String getValueFromMap(IPersistentMap map,String key){
+//        Object value=map.valAt(Keyword.intern(Symbol.create(key)));
+//        if (value == null) {
+//            return null;
+//        }
+//        return String.valueOf(value);
+//    }
 
     private void logWhenErroredOut(String status, String dhisResponse) {
         if ((status != null) && (status.equalsIgnoreCase("200") || status.equalsIgnoreCase("201")) ) {
@@ -146,42 +138,42 @@ public class DHISDynamicReport {
         }
     }
 
-    private class CljProcessor {
-        private String configFile;
-        private HashMap<String, String> queryParams;
-        private HashMap<String, String> extraParams;
-
-        public CljProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-            this.configFile = configFile;
-            this.queryParams = queryParams;
-            this.extraParams = extraParams;
-        }
-
-        public void invoke() {
-            postUsingAqsClj(configFile, queryParams, extraParams);
-        }
-
-        private void postUsingAqsClj(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-            String configFilePath = StringUtil.ensureSuffix(datasenseProperties.getAqsConfigLocationPath(), "/") + configFile;
-            HashMap<String, String> postHeaders = getDhisHeaders(datasenseProperties);
-            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams,
-                    postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
-            if (!(result instanceof LazySeq)) {
-                logger.debug("result:" + result.toString());
-            } else {
-                LazySeq seq = (LazySeq) result;
-                if (!seq.isEmpty()) {
-                    Object response = seq.get(0);
-                    if (response instanceof PersistentArrayMap) {
-                        PersistentArrayMap responseMap = (PersistentArrayMap) response;
-                        String status = getValueFromMap(responseMap, "status");
-                        String dhisResponse = getValueFromMap(responseMap, "response");
-                        logWhenErroredOut(status, dhisResponse);
-                    } else {
-                        logger.debug("result:" + response.toString());
-                    }
-                }
-            }
-        }
-    }
+//    private class CljProcessor {
+//        private String configFile;
+//        private HashMap<String, String> queryParams;
+//        private HashMap<String, String> extraParams;
+//
+//        public CljProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+//            this.configFile = configFile;
+//            this.queryParams = queryParams;
+//            this.extraParams = extraParams;
+//        }
+//
+//        public void invoke() {
+//            postUsingAqsClj(configFile, queryParams, extraParams);
+//        }
+//
+//        private void postUsingAqsClj(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+//            String configFilePath = StringUtil.ensureSuffix(datasenseProperties.getAqsConfigLocationPath(), "/") + configFile;
+//            HashMap<String, String> postHeaders = getDhisHeaders(datasenseProperties);
+//            Object result = postservice.executeQueriesAndPostResultsSync(configFilePath, dataSource, queryParams, extraParams,
+//                    postHeaders, datasenseProperties.getDhisDataValueSetsUrl());
+//            if (!(result instanceof LazySeq)) {
+//                logger.debug("result:" + result.toString());
+//            } else {
+//                LazySeq seq = (LazySeq) result;
+//                if (!seq.isEmpty()) {
+//                    Object response = seq.get(0);
+//                    if (response instanceof PersistentArrayMap) {
+//                        PersistentArrayMap responseMap = (PersistentArrayMap) response;
+//                        String status = getValueFromMap(responseMap, "status");
+//                        String dhisResponse = getValueFromMap(responseMap, "response");
+//                        logWhenErroredOut(status, dhisResponse);
+//                    } else {
+//                        logger.debug("result:" + response.toString());
+//                    }
+//                }
+//            }
+//        }
+//    }
 }
