@@ -749,7 +749,6 @@
         <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
         <modifyDataType tableName="drug" columnName="name" newDataType="varchar(255)" />
     </changeSet>
-<<<<<<< HEAD
     <changeSet id="sharedhealth-datasense-20151102-1948" author="angshu" context="setup">
         <renameColumn columnDataType="varchar(50)"
                       newColumnName="circumstance_concept_uuid"
