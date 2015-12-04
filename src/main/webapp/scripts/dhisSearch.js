@@ -1,18 +1,22 @@
 function searchDHISDataset(searchTxt) {
+    var deferredRes = $.Deferred();
     $.get( "/dhis2/reports/search?name=" + searchTxt)
-    .done(function(result) {
-        $('#searchResultsContainer').hide();
-        $(".configure-btn").unbind("click", configureDatasetForReport);
-        var template = $('#template_search_results').html();
-        Mustache.parse(template);
-        var rendered = Mustache.render(template, result.dataSets);
-        $('#searchResultsContainer').html(rendered);
-        $('#searchResultsContainer').show();
-        $(".configure-btn").bind("click", configureDatasetForReport);
-    })
-    .fail(function() {
-        alert( "error" );
-    });
+        .done(function(result) {
+            $('#searchResultsContainer').hide();
+            $(".configure-btn").unbind("click", configureDatasetForReport);
+            var template = $('#template_search_results').html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, result.dataSets);
+            $('#searchResultsContainer').html(rendered);
+            $('#searchResultsContainer').show();
+            $(".configure-btn").bind("click", configureDatasetForReport);
+            deferredRes.resolve();
+        })
+        .fail(function() {
+            alert( "error" );
+            deferredRes.reject('error');
+        });
+    return deferredRes;
 }
 
 function configureDatasetForReport(e) {

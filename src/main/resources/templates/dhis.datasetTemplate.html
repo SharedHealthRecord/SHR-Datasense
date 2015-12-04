@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/style.css"/>
+    <script src="/scripts/jquery-2.1.3.min.js"></script>
+    <script src="/scripts/dhisSearch.js"></script>
+    <script src="/scripts/dhisDataSetTemplate.js"></script>
+    <script src="/scripts/mustache.min.js"></script>
+    <script src="/scripts/script.js"/>
+    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script type = "text/javascript">
+        $( document ).ready(function() {
+            var dataSetTemplateHelper = new DhisDataSetTemplate();
+            $("#searchBtn").click(function() {
+                var searchText = $("#searchTxt").val();
+                searchDHISDataset(searchText).done(function() {
+                    dataSetTemplateHelper.attach($('.template-btn'));
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+<div th:replace="fragments/header :: header">
+    <!-- ============================================================================ -->
+    <!-- This content is only used for static prototyping purposes (natural templates)-->
+    <!-- and is therefore entirely optional, as this markup fragment will be included -->
+    <!-- from "fragments/header.html" at runtime.                                     -->
+    <!-- ============================================================================ -->
+    <div class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">Static header</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="#">Home</a></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <div>
+        <h2>&nbsp;</h2>
+    </div>
+    <div>
+        <h2 th:text="Templates"></h2>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="input-group">
+                    <input id="searchTxt" type="text" class="form-control" placeholder="Please type in the Dataset Name ..."/>
+                    <span class="input-group-btn">
+                        <button id="searchBtn" class="btn btn-default" type="button">Go!</button>
+                    </span>
+                </div>
+                <!-- /input-group -->
+            </div>
+        </div><!-- /.row -->
+
+    </div>
+
+    <div>
+        <h3>Results</h3>
+        <div id="searchResultsContainer" class="search-results">
+        </div>
+    </div>
+
+    <br/>
+    <div id="suggestionContainer" class="row hidden">
+        <div>
+            <span><b>Config Template Suggestion</b></span>
+            <textarea class="col-md-12" rows="10" id="aqsConfigSuggestion"></textarea>
+        </div>
+        <br/>
+        <div>
+            <span><b>Query Template Suggestion</b></span>
+            <textarea class="col-md-12" rows="10" id="aqsQuerySuggestion"></textarea>
+        </div>
+        <br/>
+        <div>
+            <span><b>Post Template Suggestion</b></span>
+            <textarea class="col-md-12" rows="10" id="aqsTemplateSuggestion"></textarea>
+        </div>
+    </div>
+
+
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script id="template_search_results" type="x-tmpl-mustache">
+    {{#.}}
+    <div class="row">
+        <div class="col-md-5" data-datasetId="{{ id }}">
+            {{ name }}
+        </div>
+        <div class="col-md-5">
+            {{ id }}
+        </div>
+        <div class="col-md-2">
+            <button data-datasetId="{{ id }}" data-periodType="{{ periodType }}" class="template-btn btn">Generate Template</button>
+        </div>
+    </div>
+    {{/.}}
+</script>
+
+<script id="mushTmpl_config_suggestion" type="x-tmpl-mustache">
+    {
+        "query_json_path": "/[path to config]/aqs_query/{{ reportName }}.json",
+        "template_base":"/[path to config]/",
+        "template_query_map": [
+            {
+                "template_path": "templates/{{ reportName }}.ftl",
+                "query_list": [
+                    {{#dataElementList}}
+                        {{#categoryOptionCombos}}
+                            "{{ queryName }}",
+                        {{/categoryOptionCombos}}
+                    {{/dataElementList}}
+                ]
+            }
+        ],
+        "http-post-uri": "[server url]/api/dataValueSets"
+    }
+</script>
+
+<script id="mushTmpl_postTemplate_suggestion" type="x-tmpl-mustache">
+    {
+      "dataSet": "${paramDatasetId}",
+      "period": "${paramReportingPeriod}",
+      "orgUnit": "${paramOrgUnitId}",
+      "dataValues": [
+            {{#dataElementList}}
+                {{#categoryOptionCombos}}
+                &lt;#list {{ queryName }} as row&gt;
+                    {
+                        "dataElement": "{{dataElementId}}",
+                        "categoryOptionCombo": "{{id}}",
+                        "value": "${value}"
+                    },
+                &lt;#list&gt;
+                {{/categoryOptionCombos}}
+            {{/dataElementList}}
+      ]
+    }
+</script>
+
+
+<script id="mushTmpl_query_suggestion" type="x-tmpl-mustache">
+    [
+      {
+        "queryGroupname": "{{reportName}}",
+        "queries": [
+           {{#dataElementList}}
+                {{#categoryOptionCombos}}
+                    {
+                        "queryName": "{{queryName}}",
+                        "query": "select 0 as value from dual;"
+                    },
+                {{/categoryOptionCombos}}
+           {{/dataElementList}}
+        ]
+      }
+    ]
+</script>
+
+</body>
+</html>
+
