@@ -15,7 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 @RequestMapping(value = "/dhis2/orgUnits")
 public class DHISOrgUnitController {
 
-    public static final String DHIS_ORGUNIT_SEARCH_FORMAT = "/api/organisationUnits?filter=name:like:%s&fields=id,name,href";
+    public static final String DHIS_ORGUNIT_SEARCH_FORMAT = "/api/organisationUnits?filter=name:like:%s&fields=id,name,href&pageSize=500";
     @Autowired
     DHISMetaDataService metaDataService;
 
@@ -51,8 +51,9 @@ public class DHISOrgUnitController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
     DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) {
+        String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
         String searchUri =
-                String.format(DHIS_ORGUNIT_SEARCH_FORMAT, name);
+                String.format(DHIS_ORGUNIT_SEARCH_FORMAT, searchString);
         return dhis2Client.get(searchUri);
     }
 

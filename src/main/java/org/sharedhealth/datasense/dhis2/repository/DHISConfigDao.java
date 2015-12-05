@@ -127,4 +127,12 @@ public class DHISConfigDao {
 
         return orgUnitConfigs.isEmpty() ? null : orgUnitConfigs.get(0);
     }
+
+    public DHISReportConfig getReportConfig(Integer configId) {
+        List<DHISReportConfig> configs = jdbcTemplate.query(
+                String.format("select %s from dhis_dataset_map where id=:configId", DATASET_CFG_ALL_FIELDS),
+                Collections.singletonMap("configId", configId),
+                rowMapperForDataset());
+        return configs.isEmpty() ? null : configs.get(0);
+    }
 }

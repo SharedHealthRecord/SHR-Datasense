@@ -2,14 +2,14 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
     <script src="/scripts/dhisSearch.js"></script>
     <script src="/scripts/dhisDataSetTemplate.js"></script>
     <script src="/scripts/mustache.min.js"></script>
     <script src="/scripts/script.js"/>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
     <script type = "text/javascript">
         $( document ).ready(function() {
             var dataSetTemplateHelper = new DhisDataSetTemplate();
@@ -142,7 +142,7 @@
                         "categoryOptionCombo": "{{id}}",
                         "value": "${value}"
                     },
-                &lt;#list&gt;
+                &lt;/#list&gt;
                 {{/categoryOptionCombos}}
             {{/dataElementList}}
       ]

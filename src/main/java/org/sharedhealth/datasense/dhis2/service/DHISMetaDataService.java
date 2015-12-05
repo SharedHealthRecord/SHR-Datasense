@@ -85,4 +85,8 @@ public class DHISMetaDataService {
     public DHISReportConfig getReportConfigForDataset(String datasetId) {
         return dhisConfigDao.getMappedConfigForDataset(datasetId);
     }
+
+    public DHISReportConfig getReportConfig(Integer configId) {
+        return dhisConfigDao.getReportConfig(configId);
+    }
 }

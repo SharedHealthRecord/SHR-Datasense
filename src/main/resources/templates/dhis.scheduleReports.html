@@ -2,13 +2,13 @@
 <html>
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="/css/style.css"/>
     <link rel="stylesheet" href="/css/datepicker.css"/>
     <script src="/scripts/jquery-2.1.3.min.js"></script>
     <script src="/scripts/script.js"/>
     <script src="/scripts/mustache.min.js"></script>
-    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+    <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/bootstrap-datepicker.js"></script>
     <script src="/scripts/reportScheduleOptions.js"></script>
     <script type = "text/javascript">
@@ -69,6 +69,7 @@
                     </div>
                     <input id="datasetIdEl" name="datasetId" type="hidden" th:value="${reportConfig.datasetId}" />
                     <input name="datasetName" type="hidden" th:value="${reportConfig.datasetName}" />
+                    <input name = "configId" id="configId" type="hidden" th:value="${reportConfig.id}" />
 
                     <div class="form-group">
                         <label class="radio-inline"><input type="radio" name="scheduleType" value="once" checked="checked"/>One time</label>

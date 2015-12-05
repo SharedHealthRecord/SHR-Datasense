@@ -28,6 +28,7 @@ public class ReportScheduleRequest {
     private String endDate;
     private ReportPeriod reportPeriod;
     private String datasetName;
+    private Integer configId;
 
     public ReportScheduleRequest() {
     }
@@ -89,6 +90,15 @@ public class ReportScheduleRequest {
     public void setDatasetName(String datasetName) {
         this.datasetName = datasetName;
     }
+
+    public Integer getConfigId() {
+        return configId;
+    }
+
+    public void setConfigId(Integer configId) {
+        this.configId = configId;
+    }
+
 
     private Calendar fromDateString(String dateString) {
         try {
@@ -293,5 +303,6 @@ public class ReportScheduleRequest {
             int endDayOfMonth = last.getActualMaximum(Calendar.DAY_OF_MONTH);
             return String.format("%04d-%02d-%02d", last.get(Calendar.YEAR), last.get(Calendar.MONTH) + 1, endDayOfMonth);
         }
+
     }
 }

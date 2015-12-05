@@ -47,14 +47,14 @@ public class JobSchedulerService {
 
     private void scheduleOnce(ReportScheduleRequest scheduleRequest)  {
         String datasetId = scheduleRequest.getDatasetId();
-        DHISReportConfig configForDataset = dhisMapDao.getMappedConfigForDataset(datasetId);
+        DHISReportConfig configForDataset = dhisMapDao.getReportConfig(scheduleRequest.getConfigId());
 
         for (String facilityId : scheduleRequest.getSelectedFacilities()) {
             JobDetailFactoryBean jobFactory = new JobDetailFactoryBean();
             jobFactory.setJobClass(DHISQuartzJob.class);
             DHISOrgUnitConfig orgUnitConfig = dhisMapDao.findOrgUnitConfigFor(facilityId);
 
-            String jobName = getJobName(datasetId, facilityId, scheduleRequest.reportPeriod().period());
+            String jobName = getJobName(scheduleRequest.getConfigId(), datasetId, facilityId, scheduleRequest.reportPeriod().period());
             jobFactory.setName(jobName);
             jobFactory.setGroup(datasetId);
             jobFactory.afterPropertiesSet();
@@ -75,7 +75,7 @@ public class JobSchedulerService {
             String triggerName = jobName + "-TRIGGER";
             SimpleTrigger trigger = (SimpleTrigger) newTrigger()
                                         .withIdentity(triggerName, datasetName)
-                                        .startAt(afterSecs(10)).build();
+                                        .startAt(afterSecs(30)).build();
             //CronTrigger trigger = getTrigger(triggerName, cronExpression, jobDetail);
             try {
                 if (!scheduler.checkExists(trigger.getKey())) {
@@ -101,8 +101,8 @@ public class JobSchedulerService {
         return c.getTime();
     }
 
-    private String getJobName(String datasetId, String facilityId, String period) {
-        return datasetId + "-" + facilityId + "-" + period;
+    private String getJobName(Integer configId, String datasetId, String facilityId, String period) {
+        return datasetId + "." + configId + "-" + facilityId + "-" + period;
     }
 
 
@@ -116,18 +116,21 @@ public class JobSchedulerService {
         return parts[2];
     }
 
-    public List<DatasetJobSchedule> findAllJobsForDataset(String datasetId) throws SchedulerException {
-        DHISReportConfig configForDataset = dhisMapDao.getMappedConfigForDataset(datasetId);
+    public List<DatasetJobSchedule> findAllJobsForDatasetConfig(Integer configId) throws SchedulerException {
+        DHISReportConfig reportConfig = dhisMapDao.getReportConfig(configId);
         List<DatasetJobSchedule> reportSchedules = new ArrayList<DatasetJobSchedule>();
-        if (configForDataset == null) {
+        if (reportConfig == null) {
             return reportSchedules;
         }
+
+        String datasetId = reportConfig.getDatasetId();
 
         List<String> jobGroupNames = scheduler.getJobGroupNames();
         for (String groupName : jobGroupNames) {
             for (JobKey jobKey : scheduler.getJobKeys(GroupMatcher.jobGroupEquals(groupName))) {
                 String jobName = jobKey.getName();
-                if (!jobName.startsWith(datasetId + "-")) {
+                String matcher = datasetId + "." + reportConfig.getId() + "-";
+                if (!jobName.startsWith(matcher)) {
                     continue;
                 }
 
@@ -140,7 +143,7 @@ public class JobSchedulerService {
                 for (Trigger trigger : triggers) {
                     DatasetJobSchedule reportSchedule = new DatasetJobSchedule();
                     System.out.println("[jobName] : " + jobName + " [groupName] : " + jobGroup + " - " + trigger.getNextFireTime());
-                    reportSchedule.setDatasetName(configForDataset.getDatasetName());
+                    reportSchedule.setDatasetName(reportConfig.getDatasetName());
                     reportSchedule.setFacilityId(facilityId);
                     reportSchedule.setPeriod(periodForJob);
                     reportSchedule.setNextFireTime(toNotNullDateString(trigger.getNextFireTime()));

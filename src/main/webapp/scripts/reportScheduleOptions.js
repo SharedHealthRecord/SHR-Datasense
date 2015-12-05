@@ -27,8 +27,8 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
 
 
    $("#loadScheduleStatus").bind("click", function() {
-       var datasetId = $("#datasetIdEl").val();
-       var targetUrl = "/dhis2/reports/schedule/" + datasetId + "/jobs";
+       var configId = $("#configId").val();
+       var targetUrl = "/dhis2/reports/schedule/" + configId + "/jobs";
        $.get(targetUrl).done(function(results) {
            var template = $('#template_scheduled_jobs_results').html();
            Mustache.parse(template);

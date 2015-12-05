@@ -27,7 +27,7 @@ import java.util.List;
 public class DHISReportController {
 
 
-    public static final String DHIS_DATASET_SEARCH_FORMAT = "/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType";
+    public static final String DHIS_DATASET_SEARCH_FORMAT = "/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType&pageSize=500";
     private static final String DHIS_DATASET_ORGUNIT_FORMAT = "/api/dataSets/%s?fields=id,name,organisationUnits";
     @Autowired
     DHISMetaDataService metaDataService;
@@ -68,8 +68,9 @@ public class DHISReportController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
     DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) {
+        String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
         String searchUri =
-                String.format(DHIS_DATASET_SEARCH_FORMAT, name);
+                String.format(DHIS_DATASET_SEARCH_FORMAT, searchString);
         return dhis2Client.get(searchUri);
     }
 
@@ -83,10 +84,10 @@ public class DHISReportController {
 
 
 
-    @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/schedule/{configId}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public ModelAndView showScheduleOptions(@PathVariable String datasetId) {
-        return viewModelForDataset(datasetId);
+    public ModelAndView showScheduleOptions(@PathVariable Integer configId) {
+        return viewModelForDataset(configId);
     }
 
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.POST)
@@ -104,28 +105,28 @@ public class DHISReportController {
             e.printStackTrace();
             formErrors[0] = e.getMessage();
         }
-        ModelAndView viewModel = viewModelForDataset(scheduleRequest.getDatasetId());
+        ModelAndView viewModel = viewModelForDataset(scheduleRequest.getConfigId());
         viewModel.addObject("formErrors", formErrors);
         return viewModel;
     }
 
-    @RequestMapping(value = "/schedule/{datasetId}/jobs", method = RequestMethod.GET)
+    @RequestMapping(value = "/schedule/{configId}/jobs", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    List<DatasetJobSchedule> showScheduleForDataset(@PathVariable String datasetId) {
+    List<DatasetJobSchedule> showScheduleForDataset(@PathVariable Integer configId) {
         try {
-            return jobScheduler.findAllJobsForDataset(datasetId);
+            return jobScheduler.findAllJobsForDatasetConfig(configId);
         } catch (SchedulerException e) {
             e.printStackTrace();
         }
         return null;
     }
 
-    private ModelAndView viewModelForDataset(String datasetId) {
+    private ModelAndView viewModelForDataset(Integer configId) {
         ModelAndView modelAndView = new ModelAndView("dhis.scheduleReports");
         modelAndView.addObject("orgUnits", metaDataService.getAvailableOrgUnits(false));
         modelAndView.addObject("supportedPeriodTypes", Arrays.asList(ReportScheduleRequest.SUPPORTED_PERIOD_TYPES));
-        modelAndView.addObject("reportConfig", metaDataService.getReportConfigForDataset(datasetId));
+        modelAndView.addObject("reportConfig", metaDataService.getReportConfig(configId));
         return modelAndView;
     }
 
