@@ -51,7 +51,10 @@ function DhisDataSetTemplate() {
                                 success: function(rs) {
                                    item.categoryOptionCombos = rs.categoryOptionCombos;
                                    item.categoryOptionCombos.forEach(function(coc) {
-                                        var query_name = item.name + ' ' + coc.name;
+                                        var query_name = item.name;
+                                        if (coc.name !== '(default)') {
+                                            query_name = query_name + ' ' + coc.name;
+                                        }
                                         coc.queryName = query_name.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_').replace(/^(-)+|(_)+$/g,'').replace(/-/g, '_');
                                         coc.dataElementId = item.dataElementId;
                                    });

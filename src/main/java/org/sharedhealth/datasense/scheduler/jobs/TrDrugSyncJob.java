@@ -39,7 +39,7 @@ public class TrDrugSyncJob {
             feedProcessor.process();
         } catch (URISyntaxException e) {
             String message = String.format("Unable to process drug feed [%s]", trMedicationAtomfeedUrl);
-            log.error(message);
+            log.error(message, e);
             throw new RuntimeException(message, e);
         }
     }

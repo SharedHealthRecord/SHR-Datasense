@@ -124,7 +124,7 @@
                 ]
             }
         ],
-        "http-post-uri": "[server url]/api/dataValueSets"
+        "http-post-uri": "http://dhis2.example.org/api/dataValueSets"
     }
 </script>
 
@@ -140,7 +140,7 @@
                     {
                         "dataElement": "{{dataElementId}}",
                         "categoryOptionCombo": "{{id}}",
-                        "value": "${value}"
+                        "value": "${row.value}"
                     },
                 &lt;/#list&gt;
                 {{/categoryOptionCombos}}

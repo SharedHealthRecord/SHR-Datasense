@@ -46,7 +46,7 @@ public class CatchmentEncounterCrawlerJob {
                 feedCrawler.process();
             } catch (Exception e) {
                 String errorMessage = String.format("Unable to process encounter catchment feed [%s]", feedUrl);
-                log.error(errorMessage);
+                log.error(errorMessage, e);
                 throw new RuntimeException(errorMessage, e);
             }
         }

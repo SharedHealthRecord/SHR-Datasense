@@ -37,7 +37,7 @@ public class PatientUpdateCrawlerJob {
             feedProcessor.process();
         } catch (URISyntaxException e) {
             String errorMessage = String.format("Unable to process patient update feed [%s]", feedUrl);
-            log.error(errorMessage);
+            log.error(errorMessage, e);
             throw new RuntimeException(errorMessage, e);
         }
     }

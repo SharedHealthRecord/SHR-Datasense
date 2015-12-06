@@ -29,7 +29,7 @@ public class PatientUpdateEventWorker implements EventWorker {
             final PatientUpdate patientUpdate = readFrom(extractContent(event.getContent()), PatientUpdate.class);
             patientDao.update(patientUpdate);
         } catch (IOException e) {
-            LOG.error(e.getMessage());
+            LOG.error(e.getMessage(), e);
         }
     }
 
