@@ -44,6 +44,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
+        logger.info("Resolving service provider for encounter of patient:" + composition.getPatientReference().getHealthId());
         String facilityId = null;
         Facility facility = null;
         ServiceProviderReference serviceProviderReference = composition.getServiceProviderReference();
@@ -94,6 +95,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     private void callNextIfGiven(EncounterComposition bundle) {
         if (nextProcessor != null) {
+            logger.info("Invoking next processor:" + nextProcessor.getClass().getName());
             nextProcessor.process(bundle);
         }
     }

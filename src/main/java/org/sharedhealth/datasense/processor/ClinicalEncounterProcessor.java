@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.processor;
 
 import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.valueset.EncounterTypeEnum;
+import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.Patient;
@@ -21,6 +22,8 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     private EncounterDao encounterDao;
     private ResourceProcessor nextProcessor;
 
+    private Logger log = Logger.getLogger(ClinicalEncounterProcessor.class);
+
     @Autowired
     public ClinicalEncounterProcessor(@Qualifier("subResourceProcessor") ResourceProcessor nextProcessor,
                                       EncounterDao encounterDao) {
@@ -30,12 +33,14 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
+        log.info("Processing encounters for patient:" + composition.getPatientReference().getHealthId());
         ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = composition.getEncounterReference().getResource();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         composition.getEncounterReference().setValue(encounter);
         encounterDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
         encounterDao.save(encounter);
         if (nextProcessor != null) {
+            log.info("Invoking next processor:" + nextProcessor.getClass().getName());
             nextProcessor.process(composition);
         }
     }

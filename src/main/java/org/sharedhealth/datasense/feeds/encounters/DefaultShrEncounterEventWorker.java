@@ -5,6 +5,8 @@ import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.processor.ResourceProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
@@ -17,6 +19,7 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
     @Autowired
     @Qualifier("patientProcessor")
     ResourceProcessor firstProcessor;
+    private static final Logger logger = LoggerFactory.getLogger(DefaultShrEncounterEventWorker.class);
 
     @Override
     public void process(EncounterBundle encounterBundle) {
@@ -24,8 +27,11 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
         BundleContext context = new BundleContext(bundle, encounterBundle.getEncounterId());
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         for (EncounterComposition encounterComposition : encounterCompositions) {
+            logger.info("Invoking processor for encounter bundle:" + encounterBundle.getEncounterId());
             firstProcessor.process(encounterComposition);
         }
+        logger.info("Done processing encounter bundle:" + encounterBundle.getEncounterId());
+
     }
 
 
