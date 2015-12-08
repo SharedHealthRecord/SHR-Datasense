@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.feeds.encounters;
 
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Logger;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
@@ -12,6 +13,7 @@ import org.sharedhealth.datasense.client.ShrWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.feeds.transaction.AtomFeedSpringTransactionManager;
 import org.sharedhealth.datasense.model.EncounterBundle;
+import org.slf4j.LoggerFactory;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -26,6 +28,8 @@ public class ShrEncounterFeedProcessor {
     private ShrWebClient shrWebClient;
     private DatasenseProperties properties;
     private FhirBundleUtil fhirBundleUtil;
+
+    private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ShrEncounterFeedProcessor.class);
 
     public ShrEncounterFeedProcessor(EncounterEventWorker encounterEventWorker,
                                      String feedUrl,
@@ -50,6 +54,7 @@ public class ShrEncounterFeedProcessor {
         AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.feedUrl),
                 new FeedEventWorker(encounterEventWorker),
                 atomProperties);
+        logger.info("Crawling feed:" + this.feedUrl);
         atomFeedClient.processEvents();
         atomFeedClient.processFailedEvents();
     }
