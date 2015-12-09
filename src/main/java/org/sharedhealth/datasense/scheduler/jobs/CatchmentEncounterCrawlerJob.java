@@ -43,6 +43,7 @@ public class CatchmentEncounterCrawlerJob {
                             new AllFailedEventsJdbcImpl(transactionManager),
                             transactionManager, shrWebClient, properties, bundleUtil);
             try {
+                log.info("Crawling feed:" + feedUrl);
                 feedCrawler.process();
             } catch (Exception e) {
                 String errorMessage = String.format("Unable to process encounter catchment feed [%s]", feedUrl);

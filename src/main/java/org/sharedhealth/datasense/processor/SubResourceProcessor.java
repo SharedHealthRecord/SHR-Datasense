@@ -20,12 +20,12 @@ public class SubResourceProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        logger.info("Processing sub resources of encounters for patient:" + composition.getPatientReference().getHealthId());
+        logger.debug("Processing sub resources of encounters for patient:" + composition.getPatientReference().getHealthId());
         deleteExistingEncounter(composition);
         for (IResource resource : composition.getTopLevelResources()) {
             for (FhirResourceHandler fhirResourceHandler : this.fhirResourceHandlers) {
                 if (fhirResourceHandler.canHandle(resource)) {
-                    logger.info("Invoking next sub resource handler:" + fhirResourceHandler.getClass().getName());
+                    logger.debug("Invoking next sub resource handler:" + fhirResourceHandler.getClass().getName());
                     fhirResourceHandler.process(resource, composition);
                 }
             }

@@ -33,7 +33,7 @@ public class PatientProcessor implements ResourceProcessor {
     @Override
     public void process(EncounterComposition composition) {
         String healthId = composition.getPatientReference().getHealthId();
-        log.info("Processing Patient : " + healthId);
+        log.debug("Processing Patient : " + healthId);
         Patient patient = patientDao.findPatientById(healthId);
         if (patient == null) {
             patient = downloadPatientAndSave(healthId);
@@ -46,7 +46,7 @@ public class PatientProcessor implements ResourceProcessor {
         Patient patient;
         String message = "Could not identify patient by health Id:" + healthId;
         try {
-            log.info("Couldn't identify patient locally, downloading patient: " + healthId);
+            log.debug("Couldn't identify patient locally, downloading patient: " + healthId);
             patient = mciWebClient.identifyPatient(healthId);
         } catch (URISyntaxException e) {
             throw new RuntimeException("Unable to identify patient in MCI", e);
@@ -57,7 +57,7 @@ public class PatientProcessor implements ResourceProcessor {
         if (patient == null) {
             throw new RuntimeException(message);
         }
-        log.info("Saving downloaded patient: " + healthId);
+        log.debug("Saving downloaded patient: " + healthId);
         patientDao.save(patient);
         return patient;
     }
@@ -70,7 +70,7 @@ public class PatientProcessor implements ResourceProcessor {
 
     private void callNextIfGiven(EncounterComposition bundle) {
         if (nextProcessor != null) {
-            log.info("Invoking next processor:" + nextProcessor.getClass().getName());
+            log.debug("Invoking next processor:" + nextProcessor.getClass().getName());
             nextProcessor.process(bundle);
         }
     }

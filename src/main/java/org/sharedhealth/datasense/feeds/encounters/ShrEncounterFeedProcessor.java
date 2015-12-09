@@ -54,7 +54,7 @@ public class ShrEncounterFeedProcessor {
         AtomFeedClient atomFeedClient = atomFeedClient(new URI(this.feedUrl),
                 new FeedEventWorker(encounterEventWorker),
                 atomProperties);
-        logger.info("Crawling feed:" + this.feedUrl);
+        logger.debug("Crawling feed:" + this.feedUrl);
         atomFeedClient.processEvents();
         atomFeedClient.processFailedEvents();
     }

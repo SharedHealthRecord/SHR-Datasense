@@ -27,10 +27,10 @@ public class DefaultShrEncounterEventWorker implements EncounterEventWorker {
         BundleContext context = new BundleContext(bundle, encounterBundle.getEncounterId());
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         for (EncounterComposition encounterComposition : encounterCompositions) {
-            logger.info("Invoking processor for encounter bundle:" + encounterBundle.getEncounterId());
+            logger.debug("Invoking processor for encounter bundle:" + encounterBundle.getEncounterId());
             firstProcessor.process(encounterComposition);
         }
-        logger.info("Done processing encounter bundle:" + encounterBundle.getEncounterId());
+        logger.debug("Done processing encounter bundle:" + encounterBundle.getEncounterId());
 
     }
 

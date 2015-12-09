@@ -54,7 +54,7 @@ public class MciWebClient {
 
     private String getResponse(final String healthId) throws URISyntaxException, IOException {
         URI mciURI = getMciURI(healthId);
-        log.info("Reading from " + mciURI);
+        log.debug("Reading from " + mciURI);
         Map<String, String> headers = getHrmAccessTokenHeaders(identityServiceClient.getOrCreateToken(), properties);
         headers.put("Accept", "application/json");
         String response = null;

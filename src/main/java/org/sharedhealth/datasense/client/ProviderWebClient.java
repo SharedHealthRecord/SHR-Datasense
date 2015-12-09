@@ -50,7 +50,7 @@ public class ProviderWebClient {
 
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         URI providerUrl = getProviderUrl(facilityId);
-        log.info("Reading from " + providerUrl);
+        log.debug("Reading from " + providerUrl);
         Map<String, String> headers = getHrmAuthTokenHeaders(properties);
         headers.put("Accept", "application/json");
         return new WebClient().get(providerUrl, headers);
