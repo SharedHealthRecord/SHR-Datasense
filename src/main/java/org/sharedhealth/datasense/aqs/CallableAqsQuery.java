@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.aqs;
 
 
+import org.apache.log4j.Logger;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 
@@ -19,6 +20,8 @@ public class CallableAqsQuery implements Callable<HashMap<String, List<Map<Strin
     private NamedParameterJdbcTemplate jdbcTemplate;
     private QueryDefinition queryDefinition;
     private Map<String, Object> params;
+
+    private static final Logger logger = Logger.getLogger(CallableAqsQuery.class);
 
     public CallableAqsQuery(NamedParameterJdbcTemplate jdbcTemplate, QueryDefinition queryDefinition, Map<String, Object> params) {
         this.jdbcTemplate = jdbcTemplate;
@@ -41,7 +44,7 @@ public class CallableAqsQuery implements Callable<HashMap<String, List<Map<Strin
             queryString = queryString.replace(String.format(":%s:", paramName), String.format("%s", paramValue));
         }
         //TODO: use logger
-        System.out.println("executing query:" + queryString);
+        logger.debug("executing query:" + queryString);
         List<Map<String, Object>> queryResults = jdbcTemplate.query(queryString, new RowMapper<Map<String, Object>>() {
             @Override
             public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {

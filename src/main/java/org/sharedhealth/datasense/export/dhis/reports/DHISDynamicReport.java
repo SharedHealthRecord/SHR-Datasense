@@ -78,7 +78,7 @@ public class DHISDynamicReport {
         } catch (Exception e) {
             System.out.println(e);
             logger.error(String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]",
-                            facilityId, datasetId, reportingStartDate), e);
+                    facilityId, datasetId, reportingStartDate), e);
         }
     }
 
@@ -87,14 +87,13 @@ public class DHISDynamicReport {
     }
 
     private void logWhenErroredOut(String status, String dhisResponse) {
-        if ((status != null) && (status.equalsIgnoreCase("200") || status.equalsIgnoreCase("201")) ) {
+        if ((status != null) && (status.equalsIgnoreCase("200") || status.equalsIgnoreCase("201"))) {
             if (!StringUtils.isBlank(dhisResponse)) {
                 if (dhisResponse.toUpperCase().contains("ERROR")) {
                     logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
                 }
             }
-        }
-        else {
+        } else {
             logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
         }
 
@@ -120,6 +119,7 @@ public class DHISDynamicReport {
             params.putAll(queryParams);
             params.putAll(extraParams);
             String content = aqsFTLProcessor.process(configFile, params);
+            logger.debug(String.format("Posting contents to DHIS2:- %s", content));
             try {
                 DHISResponse dhisResponse = dhis2Client.post(content);
                 logger.debug(dhisResponse.getValue());
