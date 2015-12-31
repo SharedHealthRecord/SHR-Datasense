@@ -788,4 +788,15 @@
         <comment>Change event content column type for failed_event_retry_log</comment>
         <modifyDataType tableName="failed_event_retry_log" columnName="event_content" newDataType="mediumtext" />
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20151231-1301" context="setup" author="neha, dubey">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <columnExists columnName="tags" tableName="failed_events"/>
+            </not>
+        </preConditions>
+        <comment>Creating column tags for failed_events table. This is same as atom spec feed.entry.categories.</comment>
+        <addColumn tableName="failed_events">
+            <column name="tags" type="varchar(255)"/>
+        </addColumn>
+    </changeSet>
 </databaseChangeLog>
