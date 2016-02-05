@@ -19,9 +19,10 @@ public class DrugProcessor {
     private static final Logger logger = LoggerFactory.getLogger(DrugProcessor.class);
 
     public void process(TrMedication trMedication) {
-        TrConcept concept = conceptDao.findByConceptUuid(trMedication.getConceptId());
+        final String associatedConceptId = trMedication.getAssociatedConceptId();
+        TrConcept concept = conceptDao.findByConceptUuid(associatedConceptId);
         if(concept == null){
-            String message = "Drug Concept not downloaded";
+            final String message = String.format("Concept [%s] associated with Drug [%s] not downloaded", associatedConceptId, trMedication.getUuid());
             logger.error(message);
             throw new RuntimeException(message);
         }

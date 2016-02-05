@@ -38,7 +38,7 @@ public class DrugDao {
     private HashMap<String, Object> getParameterMap(TrMedication drug) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("drug_uuid", drug.getUuid());
-        map.put("concept_uuid", drug.getConceptId());
+        map.put("concept_uuid", drug.getAssociatedConceptId());
         map.put("name", drug.getName());
         map.put("reference_term_uuid", drug.getReferenceTermId());
         map.put("updated_at", new Date());

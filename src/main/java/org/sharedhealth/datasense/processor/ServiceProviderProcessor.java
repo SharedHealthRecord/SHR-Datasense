@@ -1,10 +1,13 @@
 package org.sharedhealth.datasense.processor;
 
+import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.client.FacilityWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
+import org.sharedhealth.datasense.model.fhir.ProviderReference;
 import org.sharedhealth.datasense.model.fhir.ServiceProviderReference;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.slf4j.Logger;
@@ -15,6 +18,7 @@ import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.List;
 
 @Component("serviceProviderProcessor")
 public class ServiceProviderProcessor implements ResourceProcessor {
@@ -57,6 +61,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
             facility = loadFacilityFromParticipant(composition);
         }
         setFacilityValue(composition, facility);
+        saveEncounterProviders(composition);
         callNextIfGiven(composition);
     }
 
@@ -128,5 +133,18 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     @Override
     public void setNext(ResourceProcessor nextProcessor) {
         this.nextProcessor = nextProcessor;
+    }
+
+    public void saveEncounterProviders(EncounterComposition composition) {
+        final ProviderReference providerReference = composition.getProviderReference();
+        final String encounterId = composition.getContext().getShrEncounterId();
+        providerProcessor.deleteEncounterProviders(encounterId);
+        for (ResourceReferenceDt reference : providerReference.getReferences()) {
+            String providerId = providerReference.getProviderId(reference);
+            if (!StringUtils.isBlank(providerId)) {
+                providerProcessor.saveEncounterProviders(encounterId, providerId);
+            }
+        }
+
     }
 }

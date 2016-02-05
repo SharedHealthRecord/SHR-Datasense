@@ -68,7 +68,7 @@ public class DrugDaoIT {
                 assertEquals(drug.getUuid(), rs.getString("drug_uuid"));
                 assertEquals(drug.getName(), rs.getString("name"));
                 assertEquals(drug.getReferenceTermId(), rs.getString("reference_term_uuid"));
-                assertEquals(drug.getConceptId(), rs.getString("concept_uuid"));
+                assertEquals(drug.getAssociatedConceptId(), rs.getString("concept_uuid"));
                 return rs;
             }
         });

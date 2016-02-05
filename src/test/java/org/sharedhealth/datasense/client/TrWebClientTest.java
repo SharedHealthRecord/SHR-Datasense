@@ -89,7 +89,7 @@ public class TrWebClientTest {
         assertEquals("OPV 1",trMedication.getName());
         assertEquals(DRUG_UUID,trMedication.getUuid());
         assertEquals("8bb7fb27-2be1-4b7a-bee4-e09d7b800d39",trMedication.getReferenceTermId());
-        assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a", trMedication.getConceptId());
+        assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a", trMedication.getAssociatedConceptId());
 
     }
 }

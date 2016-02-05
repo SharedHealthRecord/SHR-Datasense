@@ -55,4 +55,12 @@ public class ProviderProcessor {
         }
         return provider;
     }
+
+    public void saveEncounterProviders(String encounterId, String providerId) {
+        providerDao.saveEncounterProvider(encounterId, providerId);
+    }
+
+    public void deleteEncounterProviders(String encounter_id) {
+        providerDao.deleteEncounterProvider(encounter_id);
+    }
 }

@@ -41,7 +41,7 @@ public class TrMedication {
         return null;
     }
 
-    public String getConceptId() {
+    public String getAssociatedConceptId() {
         for (org.sharedhealth.datasense.model.tr.Coding coding : code.getCoding()) {
             if (isConceptUrl(coding.getSystem()))
                 return coding.getCode();
