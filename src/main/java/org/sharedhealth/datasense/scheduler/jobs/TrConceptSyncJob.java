@@ -25,7 +25,7 @@ public class TrConceptSyncJob {
 
     Logger log = Logger.getLogger(TrConceptSyncJob.class);
 
-    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 30000)
+    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 120000)
     public void start() {
         String trConceptAtomfeedUrl = properties.getTrConceptAtomfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
