@@ -825,4 +825,25 @@
             <column name="encounter_id" type="varchar(50)"/>
         </createIndex>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20160104-1141" author="sharedhealth" context="setup">
+        <comment>creating diagnostic order table</comment>
+        <createTable tableName="diagnostic_order">
+            <column name="order_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="order_datetime" type="timestamp"/>
+            <column name="order_category" type="varchar(50)"/>
+            <column name="order_code" type="varchar(10)"/>
+            <column name="orderer" type="varchar(100)"/>
+            <column name="order_concept" type="varchar(50)"/>
+            <column name="order_status" type="varchar(20)"/>
+            <column name="uuid" type="varchar(50)">
+                    <constraints nullable="false" unique="true" />
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </createTable>
+    </changeSet>
+
 </databaseChangeLog>

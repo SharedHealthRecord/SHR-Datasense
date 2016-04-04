@@ -3,15 +3,15 @@ package org.sharedhealth.datasense.model;
 import java.util.Date;
 
 public class Procedure extends BaseResource {
-    String patientHid;
-    String encounterId;
-    Date date;
-    Date startDate;
-    Date endDate;
-    String procedureUuid;
-    String procedureCode;
-    String diagnosisUuid;
-    String diagnosisCode;
+    private String patientHid;
+    private String encounterId;
+    private Date date;
+    private Date startDate;
+    private Date endDate;
+    private String procedureUuid;
+    private String procedureCode;
+    private String diagnosisUuid;
+    private String diagnosisCode;
 
 
     public String getDiagnosisCode() {
