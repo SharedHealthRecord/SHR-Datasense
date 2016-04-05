@@ -41,11 +41,11 @@ public class IdPAuthProvider implements AuthenticationProvider {
     }
 
     private boolean hasDatasenseRoles(UserInfo userInfo) {
-        return userInfo.getProperties().getGroups().contains("ROLE_SHR System Admin");
+        return userInfo.getProperties().getUserGroups().contains("ROLE_SHR System Admin");
     }
 
     private List<? extends GrantedAuthority> grantedAuthorities(UserInfo userInfo) {
-        String commaSeparatedRoles = StringUtils.join(userInfo.getProperties().getGroups(), ",");
+        String commaSeparatedRoles = StringUtils.join(userInfo.getProperties().getUserGroups(), ",");
         return AuthorityUtils.commaSeparatedStringToAuthorityList(commaSeparatedRoles);
     }
 
