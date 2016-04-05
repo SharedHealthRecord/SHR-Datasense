@@ -23,10 +23,13 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
+import java.util.List;
 
 import static org.junit.Assert.*;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
@@ -50,7 +53,10 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
     @Before
     public void setUp() throws Exception {
         super.loadConfigParameters();
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml");
+    }
+
+    private void setUpData(String fileName, String diagnosticOrderResourceUuid) throws IOException, ParseException {
+        Bundle bundle = loadFromXmlFile(fileName);
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();
@@ -60,7 +66,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         encounter.setEncounterId(SHR_ENCOUNTER_ID);
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
+        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference(diagnosticOrderResourceUuid);
         diagnosticOrder = bundleContext.getResourceForReference(resourceReference);
     }
 
@@ -71,22 +77,65 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void canHandleDeathNoteResource() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
         assertTrue(diagnosticOrderResourceHandler.canHandle(diagnosticOrder));
     }
 
     @Test
-    public void shouldSavePatientAndEncounterIdForDiagnosticOrder() {
+    public void shouldSaveASingleDiagnosticOrder() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
-        DiagnosticOrder savedDiagnosticOrder = findByEncounterId("shrEncounterId");
+        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(1, savedDiagnosticOrders.size());
+        DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "RAD");
+    }
+
+    @Test
+    public void shouldStoreADiagnosticOrderForEachItemInDiagnosticOrder() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested_with_multiple_items.xml", "urn:uuid:6c1f201d-17ea-419a-a5f6-a3d15082da80");
+        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(2, savedDiagnosticOrders.size());
+        DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
+        DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested", "LAB");
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested", "LAB");
+    }
+
+    @Test
+    public void shouldStoreCancelledDiagnosticOrders() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_cancelled_with_multiple_items.xml", "urn:uuid:6c1f201d-17ea-419a-a5f6-a3d15082da80");
+        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(2, savedDiagnosticOrders.size());
+        DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
+        DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB");
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB");
+    }
+
+    @Test
+    public void shouldNotStoreDiagnosticOrderWithoutSystemAndCode() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe");
+        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(0, savedDiagnosticOrders.size());
+    }
+
+    private void assertDiagnosticOrder(DiagnosticOrder savedDiagnosticOrder, String orderCode,
+                                       String orderConcept, String orderStatus, String orderCategory) {
         assertEquals(PATIENT_HID, savedDiagnosticOrder.getPatientHid());
         assertEquals(SHR_ENCOUNTER_ID, savedDiagnosticOrder.getEncounterId());
-        assertEquals("RAD", savedDiagnosticOrder.getOrderCategory());
-        assertEquals("requested", savedDiagnosticOrder.getOrderStatus());
-        assertEquals("http://172.18.46.199:8084/api/1.0/providers/24.json",savedDiagnosticOrder.getOrderer());
+        assertEquals(orderCategory, savedDiagnosticOrder.getOrderCategory());
+        assertEquals(orderCode, savedDiagnosticOrder.getOrderCode());
+        assertEquals("24", savedDiagnosticOrder.getOrderer());
+        assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
+        assertEquals(orderStatus, savedDiagnosticOrder.getOrderStatus());
         assertNotNull(savedDiagnosticOrder.getUuid());
     }
 
-    private DiagnosticOrder findByEncounterId(String shrEncounterId) {
+    private List<DiagnosticOrder> findByEncounterId(String shrEncounterId) {
         String sql = "select patient_hid,encounter_id,order_datetime,order_category,order_code,orderer," +
                 "order_concept,order_status from diagnostic_order where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
@@ -104,6 +153,6 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
                 order.setOrderStatus(rs.getString("order_status"));
                 return order;
             }
-        }).get(0);
+        });
     }
 }
