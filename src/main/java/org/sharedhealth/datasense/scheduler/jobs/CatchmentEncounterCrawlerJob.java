@@ -26,7 +26,7 @@ public class CatchmentEncounterCrawlerJob {
     @Autowired
     private EncounterEventWorker encounterEventWorker;
     @Autowired
-    FhirBundleUtil bundleUtil;
+    private FhirBundleUtil bundleUtil;
 
     Logger log = Logger.getLogger(CatchmentEncounterCrawlerJob.class);
 

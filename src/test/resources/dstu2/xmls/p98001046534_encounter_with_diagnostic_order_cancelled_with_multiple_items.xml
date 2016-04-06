@@ -109,12 +109,12 @@
                     </code>
                     <status value="cancelled"/>
                     <event>
-                        <status value="requested"/>
-                        <dateTime value="2016-04-04T14:43:48.000+05:30"/>
+                        <status value="cancelled"/>
+                        <dateTime value="2016-04-05T14:53:37.000+05:30"/>
                     </event>
                     <event>
-                        <status value="cancelled"/>
-                        <dateTime value="2016-04-04T14:53:37.000+05:30"/>
+                        <status value="requested"/>
+                        <dateTime value="2016-04-04T14:43:48.000+05:30"/>
                     </event>
                 </item>
                 <item>
@@ -132,12 +132,12 @@
                     </code>
                     <status value="cancelled"/>
                     <event>
-                        <status value="requested"/>
-                        <dateTime value="2016-04-04T14:43:48.000+05:30"/>
+                        <status value="cancelled"/>
+                        <dateTime value="2016-04-05T14:53:37.000+05:30"/>
                     </event>
                     <event>
-                        <status value="cancelled"/>
-                        <dateTime value="2016-04-04T14:53:37.000+05:30"/>
+                        <status value="requested"/>
+                        <dateTime value="2016-04-04T14:43:48.000+05:30"/>
                     </event>
                 </item>
             </DiagnosticOrder>

@@ -88,7 +88,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "RAD");
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "RAD", "01-04-2016");
     }
 
     @Test
@@ -99,8 +99,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
-        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested", "LAB");
-        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested", "LAB");
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested", "LAB", "04-04-2016");
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested", "LAB", "04-04-2016");
     }
 
     @Test
@@ -111,8 +111,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
-        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB");
-        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB");
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB", "05-04-2016");
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB", "05-04-2016");
     }
 
     @Test
@@ -123,8 +123,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(0, savedDiagnosticOrders.size());
     }
 
-    private void assertDiagnosticOrder(DiagnosticOrder savedDiagnosticOrder, String orderCode,
-                                       String orderConcept, String orderStatus, String orderCategory) {
+    private void assertDiagnosticOrder(DiagnosticOrder savedDiagnosticOrder, String orderCode, String orderConcept,
+                                       String orderStatus, String orderCategory, String orderDate) throws ParseException {
         assertEquals(PATIENT_HID, savedDiagnosticOrder.getPatientHid());
         assertEquals(SHR_ENCOUNTER_ID, savedDiagnosticOrder.getEncounterId());
         assertEquals(orderCategory, savedDiagnosticOrder.getOrderCategory());
@@ -132,6 +132,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals("24", savedDiagnosticOrder.getOrderer());
         assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
         assertEquals(orderStatus, savedDiagnosticOrder.getOrderStatus());
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        assertEquals(orderDate, simpleDateFormat.format(savedDiagnosticOrder.getOrderDate()));
         assertNotNull(savedDiagnosticOrder.getUuid());
     }
 
@@ -146,6 +148,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
                 DiagnosticOrder order = new DiagnosticOrder();
                 order.setPatientHid(rs.getString("patient_hid"));
                 order.setEncounterId(rs.getString("encounter_id"));
+                order.setOrderDate(rs.getDate("order_datetime"));
                 order.setOrderCategory(rs.getString("order_category"));
                 order.setOrderCode(rs.getString("order_code"));
                 order.setOrderer(rs.getString("orderer"));
