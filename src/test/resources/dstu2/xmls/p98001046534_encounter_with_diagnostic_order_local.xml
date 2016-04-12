@@ -78,7 +78,7 @@
         <fullUrl value="urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe"/>
         <resource>
             <DiagnosticOrder xmlns="http://hl7.org/fhir">
-                <extension url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnositicOrderCategory">
+                <extension url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnosticOrderCategory">
                     <valueString value="RAD"/>
                 </extension>
                 <subject>

@@ -24,8 +24,8 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
     @Autowired
     DiagnosticOrderDao diagnosticOrderDao;
 
-    private static final String FHIR_DIAGNOSIC_ORDER_CATEGORY_EXTENSION_URL = "https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnositicOrderCategory";
-    private static final String FHIR_DIAGNOSIC_ORDER_LAB_CATEGORY_CODE = "LAB";
+    private static final String FHIR_DIAGNOSTIC_ORDER_CATEGORY_EXTENSION_URL = "https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnosticOrderCategory";
+    private static final String FHIR_DIAGNOSTIC_ORDER_LAB_CATEGORY_CODE = "LAB";
 
     @Override
     public boolean canHandle(IResource resource) {
@@ -81,9 +81,9 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
     }
 
     private void setCategory(DiagnosticOrder order, ca.uhn.fhir.model.dstu2.resource.DiagnosticOrder fhirOrder) {
-        List<ExtensionDt> undeclaredExtensionsByUrl = fhirOrder.getUndeclaredExtensionsByUrl(FHIR_DIAGNOSIC_ORDER_CATEGORY_EXTENSION_URL);
+        List<ExtensionDt> undeclaredExtensionsByUrl = fhirOrder.getUndeclaredExtensionsByUrl(FHIR_DIAGNOSTIC_ORDER_CATEGORY_EXTENSION_URL);
         if (CollectionUtils.isEmpty(undeclaredExtensionsByUrl)) {
-            order.setOrderCategory(FHIR_DIAGNOSIC_ORDER_LAB_CATEGORY_CODE);
+            order.setOrderCategory(FHIR_DIAGNOSTIC_ORDER_LAB_CATEGORY_CODE);
             return;
         }
         String category = undeclaredExtensionsByUrl.get(0).getValue().toString();
