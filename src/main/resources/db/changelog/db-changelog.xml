@@ -845,5 +845,32 @@
             <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20161004-1241" author="sukreet" context="setup">
+        <comment>creating diagnostic report table</comment>
+        <createTable tableName="diagnostic_report">
+            <column name="report_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="order_id" type="int"/>
+            <column name="report_datetime" type="datetime"/>
+            <column name="report_category" type="varchar(50)"/>
+            <column name="report_code" type="varchar(50)"/>
+            <column name="fulfiller " type="varchar(100)"/>
+            <column name="report_concept" type="varchar(50)"/>
+            <column name="uuid" type="varchar(50)">
+                <constraints nullable="false" unique="true" />
+            </column>
+        </createTable>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161104-1214" author="sukreet" context="setup">
+        <comment>adding order id to observations</comment>
+        <sql>
+            ALTER TABLE observation
+            ADD report_id int;
+        </sql>
+    </changeSet>
+
 
 </databaseChangeLog>

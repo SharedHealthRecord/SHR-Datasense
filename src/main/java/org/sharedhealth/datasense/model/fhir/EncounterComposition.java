@@ -135,6 +135,10 @@ public class EncounterComposition {
         return parentRefs;
     }
 
+    public IResource getResourceByReference(ResourceReferenceDt resultReerence) {
+        return context.getResourceForReference(resultReerence);
+    }
+
 ////    private ArrayList<AtomEntry<? extends Resource>> loadAtomEntriesFromComposition() {
 ////        ArrayList<AtomEntry<? extends Resource>> atomEntries = new ArrayList<>();
 ////        for (Composition.SectionComponent sectionComponent : composition.getSection()) {

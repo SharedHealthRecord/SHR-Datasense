@@ -48,7 +48,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     @Override
     public void process(IResource resource, EncounterComposition composition) {
         Observation observation = new Observation();
-        mapObservation(composition, observation, resource);
+        mapObservation(composition, observation, resource, null);
     }
 
     @Override
@@ -60,21 +60,21 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     private void mapRelatedComponents(EncounterComposition composition, String parentObsUUID,
-                                      ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation) {
+                                      ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation, Integer reportId) {
 
         List<ca.uhn.fhir.model.dstu2.resource.Observation.Related> relatedObservations = fhirObservation.getRelated();
         for (ca.uhn.fhir.model.dstu2.resource.Observation.Related relatedObservation : relatedObservations) {
             IResource resource = composition.getContext().getResourceForReference(relatedObservation.getTarget());
             Observation childObservation;
             childObservation = new Observation();
-            mapObservation(composition, childObservation, resource);
+            mapObservation(composition, childObservation, resource, reportId);
             childObservation.setParentId(parentObsUUID);
             observationDao.updateParentId(childObservation);
         }
     }
 
-    private void mapObservation(EncounterComposition composition, Observation observation, IResource
-            resource) {
+    public void mapObservation(EncounterComposition composition, Observation observation, IResource
+            resource, Integer report_id) {
         ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation =
                 (ca.uhn.fhir.model.dstu2.resource.Observation) resource;
 
@@ -92,10 +92,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
             observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
 
             observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
-
+            if(null != report_id) {
+                observation.setReportId(report_id);
+            }
             observation.setObservationId(observationDao.save(observation));
             parentObsUUID = observation.getUuid();
         }
-        mapRelatedComponents(composition, parentObsUUID, fhirObservation);
+        mapRelatedComponents(composition, parentObsUUID, fhirObservation, report_id);
     }
 }

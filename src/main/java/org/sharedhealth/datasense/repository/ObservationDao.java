@@ -24,8 +24,9 @@ public class ObservationDao {
         map.put("parent_id", observation.getParentId());
         map.put("value", observation.getValue());
         map.put("uuid", observation.getUuid());
-        String sql = "insert into observation (patient_hid, encounter_id, datetime, concept_id, code, value, uuid) " +
-                "values(:patient_hid, :encounter_id, :datetime, :concept_id, :code, :value, :uuid)";
+        map.put("report_id", observation.getReportId());
+        String sql = "insert into observation (patient_hid, encounter_id, datetime, concept_id, code, value, uuid, report_id) " +
+                "values(:patient_hid, :encounter_id, :datetime, :concept_id, :code, :value, :uuid, :report_id)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(map), generatedKeyHolder);
         return generatedKeyHolder.getKey().intValue();

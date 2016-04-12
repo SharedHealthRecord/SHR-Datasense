@@ -11,6 +11,15 @@ public class Observation extends BaseResource {
     private Date datetime;
     private String parentId;
     private String value;
+    private Integer reportId;
+
+    public Integer getReportId() {
+        return reportId;
+    }
+
+    public void setReportId(int orderId) {
+        this.reportId = orderId;
+    }
 
     public void setObservationId(int observationId) {
         this.observationId = observationId;
