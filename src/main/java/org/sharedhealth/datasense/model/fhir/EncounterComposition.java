@@ -152,7 +152,7 @@ public class EncounterComposition {
 //    private ArrayList<IResource> getTopLevelResources(HashSet<String> references) {
 //        ArrayList<IResource> parentResources = new ArrayList<>();
 //        for (AtomEntry<? extends Resource> atomEntry : loadAtomEntriesFromComposition()) {
-//            if(!references.contains(atomEntry.getId())) {
+//            if(!references.contains(atomEntry.getReportId())) {
 //                parentResources.add(atomEntry.getResource());
 //            }
 //        }

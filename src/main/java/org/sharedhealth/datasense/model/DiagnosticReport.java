@@ -6,14 +6,11 @@ public class DiagnosticReport extends BaseResource {
     private Integer reportId;
     private String patientHid;
     private String encounterId;
+    private Integer orderId;
     private Date reportDate;
     private String reportCategory;
     private String reportCode;
     private String fulfiller;
-
-    public Integer getReportId() {
-        return reportId;
-    }
 
     public void setReportId(int reportId) {
         this.reportId = reportId;
@@ -78,7 +75,17 @@ public class DiagnosticReport extends BaseResource {
     private String reportConcept;
 
 
-    public Integer getId() {
+    public Integer getReportId() {
         return reportId;
     }
+
+
+    public Integer getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(Integer orderId) {
+        this.orderId = orderId;
+    }
+
 }

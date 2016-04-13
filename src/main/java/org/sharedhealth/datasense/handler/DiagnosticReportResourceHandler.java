@@ -5,10 +5,12 @@ import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
+import org.sharedhealth.datasense.model.DiagnosticOrder;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
+import org.sharedhealth.datasense.repository.DiagnosticOrderDao;
 import org.sharedhealth.datasense.repository.DiagnosticReportDao;
 import org.sharedhealth.datasense.util.TrUrl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,8 +26,8 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     DiagnosticReportDao diagnosticReportDao;
     @Autowired
     ObservationResourceHandler observationResourceHandler;
-
-    private BundleContext bundleContext;
+    @Autowired
+    DiagnosticOrderDao diagnosticOrderDao;
 
     @Override
     public boolean canHandle(IResource resource) {
@@ -38,15 +40,30 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         DiagnosticReport fhirDiagnosticReport = (DiagnosticReport) resource;
 
         org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport = new org.sharedhealth.datasense.model.DiagnosticReport();
+        String encounterId = composition.getEncounterReference().getEncounterId();
+
+        diagnosticReport.setEncounterId(encounterId);
         diagnosticReport.setPatientHid(composition.getPatientReference().getHealthId());
-        diagnosticReport.setEncounterId(composition.getEncounterReference().getEncounterId());
         diagnosticReport.setReportDate(fhirDiagnosticReport.getIssued());
         diagnosticReport.setFulfiller(ProviderReference.parseUrl(fhirDiagnosticReport.getPerformer().getReference().getValue()));
         setCategory(fhirDiagnosticReport, diagnosticReport);
         populateOrderCodeAndConcept(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport);
+        if(diagnosticReport.getReportCode() == null && diagnosticReport.getReportConcept() == null) return;
+        String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
+        populateOrderId(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport, orderEncounterId);
         int reportId = diagnosticReportDao.save(diagnosticReport);
         saveResultObservations(composition, fhirDiagnosticReport, reportId);
 
+    }
+
+    private String getOrderEncounterId(DiagnosticReport fhirDiagnosticReport) {
+
+        List<ResourceReferenceDt> request = fhirDiagnosticReport.getRequest();
+        if(null == request) return null;
+        String referenceUrl = request.get(0).getReference().getValue();
+        if(referenceUrl.contains("#"))
+            referenceUrl = referenceUrl.substring(0, referenceUrl.lastIndexOf('#'));
+        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
     }
 
     @Override
@@ -70,13 +87,26 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
             diagnosticReport.setReportCategory("LAB");
     }
 
-    private void populateOrderCodeAndConcept(List<CodingDt> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticOrder) {
+    private void populateOrderCodeAndConcept(List<CodingDt> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport) {
         for (CodingDt codingDt : coding) {
             if (isConceptUrl(codingDt.getSystem())) {
-                diagnosticOrder.setReportConcept(codingDt.getCode());
+                diagnosticReport.setReportConcept(codingDt.getCode());
             } else if (TrUrl.isReferenceTermUrl(codingDt.getSystem())) {
-                diagnosticOrder.setReportCode(codingDt.getCode());
+                diagnosticReport.setReportCode(codingDt.getCode());
             }
+        }
+    }
+
+    private void populateOrderId(List<CodingDt> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport, String orderEncounterId) {
+        List<DiagnosticOrder> matchingOrders = null;
+        for (CodingDt codingDt : coding) {
+            if (isConceptUrl(codingDt.getSystem())) {
+                matchingOrders = diagnosticOrderDao.getOrderId(orderEncounterId, codingDt.getCode());
+            }
+        }
+        if (matchingOrders != null) {
+            if (!matchingOrders.isEmpty())
+                diagnosticReport.setOrderId(matchingOrders.get(0).getId());
         }
     }
 

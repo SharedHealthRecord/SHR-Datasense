@@ -1,12 +1,15 @@
 package org.sharedhealth.datasense.repository;
 
 import org.sharedhealth.datasense.model.DiagnosticOrder;
-import org.sharedhealth.datasense.model.Procedure;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
+import java.util.List;
 
 @Component
 public class DiagnosticOrderDao {
@@ -30,6 +33,26 @@ public class DiagnosticOrderDao {
                 ":order_datetime, :order_category, :order_code, :orderer, :order_concept, :order_status, :uuid)";
 
         jdbcTemplate.update(sql, map);
+    }
+
+    public List<DiagnosticOrder> getOrderId(String encounterId, String conceptUuid) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("encounter_id", encounterId);
+        map.put("order_concept", conceptUuid);
+
+        String sql = "select order_id from diagnostic_order where encounter_id =:encounter_id " +
+                "and  order_concept =:order_concept";
+
+        return jdbcTemplate.query(sql, map, new RowMapper<DiagnosticOrder>() {
+            @Override
+            public DiagnosticOrder mapRow(ResultSet rs, int rowNum) throws SQLException {
+                DiagnosticOrder order = new DiagnosticOrder();
+                order.setId(rs.getInt("order_id"));
+                return order;
+            }
+        });
+
+
     }
 
     public void deleteExisting(String healthId, String encounterId) {

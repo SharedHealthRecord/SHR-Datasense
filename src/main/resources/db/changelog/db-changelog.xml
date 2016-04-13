@@ -862,6 +862,7 @@
             <column name="uuid" type="varchar(50)">
                 <constraints nullable="false" unique="true" />
             </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20161104-1214" author="sukreet" context="setup">

@@ -11,6 +11,7 @@ public class DiagnosticOrder extends BaseResource {
     private String orderer;
     private String orderConcept;
     private String orderStatus;
+    private Integer id;
 
     public String getPatientHid() {
         return patientHid;
@@ -74,5 +75,13 @@ public class DiagnosticOrder extends BaseResource {
 
     public void setOrderStatus(String orderStatus) {
         this.orderStatus = orderStatus;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public int getId() {
+        return id;
     }
 }

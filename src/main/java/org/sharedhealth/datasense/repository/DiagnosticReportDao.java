@@ -20,14 +20,15 @@ public class DiagnosticReportDao {
         map.put("encounter_id", diagnosticreport.getEncounterId());
         map.put("report_datetime", diagnosticreport.getReportDate());
         map.put("report_category", diagnosticreport.getReportCategory());
+        map.put("order_id", diagnosticreport.getOrderId());
         map.put("report_code", diagnosticreport.getReportCode());
         map.put("fulfiller", diagnosticreport.getFulfiller());
         map.put("report_concept", diagnosticreport.getReportConcept());
         map.put("uuid", diagnosticreport.getUuid());
 
         String sql = "insert into diagnostic_report (patient_hid, encounter_id, report_datetime, report_category," +
-                " report_code , fulfiller, report_concept, uuid) values(:patient_hid, :encounter_id, " +
-                ":report_datetime, :report_category, :report_code, :fulfiller, :report_concept, :uuid)";
+                " report_code , fulfiller, report_concept,order_id, uuid) values(:patient_hid, :encounter_id, " +
+                ":report_datetime, :report_category, :report_code, :fulfiller, :report_concept, :order_id, :uuid)";
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(map), generatedKeyHolder);
         return generatedKeyHolder.getKey().intValue();

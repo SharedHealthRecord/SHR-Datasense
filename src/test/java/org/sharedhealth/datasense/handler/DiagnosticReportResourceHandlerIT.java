@@ -11,15 +11,14 @@ import org.sharedhealth.datasense.BaseIntegrationTest;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
-import org.sharedhealth.datasense.model.DiagnosticReport;
-import org.sharedhealth.datasense.model.Encounter;
-import org.sharedhealth.datasense.model.Observation;
-import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.model.*;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.RowMapper;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
@@ -133,19 +132,52 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         List<Observation> observations = findObsByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, observations.size());
         Observation observation = observations.get(0);
-        assertEquals(savedDiagnosticReport.getId(), observation.getReportId());
+        assertEquals(savedDiagnosticReport.getReportId(), observation.getReportId());
         assertEquals("20.0", observation.getValue());
     }
 
+
+    @Test
+    public void shouldAssociateDiagnosticReportWithOrder() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+
+        DiagnosticOrder order = new DiagnosticOrder();
+        order.setEncounterId("shr-enc-12");
+        order.setPatientHid(PATIENT_HID);
+        order.setOrderer("someone");
+        order.setOrderCategory("RAD");
+        order.setOrderStatus("requested");
+        order.setOrderCode("BN00ZZZ");
+        order.setOrderConcept("501qb827-a67c-4q1f-a705-e5efe0q6a972");
+        order.setOrderDate(new Date());
+        Integer savedOrderId = saveOrder(order);
+
+        diagnosticReportResourceHandler.process(diagnosticReport, composition);
+        List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);
+        DiagnosticReport savedDiagnosticReport = savedDiagnosticReports.get(0);
+        assertEquals(savedOrderId, savedDiagnosticReport.getOrderId());
+    }
+
+    @Test
+    public void shouldNotSaveLocalDiagnosticReports() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_local_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+
+        diagnosticReportResourceHandler.process(diagnosticReport, composition);
+        List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(0, savedDiagnosticReports.size());
+    }
+
+
     private List<DiagnosticReport> findByEncounterId(String shrEncounterId) {
-        String sql = "select report_id, patient_hid,encounter_id,report_datetime,report_category,report_code,fulfiller," +
-                "report_concept from diagnostic_report where encounter_id= :encounter_id";
+        String sql = "select report_id, patient_hid, encounter_id, report_datetime, report_category, report_code, fulfiller," +
+                "report_concept, order_id from diagnostic_report where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
         return jdbcTemplate.query(sql, map, new RowMapper<DiagnosticReport>() {
             @Override
             public DiagnosticReport mapRow(ResultSet rs, int rowNum) throws SQLException {
                 DiagnosticReport report = new DiagnosticReport();
+                report.setOrderId(rs.getInt("order_id"));
                 report.setReportId(rs.getInt("report_id"));
                 report.setPatientHid(rs.getString("patient_hid"));
                 report.setEncounterId(rs.getString("encounter_id"));
@@ -188,5 +220,26 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
                         return observation;
                     }
                 });
+    }
+
+    private Integer saveOrder(DiagnosticOrder diagnosticOrder) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", diagnosticOrder.getPatientHid());
+        map.put("encounter_id", diagnosticOrder.getEncounterId());
+        map.put("order_datetime", diagnosticOrder.getOrderDate());
+        map.put("order_category", diagnosticOrder.getOrderCategory());
+        map.put("order_code", diagnosticOrder.getOrderCode());
+        map.put("orderer", diagnosticOrder.getOrderer());
+        map.put("order_concept", diagnosticOrder.getOrderConcept());
+        map.put("order_status", diagnosticOrder.getOrderStatus());
+        map.put("uuid", diagnosticOrder.getUuid());
+
+        String sql = "insert into diagnostic_order (patient_hid, encounter_id, order_datetime, order_category," +
+                " order_code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
+                ":order_datetime, :order_category, :order_code, :orderer, :order_concept, :order_status, :uuid)";
+
+        GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
+        jdbcTemplate.update(sql, new MapSqlParameterSource(map), generatedKeyHolder);
+        return generatedKeyHolder.getKey().intValue();
     }
 }
