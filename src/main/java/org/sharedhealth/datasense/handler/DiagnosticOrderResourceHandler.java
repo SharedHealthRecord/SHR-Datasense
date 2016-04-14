@@ -48,7 +48,7 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
         diagnosticOrder.setOrderStatus(item.getStatus());
         setCategory(diagnosticOrder, fhirDiagnosticOrder);
         populateOrderCodeAndConcept(item.getCode().getCoding(), diagnosticOrder);
-        if (diagnosticOrder.getOrderCode() == null && diagnosticOrder.getOrderConcept() == null) return;
+        if (diagnosticOrder.getCode() == null && diagnosticOrder.getOrderConcept() == null) return;
         setOrderDate(item, diagnosticOrder);
         String ordererId = ProviderReference.parseUrl(fhirDiagnosticOrder.getOrderer().getReference().getValue());
         diagnosticOrder.setOrderer(ordererId);
@@ -75,7 +75,7 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
             if (isConceptUrl(codingDt.getSystem())) {
                 diagnosticOrder.setOrderConcept(codingDt.getCode());
             } else if (TrUrl.isReferenceTermUrl(codingDt.getSystem())) {
-                diagnosticOrder.setOrderCode(codingDt.getCode());
+                diagnosticOrder.setcode(codingDt.getCode());
             }
         }
     }

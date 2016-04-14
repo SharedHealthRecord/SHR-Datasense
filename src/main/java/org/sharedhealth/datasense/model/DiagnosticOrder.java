@@ -7,7 +7,7 @@ public class DiagnosticOrder extends BaseResource {
     private String encounterId;
     private Date orderDate;
     private String orderCategory;
-    private String orderCode;
+    private String code;
     private String orderer;
     private String orderConcept;
     private String orderStatus;
@@ -45,12 +45,12 @@ public class DiagnosticOrder extends BaseResource {
         this.orderCategory = orderCategory;
     }
 
-    public String getOrderCode() {
-        return orderCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setOrderCode(String orderCode) {
-        this.orderCode = orderCode;
+    public void setcode(String code) {
+        this.code = code;
     }
 
     public String getOrderer() {

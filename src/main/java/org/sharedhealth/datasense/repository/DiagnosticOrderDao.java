@@ -22,15 +22,15 @@ public class DiagnosticOrderDao {
         map.put("encounter_id", diagnosticOrder.getEncounterId());
         map.put("order_datetime", diagnosticOrder.getOrderDate());
         map.put("order_category", diagnosticOrder.getOrderCategory());
-        map.put("order_code", diagnosticOrder.getOrderCode());
+        map.put("code", diagnosticOrder.getCode());
         map.put("orderer", diagnosticOrder.getOrderer());
         map.put("order_concept", diagnosticOrder.getOrderConcept());
         map.put("order_status", diagnosticOrder.getOrderStatus());
         map.put("uuid", diagnosticOrder.getUuid());
 
         String sql = "insert into diagnostic_order (patient_hid, encounter_id, order_datetime, order_category," +
-                " order_code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
-                ":order_datetime, :order_category, :order_code, :orderer, :order_concept, :order_status, :uuid)";
+                " code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
+                ":order_datetime, :order_category, :code, :orderer, :order_concept, :order_status, :uuid)";
 
         jdbcTemplate.update(sql, map);
     }

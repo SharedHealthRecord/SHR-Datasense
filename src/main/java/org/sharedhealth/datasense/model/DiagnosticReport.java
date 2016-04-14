@@ -9,7 +9,7 @@ public class DiagnosticReport extends BaseResource {
     private Integer orderId;
     private Date reportDate;
     private String reportCategory;
-    private String reportCode;
+    private String code;
     private String fulfiller;
 
     public void setReportId(int reportId) {
@@ -56,12 +56,12 @@ public class DiagnosticReport extends BaseResource {
         this.reportCategory = reportCategory;
     }
 
-    public String getReportCode() {
-        return reportCode;
+    public String getCode() {
+        return code;
     }
 
-    public void setReportCode(String reportCode) {
-        this.reportCode = reportCode;
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public String getFulfiller() {

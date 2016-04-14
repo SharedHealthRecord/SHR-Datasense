@@ -138,7 +138,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(PATIENT_HID, savedDiagnosticOrder.getPatientHid());
         assertEquals(SHR_ENCOUNTER_ID, savedDiagnosticOrder.getEncounterId());
         assertEquals(orderCategory, savedDiagnosticOrder.getOrderCategory());
-        assertEquals(orderCode, savedDiagnosticOrder.getOrderCode());
+        assertEquals(orderCode, savedDiagnosticOrder.getCode());
         assertEquals("24", savedDiagnosticOrder.getOrderer());
         assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
         assertEquals(orderStatus, savedDiagnosticOrder.getOrderStatus());
@@ -148,7 +148,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
     }
 
     private List<DiagnosticOrder> findByEncounterId(String shrEncounterId) {
-        String sql = "select patient_hid,encounter_id,order_datetime,order_category,order_code,orderer," +
+        String sql = "select patient_hid,encounter_id,order_datetime,order_category,code,orderer," +
                 "order_concept,order_status from diagnostic_order where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
@@ -160,7 +160,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
                 order.setEncounterId(rs.getString("encounter_id"));
                 order.setOrderDate(rs.getDate("order_datetime"));
                 order.setOrderCategory(rs.getString("order_category"));
-                order.setOrderCode(rs.getString("order_code"));
+                order.setcode(rs.getString("code"));
                 order.setOrderer(rs.getString("orderer"));
                 order.setOrderConcept(rs.getString("order_concept"));
                 order.setOrderStatus(rs.getString("order_status"));

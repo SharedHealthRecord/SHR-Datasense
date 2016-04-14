@@ -97,7 +97,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         assertEquals("RAD", savedDiagnosticReport.getReportCategory());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         assertEquals("22-03-2016", simpleDateFormat.format(savedDiagnosticReport.getReportDate()));
-        assertEquals("BN00ZZZ", savedDiagnosticReport.getReportCode());
+        assertEquals("BN00ZZZ", savedDiagnosticReport.getCode());
         assertEquals("501qb827-a67c-4q1f-a705-e5efe0q6a972", savedDiagnosticReport.getReportConcept());
         assertNotNull(savedDiagnosticReport.getUuid());
 
@@ -116,7 +116,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         assertEquals("LAB", savedDiagnosticReport.getReportCategory());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         assertEquals("31-08-2015", simpleDateFormat.format(savedDiagnosticReport.getReportDate()));
-        assertEquals("20563-3", savedDiagnosticReport.getReportCode());
+        assertEquals("20563-3", savedDiagnosticReport.getCode());
         assertEquals("79647ed4-a60e-4cf5-ba68-cf4d55956cba", savedDiagnosticReport.getReportConcept());
         assertNotNull(savedDiagnosticReport.getUuid());
 
@@ -147,7 +147,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         order.setOrderer("someone");
         order.setOrderCategory("RAD");
         order.setOrderStatus("requested");
-        order.setOrderCode("BN00ZZZ");
+        order.setcode("BN00ZZZ");
         order.setOrderConcept("501qb827-a67c-4q1f-a705-e5efe0q6a972");
         order.setOrderDate(new Date());
         Integer savedOrderId = saveOrder(order);
@@ -169,7 +169,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
 
     private List<DiagnosticReport> findByEncounterId(String shrEncounterId) {
-        String sql = "select report_id, patient_hid, encounter_id, report_datetime, report_category, report_code, fulfiller," +
+        String sql = "select report_id, patient_hid, encounter_id, report_datetime, report_category, code, fulfiller," +
                 "report_concept, order_id from diagnostic_report where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
@@ -183,7 +183,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
                 report.setEncounterId(rs.getString("encounter_id"));
                 report.setReportDate(rs.getDate("report_datetime"));
                 report.setReportCategory(rs.getString("report_category"));
-                report.setReportCode(rs.getString("report_code"));
+                report.setCode(rs.getString("code"));
                 report.setFulfiller(rs.getString("fulfiller"));
                 report.setReportConcept(rs.getString("report_concept"));
                 return report;
@@ -228,15 +228,15 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         map.put("encounter_id", diagnosticOrder.getEncounterId());
         map.put("order_datetime", diagnosticOrder.getOrderDate());
         map.put("order_category", diagnosticOrder.getOrderCategory());
-        map.put("order_code", diagnosticOrder.getOrderCode());
+        map.put("code", diagnosticOrder.getCode());
         map.put("orderer", diagnosticOrder.getOrderer());
         map.put("order_concept", diagnosticOrder.getOrderConcept());
         map.put("order_status", diagnosticOrder.getOrderStatus());
         map.put("uuid", diagnosticOrder.getUuid());
 
         String sql = "insert into diagnostic_order (patient_hid, encounter_id, order_datetime, order_category," +
-                " order_code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
-                ":order_datetime, :order_category, :order_code, :orderer, :order_concept, :order_status, :uuid)";
+                " code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
+                ":order_datetime, :order_category, :code, :orderer, :order_concept, :order_status, :uuid)";
 
         GeneratedKeyHolder generatedKeyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(sql, new MapSqlParameterSource(map), generatedKeyHolder);

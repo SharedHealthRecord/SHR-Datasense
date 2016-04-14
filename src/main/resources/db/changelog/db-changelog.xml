@@ -835,7 +835,7 @@
             <column name="encounter_id" type="varchar(50)"/>
             <column name="order_datetime" type="datetime"/>
             <column name="order_category" type="varchar(50)"/>
-            <column name="order_code" type="varchar(10)"/>
+            <column name="code" type="varchar(10)"/>
             <column name="orderer" type="varchar(100)"/>
             <column name="order_concept" type="varchar(50)"/>
             <column name="order_status" type="varchar(20)"/>
@@ -856,7 +856,7 @@
             <column name="order_id" type="int"/>
             <column name="report_datetime" type="datetime"/>
             <column name="report_category" type="varchar(50)"/>
-            <column name="report_code" type="varchar(50)"/>
+            <column name="code" type="varchar(50)"/>
             <column name="fulfiller " type="varchar(100)"/>
             <column name="report_concept" type="varchar(50)"/>
             <column name="uuid" type="varchar(50)">

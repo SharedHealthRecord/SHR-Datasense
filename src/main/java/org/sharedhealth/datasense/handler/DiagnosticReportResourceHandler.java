@@ -7,7 +7,6 @@ import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
 import org.sharedhealth.datasense.model.DiagnosticOrder;
 import org.sharedhealth.datasense.model.Observation;
-import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
 import org.sharedhealth.datasense.repository.DiagnosticOrderDao;
@@ -48,7 +47,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         diagnosticReport.setFulfiller(ProviderReference.parseUrl(fhirDiagnosticReport.getPerformer().getReference().getValue()));
         setCategory(fhirDiagnosticReport, diagnosticReport);
         populateOrderCodeAndConcept(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport);
-        if(diagnosticReport.getReportCode() == null && diagnosticReport.getReportConcept() == null) return;
+        if(diagnosticReport.getCode() == null && diagnosticReport.getReportConcept() == null) return;
         String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
         populateOrderId(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport, orderEncounterId);
         int reportId = diagnosticReportDao.save(diagnosticReport);
@@ -92,7 +91,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
             if (isConceptUrl(codingDt.getSystem())) {
                 diagnosticReport.setReportConcept(codingDt.getCode());
             } else if (TrUrl.isReferenceTermUrl(codingDt.getSystem())) {
-                diagnosticReport.setReportCode(codingDt.getCode());
+                diagnosticReport.setCode(codingDt.getCode());
             }
         }
     }
