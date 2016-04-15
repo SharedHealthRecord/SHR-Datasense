@@ -36,7 +36,7 @@ public class DiagnosticOrderDao {
         jdbcTemplate.update(sql, map);
     }
 
-    public List<DiagnosticOrder> getOrderId(String encounterId, String conceptUuid) {
+    public Integer getOrderId(String encounterId, String conceptUuid) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", encounterId);
         map.put("order_concept", conceptUuid);
@@ -44,18 +44,32 @@ public class DiagnosticOrderDao {
         String sql = "select order_id from diagnostic_order where encounter_id =:encounter_id " +
                 "and  order_concept =:order_concept";
 
-        return jdbcTemplate.query(sql, map, new RowMapper<DiagnosticOrder>() {
+        List<Integer> order_id = jdbcTemplate.query(sql, map, new RowMapper<Integer>() {
             @Override
-            public DiagnosticOrder mapRow(ResultSet rs, int rowNum) throws SQLException {
-                DiagnosticOrder order = new DiagnosticOrder();
-                order.setId(rs.getInt("order_id"));
-                return order;
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt("order_id");
             }
         });
-
-
+        if(order_id.isEmpty()) return null;
+        return order_id.get(0);
     }
-    
+
+    public Integer getOrderId(String shrOrderUuid) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("shr_order_uuid", shrOrderUuid);
+
+        String sql = "select order_id from diagnostic_order where shr_order_uuid = :shr_order_uuid";
+
+        List<Integer> order_id = jdbcTemplate.query(sql, map, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt("order_id");
+            }
+        });
+        if(order_id.isEmpty()) return null;
+        return order_id.get(0);
+    }
+
     public void deleteExisting(String healthId, String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", healthId);

@@ -4,8 +4,8 @@ package org.sharedhealth.datasense.handler;
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import ca.uhn.fhir.model.dstu2.resource.DiagnosticOrder;
 import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
-import org.sharedhealth.datasense.model.DiagnosticOrder;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
@@ -47,22 +47,11 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         diagnosticReport.setFulfiller(ProviderReference.parseUrl(fhirDiagnosticReport.getPerformer().getReference().getValue()));
         setCategory(fhirDiagnosticReport, diagnosticReport);
         populateOrderCodeAndConcept(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport);
-        if(diagnosticReport.getCode() == null && diagnosticReport.getReportConcept() == null) return;
-        String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
-        populateOrderId(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport, orderEncounterId);
+        if (diagnosticReport.getCode() == null && diagnosticReport.getReportConcept() == null) return;
+        populateOrderId(fhirDiagnosticReport, diagnosticReport);
         int reportId = diagnosticReportDao.save(diagnosticReport);
         saveResultObservations(composition, fhirDiagnosticReport, reportId);
 
-    }
-
-    private String getOrderEncounterId(DiagnosticReport fhirDiagnosticReport) {
-
-        List<ResourceReferenceDt> request = fhirDiagnosticReport.getRequest();
-        if(null == request) return null;
-        String referenceUrl = request.get(0).getReference().getValue();
-        if(referenceUrl.contains("#"))
-            referenceUrl = referenceUrl.substring(0, referenceUrl.lastIndexOf('#'));
-        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
     }
 
     @Override
@@ -96,17 +85,53 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         }
     }
 
-    private void populateOrderId(List<CodingDt> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport, String orderEncounterId) {
-        List<DiagnosticOrder> matchingOrders = null;
-        for (CodingDt codingDt : coding) {
-            if (isConceptUrl(codingDt.getSystem())) {
-                matchingOrders = diagnosticOrderDao.getOrderId(orderEncounterId, codingDt.getCode());
-            }
-        }
-        if (matchingOrders != null) {
-            if (!matchingOrders.isEmpty())
-                diagnosticReport.setOrderId(matchingOrders.get(0).getId());
-        }
+    private void populateOrderId(DiagnosticReport fhirDiagnosticReport, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport) {
+        Integer orderId = null;
+        if (hasShrOrderUuid(fhirDiagnosticReport.getRequest()))
+            orderId = getOrderIdFromShrOrderUuid(fhirDiagnosticReport.getRequest());
+        else
+            orderId = getOrderIdFromEncounter(fhirDiagnosticReport);
+        diagnosticReport.setOrderId(orderId);
     }
 
+    private boolean hasShrOrderUuid(List<ResourceReferenceDt> request) {
+        if (null == request) return false;
+        String referenceUrl = request.get(0).getReference().getValue();
+        if (referenceUrl.isEmpty()) return false;
+        return referenceUrl.contains("#" + new DiagnosticOrder().getResourceName());
+    }
+
+    private Integer getOrderIdFromShrOrderUuid(List<ResourceReferenceDt> request) {
+        String shrOrderUuid = getShrOrderUuid(request.get(0));
+        return diagnosticOrderDao.getOrderId(shrOrderUuid);
+
+    }
+
+    private String getShrOrderUuid(ResourceReferenceDt resourceReferenceDt) {
+        String referenceUrl = resourceReferenceDt.getReference().getValue();
+        if(referenceUrl.isEmpty()) return null;
+        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
+    }
+
+    private Integer getOrderIdFromEncounter(DiagnosticReport fhirDiagnosticReport) {
+        String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
+        for (CodingDt codingDt : fhirDiagnosticReport.getCode().getCoding()) {
+            if (isConceptUrl(codingDt.getSystem())) {
+                return diagnosticOrderDao.getOrderId(orderEncounterId, codingDt.getCode());
+            }
+        }
+        return null;
+    }
+
+    private String getOrderEncounterId(DiagnosticReport fhirDiagnosticReport) {
+        List<ResourceReferenceDt> request = fhirDiagnosticReport.getRequest();
+        if (null == request) return null;
+        String referenceUrl = request.get(0).getReference().getValue();
+        if (referenceUrl.isEmpty()) return null;
+        if (referenceUrl.contains("#"))
+            referenceUrl = referenceUrl.substring(0, referenceUrl.lastIndexOf('#'));
+        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
+    }
 }
+
+
