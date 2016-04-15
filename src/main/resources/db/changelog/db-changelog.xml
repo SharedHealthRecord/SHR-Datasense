@@ -877,6 +877,71 @@
             <column name="shr_order_uuid" type="varchar(50)"/>
         </addColumn>
     </changeSet>
-
+    <changeSet id="sharedhealth-datasense-20161504-1500" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_order_encounter_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_order_encounter_id"
+                     tableName="diagnostic_order">
+            <column name="encounter_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1502" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_order_code"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_order_code"
+                     tableName="diagnostic_order">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1504" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_order_datetime"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_order_datetime"
+                     tableName="diagnostic_order">
+            <column name="order_datetime"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1506" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_report_encounter_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_report_encounter_id"
+                     tableName="diagnostic_report">
+            <column name="encounter_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1508" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_report_code"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_report_code"
+                     tableName="diagnostic_report">
+            <column name="code"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1510" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_diagnostic_report_datetime"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_diagnostic_report_datetime"
+                     tableName="diagnostic_report">
+            <column name="report_datetime"/>
+        </createIndex>
+    </changeSet>
 
 </databaseChangeLog>
