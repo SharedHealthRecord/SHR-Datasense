@@ -872,6 +872,11 @@
             ADD report_id int;
         </sql>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20161504-1130" author="sukreet"  context="setup">
+        <addColumn tableName="diagnostic_order">
+            <column name="shr_order_uuid" type="varchar(50)"/>
+        </addColumn>
+    </changeSet>
 
 
 </databaseChangeLog>

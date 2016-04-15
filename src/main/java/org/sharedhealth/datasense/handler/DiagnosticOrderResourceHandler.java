@@ -46,6 +46,7 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
         diagnosticOrder.setPatientHid(composition.getPatientReference().getHealthId());
         diagnosticOrder.setEncounterId(composition.getEncounterReference().getEncounterId());
         diagnosticOrder.setOrderStatus(item.getStatus());
+        diagnosticOrder.setShrOrderUuuid(fhirDiagnosticOrder.getId().getIdPart());
         setCategory(diagnosticOrder, fhirDiagnosticOrder);
         populateOrderCodeAndConcept(item.getCode().getCoding(), diagnosticOrder);
         if (diagnosticOrder.getCode() == null && diagnosticOrder.getOrderConcept() == null) return;

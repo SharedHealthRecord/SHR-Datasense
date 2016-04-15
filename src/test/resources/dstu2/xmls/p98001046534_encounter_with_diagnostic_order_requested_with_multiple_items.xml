@@ -40,7 +40,7 @@
                 </section>
                 <section>
                     <entry>
-                        <reference value="urn:uuid:6c1f201d-17ea-419a-a5f6-a3d15082da80"/>
+                        <reference value="urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21"/>
                         <display value="Diagnostic Order"/>
                     </entry>
                 </section>
@@ -75,7 +75,7 @@
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:6c1f201d-17ea-419a-a5f6-a3d15082da80"/>
+        <fullUrl value="urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21"/>
         <resource>
             <DiagnosticOrder xmlns="http://hl7.org/fhir">
                 <extension url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnosticOrderCategory">

@@ -26,11 +26,12 @@ public class DiagnosticOrderDao {
         map.put("orderer", diagnosticOrder.getOrderer());
         map.put("order_concept", diagnosticOrder.getOrderConcept());
         map.put("order_status", diagnosticOrder.getOrderStatus());
+        map.put("shr_order_uuid", diagnosticOrder.getShrOrderUuid());
         map.put("uuid", diagnosticOrder.getUuid());
 
         String sql = "insert into diagnostic_order (patient_hid, encounter_id, order_datetime, order_category," +
-                " code , orderer, order_concept, order_status, uuid) values(:patient_hid, :encounter_id, " +
-                ":order_datetime, :order_category, :code, :orderer, :order_concept, :order_status, :uuid)";
+                " code , orderer, order_concept, order_status, shr_order_uuid, uuid) values(:patient_hid, :encounter_id, " +
+                ":order_datetime, :order_category, :code, :orderer, :order_concept, :order_status, :shr_order_uuid, :uuid)";
 
         jdbcTemplate.update(sql, map);
     }
@@ -54,7 +55,7 @@ public class DiagnosticOrderDao {
 
 
     }
-
+    
     public void deleteExisting(String healthId, String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", healthId);

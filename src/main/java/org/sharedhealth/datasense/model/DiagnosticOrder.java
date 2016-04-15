@@ -12,6 +12,15 @@ public class DiagnosticOrder extends BaseResource {
     private String orderConcept;
     private String orderStatus;
     private Integer id;
+    private String shrOrderUuid;
+
+    public String getShrOrderUuid() {
+        return shrOrderUuid;
+    }
+
+    public void setShrOrderUuuid(String shr_order_uuid) {
+        this.shrOrderUuid = shr_order_uuid;
+    }
 
     public String getPatientHid() {
         return patientHid;
