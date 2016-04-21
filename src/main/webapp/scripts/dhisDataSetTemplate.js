@@ -85,6 +85,7 @@ function DhisDataSetTemplate() {
    };
 
     var stringifyAndDisplaySuggestion = function(data) {
+        data["dataElementList"][data["dataElementList"].length -1 ]["last"] = true;
         var jsonStr = JSON.stringify(data);
 
         var configTemplate = $('#mushTmpl_config_suggestion').html();

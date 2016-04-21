@@ -118,7 +118,7 @@
                 "query_list": [
                     {{#dataElementList}}
                         {{#categoryOptionCombos}}
-                            "{{ queryName }}",
+                            "{{ queryName }}"{{^last}},{{/last}}
                         {{/categoryOptionCombos}}
                     {{/dataElementList}}
                 ]
@@ -141,7 +141,7 @@
                         "dataElement": "{{dataElementId}}",
                         "categoryOptionCombo": "{{id}}",
                         "value": "${row.value}"
-                    },
+                    }{{^last}},{{/last}}
                 &lt;/#list&gt;
                 {{/categoryOptionCombos}}
             {{/dataElementList}}
@@ -160,7 +160,7 @@
                     {
                         "queryName": "{{queryName}}",
                         "query": "select 0 as value from dual;"
-                    },
+                    }{{^last}},{{/last}}
                 {{/categoryOptionCombos}}
            {{/dataElementList}}
         ]
