@@ -25,7 +25,7 @@ public class TrDrugSyncJob {
 
     Logger log = Logger.getLogger(TrDrugSyncJob.class);
 
-    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 1800000)
+    @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 120000)
     public void start() {
         String trMedicationAtomfeedUrl = properties.getTrMedicationfeedUrl();
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);

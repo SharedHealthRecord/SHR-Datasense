@@ -34,14 +34,6 @@ public class DrugProcessorTest {
         initMocks(this);
     }
 
-    @Test(expected = RuntimeException.class)
-    public void shouldNotProcessADrugIfAssociatedConceptIsNotDownloaded() throws Exception {
-        TrMedication drug = new TrMedication();
-        drug.setCode(getCodeableConcept("CODE", "ConceptId"));
-
-        drugProcessor.process(drug);
-        verify(drugDao, never()).saveOrUpdate(drug);
-    }
 
     @Test
     public void shouldProcessADrugIfAssociatedConceptIsDownloaded() throws Exception {
@@ -53,6 +45,16 @@ public class DrugProcessorTest {
 
         verify(drugDao, times(1)).saveOrUpdate(drug);
 
+    }
+
+    @Test
+    public void shouldProcessADrugIfAssociatedConceptIsNotDownloaded() throws Exception {
+        TrMedication drug = new TrMedication();
+        drug.setCode(getCodeableConcept("CODE", "ConceptId"));
+
+        drugProcessor.process(drug);
+
+        verify(drugDao, times(1)).saveOrUpdate(drug);
     }
 
     private CodeableConcept getCodeableConcept(String code, String conceptId) {
