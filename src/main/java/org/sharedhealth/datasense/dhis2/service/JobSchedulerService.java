@@ -19,10 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 import static org.quartz.TriggerBuilder.newTrigger;
 
@@ -61,14 +58,7 @@ public class JobSchedulerService {
 
             JobDetail jobDetail = jobFactory.getObject();
             JobDataMap jobDataMap = jobDetail.getJobDataMap();
-            jobDataMap.put("paramStartDate", scheduleRequest.reportPeriod().startDate());
-            jobDataMap.put("paramEndDate", scheduleRequest.reportPeriod().endDate());
-            jobDataMap.put("paramPeriodType", scheduleRequest.getPeriodType());
-            jobDataMap.put("paramFacilityId", facilityId);
-            jobDataMap.put("paramDatasetId", datasetId);
-            jobDataMap.put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
-            jobDataMap.put("paramConfigFile", configForDataset.getConfigFile());
-            jobDataMap.put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
+            createJobMap(jobDataMap, scheduleRequest, scheduleRequest.getDatasetId(), configForDataset, facilityId, orgUnitConfig);
 
             String datasetName =  scheduleRequest.getDatasetName();
 
@@ -91,6 +81,17 @@ public class JobSchedulerService {
             logger.info(String.format("Job %s starred", jobName));
 
         }
+    }
+
+    private void createJobMap(Map dataMap, ReportScheduleRequest scheduleRequest, String datasetId, DHISReportConfig configForDataset, String facilityId, DHISOrgUnitConfig orgUnitConfig) {
+        dataMap.put("paramStartDate", scheduleRequest.reportPeriod().startDate());
+        dataMap.put("paramEndDate", scheduleRequest.reportPeriod().endDate());
+        dataMap.put("paramPeriodType", scheduleRequest.getPeriodType());
+        dataMap.put("paramFacilityId", facilityId);
+        dataMap.put("paramDatasetId", datasetId);
+        dataMap.put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
+        dataMap.put("paramConfigFile", configForDataset.getConfigFile());
+        dataMap.put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
     }
 
     private Date afterSecs(int seconds) {

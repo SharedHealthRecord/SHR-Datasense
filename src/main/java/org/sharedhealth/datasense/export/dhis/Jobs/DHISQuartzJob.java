@@ -15,7 +15,7 @@ public class DHISQuartzJob extends QuartzJobBean {
     @Override
     protected void executeInternal(JobExecutionContext context) throws JobExecutionException {
         JobDataMap mergedJobDataMap = context.getMergedJobDataMap();
-        dhisDynamicReport.process(mergedJobDataMap);
+        dhisDynamicReport.processAndPost(mergedJobDataMap);
     }
 
 

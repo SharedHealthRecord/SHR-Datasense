@@ -2,17 +2,34 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
    var periodId = "#periodType", startDtId = "#startDate", displayPeriodId =  "#reportingPeriod";
    var dtCh= "/",  minYear=1900, maxYear=2100;
    var applicableOrgUnits = [];
+   var isChecked=false;
+   var isDateSelected=false;
 
    var self = this;
    $(periodId).change(function() {
         self.validateInput($(this).val());
    });
 
+   var checkboxes = $("input[type='checkbox']");
+   checkboxes.click(function() {
+        if(checkboxes.is(":checked")){
+            isChecked = true;
+        }
+        else{
+            isChecked = false;
+        }
+        self.disableSubmitAndPreview();
+   });
+
    $('#startDate').datepicker({
          autoclose: true,
          format: 'dd/mm/yyyy'
    }).on('changeDate', function (ev) {
-       self.validateInput($("#periodType").val());
+       if(self.validateInput($("#periodType").val()))
+            isDateSelected = true;
+       else
+            isDateSelected = false
+       self.disableSubmitAndPreview();
    });
 
    $('#reportScheduleForm').submit(function(e) {
@@ -24,7 +41,24 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
        }
    });
 
-
+   $('#preview').bind("click",function() {
+        var configId = $("#configId").val();
+        var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
+        var a = {};
+        a.selectedFacilities =$('input[name="selectedFacilities"]:checked').val();
+        a.periodType = $('#periodType').val();
+        a.startDate = $('#startDate').val();
+        a.datasetId = $('#datasetIdEl').val();
+        a.scheduleType = $('input[name="scheduleType"]:checked').val();
+        a.datasetName = $('#datasetName').val();
+        a.configId = $('#configId').val();
+        $.post(targetUrl,a).done(function(results) {
+            var template = $('#template_report_preview').html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, results);
+            $('#reportPreview tbody').html(rendered);
+        });
+   });
 
    $("#loadScheduleStatus").bind("click", function() {
        var configId = $("#configId").val();
@@ -52,6 +86,17 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
             e.preventDefault();
         }
    });
+
+   this.disableSubmitAndPreview = function() {
+          if (isChecked && isDateSelected) {
+              $("#submit").attr("disabled", false);
+              $("#preview").attr("disabled", false);
+          }
+          else {
+              $("#submit").attr("disabled", true);
+              $("#preview").attr("disabled", true);
+          }
+      }
 
    this.validateInput = function(periodValue) {
        var dateString = $(startDtId).val();
@@ -168,8 +213,5 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
            }
        });
    };
-
    fetchOrgUnits();
-
 }
-

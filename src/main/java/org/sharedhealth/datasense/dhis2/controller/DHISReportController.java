@@ -1,10 +1,12 @@
 package org.sharedhealth.datasense.dhis2.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.quartz.SchedulerException;
 import org.sharedhealth.datasense.client.DHIS2Client;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
+import org.sharedhealth.datasense.dhis2.service.DHISDataPreviewService;
 import org.sharedhealth.datasense.dhis2.service.DHISMetaDataService;
 import org.sharedhealth.datasense.dhis2.service.JobSchedulerService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/dhis2/reports")
@@ -37,6 +42,9 @@ public class DHISReportController {
 
     @Autowired
     private JobSchedulerService jobScheduler;
+
+    @Autowired
+    private DHISDataPreviewService dhisDataPreviewService;
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
@@ -108,6 +116,16 @@ public class DHISReportController {
         ModelAndView viewModel = viewModelForDataset(scheduleRequest.getConfigId());
         viewModel.addObject("formErrors", formErrors);
         return viewModel;
+    }
+
+    @RequestMapping(value = "/schedule/{datasetId}/preview", method = RequestMethod.POST)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public @ResponseBody Map previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest) {
+        String[] formErrors = new String[] {"Error Occurred."};
+        Map<String, Object> results = dhisDataPreviewService.fetchResults(scheduleRequest);
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("result", results.entrySet());
+        return map;
     }
 
     @RequestMapping(value = "/schedule/{configId}/jobs", method = RequestMethod.GET)

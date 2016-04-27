@@ -14,7 +14,6 @@
     <script type = "text/javascript">
         $( document ).ready(function() {
             var scheduleOptions = new ReportScheduleOptions();
-
         });
     </script>
 </head>
@@ -46,6 +45,7 @@
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#createScheduledJobs" id="tabCreateScheduledJobs">Schedule</a></li>
         <li><a data-toggle="tab" href="#viewScheduledJobs" id="tabViewScheduledJobs">Status</a></li>
+        <li><a data-toggle="tab" href="#reportPreviewBoard" id="tabPreview">Preview</a></li>
     </ul>
 
     <div class="tab-content">
@@ -68,7 +68,7 @@
                         </label>
                     </div>
                     <input id="datasetIdEl" name="datasetId" type="hidden" th:value="${reportConfig.datasetId}" />
-                    <input name="datasetName" type="hidden" th:value="${reportConfig.datasetName}" />
+                    <input id = "datasetName" name="datasetName"  type="hidden" th:value="${reportConfig.datasetName}" />
                     <input name = "configId" id="configId" type="hidden" th:value="${reportConfig.id}" />
 
                     <div class="form-group">
@@ -99,7 +99,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" class="btn btn-info" value="Submit"/>
+                            <input type="submit" id="submit" class="btn btn-info" value="Submit" disabled="true"/>
+                            <input class="btn btn-info" id="preview" value="Preview" disabled="true"/>
                         </div>
                     </div>
                 </form>
@@ -134,19 +135,44 @@
                     </table>
                 </div>
             </div>
+
+        </div>
+        <div id="reportPreviewBoard" class="tab-pane fade">
+            <div class="previewRow">
+                <div class="container" id="previewStatus">
+                    <table id="reportPreview" class="table">
+                        <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Value</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
+    <script id="template_report_preview" type="x-tmpl-mustache">
+        {{#result}}
+             <tr>
+                <td>{{ key }}</td>
+                <td>{{ #value }} {{ v1 }}{{ /value }}</td>
+             </tr>
+        {{/result}}
+    </script>
     <script id="template_scheduled_jobs_results" type="x-tmpl-mustache">
-    {{#.}}
-         <tr>
-            <td>{{ facilityId }}</td>
-            <td>{{ period }}</td>
-            <td>{{ prevFireTime }}</td>
-            <td>{{ nextFireTime }}</td>
-         </tr>
-    {{/.}}
-</script>
+        {{#.}}
+             <tr>
+                <td>{{ facilityId }}</td>
+                <td>{{ period }}</td>
+                <td>{{ prevFireTime }}</td>
+                <td>{{ nextFireTime }}</td>
+             </tr>
+        {{/.}}
+    </script>
 
 
 </div>

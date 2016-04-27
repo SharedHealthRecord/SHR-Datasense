@@ -44,6 +44,26 @@ public class AqsFTLProcessor implements AqsTemplateProcessor {
         }
     }
 
+    public HashMap<String, Object> getResult(String aqsConfigFile, Map<String, Object> params){
+        try {
+            initializeConfiguration();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try{
+            AqsConfig aqsConfig = executor.loadAqsConfig(aqsConfigFile);
+            HashMap<String, Object> results = executor.fetchResults(aqsConfig, params);
+            return results;
+        }catch (IOException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public String process(String aqsConfigFile, Map<String, Object> params) {
         try {
             initializeConfiguration();
