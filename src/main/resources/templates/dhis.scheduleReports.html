@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/html">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <link rel="stylesheet" href="/css/bootstrap.min.css"/>
@@ -45,7 +45,6 @@
     <ul class="nav nav-tabs">
         <li class="active"><a data-toggle="tab" href="#createScheduledJobs" id="tabCreateScheduledJobs">Schedule</a></li>
         <li><a data-toggle="tab" href="#viewScheduledJobs" id="tabViewScheduledJobs">Status</a></li>
-        <li><a data-toggle="tab" href="#reportPreviewBoard" id="tabPreview">Preview</a></li>
     </ul>
 
     <div class="tab-content">
@@ -137,32 +136,8 @@
             </div>
 
         </div>
-        <div id="reportPreviewBoard" class="tab-pane fade">
-            <div class="previewRow">
-                <div class="container" id="previewStatus">
-                    <table id="reportPreview" class="table">
-                        <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Value</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
     </div>
 
-    <script id="template_report_preview" type="x-tmpl-mustache">
-        {{#result}}
-             <tr>
-                <td>{{ key }}</td>
-                <td>{{ #value }} {{ v1 }}{{ /value }}</td>
-             </tr>
-        {{/result}}
-    </script>
     <script id="template_scheduled_jobs_results" type="x-tmpl-mustache">
         {{#.}}
              <tr>
@@ -173,10 +148,7 @@
              </tr>
         {{/.}}
     </script>
-
-
 </div>
-
 <div class="container">
     <div th:replace="fragments/footer :: footer"></div>
 </div>

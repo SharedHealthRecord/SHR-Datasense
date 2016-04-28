@@ -1,7 +1,5 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.JobDataMap;
@@ -125,7 +123,7 @@ public class DHISDynamicReport {
     }
 
     private Map<String, Object> previewQueryResult(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
-        return new JProcessor(configFile, queryParams, extraParams).getResult();
+        return new JProcessor(configFile, queryParams, extraParams).invoke();
     }
 
     private void logWhenErroredOut(String status, String dhisResponse) {
@@ -156,7 +154,7 @@ public class DHISDynamicReport {
             postUsingFTLProcessor(configFile, queryParams, extraParams);
         }
 
-        public Map<String, Object> getResult() {
+        public Map<String, Object> invoke() {
             return getResultFromAqs(configFile, queryParams, extraParams);
         }
 

@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.dhis2.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
@@ -25,7 +26,24 @@ public class DHISDataPreviewService {
         DHISReportConfig configForDataset = dhisConfigDao.getReportConfig(scheduleRequest.getConfigId());
         HashMap<String, String> dataMap = new HashMap<>();
         createJobMap(dataMap, scheduleRequest, scheduleRequest.getDatasetId(), configForDataset, facilityId, orgUnitConfig);
-        return dhisDynamicReport.process(dataMap);
+        Map<String, Object> results = dhisDynamicReport.process(dataMap);
+        Map<String, Object> trimmedResults = trimKeys(results);
+
+        Map<String, Object> map = new HashMap<>();
+        map.put("facilityName", orgUnitConfig.getFacilityName());
+        map.put("datasetName", scheduleRequest.getDatasetName());
+        map.put("reportPeriod", scheduleRequest.reportPeriod().period());
+        map.put("results", trimmedResults.entrySet());
+        return map;
+    }
+
+    private Map<String, Object> trimKeys(Map<String, Object> results) {
+        HashMap<String, Object> map = new HashMap<>();
+        for (String key : results.keySet()) {
+            String trimmedKey = StringUtils.replaceChars(key, "_", " ");
+            map.put(trimmedKey, results.get(key));
+        }
+        return map;
     }
 
     private void createJobMap(Map dataMap, ReportScheduleRequest scheduleRequest, String datasetId, DHISReportConfig configForDataset, String facilityId, DHISOrgUnitConfig orgUnitConfig) {

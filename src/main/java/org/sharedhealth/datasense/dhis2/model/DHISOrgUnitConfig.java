@@ -32,9 +32,6 @@ public class DHISOrgUnitConfig {
         this.orgUnitName = orgUnitName;
     }
 
-    public String getFacilityName() {
-        return facilityName;
-    }
     public String getFacilityId() {
         return facilityId;
     }
@@ -51,20 +48,24 @@ public class DHISOrgUnitConfig {
         this.facilityId = facilityId;
     }
 
-    public void setFacilityName(String facilityName) {
-        this.facilityName = facilityName;
-    }
-
     public String getOrgUnitId() {
         return orgUnitId;
     }
 
-    public void setOrgUnitId(String orgUnitId) {
-        this.orgUnitId = orgUnitId;
-    }
-
     public String getOrgUnitName() {
         return orgUnitName;
+    }
+
+    public String getFacilityName() {
+        return facilityName;
+    }
+
+    public void setFacilityName(String facilityName) {
+        this.facilityName = facilityName;
+    }
+
+    public void setOrgUnitId(String orgUnitId) {
+        this.orgUnitId = orgUnitId;
     }
 
     public void setOrgUnitName(String orgUnitName) {

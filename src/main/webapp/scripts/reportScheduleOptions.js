@@ -52,11 +52,9 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
         a.scheduleType = $('input[name="scheduleType"]:checked').val();
         a.datasetName = $('#datasetName').val();
         a.configId = $('#configId').val();
-        $.post(targetUrl,a).done(function(results) {
-            var template = $('#template_report_preview').html();
-            Mustache.parse(template);
-            var rendered = Mustache.render(template, results);
-            $('#reportPreview tbody').html(rendered);
+        $.post(targetUrl,a).done(function(previewHtml) {
+            var previewWindow = window.open("", "", "width=800,height=800");
+            previewWindow.document.write(previewHtml);
         });
    });
 
