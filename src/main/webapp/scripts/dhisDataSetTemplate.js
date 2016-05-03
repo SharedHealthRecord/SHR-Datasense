@@ -64,7 +64,6 @@ function DhisDataSetTemplate() {
                     });
 
                     $.when.apply($, deferredCategoryComboCalls).then(function(data){
-                        console.log(dataSetConfiguration);
                         stringifyAndDisplaySuggestion(dataSetConfiguration)
                     });
 

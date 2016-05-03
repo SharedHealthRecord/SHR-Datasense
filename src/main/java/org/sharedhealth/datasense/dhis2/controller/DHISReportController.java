@@ -119,9 +119,11 @@ public class DHISReportController {
     public
     ModelAndView previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest) {
         String[] formErrors = new String[]{"Error Occurred."};
-        Map<String, Object> map = dhisDataPreviewService.fetchResults(scheduleRequest);
+        List<Map> reports = dhisDataPreviewService.fetchResults(scheduleRequest);
         ModelAndView modelAndView = new ModelAndView("dhis.preview");
-        modelAndView.addObject("data", map);
+        modelAndView.addObject("datasetName",scheduleRequest.getDatasetName());
+        modelAndView.addObject("reportPeriod",scheduleRequest.reportPeriod().period());
+        modelAndView.addObject("reports", reports);
         return modelAndView;
     }
 

@@ -56,10 +56,13 @@
                 <h4>Select Facilities and schedule submission</h4>
 
                 <form role="form" method="post" id="reportScheduleForm">
-                    <div id="formErrors" class="alert alert-danger" role="alert" th:classappend="${formErrors != null} ? show : hidden"
-                         th:each="errorMessage : ${formErrors}">
-                        <span th:text="${errorMessage}">Error Occurred</span>.
-                    </div>
+                    <th:block th:object="${formErrors}">
+                        <h1 th:text="${formErrors}"></h1>
+                        <div id="formErrors" class="alert alert-danger" role="alert" th:classappend="${formErrors != null} ? show : hidden"
+                            th:each="errorMessage : ${formErrors}">
+                            <span th:text="${errorMessage}">Error Occurred</span>
+                        </div>
+                    </th:block>
                     <div class="checkbox" th:each="org: ${orgUnits}">
                         <label>
                             <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}" th:attr="data-orgunit=${org.orgUnitId}"/>
@@ -98,8 +101,8 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" id="submit" class="btn btn-info" value="Submit" disabled="true"/>
-                            <input class="btn btn-info" id="preview" value="Preview" disabled="true"/>
+                        <input type="submit" name="Submit" id="submit" class="btn btn-info" value="Submit" disabled="true"/>
+                            <input type="submit" name="Preview" class="btn btn-info" id="preview" value="Preview" disabled="true"/>
                         </div>
                     </div>
                 </form>

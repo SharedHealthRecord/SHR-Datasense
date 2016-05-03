@@ -9,7 +9,9 @@ import org.sharedhealth.datasense.export.dhis.reports.DHISDynamicReport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Component
@@ -20,22 +22,25 @@ public class DHISDataPreviewService {
     @Autowired
     private DHISDynamicReport dhisDynamicReport;
 
-    public Map<String, Object> fetchResults(ReportScheduleRequest scheduleRequest) {
-        String facilityId = scheduleRequest.getSelectedFacilities().get(0);
-        DHISOrgUnitConfig orgUnitConfig = dhisConfigDao.findOrgUnitConfigFor(facilityId);
-        DHISReportConfig configForDataset = dhisConfigDao.getReportConfig(scheduleRequest.getConfigId());
-        HashMap<String, String> dataMap = new HashMap<>();
-        createJobMap(dataMap, scheduleRequest, scheduleRequest.getDatasetId(), configForDataset, facilityId, orgUnitConfig);
-        Map<String, Object> results = dhisDynamicReport.process(dataMap);
-        Map<String, Object> trimmedResults = trimKeys(results);
+    public List<Map> fetchResults(ReportScheduleRequest scheduleRequest) {
+        List<Map> arrayList = new ArrayList<Map>();
+        for (String facilityId : scheduleRequest.getSelectedFacilities()) {
+            DHISOrgUnitConfig orgUnitConfig = dhisConfigDao.findOrgUnitConfigFor(facilityId);
+            DHISReportConfig configForDataset = dhisConfigDao.getReportConfig(scheduleRequest.getConfigId());
+            HashMap<String, String> dataMap = new HashMap<>();
+            createJobMap(dataMap, scheduleRequest, scheduleRequest.getDatasetId(), configForDataset, facilityId, orgUnitConfig);
+            Map<String, Object> results = dhisDynamicReport.process(dataMap);
+            Map<String, Object> trimmedResults = trimKeys(results);
 
-        Map<String, Object> map = new HashMap<>();
-        map.put("facilityName", orgUnitConfig.getFacilityName());
-        map.put("datasetName", scheduleRequest.getDatasetName());
-        map.put("reportPeriod", scheduleRequest.reportPeriod().period());
-        map.put("results", trimmedResults.entrySet());
-        return map;
+            Map<String, Object> map = new HashMap<>();
+            map.put("facilityName", orgUnitConfig.getFacilityName());
+            map.put("facilityId", orgUnitConfig.getFacilityId());
+            map.put("results", trimmedResults.entrySet());
+            arrayList.add(map);
+        }
+        return arrayList;
     }
+
 
     private Map<String, Object> trimKeys(Map<String, Object> results) {
         HashMap<String, Object> map = new HashMap<>();

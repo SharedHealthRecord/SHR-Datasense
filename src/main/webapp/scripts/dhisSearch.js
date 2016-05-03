@@ -33,7 +33,7 @@ function configureDatasetForReport(e) {
     url: "/dhis2/reports/configure",
     data: JSON.stringify(postData),
     contentType: "application/json; charset=utf-8",
-    success: function(data, status) { console.log(data); window.location.href="/dhis2/reports"; },
+    success: function(data, status) { window.location.href="/dhis2/reports"; },
     dataType: "json"
   });
 
@@ -70,7 +70,7 @@ function configureOrgUnitForFacility(e) {
     url: "/dhis2/orgUnits/configure",
     data: JSON.stringify(postData),
     contentType: "application/json; charset=utf-8",
-    success: function(data, status) { console.log(data); window.location.href="/dhis2/orgUnits"; },
+    success: function(data, status) { window.location.href="/dhis2/orgUnits"; },
     dataType: "json"
   });
 

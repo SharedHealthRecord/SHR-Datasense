@@ -32,30 +32,32 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
        self.disableSubmitAndPreview();
    });
 
-   $('#reportScheduleForm').submit(function(e) {
-       var validationResult = self.validateInput($("#periodType").val());
-       if (validationResult) {
-           $('#periodType').removeAttr('disabled');
-       } else {
-           e.preventDefault();
-       }
-   });
 
-   $('#preview').bind("click",function() {
-        var configId = $("#configId").val();
-        var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
-        var a = {};
-        a.selectedFacilities =$('input[name="selectedFacilities"]:checked').val();
-        a.periodType = $('#periodType').val();
-        a.startDate = $('#startDate').val();
-        a.datasetId = $('#datasetIdEl').val();
-        a.scheduleType = $('input[name="scheduleType"]:checked').val();
-        a.datasetName = $('#datasetName').val();
-        a.configId = $('#configId').val();
-        $.post(targetUrl,a).done(function(previewHtml) {
-            var previewWindow = window.open("", "", "width=800,height=800");
-            previewWindow.document.write(previewHtml);
-        });
+    $("form input[type=submit]").click(function() {
+            $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
+            $(this).attr("clicked", "true");
+    });
+
+   $('#reportScheduleForm').submit(function(e) {
+        var val = $("input[type=submit][clicked=true]").val();
+        if (val == "Submit") {
+           var validationResult = self.validateInput($("#periodType").val());
+           if (validationResult) {
+               $('#periodType').removeAttr('disabled');
+           } else {
+               e.preventDefault();
+           }
+         }
+        else if (val == "Preview") {
+            var configId = $("#configId").val();
+            var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
+            var data = $(this).serialize() + '&periodType=' + $('#periodType').val();
+            $.post(targetUrl, data, function(previewHtml){
+                var previewWindow = window.open("", "", "width=800,height=800");
+                previewWindow.document.write(previewHtml);
+            });
+            e.preventDefault();
+        }
    });
 
    $("#loadScheduleStatus").bind("click", function() {

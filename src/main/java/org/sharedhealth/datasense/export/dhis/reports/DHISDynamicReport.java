@@ -80,7 +80,7 @@ public class DHISDynamicReport {
 
         String configFile = dataMap.get("paramConfigFile");
 
-        HashMap<String, String> queryParams = getQueryParams(reportingStartDate, reportingEndDate, facilityId, orgUnitId, datasetId, (String) dataMap.get("paramPeriodType"));
+        HashMap<String, String> queryParams = getQueryParams(reportingStartDate, reportingEndDate, facilityId, orgUnitId, datasetId, dataMap.get("paramPeriodType"));
         HashMap<String, String> extraParams = getExtraParams(reportingPeriod, orgUnitId, datasetId);
 
         logger.info(String.format("Posting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
