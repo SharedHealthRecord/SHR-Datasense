@@ -52,9 +52,8 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
             var configId = $("#configId").val();
             var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
             var data = $(this).serialize() + '&periodType=' + $('#periodType').val();
-            $.post(targetUrl, data, function(previewHtml){
-                var previewWindow = window.open("", "", "width=800,height=800");
-                previewWindow.document.write(previewHtml);
+            $.post(targetUrl, data, function(response){
+                getDhisNames(response);
             });
             e.preventDefault();
         }
@@ -213,5 +212,60 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
            }
        });
    };
+
+   var getDhisNames = function(response) {
+       var dataElements = {};
+       var comboOptions = {};
+       var deferredDataElementCalls = [];
+       var deferredCatOptionComboCalls = [];
+       $.each(response.reports, function(index, report){
+          $.each(report.results.dataValues, function(index, item) {
+              if(!(item.dataElement in  dataElements)) {
+                  dataElements[item.dataElement] = "";
+                  deferredDataElementCalls.push($.ajax({
+                      url: "/dhis2/dataSets/dataElements/" + item.dataElement,
+                      success: function(rs) {
+                         dataElements[item.dataElement] = rs.name;
+                      }
+                  }));
+              }
+              if(!(item.categoryOptionCombo in  comboOptions)) {
+                  comboOptions[item.categoryOptionCombo] = "";
+                  deferredDataElementCalls.push($.ajax({
+                      url: "/dhis2/dataSets/categoryOptionCombos/" + item.categoryOptionCombo,
+                      success: function(rs) {
+                         comboOptions[item.categoryOptionCombo] = rs.name;
+                      }
+                  }));
+              }
+          });
+          $.when.apply($, deferredDataElementCalls).done(function() {
+              $.each(report.results.dataValues, function(index, item) {
+                  item.name = dataElements[item.dataElement] + " " + comboOptions[item.categoryOptionCombo];
+              });
+              var template = $('#template_report_result').html();
+              Mustache.parse(template);
+              var rendered = Mustache.render(template, response);
+              $('#myModal .modal-content').html(rendered);
+              $('#myModal').modal('show', {backdrop: 'static'});
+          });
+       });
+   };
+
    fetchOrgUnits();
 }
+
+var toggleFacilityDetails = function(facilityId, show) {
+   var tableId = "facility-table-" + facilityId;
+   var viewButtonId = "view-facility-" + facilityId;
+   var closeButtonId = "close-facility-" + facilityId;
+   if(!show) {
+       $("#" + tableId).prop("hidden", true);
+       $("#" + closeButtonId).prop("hidden", true);
+       $("#" + viewButtonId).prop("hidden", false);
+   } else {
+       $("#" + tableId).prop("hidden", false);
+       $("#" + viewButtonId).prop("hidden", true);
+       $("#" + closeButtonId).prop("hidden", false);
+   }
+};

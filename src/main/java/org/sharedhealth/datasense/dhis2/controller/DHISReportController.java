@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.dhis2.controller;
 
 import org.quartz.SchedulerException;
 import org.sharedhealth.datasense.client.DHIS2Client;
-import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
@@ -97,7 +96,7 @@ public class DHISReportController {
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView scheduleReportSubmission(ReportScheduleRequest scheduleRequest) {
-        String[] formErrors = new String[] {"Error Occurred."};
+        String[] formErrors = new String[]{"Error Occurred."};
         try {
             if (!scheduleRequest.getSelectedFacilities().isEmpty()) {
                 jobScheduler.scheduleJob(scheduleRequest);
@@ -117,14 +116,15 @@ public class DHISReportController {
     @RequestMapping(value = "/schedule/{datasetId}/preview", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
-    ModelAndView previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest) {
+    @ResponseBody
+    Map<String, Object> previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest) {
         String[] formErrors = new String[]{"Error Occurred."};
         List<Map> reports = dhisDataPreviewService.fetchResults(scheduleRequest);
-        ModelAndView modelAndView = new ModelAndView("dhis.preview");
-        modelAndView.addObject("datasetName",scheduleRequest.getDatasetName());
-        modelAndView.addObject("reportPeriod",scheduleRequest.reportPeriod().period());
-        modelAndView.addObject("reports", reports);
-        return modelAndView;
+        Map<String, Object> map = new HashMap<>();
+        map.put("datasetName", scheduleRequest.getDatasetName());
+        map.put("reportPeriod", scheduleRequest.reportPeriod().period());
+        map.put("reports", reports);
+        return map;
     }
 
     @RequestMapping(value = "/schedule/{configId}/jobs", method = RequestMethod.GET)
@@ -147,6 +147,4 @@ public class DHISReportController {
         modelAndView.addObject("reportConfig", metaDataService.getReportConfig(configId));
         return modelAndView;
     }
-
-
 }

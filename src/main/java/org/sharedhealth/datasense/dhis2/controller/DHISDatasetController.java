@@ -20,6 +20,7 @@ public class DHISDatasetController {
     private static final String DHIS_DATASET_DATA_ELEMENTS_FORMAT = "/api/dataSets/%s?fields=id,name,dataElements,categoryCombo";
     private static final String DHIS_DATA_ELEMENTS_FORMAT = "/api/dataElements/%s";
     private static final String DHIS_CAT_COMBO_FORMAT = "/api/categoryCombos/%s";
+    private static final String DHIS_CAT_OPT_COMBO_FORMAT = "/api/categoryOptionCombos/%s";
 
     @Autowired
     DHIS2Client dhis2Client;
@@ -55,4 +56,11 @@ public class DHISDatasetController {
         return dhis2Client.get(searchUri);
     }
 
+    @RequestMapping(value = "/categoryOptionCombos/{categoryOptionComboId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public @ResponseBody
+    DHISResponse getCategoryOptionComboDetails(@PathVariable String categoryOptionComboId) {
+        String searchUri = String.format(DHIS_CAT_OPT_COMBO_FORMAT, categoryOptionComboId);
+        return dhis2Client.get(searchUri);
+    }
 }

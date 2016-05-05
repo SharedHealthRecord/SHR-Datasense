@@ -46,3 +46,12 @@ input.expression{
  float: left;
  margin-right: 5px;
 }
+
+.modal-body {
+    max-height: calc(100vh - 200px) !important;
+    overflow-y: auto !important;
+}
+
+.modal-dialog {
+    overflow-y: initial !important;
+}

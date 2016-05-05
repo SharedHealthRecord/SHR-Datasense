@@ -68,8 +68,7 @@ public class DHISDynamicReport {
         }
     }
 
-    public Map<String, Object> process(Map<String, String> dataMap) {
-
+    public String process(Map<String, String> dataMap) {
         String reportingStartDate = dataMap.get("paramStartDate");
         String reportingEndDate = dataMap.get("paramEndDate");
         String reportingPeriod = dataMap.get("paramReportingPeriod");
@@ -83,7 +82,6 @@ public class DHISDynamicReport {
         HashMap<String, String> queryParams = getQueryParams(reportingStartDate, reportingEndDate, facilityId, orgUnitId, datasetId, dataMap.get("paramPeriodType"));
         HashMap<String, String> extraParams = getExtraParams(reportingPeriod, orgUnitId, datasetId);
 
-        logger.info(String.format("Posting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId, reportingStartDate));
         try {
             return previewQueryResult(configFile, queryParams, extraParams);
         } catch (Exception e) {
@@ -122,7 +120,7 @@ public class DHISDynamicReport {
         new JProcessor(configFile, queryParams, extraParams).invokeAndPostToDhis();
     }
 
-    private Map<String, Object> previewQueryResult(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+    private String previewQueryResult(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
         return new JProcessor(configFile, queryParams, extraParams).invoke();
     }
 
@@ -154,7 +152,7 @@ public class DHISDynamicReport {
             postUsingFTLProcessor(configFile, queryParams, extraParams);
         }
 
-        public Map<String, Object> invoke() {
+        public String invoke() {
             return getResultFromAqs(configFile, queryParams, extraParams);
         }
 
@@ -170,9 +168,9 @@ public class DHISDynamicReport {
             }
         }
 
-        private Map<String, Object> getResultFromAqs(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
+        private String getResultFromAqs(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
             Map<String, Object> params = getContent(queryParams, extraParams);
-            return aqsFTLProcessor.getResult(configFile, params);
+            return aqsFTLProcessor.process(configFile, params);
         }
 
         private HashMap<String, Object> getContent(HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
