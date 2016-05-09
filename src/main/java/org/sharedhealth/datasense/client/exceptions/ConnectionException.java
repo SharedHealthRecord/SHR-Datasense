@@ -1,4 +1,4 @@
-package org.sharedhealth.datasense.client;
+package org.sharedhealth.datasense.client.exceptions;
 
 import java.io.IOException;
 

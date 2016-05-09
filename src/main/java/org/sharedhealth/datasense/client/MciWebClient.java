@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.client;
 
 import org.apache.log4j.Logger;
+import org.sharedhealth.datasense.client.exceptions.ConnectionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.util.MapperUtil;

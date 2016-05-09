@@ -1,16 +1,15 @@
 package org.sharedhealth.datasense.client;
 
+import javassist.NotFoundException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpRequestBase;
-import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
-import org.sharedhealth.datasense.util.MapperUtil;
+import org.sharedhealth.datasense.client.exceptions.ConnectionException;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class WebClient {
                         HttpEntity entity = response.getEntity();
                         return entity != null ? parseContentInputAsString(entity) : null;
                     } else if (status == 404) {
-                        return null;
+                        throw new ConnectionException("Resource not found", 404, null);
                     } else if (status == 401) {
                         throw new ConnectionException("Unauthorized request", 401, null);
                     } else {

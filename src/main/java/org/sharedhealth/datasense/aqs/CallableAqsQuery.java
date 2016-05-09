@@ -39,7 +39,9 @@ public class CallableAqsQuery implements Callable<HashMap<String, List<Map<Strin
             String paramName = m.group(1);
             Object paramValue = params.get(paramName);
             if (paramValue == null) {
-                System.out.println("Could not find value for query parameter:" + paramName);
+                String message = "Could not find value for query parameter:" + paramName;
+                logger.error(message);
+                throw new RuntimeException(message);
             }
             queryString = queryString.replace(String.format(":%s:", paramName), String.format("%s", paramValue));
         }

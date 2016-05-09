@@ -13,6 +13,9 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 @Controller
 @RequestMapping(value = "/dhis2/dataSets")
 public class DHISDatasetController {
@@ -35,7 +38,7 @@ public class DHISDatasetController {
     @RequestMapping(value = "/{datasetId}/dataElements", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    DHISResponse getDataElementsForDataSet(@PathVariable String datasetId) {
+    DHISResponse getDataElementsForDataSet(@PathVariable String datasetId) throws IOException, URISyntaxException {
         String searchUri = String.format(DHIS_DATASET_DATA_ELEMENTS_FORMAT, datasetId);
         return dhis2Client.get(searchUri);
     }
@@ -43,7 +46,7 @@ public class DHISDatasetController {
     @RequestMapping(value = "/dataElements/{dataElementId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    DHISResponse getDataElementDetails(@PathVariable String dataElementId) {
+    DHISResponse getDataElementDetails(@PathVariable String dataElementId) throws IOException, URISyntaxException {
         String searchUri = String.format(DHIS_DATA_ELEMENTS_FORMAT, dataElementId);
         return dhis2Client.get(searchUri);
     }
@@ -51,7 +54,7 @@ public class DHISDatasetController {
     @RequestMapping(value = "/categoryCombos/{categoryComboId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    DHISResponse getCategoryComboDetails(@PathVariable String categoryComboId) {
+    DHISResponse getCategoryComboDetails(@PathVariable String categoryComboId) throws IOException, URISyntaxException {
         String searchUri = String.format(DHIS_CAT_COMBO_FORMAT, categoryComboId);
         return dhis2Client.get(searchUri);
     }
@@ -59,7 +62,7 @@ public class DHISDatasetController {
     @RequestMapping(value = "/categoryOptionCombos/{categoryOptionComboId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    DHISResponse getCategoryOptionComboDetails(@PathVariable String categoryOptionComboId) {
+    DHISResponse getCategoryOptionComboDetails(@PathVariable String categoryOptionComboId) throws IOException, URISyntaxException {
         String searchUri = String.format(DHIS_CAT_OPT_COMBO_FORMAT, categoryOptionComboId);
         return dhis2Client.get(searchUri);
     }

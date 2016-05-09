@@ -11,9 +11,11 @@
     <script src="/scripts/bootstrap.min.js"></script>
     <script src="/scripts/bootstrap-datepicker.js"></script>
     <script src="/scripts/reportScheduleOptions.js"></script>
-    <script type = "text/javascript">
+    <script src="/scripts/error.js"></script>
+    <script type = "text/javascript" th:inline="javascript">
         $( document ).ready(function() {
-            var scheduleOptions = new ReportScheduleOptions();
+            var formErrors = [[${formErrors}]];
+            var scheduleOptions = new ReportScheduleOptions(formErrors);
         });
     </script>
 </head>
@@ -52,17 +54,11 @@
             <div>
                 <h3 th:text="'Schedule Dataset for:'+ ${reportConfig.datasetName}"></h3>
             </div>
-            <div th:if="!${orgUnits.isEmpty()}">
+            <div th:include="fragments/error :: error" />
+            <div id="createReportSchedule" th:if="!${orgUnits.isEmpty()}">
                 <h4>Select Facilities and schedule submission</h4>
 
                 <form role="form" method="post" id="reportScheduleForm">
-                    <th:block th:object="${formErrors}">
-                        <h1 th:text="${formErrors}"></h1>
-                        <div id="formErrors" class="alert alert-danger" role="alert" th:classappend="${formErrors != null} ? show : hidden"
-                            th:each="errorMessage : ${formErrors}">
-                            <span th:text="${errorMessage}">Error Occurred</span>
-                        </div>
-                    </th:block>
                     <div class="checkbox" th:each="org: ${orgUnits}">
                         <label>
                             <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}" th:attr="data-orgunit=${org.orgUnitId}"/>
@@ -106,15 +102,11 @@
                         </div>
                     </div>
                 </form>
+                <div th:include="fragments/preview :: preview" />
             </div>
         </div>
-        <div class="modal fade" id="myModal" role="dialog">
-            <div class="modal-dialog modal-lg">
-                <!-- Modal content-->
-                <div class="modal-content" id="modalContent">
-                </div>
-            </div>
-        </div>
+
+
         <div id="viewScheduledJobs" class="tab-pane fade">
             <div>&nbsp;</div>
             <div class="row">
@@ -156,59 +148,6 @@
                 <td>{{ nextFireTime }}</td>
              </tr>
         {{/.}}
-    </script>
-
-    <script id="template_report_result" type="x-tmpl-mustache">
-        <div class="modal-header">
-            <button type="button" class="close" data-dismiss="modal">&times;</button>
-            <h2 class="modal-title text-center">{{ datasetName }}</h2>
-
-            <h3 class="modal-title text-center">{{ reportPeriod }}</h3>
-        </div>
-        <div class="modal-body">
-            <table class="table table-hover">
-                <tbody>
-                {{ #reports }}
-                <tr>
-                    <td>
-                        <div>
-                            <label>{{ facilityName }}</label>
-                            <img src="/images/down_arrow.png" alt="View Details" class="button-in-td"
-                                 id="view-facility-{{ facilityId}}"
-                                 onclick="toggleFacilityDetails({{ facilityId}}, true);"/>
-                            <img src="/images/up_arrow.png" alt="Close" class="button-in-td"
-                                 id="close-facility-{{ facilityId}}"
-                                 onclick="toggleFacilityDetails({{ facilityId}}, false);" hidden="true"/>
-                        </div>
-                        <div>
-                            <table id="facility-table-{{ facilityId}}" class="table table-bordered"
-                                   hidden="true">
-                                <thead>
-                                <tr>
-                                    <th>Name</th>
-                                    <th>Value</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {{ #results.dataValues }}
-                                <tr>
-                                    <td>
-                                        {{ name }}
-                                    </td>
-                                    <td>
-                                        {{ value }}
-                                    </td>
-                                </tr>
-                                {{ /results.dataValues }}
-                                </tbody>
-                            </table>
-                        </div>
-                    </td>
-                </tr>
-                {{ /reports }}
-                </tbody>
-            </table>
-        </div>
     </script>
 </div>
 <div class="container">

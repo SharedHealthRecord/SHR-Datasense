@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.dhis2.controller;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.quartz.SchedulerException;
 import org.sharedhealth.datasense.client.DHIS2Client;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
@@ -12,13 +13,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.io.IOException;
+import java.net.URISyntaxException;
+import java.util.*;
 
 @Controller
 @RequestMapping(value = "/dhis2/reports")
@@ -70,7 +71,7 @@ public class DHISReportController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) {
+    DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) throws IOException, URISyntaxException {
         String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
         String searchUri =
                 String.format(DHIS_DATASET_SEARCH_FORMAT, searchString);
@@ -81,7 +82,7 @@ public class DHISReportController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    DHISResponse getOrgUnits(@PathVariable String datasetId) {
+    DHISResponse getOrgUnits(@PathVariable String datasetId) throws IOException, URISyntaxException {
         String searchUri = String.format(DHIS_DATASET_ORGUNIT_FORMAT, datasetId);
         return dhis2Client.get(searchUri);
     }
@@ -117,13 +118,18 @@ public class DHISReportController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    Map<String, Object> previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest) {
-        String[] formErrors = new String[]{"Error Occurred."};
-        List<Map> reports = dhisDataPreviewService.fetchResults(scheduleRequest);
+    Map<String, Object> previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest, Model model) {
+        List<String> formErrors = new ArrayList<>();
+        List<Map> reports = dhisDataPreviewService.fetchResults(scheduleRequest, formErrors);
         Map<String, Object> map = new HashMap<>();
-        map.put("datasetName", scheduleRequest.getDatasetName());
-        map.put("reportPeriod", scheduleRequest.reportPeriod().period());
-        map.put("reports", reports);
+        if (CollectionUtils.isNotEmpty(reports)) {
+            map.put("datasetName", scheduleRequest.getDatasetName());
+            map.put("reportPeriod", scheduleRequest.reportPeriod().period());
+            map.put("reports", reports);
+        } else {
+            model.addAttribute("formErrors", formErrors);
+            map.put("formErrors", formErrors);
+        }
         return map;
     }
 

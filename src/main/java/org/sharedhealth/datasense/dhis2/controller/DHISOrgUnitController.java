@@ -11,6 +11,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.io.IOException;
+import java.net.URISyntaxException;
+
 @Controller
 @RequestMapping(value = "/dhis2/orgUnits")
 public class DHISOrgUnitController {
@@ -50,7 +53,7 @@ public class DHISOrgUnitController {
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody
-    DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) {
+    DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) throws IOException, URISyntaxException {
         String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
         String searchUri =
                 String.format(DHIS_ORGUNIT_SEARCH_FORMAT, searchString);

@@ -60,13 +60,16 @@ public class AqsFTLProcessor implements AqsTemplateProcessor {
             return writer.toString();
         } catch (IOException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (ExecutionException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (InterruptedException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         } catch (TemplateException e) {
             e.printStackTrace();
+            throw new RuntimeException(e);
         }
-        return null;
     }
 }

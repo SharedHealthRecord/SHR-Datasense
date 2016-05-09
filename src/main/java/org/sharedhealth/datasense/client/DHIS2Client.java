@@ -20,18 +20,12 @@ public class DHIS2Client {
     @Autowired
     DatasenseProperties properties;
 
-    public DHISResponse get(String resourceUrl) {
-        String uri = StringUtil.ensureSuffix(properties.getDhisBaseUrl(), "/") + StringUtil.removePrefix(resourceUrl,"/");
+    public DHISResponse get(String resourceUrl) throws URISyntaxException, IOException {
+        String uri = StringUtil.ensureSuffix(properties.getDhisBaseUrl(), "/") + StringUtil.removePrefix(resourceUrl, "/");
         HashMap<String, String> dhisHeaders = HeaderUtil.getDhisHeaders(properties);
-        try {
-            String remoteResponse = new WebClient().get(new URI(uri), dhisHeaders);
-            return new DHISResponse(remoteResponse);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-        }
-        return null;
+        String remoteResponse = null;
+        remoteResponse = new WebClient().get(new URI(uri), dhisHeaders);
+        return new DHISResponse(remoteResponse);
     }
 
     public DHISResponse post(String content) throws UnsupportedEncodingException {

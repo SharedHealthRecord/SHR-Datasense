@@ -1,11 +1,11 @@
-function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
+function ReportScheduleOptions(formErrors) {
    var periodId = "#periodType", startDtId = "#startDate", displayPeriodId =  "#reportingPeriod";
    var dtCh= "/",  minYear=1900, maxYear=2100;
    var applicableOrgUnits = [];
    var isChecked=false;
    var isDateSelected=false;
-
    var self = this;
+
    $(periodId).change(function() {
         self.validateInput($(this).val());
    });
@@ -53,7 +53,11 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
             var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
             var data = $(this).serialize() + '&periodType=' + $('#periodType').val();
             $.post(targetUrl, data, function(response){
-                getDhisNames(response);
+                if(response.formErrors != null && response.formErrors.length > 0) {
+                    showErrors(response.formErrors);
+                } else {
+                    getDhisNames(response);
+                }
             });
             e.preventDefault();
         }
@@ -210,49 +214,66 @@ function ReportScheduleOptions(periodEle, startDateEle, reportingPeriodEle) {
                  self.applicableOrgUnits = results.organisationUnits;
               }
            }
+       }).fail(function(){
+            showErrors("Unable to fetch dataset.");
+            $('#createReportSchedule').attr('hidden', true);
        });
    };
 
    var getDhisNames = function(response) {
        var dataElements = {};
        var comboOptions = {};
-       var deferredDataElementCalls = [];
-       var deferredCatOptionComboCalls = [];
+       var deferredCalls = [];
+       var defferedApply = [];
        $.each(response.reports, function(index, report){
           $.each(report.results.dataValues, function(index, item) {
               if(!(item.dataElement in  dataElements)) {
                   dataElements[item.dataElement] = "";
-                  deferredDataElementCalls.push($.ajax({
+                  deferredCalls.push($.ajax({
                       url: "/dhis2/dataSets/dataElements/" + item.dataElement,
                       success: function(rs) {
-                         dataElements[item.dataElement] = rs.name;
+                         if(rs.name != "(default)") {
+                             dataElements[item.dataElement] = rs.name;
+                         }
+                      },
+                      error: function(rs) {
+                         showErrors("Unable fetch data from DHIS");
                       }
                   }));
               }
               if(!(item.categoryOptionCombo in  comboOptions)) {
                   comboOptions[item.categoryOptionCombo] = "";
-                  deferredDataElementCalls.push($.ajax({
+                  deferredCalls.push($.ajax({
                       url: "/dhis2/dataSets/categoryOptionCombos/" + item.categoryOptionCombo,
                       success: function(rs) {
-                         comboOptions[item.categoryOptionCombo] = rs.name;
+                         if(rs.name != "(default)") {
+                            comboOptions[item.categoryOptionCombo] = rs.name;
+                         }
+                      },
+                      error: function(rs) {
+                         showErrors("Unable fetch data from DHIS");
                       }
                   }));
               }
           });
-          $.when.apply($, deferredDataElementCalls).done(function() {
+
+          defferedApply.push($.when.apply($, deferredCalls).done(function() {
               $.each(report.results.dataValues, function(index, item) {
                   item.name = dataElements[item.dataElement] + " " + comboOptions[item.categoryOptionCombo];
               });
-              var template = $('#template_report_result').html();
-              Mustache.parse(template);
-              var rendered = Mustache.render(template, response);
-              $('#myModal .modal-content').html(rendered);
-              $('#myModal').modal('show', {backdrop: 'static'});
-          });
+          }));
+       });
+       $.when.apply($, defferedApply).done(function() {
+           var template = $('#template_report_preview').html();
+           Mustache.parse(template);
+           var rendered = Mustache.render(template, response);
+           $('#previewModalContent').html(rendered);
+           $('#previewModal').modal('show', {backdrop: 'static'});
        });
    };
 
    fetchOrgUnits();
+   showErrors(formErrors);
 }
 
 var toggleFacilityDetails = function(facilityId, show) {

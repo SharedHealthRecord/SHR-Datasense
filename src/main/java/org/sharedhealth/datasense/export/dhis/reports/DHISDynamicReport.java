@@ -62,7 +62,6 @@ public class DHISDynamicReport {
             logger.info(String.format("Done submitting data for facility [%s], dataset [%s] for date [%s]", facilityId, datasetId,
                     reportingStartDate));
         } catch (Exception e) {
-            System.out.println(e);
             logger.error(String.format("Error submitting data for facility [%s], dataset [%s] for date [%s]",
                     facilityId, datasetId, reportingStartDate), e);
         }
@@ -82,14 +81,7 @@ public class DHISDynamicReport {
         HashMap<String, String> queryParams = getQueryParams(reportingStartDate, reportingEndDate, facilityId, orgUnitId, datasetId, dataMap.get("paramPeriodType"));
         HashMap<String, String> extraParams = getExtraParams(reportingPeriod, orgUnitId, datasetId);
 
-        try {
-            return previewQueryResult(configFile, queryParams, extraParams);
-        } catch (Exception e) {
-            System.out.println(e);
-            logger.error(String.format("Error fetching data for facility [%s], dataset [%s] for date [%s]",
-                    facilityId, datasetId, reportingStartDate), e);
-        }
-        return null;
+        return previewQueryResult(configFile, queryParams, extraParams);
     }
 
     private HashMap<String, String> getExtraParams(String reportingPeriod, String orgUnitId, String datasetId) {
@@ -158,9 +150,9 @@ public class DHISDynamicReport {
 
         private void postUsingFTLProcessor(String configFile, HashMap<String, String> queryParams, HashMap<String, String> extraParams) {
             HashMap<String, Object> params = getContent(queryParams, extraParams);
-            String content = aqsFTLProcessor.process(configFile, params);
-            logger.debug(String.format("Posting contents to DHIS2:- %s", content));
             try {
+                String content = aqsFTLProcessor.process(configFile, params);
+                logger.debug(String.format("Posting contents to DHIS2:- %s", content));
                 DHISResponse dhisResponse = dhis2Client.post(content);
                 logger.debug(dhisResponse.getValue());
             } catch (Exception e) {
