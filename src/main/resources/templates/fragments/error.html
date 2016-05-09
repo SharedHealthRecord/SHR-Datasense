@@ -1,10 +1,11 @@
 <div th:fragment="error">
-    <div id="errorBlock">
+    <div id="errorBlock" hidden="true">
     </div>
 
     <script id="template_errors" type="x-tmpl-mustache">
         {{#.}}
             <div id="formErrors" class="alert alert-danger show" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 <span> {{ . }}</span>
             </div>
         {{/.}}

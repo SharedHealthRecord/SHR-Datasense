@@ -32,7 +32,6 @@ function ReportScheduleOptions(formErrors) {
        self.disableSubmitAndPreview();
    });
 
-
     $("form input[type=submit]").click(function() {
             $("input[type=submit]", $(this).parents("form")).removeAttr("clicked");
             $(this).attr("clicked", "true");
