@@ -64,6 +64,7 @@ ext.libraries = [
         apache_httpclient    : "org.apache.httpcomponents:httpclient:4.3.5",
         apache_commons_codec : "commons-codec:commons-codec:1.9",
         apache_commons_dbcp  : "commons-dbcp:commons-dbcp:1.4",
+        apache_commons_collections : "org.apache.commons:commons-collections4:4.1",
         spring_ctx_support   : "org.springframework:spring-context-support:4.1.1.RELEASE",
         joda                 : "joda-time:joda-time:2.5",
         thymeleaf            : "org.thymeleaf:thymeleaf-spring3:2.1.4.RELEASE",
@@ -96,7 +97,7 @@ dependencies {
             libraries.liquibase, libraries.atomfeed_client, libraries.atomfeed_commons, libraries.rome,
             libraries.spring_transaction, libraries.spring_jdbc, libraries.apache_httpclient, libraries.apache_commons_codec,
             libraries.apache_commons_dbcp, libraries.spring_ctx_support, libraries.joda, libraries.free_marker,libraries.thymeleaf, libraries.spring_web,
-            libraries.guava,
+            libraries.guava, libraries.apache_commons_collections,
             libraries.hapi_fhir_base, libraries.hapi_fhir_structures,
             libraries.phloc_schematron, libraries.phloc_commons
 
