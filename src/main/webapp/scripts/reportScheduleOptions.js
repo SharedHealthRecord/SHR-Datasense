@@ -48,14 +48,24 @@ function ReportScheduleOptions(formErrors) {
            }
          }
         else if (val == "Preview") {
+            loading();
             var configId = $("#configId").val();
             var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
             var data = $(this).serialize() + '&periodType=' + $('#periodType').val();
-            $.post(targetUrl, data, function(response){
-                if(response.formErrors != null && response.formErrors.length > 0) {
-                    showErrors(response.formErrors);
-                } else {
-                    getDhisNames(response);
+            $.ajax({
+                type: "POST",
+                url: targetUrl,
+                data: data,
+                dataType: 'json',
+                success: function(response){
+                    if(response.formErrors != null && response.formErrors.length > 0) {
+                        showErrors(response.formErrors);
+                    } else {
+                        getDhisNames(response);
+                    }
+                },
+                complete: function(){
+                   $('#overlay').remove();
                 }
             });
             e.preventDefault();
@@ -218,6 +228,13 @@ function ReportScheduleOptions(formErrors) {
             $('#createReportSchedule').attr('hidden', true);
        });
    };
+
+   var loading = function(){
+    var over = '<div id="overlay">' +
+                '<img id="loading" class = "loaderImage" src="/images/ajax-loader.gif">' +
+                '</div>';
+    $(over).appendTo('body');
+   }
 
    var getDhisNames = function(response) {
        var dataElements = {};
