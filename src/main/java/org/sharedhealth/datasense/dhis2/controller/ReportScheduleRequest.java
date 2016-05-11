@@ -26,6 +26,8 @@ public class ReportScheduleRequest {
     private String startDate;
     private String datasetId;
     private String scheduleType;
+    private String cronExp;
+    private String scheduleStartDate;
     private String endDate;
     private ReportPeriod reportPeriod;
     private String datasetName;
@@ -152,6 +154,22 @@ public class ReportScheduleRequest {
             return new QuarterlyReportPeriod(startDate);
         }
         return new NotImplementedPeriod(startDate);
+    }
+
+    public String getCronExp() {
+        return cronExp;
+    }
+
+    public void setCronExp(String cronExp) {
+        this.cronExp = cronExp;
+    }
+
+    public String getScheduleStartDate() {
+        return scheduleStartDate;
+    }
+
+    public void setScheduleStartDate(String scheduleStartDate) {
+        this.scheduleStartDate = scheduleStartDate;
     }
 
 

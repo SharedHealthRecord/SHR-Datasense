@@ -21,8 +21,24 @@ function ReportScheduleOptions(formErrors) {
         self.disableSubmitAndPreview();
    });
 
+   $('#scheduleStartDate').datepicker({
+       autoclose: true,
+       onRender: function(date) {
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            return date.valueOf() < now.valueOf() ? 'disabled' : '';
+       },
+       format: 'dd/mm/yyyy'
+   });
+
    $('#startDate').datepicker({
          autoclose: true,
+         onRender: function(dateTemp) {
+            var nowTemp = new Date();
+            var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+            var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
+            return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+         },
          format: 'dd/mm/yyyy'
    }).on('changeDate', function (ev) {
        if(self.validateInput($("#periodType").val()))
@@ -43,6 +59,11 @@ function ReportScheduleOptions(formErrors) {
            var validationResult = self.validateInput($("#periodType").val());
            if (validationResult) {
                $('#periodType').removeAttr('disabled');
+               if ($('input[type=radio]:checked').val() == "repeat"){
+                   var cronExp = calculateCronExp();
+                   $('#cronExp').val(cronExp);
+                   alert(cronExp);
+               }
            } else {
                e.preventDefault();
            }
@@ -99,10 +120,23 @@ function ReportScheduleOptions(formErrors) {
         }
    });
 
+   $("input[name=scheduleType]").bind("click", function(e) {
+        var val = $('input[type=radio]:checked').val();
+        if (val == "repeat") {
+            $('#recurringSchedule').removeAttr("hidden");
+        } else {
+            $('#recurringSchedule').attr("hidden", true);
+        }
+        self.disableSubmitAndPreview();
+   });
+
    this.disableSubmitAndPreview = function() {
           if (isChecked && isDateSelected) {
               $("#submit").attr("disabled", false);
-              $("#preview").attr("disabled", false);
+              if ($('input[type=radio]:checked').val() === "once")
+                $("#preview").attr("disabled", false);
+              else
+                $("#preview").attr("disabled", true);
           }
           else {
               $("#submit").attr("disabled", true);
@@ -136,6 +170,15 @@ function ReportScheduleOptions(formErrors) {
             return result;
        }
    };
+
+   var calculateCronExp = function() {
+        var cronSec = "0";
+        var cronDow = "?";
+        var cronMin = cronHour = cronDay = cronMonth = cronYear = "*";
+        cronMin = $("#min").val();
+        cronHour = $("#hour").val();
+        return [cronSec, cronMin, cronHour, cronDay, cronMonth, cronDow, cronYear].join(" ");
+   }
 
    var validateYearlyReportingPeriod =function(reportingDate) {
         var currentDate = new Date();

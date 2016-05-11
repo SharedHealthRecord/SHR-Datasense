@@ -1,13 +1,8 @@
 package org.sharedhealth.datasense.dhis2.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
-import org.quartz.JobDataMap;
-import org.quartz.JobDetail;
-import org.quartz.JobKey;
-import org.quartz.Scheduler;
-import org.quartz.SchedulerException;
-import org.quartz.SimpleTrigger;
-import org.quartz.Trigger;
+import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
@@ -15,12 +10,16 @@ import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
 import org.sharedhealth.datasense.dhis2.repository.DHISConfigDao;
 import org.sharedhealth.datasense.export.dhis.Jobs.DHISQuartzJob;
+import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.quartz.JobDetailFactoryBean;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
 import java.util.*;
+import java.util.Calendar;
 
+import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 
 @Service
@@ -37,12 +36,10 @@ public class JobSchedulerService {
     }
 
     public void scheduleJob(ReportScheduleRequest scheduleRequest) throws SchedulerException {
-        if (scheduleRequest.getScheduleType().equalsIgnoreCase("once")) {
-            scheduleOnce(scheduleRequest);
-        }
+        scheduleRequest(scheduleRequest);
     }
 
-    private void scheduleOnce(ReportScheduleRequest scheduleRequest)  {
+    private void scheduleRequest(ReportScheduleRequest scheduleRequest) {
         String datasetId = scheduleRequest.getDatasetId();
         DHISReportConfig configForDataset = dhisMapDao.getReportConfig(scheduleRequest.getConfigId());
 
@@ -60,13 +57,10 @@ public class JobSchedulerService {
             JobDataMap jobDataMap = jobDetail.getJobDataMap();
             createJobMap(jobDataMap, scheduleRequest, scheduleRequest.getDatasetId(), configForDataset, facilityId, orgUnitConfig);
 
-            String datasetName =  scheduleRequest.getDatasetName();
+            String datasetName = scheduleRequest.getDatasetName();
 
             String triggerName = jobName + "-TRIGGER";
-            SimpleTrigger trigger = (SimpleTrigger) newTrigger()
-                                        .withIdentity(triggerName, datasetName)
-                                        .startAt(afterSecs(30)).build();
-            //CronTrigger trigger = getTrigger(triggerName, cronExpression, jobDetail);
+            Trigger trigger = getTrigger(scheduleRequest, datasetName, triggerName);
             try {
                 if (!scheduler.checkExists(trigger.getKey())) {
                     scheduler.scheduleJob(jobDetail, trigger);
@@ -80,6 +74,29 @@ public class JobSchedulerService {
             }
             logger.info(String.format("Job %s starred", jobName));
 
+        }
+    }
+
+    private Trigger getTrigger(ReportScheduleRequest scheduleRequest, String datasetName, String triggerName) {
+        if (scheduleRequest.getScheduleType().equalsIgnoreCase("once")) {
+            return newTrigger()
+                    .withIdentity(triggerName, datasetName)
+                    .startAt(afterSecs(30))
+                    .build();
+        } else {
+            TriggerBuilder<CronTrigger> triggerBuilder = newTrigger()
+                    .withIdentity(triggerName, datasetName)
+                    .withSchedule(cronSchedule(scheduleRequest.getCronExp()));
+            if(StringUtils.isNotBlank(scheduleRequest.getScheduleStartDate())) {
+                Date triggerStartTime = null;
+                try {
+                    triggerStartTime = DateUtil.parseDate(scheduleRequest.getScheduleStartDate(), DateUtil.DATE_FMT_DD_MM_YYYY);
+                } catch (ParseException e) {
+                    throw new RuntimeException("invalid date:" + scheduleRequest.getScheduleStartDate());
+                }
+                triggerBuilder.startAt(triggerStartTime);
+            }
+            return triggerBuilder.build();
         }
     }
 
@@ -164,6 +181,4 @@ public class JobSchedulerService {
     private String toNotNullDateString(Date date) {
         return (date != null) ? date.toString() : "";
     }
-
-
 }

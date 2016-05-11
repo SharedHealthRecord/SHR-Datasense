@@ -12,11 +12,20 @@
     <script src="/scripts/bootstrap-datepicker.js"></script>
     <script src="/scripts/reportScheduleOptions.js"></script>
     <script src="/scripts/error.js"></script>
-    <script type = "text/javascript" th:inline="javascript">
+    <script type="text/javascript" th:inline="javascript">
         $( document ).ready(function() {
             var formErrors = [[${formErrors}]];
             var scheduleOptions = new ReportScheduleOptions(formErrors);
         });
+
+
+
+
+
+
+
+
+
     </script>
 </head>
 <body>
@@ -45,8 +54,10 @@
         <h2>&nbsp;</h2>
     </div>
     <ul class="nav nav-tabs">
-        <li class="active"><a class="scheduleReportTab" data-toggle="tab" href="#createScheduledJobs" id="tabCreateScheduledJobs">Schedule</a></li>
-        <li><a class="scheduleReportTab" data-toggle="tab" href="#viewScheduledJobs" id="tabViewScheduledJobs">Status</a></li>
+        <li class="active"><a class="scheduleReportTab" data-toggle="tab" href="#createScheduledJobs"
+                              id="tabCreateScheduledJobs">Schedule</a></li>
+        <li><a class="scheduleReportTab" data-toggle="tab" href="#viewScheduledJobs"
+               id="tabViewScheduledJobs">Status</a></li>
     </ul>
 
     <div class="tab-content">
@@ -54,33 +65,63 @@
             <div>
                 <h3 th:text="'Schedule Dataset for:'+ ${reportConfig.datasetName}"></h3>
             </div>
-            <div th:include="fragments/error :: error" />
+            <div th:include="fragments/error :: error"/>
             <div id="createReportSchedule" th:if="!${orgUnits.isEmpty()}">
-                <h4>Select Facilities and schedule submission</h4>
 
                 <form role="form" method="post" id="reportScheduleForm">
-                    <div class="checkbox" th:each="org: ${orgUnits}">
-                        <label>
-                            <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}" th:attr="data-orgunit=${org.orgUnitId}"/>
-                            <span th:utext="${org.facilityName}">name</span>
-                        </label>
-                    </div>
-                    <input id="datasetIdEl" name="datasetId" type="hidden" th:value="${reportConfig.datasetId}" />
-                    <input id = "datasetName" name="datasetName"  type="hidden" th:value="${reportConfig.datasetName}" />
-                    <input name = "configId" id="configId" type="hidden" th:value="${reportConfig.id}" />
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <h4>Select Facilities and schedule submission</h4>
 
-                    <div class="form-group">
-                        <label class="radio-inline"><input type="radio" name="scheduleType" value="once" checked="checked"/>One time</label>
-                        <label class="radio-inline"><input type="radio" name="scheduleType" value="repeat" disabled="disabled" />Recurring</label>
+                            <div class="checkbox" th:each="org: ${orgUnits}">
+                                <label>
+                                    <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}"
+                                           th:attr="data-orgunit=${org.orgUnitId}"/>
+                                    <span th:utext="${org.facilityName}">name</span>
+                                </label>
+                            </div>
+                        </div>
                     </div>
+                    <input id="datasetIdEl" name="datasetId" type="hidden" th:value="${reportConfig.datasetId}"/>
+                    <input id="datasetName" name="datasetName" type="hidden"
+                           th:value="${reportConfig.datasetName}"/>
+                    <input name="configId" id="configId" type="hidden" th:value="${reportConfig.id}"/>
+                    <input name="cronExp" id="cronExp" type="hidden" value=""/>
 
+                    <div class="panel panel-default">
+                        <div class="panel-body">
+                            <div class="form-group">
+                                <label class="radio-inline"><input type="radio" name="scheduleType" value="once"
+                                                                   checked="checked"/>One time</label>
+                                <label class="radio-inline"><input type="radio" name="scheduleType"
+                                                                   value="repeat"/>Recurring</label>
+                            </div>
+                            <div id="recurringSchedule" hidden="true">
+                                <div>
+                                    <p>
+                                        <span>Starting from </span>
+                                        <input id="scheduleStartDate" name="scheduleStartDate" type="text"
+                                               class="datepicker dateInput" placeholder="Today"/>
+                                        <span>, Every day at </span>
+                                        <input class="number" type="number" value="0" id="hour" min="0" max="23"/>
+                                        <span>:</span>
+                                        <input class="number" type="number" value="0" id="min" min="0" max="59"/>
+                                        <span> hours.</span>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <div class="form-group">
                         <label for="periodType" class="control-label col-xs-2">Period</label>
+
                         <div class="col-xs-10">
-                            <select id="periodType" name="periodType" class="form-control" th:disabled="${supportedPeriodTypes.contains(reportConfig.periodType)}">
+                            <select id="periodType" name="periodType" class="form-control"
+                                    th:disabled="${supportedPeriodTypes.contains(reportConfig.periodType)}">
                                 <option th:each="supportedPeriod : ${supportedPeriodTypes}"
-                                        th:value="${supportedPeriod}" th:text="${supportedPeriod}" th:selected="${supportedPeriod.equals(reportConfig.periodType)}">
+                                        th:value="${supportedPeriod}" th:text="${supportedPeriod}"
+                                        th:selected="${supportedPeriod.equals(reportConfig.periodType)}">
                                     Daily
                                 </option>
                             </select>
@@ -88,8 +129,10 @@
                     </div>
                     <div class="form-group">
                         <label for="startDate" class="control-label col-xs-2">Select Date</label>
+
                         <div class="col-xs-6">
-                            <input id="startDate" name="startDate" type="text" class="form-control startDate datepicker" placeholder="Enter a date"/>
+                            <input id="startDate" name="startDate" type="text"
+                                   class="form-control startDate datepicker dateInput" placeholder="Enter a date"/>
                         </div>
                         <div class="col-xs-4">
                             <span id="reportingPeriod" name="reportingPeriod"></span>
@@ -97,12 +140,14 @@
                     </div>
                     <div class="form-group">
                         <div class="col-sm-offset-2 col-sm-10">
-                            <input type="submit" name="Submit" id="submit" class="btn btn-info" value="Submit" disabled="true"/>
-                            <input type="submit" name="Preview" class="btn btn-info" id="preview" value="Preview" disabled="true"/>
+                            <input type="submit" name="Submit" id="submit" class="btn btn-info" value="Submit"
+                                   disabled="true"/>
+                            <input type="submit" name="Preview" class="btn btn-info" id="preview" value="Preview"
+                                   disabled="true"/>
                         </div>
                     </div>
                 </form>
-                <div th:include="fragments/preview :: preview" />
+                <div th:include="fragments/preview :: preview"/>
             </div>
         </div>
 
@@ -123,12 +168,12 @@
                 <div class="container" id="scheduledJobStatus">
                     <table id="reportScheduleStatus" class="table">
                         <thead>
-                            <tr>
-                                <th>Facility Name</th>
-                                <th>Reporting Period</th>
-                                <th>Prev Fire Time</th>
-                                <th>Next Fire Time</th>
-                            </tr>
+                        <tr>
+                            <th>Facility Name</th>
+                            <th>Reporting Period</th>
+                            <th>Prev Fire Time</th>
+                            <th>Next Fire Time</th>
+                        </tr>
                         </thead>
                         <tbody>
                         </tbody>
@@ -148,6 +193,15 @@
                 <td>{{ nextFireTime }}</td>
              </tr>
         {{/.}}
+
+
+
+
+
+
+
+
+
     </script>
 </div>
 <div class="container">
