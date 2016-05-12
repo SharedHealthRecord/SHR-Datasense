@@ -61,8 +61,8 @@ function ReportScheduleOptions(formErrors) {
                $('#periodType').removeAttr('disabled');
                if ($('input[type=radio]:checked').val() == "repeat"){
                    var cronExp = calculateCronExp();
-                   $('#cronExp').val(cronExp);
                    alert(cronExp);
+                   $('#cronExp').val(cronExp);
                }
            } else {
                e.preventDefault();
@@ -171,10 +171,42 @@ function ReportScheduleOptions(formErrors) {
        }
    };
 
+   $('#schedulePeriod').on('change', function() {
+        var ddl = document.getElementById("schedulePeriod");
+         var selectedValue = ddl.options[ddl.selectedIndex].value;
+            if (selectedValue == "daily"){
+                $("#dow").attr("hidden", true);
+                $("#dom").attr("hidden", true);
+           }else if (selectedValue == "weekly"){
+                $("#dow").attr("hidden", false);
+                $("#dom").attr("hidden", true);
+           }else if (selectedValue == "monthly"){
+                $("#dom").attr("hidden", false);
+                $("#dow").attr("hidden", true);
+           }else if (selectedValue == "quarterly"){
+                $("#dow").attr("hidden", true);
+                $("#dom").attr("hidden", true);
+           }
+   });
+
+
    var calculateCronExp = function() {
         var cronSec = "0";
-        var cronDow = "?";
-        var cronMin = cronHour = cronDay = cronMonth = cronYear = "*";
+        var ddl = document.getElementById("schedulePeriod");
+        var selectedValue = ddl.options[ddl.selectedIndex].value;
+        if (selectedValue == "weekly"){
+            var cronDow = $("#cron-dow").val();
+            var cronDay = "?";
+        }else if(selectedValue == "monthly"){
+            var cronDay = $("#cron-dom").val();
+            var cronDow = "?";
+        }
+        else{
+            var cronDow = "?";
+            var cronDay = "*";
+        }
+
+        var cronMin = cronHour = cronMonth = cronYear = "*";
         cronMin = $("#min").val();
         cronHour = $("#hour").val();
         return [cronSec, cronMin, cronHour, cronDay, cronMonth, cronDow, cronYear].join(" ");
