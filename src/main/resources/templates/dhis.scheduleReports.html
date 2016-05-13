@@ -95,16 +95,16 @@
                                                class="datepicker dateInput" placeholder="Today"/>
                                         <span>
                                             , Every
+                                            <input class="number" type="number" id="cronFrequency" min="1" value="1" hidden="true"/>
                                             <select name="schedulePeriod" id="schedulePeriod">
                                                 <option value="daily">Day</option>
                                                 <option value="weekly">Week</option>
                                                 <option value="monthly">Month</option>
-                                                <option value="quarterly">Quarter</option>
                                             </select>
                                         </span>
                                         <span id="dow" hidden="true">
                                             on
-                                            <select name="cron-dow" id="cron-dow">
+                                            <select multiple="multiple" name="cron-dow" id="cron-dow">
                                                 <option value="sun">Sunday</option>
                                                 <option value="mon">Monday</option>
                                                 <option value="tue">Tuesday</option>
@@ -151,9 +151,9 @@
                                             </select>
                                         </span>
                                         <span> at </span>
-                                        <input class="number" type="number" value="0" id="hour" min="0" max="23"/>
+                                        <input class="number" type="number" value="0" id="hour" min="0" max="23" required="true"/>
                                         <span>:</span>
-                                        <input class="number" type="number" value="0" id="min" min="0" max="59"/>
+                                        <input class="number" type="number" value="0" id="min" min="0" max="59" required="true"/>
                                         <span> hours.</span>
                                     </p>
                                 </div>

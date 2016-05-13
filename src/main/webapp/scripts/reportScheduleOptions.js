@@ -61,7 +61,6 @@ function ReportScheduleOptions(formErrors) {
                $('#periodType').removeAttr('disabled');
                if ($('input[type=radio]:checked').val() == "repeat"){
                    var cronExp = calculateCronExp();
-                   alert(cronExp);
                    $('#cronExp').val(cronExp);
                }
            } else {
@@ -174,39 +173,49 @@ function ReportScheduleOptions(formErrors) {
    $('#schedulePeriod').on('change', function() {
         var ddl = document.getElementById("schedulePeriod");
          var selectedValue = ddl.options[ddl.selectedIndex].value;
-            if (selectedValue == "daily"){
+            if (selectedValue == "daily") {
                 $("#dow").attr("hidden", true);
+                $("#cron-dow").attr("required", false);
                 $("#dom").attr("hidden", true);
-           }else if (selectedValue == "weekly"){
+                $("#cron-dom").attr("required", false);
+                $("#cronFrequency").attr("hidden", true);
+                $("#cronFrequency").attr("required", false);
+           } else if (selectedValue == "weekly") {
                 $("#dow").attr("hidden", false);
+                $("#cron-dow").attr("required", true);
                 $("#dom").attr("hidden", true);
-           }else if (selectedValue == "monthly"){
+                $("#cron-dom").attr("required", false);
+                $("#cronFrequency").attr("hidden", true);
+                $("#cronFrequency").attr("required", false);
+           } else if (selectedValue == "monthly") {
                 $("#dom").attr("hidden", false);
+                $("#cron-dom").attr("required", true);
+                $("#cronFrequency").attr("hidden", false);
+                $("#cronFrequency").attr("required", true);
                 $("#dow").attr("hidden", true);
-           }else if (selectedValue == "quarterly"){
-                $("#dow").attr("hidden", true);
-                $("#dom").attr("hidden", true);
+                $("#cron-dow").attr("required", false);
            }
    });
 
 
    var calculateCronExp = function() {
         var cronSec = "0";
+        var cronMin = cronHour = cronDay = cronMonth = cronYear = "*";
+        var cronDow = "?";
         var ddl = document.getElementById("schedulePeriod");
         var selectedValue = ddl.options[ddl.selectedIndex].value;
         if (selectedValue == "weekly"){
-            var cronDow = $("#cron-dow").val();
-            var cronDay = "?";
-        }else if(selectedValue == "monthly"){
-            var cronDay = $("#cron-dom").val();
-            var cronDow = "?";
+            cronDow = $("#cron-dow").val();
+            cronDay = "?";
+        } else if(selectedValue == "monthly"){
+            cronDay = $("#cron-dom").val();
+            if ($('#cronFrequency').val() > 1) {
+                cronMonth = "1/" + $('#cronFrequency').val();
+            }
         }
-        else{
-            var cronDow = "?";
-            var cronDay = "*";
+        else {
+            cronDay = "*";
         }
-
-        var cronMin = cronHour = cronMonth = cronYear = "*";
         cronMin = $("#min").val();
         cronHour = $("#hour").val();
         return [cronSec, cronMin, cronHour, cronDay, cronMonth, cronDow, cronYear].join(" ");
