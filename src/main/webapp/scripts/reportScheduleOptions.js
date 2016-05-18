@@ -92,6 +92,10 @@ function ReportScheduleOptions(formErrors) {
         }
    });
 
+   $('#cron-dow').multiselect({
+       includeSelectAllOption: true
+   });
+
    $("#loadScheduleStatus").bind("click", function() {
        var configId = $("#configId").val();
        var targetUrl = "/dhis2/reports/schedule/" + configId + "/jobs";
