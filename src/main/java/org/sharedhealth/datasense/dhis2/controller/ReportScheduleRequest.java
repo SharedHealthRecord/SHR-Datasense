@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.dhis2.controller;
 
 
 import org.apache.commons.lang3.StringUtils;
-import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.util.DateUtil;
 
 import java.text.ParseException;
@@ -12,13 +11,18 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
+import static org.sharedhealth.datasense.util.DateUtil.toGivenFormatString;
+
 public class ReportScheduleRequest {
-    private static final String DATE_FMT_DD_MM_YYYY = "dd/MM/yyyy";
     public static final String DAILY_PERIOD_TYPE = "Daily";
     public static final String MONTHLY_PERIOD_TYPE = "Monthly";
     public static final String YEARLY_PERIOD_TYPE = "Yearly";
     private static final String WEEKLY_PERIOD_TYPE = "Weekly";
     private static final String QUARTERLY_PERIOD_TYPE = "Quarterly";
+
+    public static final String SCHEDULE_TYPE_ONCE = "once";
+    public static final String SCHEDULE_TYPE_REPEAT = "repeat";
+
     public static final String[] SUPPORTED_PERIOD_TYPES = {DAILY_PERIOD_TYPE, MONTHLY_PERIOD_TYPE, QUARTERLY_PERIOD_TYPE, YEARLY_PERIOD_TYPE};
 
     private List<String> selectedFacilities = new ArrayList<>();
@@ -32,6 +36,7 @@ public class ReportScheduleRequest {
     private ReportPeriod reportPeriod;
     private String datasetName;
     private Integer configId;
+    private Integer previousPeriods;
 
     public ReportScheduleRequest() {
     }
@@ -103,6 +108,15 @@ public class ReportScheduleRequest {
     }
 
 
+    public Integer getPreviousPeriods() {
+        return previousPeriods;
+    }
+
+    public void setPreviousPeriods(Integer previousPeriods) {
+        this.previousPeriods = previousPeriods;
+    }
+
+
     private Calendar fromDateString(String dateString) {
         try {
             Date date = DateUtil.parseDate(dateString, DateUtil.DATE_FMT_DD_MM_YYYY);
@@ -126,7 +140,9 @@ public class ReportScheduleRequest {
         }
 
         if (StringUtils.isBlank(this.startDate)) {
-            return null;
+            if (SCHEDULE_TYPE_ONCE.equalsIgnoreCase(getScheduleType())) {
+                return null;
+            }
         }
 
         this.reportPeriod = createReportPeriod();
@@ -135,25 +151,39 @@ public class ReportScheduleRequest {
 
     private ReportPeriod createReportPeriod() {
         if (periodType.equalsIgnoreCase(DAILY_PERIOD_TYPE)) {
+            startDate = calculateStartDateForRecurring(Calendar.DATE, previousPeriods);
             return new DailyReportPeriod(startDate);
         }
 
         if (periodType.equalsIgnoreCase(MONTHLY_PERIOD_TYPE)) {
+            startDate = calculateStartDateForRecurring(Calendar.MONTH, previousPeriods);
             return new MonthlyReportPeriod(startDate);
         }
 
         if (periodType.equalsIgnoreCase(YEARLY_PERIOD_TYPE)) {
+            startDate = calculateStartDateForRecurring(Calendar.YEAR, previousPeriods);
             return new YearlyReportPeriod(startDate);
         }
 
         if (periodType.equalsIgnoreCase(WEEKLY_PERIOD_TYPE)) {
+            startDate = calculateStartDateForRecurring(Calendar.WEEK_OF_YEAR, previousPeriods);
             return new WeeklyReportPeriod(startDate);
         }
 
         if (periodType.equalsIgnoreCase(QUARTERLY_PERIOD_TYPE)) {
+            startDate = calculateStartDateForRecurring(Calendar.MONTH, 3 * previousPeriods);
             return new QuarterlyReportPeriod(startDate);
         }
         return new NotImplementedPeriod(startDate);
+    }
+
+    private String calculateStartDateForRecurring(int unitForPeriod, int periodsToReduce) {
+        if (SCHEDULE_TYPE_ONCE.equalsIgnoreCase(scheduleType)) {
+            return startDate;
+        }
+        Calendar calendar = fromDateString(this.scheduleStartDate);
+        calendar.add(unitForPeriod, -periodsToReduce);
+        return toGivenFormatString(calendar.getTime(), DateUtil.DATE_FMT_DD_MM_YYYY);
     }
 
     public String getCronExp() {

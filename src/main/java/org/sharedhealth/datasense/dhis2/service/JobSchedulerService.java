@@ -21,6 +21,7 @@ import java.util.Calendar;
 
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
+import static org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest.SCHEDULE_TYPE_ONCE;
 
 @Service
 public class JobSchedulerService {
@@ -78,7 +79,7 @@ public class JobSchedulerService {
     }
 
     private Trigger getTrigger(ReportScheduleRequest scheduleRequest, String datasetName, String triggerName) {
-        if (scheduleRequest.getScheduleType().equalsIgnoreCase("once")) {
+        if (scheduleRequest.getScheduleType().equalsIgnoreCase(SCHEDULE_TYPE_ONCE)) {
             return newTrigger()
                     .withIdentity(triggerName, datasetName)
                     .startAt(afterSecs(30))
@@ -109,6 +110,8 @@ public class JobSchedulerService {
         dataMap.put("paramOrgUnitId", orgUnitConfig.getOrgUnitId());
         dataMap.put("paramConfigFile", configForDataset.getConfigFile());
         dataMap.put("paramReportingPeriod", scheduleRequest.reportPeriod().period());
+        dataMap.put("paramScheduleType", scheduleRequest.getScheduleType());
+        dataMap.put("paramPreviousPeriods", scheduleRequest.getPreviousPeriods());
     }
 
     private Date afterSecs(int seconds) {

@@ -127,29 +127,42 @@ function ReportScheduleOptions(formErrors) {
         var val = $('input[type=radio]:checked').val();
         if (val == "repeat") {
             $('#recurringSchedule').removeAttr("hidden");
-        } else {
+            $('#onceSchedule').attr("hidden",true);
+            $(startDtId).val("");
+        } else if (val == "once") {
             $('#recurringSchedule').attr("hidden", true);
+            $('#onceSchedule').removeAttr("hidden");
+
         }
         self.disableSubmitAndPreview();
    });
 
-   this.disableSubmitAndPreview = function() {
-          if (isChecked && isDateSelected) {
+        this.disableSubmitAndPreview = function() {
+
+          if ($('input[type=radio]:checked').val() === "once"){
+            if (isChecked && isDateSelected) {
+              $("#preview").attr("disabled", false);
               $("#submit").attr("disabled", false);
-              if ($('input[type=radio]:checked').val() === "once")
-                $("#preview").attr("disabled", false);
-              else
-                $("#preview").attr("disabled", true);
-          }
-          else {
+            }
+            else{
               $("#submit").attr("disabled", true);
               $("#preview").attr("disabled", true);
+            }
+          }
+          else if ($('input[type=radio]:checked').val() === "repeat"){
+                if(isChecked){
+                    $("#submit").attr("disabled", false);
+                }
+                $("#preview").attr("disabled", true);
           }
       }
 
    this.validateInput = function(periodValue) {
        var dateString = $(startDtId).val();
        $(displayPeriodId).text('');
+       if($('input[type=radio]:checked').val() === "repeat"){
+            return true;
+       }
        if (dateString === '') {
           alert("Please select a valid date.");
           return false;

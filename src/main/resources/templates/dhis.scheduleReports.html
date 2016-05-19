@@ -84,10 +84,22 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="radio-inline"><input type="radio" name="scheduleType" value="once"
-                                                                   checked="checked"/>One time</label>
+                                <label class="radio-inline"><input type="radio" name="scheduleType" value="once"/>One time</label>
                                 <label class="radio-inline"><input type="radio" name="scheduleType"
                                                                    value="repeat"/>Recurring</label>
+                            </div>
+                            <div id = "onceSchedule" hidden="false">
+                                <div class="form-group">
+                                    <label for="startDate" class="control-label col-xs-2">Select Date</label>
+
+                                    <div class="col-xs-6">
+                                        <input id="startDate" name="startDate" type="text"
+                                               class="form-control startDate datepicker dateInput" placeholder="Enter a date"/>
+                                    </div>
+                                    <div class="col-xs-4">
+                                        <span id="reportingPeriod" name="reportingPeriod"></span>
+                                    </div>
+                                </div>
                             </div>
                             <div id="recurringSchedule" hidden="true">
                                 <div>
@@ -95,6 +107,9 @@
                                         <span>Starting from </span>
                                         <input id="scheduleStartDate" name="scheduleStartDate" type="text"
                                                class="datepicker dateInput" placeholder="Today"/>
+                                        <span>
+                                            post for previous</span>
+                                            <input class = "number" type="number" name="previousPeriods" id="previousPeriods" value="1" min="1"/>
                                         <span>
                                             , Every
                                             <input class="number" type="number" id="cronFrequency" min="1" value="1" hidden="true"/>
@@ -172,20 +187,8 @@
                                 <option th:each="supportedPeriod : ${supportedPeriodTypes}"
                                         th:value="${supportedPeriod}" th:text="${supportedPeriod}"
                                         th:selected="${supportedPeriod.equals(reportConfig.periodType)}">
-                                    Daily
                                 </option>
                             </select>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="startDate" class="control-label col-xs-2">Select Date</label>
-
-                        <div class="col-xs-6">
-                            <input id="startDate" name="startDate" type="text"
-                                   class="form-control startDate datepicker dateInput" placeholder="Enter a date"/>
-                        </div>
-                        <div class="col-xs-4">
-                            <span id="reportingPeriod" name="reportingPeriod"></span>
                         </div>
                     </div>
                     <div class="form-group">
