@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.export.dhis.reports;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.quartz.JobDataMap;
 import org.sharedhealth.datasense.aqs.AqsFTLProcessor;
 import org.sharedhealth.datasense.client.DHIS2Client;
@@ -56,7 +57,8 @@ public class DHISDynamicReport {
 
         if (SCHEDULE_TYPE_REPEAT.equals(mergedJobDataMap.get("paramScheduleType"))) {
             int previousPeriods = getPreviousPeriods(mergedJobDataMap);
-            String today = toGivenFormatString(new Date(), DATE_FMT_DD_MM_YYYY);
+            DateTime dateTime = new DateTime();
+            String today = toGivenFormatString(dateTime.toDate(), DATE_FMT_DD_MM_YYYY);
             ReportScheduleRequest.ReportPeriod reportPeriod = ReportFactory.createReportPeriod(null, today,
                     periodType, SCHEDULE_TYPE_REPEAT, previousPeriods);
             reportingStartDate = reportPeriod.startDate();
