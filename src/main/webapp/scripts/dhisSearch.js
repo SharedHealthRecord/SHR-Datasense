@@ -2,15 +2,21 @@ function searchDHISDataset(searchTxt) {
     var deferredRes = $.Deferred();
     $.get( "/dhis2/reports/search?name=" + searchTxt)
         .done(function(result) {
-            $('#searchResultsContainer').hide();
-            $(".configure-btn").unbind("click", configureDatasetForReport);
-            var template = $('#template_search_results').html();
-            Mustache.parse(template);
-            var rendered = Mustache.render(template, result.dataSets);
-            $('#searchResultsContainer').html(rendered);
-            $('#searchResultsContainer').show();
-            $(".configure-btn").bind("click", configureDatasetForReport);
-            deferredRes.resolve();
+            clearErrors();
+            if(result.dataSets.length <= 0){
+                showErrors("No match for " + searchTxt);
+            }
+            else{
+                $('#searchResultsContainer').hide();
+                $(".configure-btn").unbind("click", configureDatasetForReport);
+                var template = $('#template_search_results').html();
+                Mustache.parse(template);
+                var rendered = Mustache.render(template, result.dataSets);
+                $('#searchResultsContainer').html(rendered);
+                $('#searchResultsContainer').show();
+                $(".configure-btn").bind("click", configureDatasetForReport);
+                deferredRes.resolve();
+            }
         })
         .fail(function() {
             alert( "error" );
@@ -36,25 +42,34 @@ function configureDatasetForReport(e) {
     success: function(data, status) { window.location.href="/dhis2/reports"; },
     dataType: "json"
   });
-
 }
 
-
-
 function searchDHISOrgUnit(searchTxt) {
-    $.get( "/dhis2/orgUnits/search?name=" + searchTxt)
-    .done(function(result) {
-        $('#searchResultsContainer').hide();
-        $(".configure-btn").unbind("click", configureOrgUnitForFacility);
-        var template = $('#template_search_results').html();
-        Mustache.parse(template);
-        var rendered = Mustache.render(template, result.organisationUnits);
-        $('#searchResultsContainer').html(rendered);
-        $('#searchResultsContainer').show();
-        $(".configure-btn").bind("click", configureOrgUnitForFacility);
-    })
-    .fail(function() {
-        alert( "error" );
+    loading();
+    var targetUrl = "/dhis2/orgUnits/search?name=" + searchTxt;
+    $.ajax({
+        type: "GET",
+        url: targetUrl,
+        success: function(result){
+            clearErrors();
+            if(result.organisationUnits.length <= 0){
+                showErrors("No match for " + searchTxt);
+            }
+            $('#searchResultsContainer').hide();
+            $(".configure-btn").unbind("click", configureOrgUnitForFacility);
+            var template = $('#template_search_results').html();
+            Mustache.parse(template);
+            var rendered = Mustache.render(template, result.organisationUnits);
+            $('#searchResultsContainer').html(rendered);
+            $('#searchResultsContainer').show();
+            $(".configure-btn").bind("click", configureOrgUnitForFacility);
+        },
+        error: function(){
+            alert( "error" );
+        },
+        complete: function(){
+           $('#overlay').remove();
+        }
     });
 }
 

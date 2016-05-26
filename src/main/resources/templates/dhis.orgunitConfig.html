@@ -8,9 +8,15 @@
     <script src="/scripts/dhisSearch.js"></script>
     <script src="/scripts/mustache.min.js"></script>
     <script src="/scripts/script.js"/>
+    <script src="/scripts/error.js"></script>
     <script src="/scripts/bootstrap.min.js"></script>
     <script type = "text/javascript">
         $( document ).ready(function() {
+            $("#searchTxt").keyup(function(event){
+                if(event.keyCode == 13){
+                    $("#searchBtn").click();
+                }
+            });
             $("#searchBtn").click(function() {
                 var searchText = $("#searchTxt").val();
                 searchDHISOrgUnit(searchText);
@@ -61,6 +67,7 @@
 
     <div>
         <h3>Results</h3>
+        <div th:include="fragments/error :: error"/>
         <div id="searchResultsContainer" class="search-results">
         </div>
     </div>

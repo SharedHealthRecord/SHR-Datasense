@@ -8,6 +8,6 @@ var showErrors = function(errors) {
    }
 };
 
-var clearErrors = function(errors) {
+var clearErrors = function() {
     $("#errorBlock").prop("hidden", true);
 };
