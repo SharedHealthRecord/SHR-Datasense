@@ -75,6 +75,16 @@ input.expression{
     margin: -28px 0 0 -25px;
 }
 
+#printButton{
+  background-color : #c5bb83;
+  color : white;
+}
+
+#closeButton{
+    background-color : #bababa;
+    color : white;
+}
+
 .dateInput {
     width: 150px;
 }

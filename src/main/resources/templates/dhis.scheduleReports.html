@@ -85,7 +85,8 @@
                     <div class="panel panel-default">
                         <div class="panel-body">
                             <div class="form-group">
-                                <label class="radio-inline"><input type="radio" name="scheduleType" value="once"/>One time</label>
+                                <label class="radio-inline"><input type="radio" name="scheduleType" value="once"/>One
+                                    time</label>
                                 <label class="radio-inline"><input type="radio" name="scheduleType"
                                                                    value="repeat"/>Recurring</label>
                             </div>
@@ -108,7 +109,8 @@
 
                                     <div class="col-xs-6">
                                         <input id="startDate" name="startDate" type="text"
-                                               class="form-control startDate datepicker dateInput" placeholder="Enter a date"/>
+                                               class="form-control startDate datepicker dateInput"
+                                               placeholder="Enter a date"/>
                                     </div>
                                     <div class="col-xs-4">
                                         <span id="reportingPeriod" name="reportingPeriod"></span>
@@ -132,8 +134,14 @@
                                         <input id="scheduleStartDate" name="scheduleStartDate" type="text"
                                                class="datepicker dateInput" placeholder="Today"/>
                                         <span>
+                                            post for previous</span>
+                                        <input class="number" type="number" name="previousPeriods" id="previousPeriods"
+                                               value="1" min="1"/>
+                                        <span id="periodSpan"/>
+                                        <span>
                                             , every
-                                            <input class="number" type="number" id="cronFrequency" min="1" value="1" hidden="true"/>
+                                            <input class="number" type="number" id="cronFrequency" min="1" value="1"
+                                                   hidden="true"/>
                                             <select name="schedulePeriod" id="schedulePeriod">
                                                 <option value="daily">Day</option>
                                                 <option value="weekly">Week</option>
@@ -189,9 +197,11 @@
                                             </select>
                                         </span>
                                         <span> at </span>
-                                        <input class="number" type="number" value="0" id="hour" min="0" max="23" required="true"/>
+                                        <input class="number" type="number" value="0" id="hour" min="0" max="23"
+                                               required="true"/>
                                         <span>:</span>
-                                        <input class="number" type="number" value="0" id="min" min="0" max="59" required="true"/>
+                                        <input class="number" type="number" value="0" id="min" min="0" max="59"
+                                               required="true"/>
                                         <span> hours.</span>
                                     </p>
                                 </div>
@@ -253,6 +263,7 @@
                 <td>{{ nextFireTime }}</td>
              </tr>
         {{/.}}
+
     </script>
 </div>
 <div class="container">
