@@ -1,7 +1,11 @@
 function searchDHISDataset(searchTxt) {
+    loading();
     var deferredRes = $.Deferred();
-    $.get( "/dhis2/reports/search?name=" + searchTxt)
-        .done(function(result) {
+    var targetUrl = "/dhis2/reports/search?name=" + searchTxt;
+    $.ajax({
+        type: "GET",
+        url: targetUrl,
+        success : function(result){
             clearErrors();
             if(result.dataSets.length <= 0){
                 showErrors("No match for " + searchTxt);
@@ -17,11 +21,15 @@ function searchDHISDataset(searchTxt) {
                 $(".configure-btn").bind("click", configureDatasetForReport);
                 deferredRes.resolve();
             }
-        })
-        .fail(function() {
-            alert( "error" );
+        },
+        error : function(){
+            showErrors("Unable to fetch from DHIS");
             deferredRes.reject('error');
-        });
+        },
+        complete : function(){
+            $('#overlay').remove();
+        }
+    });
     return deferredRes;
 }
 
@@ -65,7 +73,7 @@ function searchDHISOrgUnit(searchTxt) {
             $(".configure-btn").bind("click", configureOrgUnitForFacility);
         },
         error: function(){
-            alert( "error" );
+            showErrors("Unable to fetch from DHIS");
         },
         complete: function(){
            $('#overlay').remove();
@@ -86,7 +94,12 @@ function configureOrgUnitForFacility(e) {
     data: JSON.stringify(postData),
     contentType: "application/json; charset=utf-8",
     success: function(data, status) { window.location.href="/dhis2/orgUnits"; },
-    dataType: "json"
+    dataType: "json",
+    error: function(){
+        showErrors("Error in configuring");
+    },
+    complete: function(){
+       $('#overlay').remove();
+    }
   });
-
 }
