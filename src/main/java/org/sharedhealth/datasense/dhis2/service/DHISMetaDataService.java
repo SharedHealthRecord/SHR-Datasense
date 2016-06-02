@@ -62,7 +62,7 @@ public class DHISMetaDataService {
 
     private DHISReportConfig findInMapped(List<DHISReportConfig> mappedDatasets, String filename) {
         for (DHISReportConfig mds : mappedDatasets) {
-            if (mds.getConfigFile().equals(filename)) {
+            if  (mds.getConfigFile().equals(filename)) {
                 return mds;
             }
         }
