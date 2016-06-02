@@ -89,7 +89,20 @@
                                 <label class="radio-inline"><input type="radio" name="scheduleType"
                                                                    value="repeat"/>Recurring</label>
                             </div>
-                            <div id = "onceSchedule" hidden="false">
+                            <div class="form-group">
+                                <label for="periodType" class="control-label col-xs-2">Period</label>
+
+                                <div class="col-xs-10">
+                                    <select id="periodType" name="periodType" class="form-control"
+                                            th:disabled="${supportedPeriodTypes.contains(reportConfig.periodType)}">
+                                        <option th:each="supportedPeriod : ${supportedPeriodTypes}"
+                                                th:value="${supportedPeriod}" th:text="${supportedPeriod}"
+                                                th:selected="${supportedPeriod.equals(reportConfig.periodType)}">
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div id="onceSchedule" hidden="false">
                                 <div class="form-group">
                                     <label for="startDate" class="control-label col-xs-2">Select Date</label>
 
@@ -104,14 +117,20 @@
                             </div>
                             <div id="recurringSchedule" hidden="true">
                                 <div>
-                                    <p>
+                                    <label for="previousPeriods" class="control-label col-xs-2">Post for</label>
+                                    <p class="col-xs-10">
+                                        <input class="number" type="number" name="previousPeriods" id="previousPeriods"
+                                               value="1" min="1"/>
+                                        <span id="periodSpan"/>
+                                        <span>back</span>
+                                    </p>
+                                </div>
+                                <div>
+                                    <label for="scheduleStartDate" class="control-label col-xs-2">Schedule</label>
+                                    <p class="col-xs-10">
                                         <span>Starting from </span>
                                         <input id="scheduleStartDate" name="scheduleStartDate" type="text"
                                                class="datepicker dateInput" placeholder="Today"/>
-                                        <span>
-                                            post for previous</span>
-                                            <input class = "number" type="number" name="previousPeriods" id="previousPeriods" value="1" min="1"/>
-                                        <span id="periodSpan"/>
                                         <span>
                                             , every
                                             <input class="number" type="number" id="cronFrequency" min="1" value="1" hidden="true"/>
@@ -177,20 +196,6 @@
                                     </p>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="periodType" class="control-label col-xs-2">Period</label>
-
-                        <div class="col-xs-10">
-                            <select id="periodType" name="periodType" class="form-control"
-                                    th:disabled="${supportedPeriodTypes.contains(reportConfig.periodType)}">
-                                <option th:each="supportedPeriod : ${supportedPeriodTypes}"
-                                        th:value="${supportedPeriod}" th:text="${supportedPeriod}"
-                                        th:selected="${supportedPeriod.equals(reportConfig.periodType)}">
-                                </option>
-                            </select>
                         </div>
                     </div>
                     <div class="form-group">
