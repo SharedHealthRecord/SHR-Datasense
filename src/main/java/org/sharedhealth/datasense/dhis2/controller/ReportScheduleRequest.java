@@ -259,28 +259,31 @@ public class ReportScheduleRequest {
 
         @Override
         public String period() {
-            Calendar calendarFromStartOfWeek = getCalendarForFirstDayOfWeek();
-            calendarFromStartOfWeek.setMinimalDaysInFirstWeek(7);
-            return String.format("%04dW%d", calendarFromStartOfWeek.get(Calendar.YEAR),
-                    calendarFromStartOfWeek.get(Calendar.WEEK_OF_YEAR));
+            Calendar calendarFromEndOfWeek = getCalendarEndDateOfWeek();
+            return String.format("%04dW%d", calendarFromEndOfWeek.get(Calendar.YEAR),
+                    calendarFromEndOfWeek.get(Calendar.WEEK_OF_YEAR));
         }
         @Override
         public String startDate() {
-            Calendar first = getCalendarForFirstDayOfWeek();
-            //return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 1, 1);
+            Calendar first = getCalendarForFirstDateOfWeek();
             return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(first.getTime());
         }
 
         @Override
         public String endDate() {
-            Calendar first = getCalendarForFirstDayOfWeek();
-            Calendar last = (Calendar) first.clone();
-            last.setFirstDayOfWeek(Calendar.MONDAY);
-            last.add(Calendar.DAY_OF_YEAR, 6);
+            Calendar last = getCalendarEndDateOfWeek();
             return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(last.getTime());
         }
 
-        private Calendar getCalendarForFirstDayOfWeek() {
+        private Calendar getCalendarEndDateOfWeek() {
+            Calendar first = getCalendarForFirstDateOfWeek();
+            Calendar last = (Calendar) first.clone();
+            last.setFirstDayOfWeek(Calendar.MONDAY);
+            last.add(Calendar.DAY_OF_YEAR, 6);
+            return last;
+        }
+
+        private Calendar getCalendarForFirstDateOfWeek() {
             Calendar first = (Calendar) reportCalendar.clone();
             first.setFirstDayOfWeek(Calendar.MONDAY);
             first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));

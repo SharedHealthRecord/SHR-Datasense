@@ -39,15 +39,16 @@ public class ReportFactory {
         }
 
         if (periodType.equalsIgnoreCase(QUARTERLY_PERIOD_TYPE)) {
+            previousPeriods = previousPeriods != null ? 3 * previousPeriods : null;
             startDate = calculateStartDateForRecurring(startDate, scheduleStartDate, scheduleType,
-                    Calendar.MONTH, 3 * previousPeriods);
+                    Calendar.MONTH, previousPeriods);
             return reportScheduleRequest.new QuarterlyReportPeriod(startDate);
         }
         return reportScheduleRequest.new NotImplementedPeriod(startDate);
     }
 
     private static String calculateStartDateForRecurring(String startDate, String scheduleStartDate,
-                                                         String scheduleType, int unitForPeriod, int periodsToReduce) {
+                                                         String scheduleType, Integer unitForPeriod, Integer periodsToReduce) {
         if (SCHEDULE_TYPE_ONCE.equalsIgnoreCase(scheduleType)) {
             return startDate;
         }

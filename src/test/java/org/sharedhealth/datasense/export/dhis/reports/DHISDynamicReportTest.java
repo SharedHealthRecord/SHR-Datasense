@@ -233,7 +233,7 @@ public class DHISDynamicReportTest {
         Map paramsCaptorValue = paramsCaptor.getValue();
         assertEquals("2016-05-02", paramsCaptorValue.get("paramStartDate"));
         assertEquals("2016-05-08", paramsCaptorValue.get("paramEndDate"));
-        assertEquals("2016W18", paramsCaptorValue.get("paramReportingPeriod"));
+        assertEquals("2016W19", paramsCaptorValue.get("paramReportingPeriod"));
         assertNull(paramsCaptorValue.get("paramScheduleType"));
         assertNull(paramsCaptorValue.get("paramPreviousPeriods"));
     }
