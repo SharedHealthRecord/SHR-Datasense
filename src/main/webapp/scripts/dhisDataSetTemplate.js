@@ -85,7 +85,8 @@ function DhisDataSetTemplate() {
    };
 
     var stringifyAndDisplaySuggestion = function(data) {
-        data["dataElementList"][data["dataElementList"].length -1 ]["last"] = true;
+        var lastDataElement = data["dataElementList"][data["dataElementList"].length -1 ];
+        lastDataElement["categoryOptionCombos"][lastDataElement["categoryOptionCombos"].length -1]["last"] = true;
         var jsonStr = JSON.stringify(data);
 
         var configTemplate = $('#mushTmpl_config_suggestion').html();
@@ -105,7 +106,6 @@ function DhisDataSetTemplate() {
         Mustache.parse(postTemplate);
         var renderedQueryTemplate = Mustache.render(postTemplate, data);
         $('#aqsTemplateSuggestion').html(renderedQueryTemplate);
-
         $('#suggestionContainer').removeClass('hidden');
     };
 }
