@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.util.Collections;
 import java.util.HashMap;
 
 @Repository
@@ -12,6 +13,8 @@ public class EncounterDao {
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+
+    private final String qryGetLastEncounter = "select created_at from encounter where facility_id = :facility_id order by created_at  desc limit 1";
 
     public void save(Encounter encounter) {
 
@@ -36,5 +39,10 @@ public class EncounterDao {
 
         jdbcTemplate.update("delete from encounter where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
 
+    }
+
+    public Object getLastSyncedEncounterDateTime(String facilityId) {
+        Object createdDateAndTime = jdbcTemplate.queryForObject(qryGetLastEncounter, Collections.singletonMap("facility_id", facilityId),java.sql.Timestamp.class);
+        return createdDateAndTime;
     }
 }

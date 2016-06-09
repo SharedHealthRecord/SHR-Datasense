@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.dhis2.repository;
 
-import org.sharedhealth.datasense.dhis2.model.MetadataConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,12 +7,10 @@ import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
-import org.springframework.jdbc.support.rowset.SqlRowSet;
 import org.springframework.stereotype.Repository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -32,8 +29,6 @@ public class DHISConfigDao {
 
     private final String qryOrgUnitByFacilityId = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
             "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where f.facility_id = :facility_id";
-
-    private final String qryGetLastEncounter = "select created_at from encounter where facility_id = :facility_id order by created_at  desc limit 1";
 
 
     public java.util.List<DHISReportConfig> findAllMappedDatasets() {
@@ -56,17 +51,6 @@ public class DHISConfigDao {
             }
         };
     }
-    private RowMapper<MetadataConfig> rowMapperForFacility() {
-        return new RowMapper<MetadataConfig>() {
-            @Override
-            public MetadataConfig mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new MetadataConfig(
-                        rs.getString("facility_id"));
-            }
-        };
-    }
-
-
 
     public void save(DHISReportConfig config) {
         List<DHISReportConfig> configs = jdbcTemplate.query(
@@ -149,10 +133,5 @@ public class DHISConfigDao {
                 Collections.singletonMap("configId", configId),
                 rowMapperForDataset());
         return configs.isEmpty() ? null : configs.get(0);
-    }
-
-    public Object getLastEncounter(MetadataConfig config) {
-        Object createdDateAndTime = jdbcTemplate.queryForObject(qryGetLastEncounter,Collections.singletonMap("facility_id", config.getFacilityId()),java.sql.Timestamp.class);
-        return createdDateAndTime;
     }
 }

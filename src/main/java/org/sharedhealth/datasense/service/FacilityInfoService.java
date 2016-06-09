@@ -1,8 +1,7 @@
-package org.sharedhealth.datasense.dhis2.service;
+package org.sharedhealth.datasense.service;
 
-import org.sharedhealth.datasense.dhis2.model.MetadataConfig;
-import org.sharedhealth.datasense.dhis2.repository.DHISConfigDao;
 import org.sharedhealth.datasense.model.Facility;
+import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,23 +12,23 @@ import java.util.List;
 @Service
 public class FacilityInfoService {
     @Autowired
-    DHISConfigDao dhisConfigDao;
+    private EncounterDao encounterDao;
 
     @Autowired
-    FacilityDao facilityCongigDao;
+    private FacilityDao facilityConfigDao;
 
     @Transactional
-    public Object getLastEncounter(MetadataConfig config) {
-        return dhisConfigDao.getLastEncounter(config);
+    public Object getLastEncounterDateTime(String facilityId) {
+        return encounterDao.getLastSyncedEncounterDateTime(facilityId);
     }
 
     @Transactional
     public Facility getAvailableFacilitiesById(String facility_Id) {
-        return facilityCongigDao.findFacilityById(facility_Id);
+        return facilityConfigDao.findFacilityById(facility_Id);
     }
 
     @Transactional
     public List<Facility> getAvailableFacilitiesBYName(String facility_name) {
-        return facilityCongigDao.findFacilityByName(facility_name);
+        return facilityConfigDao.findFacilityByName(facility_name);
     }
 }
