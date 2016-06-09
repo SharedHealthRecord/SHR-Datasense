@@ -69,7 +69,6 @@ function ReportScheduleOptions(formErrors) {
            }
          }
         else if (val == "Preview") {
-            loading();
             var configId = $("#configId").val();
             var targetUrl = "/dhis2/reports/schedule/" + configId + "/preview";
             var data = $(this).serialize() + '&periodType=' + $('#periodType').val();
@@ -84,9 +83,6 @@ function ReportScheduleOptions(formErrors) {
                     } else {
                         getDhisNames(response);
                     }
-                },
-                complete: function(){
-                   $('#overlay').remove();
                 }
             });
             e.preventDefault();
@@ -100,11 +96,15 @@ function ReportScheduleOptions(formErrors) {
    $("#loadScheduleStatus").bind("click", function() {
        var configId = $("#configId").val();
        var targetUrl = "/dhis2/reports/schedule/" + configId + "/jobs";
-       $.get(targetUrl).done(function(results) {
-           var template = $('#template_scheduled_jobs_results').html();
-           Mustache.parse(template);
-           var rendered = Mustache.render(template, results);
-           $('#reportScheduleStatus tbody').html(rendered);
+       $.ajax({
+            type: "GET",
+            url: targetUrl,
+            success: function(results){
+                var template = $('#template_scheduled_jobs_results').html();
+                Mustache.parse(template);
+                var rendered = Mustache.render(template, results);
+                $('#reportScheduleStatus tbody').html(rendered);
+            }
        });
    });
 
@@ -330,13 +330,6 @@ function ReportScheduleOptions(formErrors) {
             $('#createReportSchedule').attr('hidden', true);
        });
    };
-
-   var loading = function(){
-    var over = '<div id="overlay">' +
-                '<img id="loading" class = "loaderImage" src="/images/ajax-loader.gif">' +
-                '</div>';
-    $(over).appendTo('body');
-   }
 
    var getDhisNames = function(response) {
        var dataElements = {};

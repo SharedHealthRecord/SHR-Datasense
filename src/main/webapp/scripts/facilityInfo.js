@@ -24,6 +24,7 @@ function FacilityInformations(){
             contentType: "application/json; charset=utf-8",
             data: JSON.stringify(postData),
             success: function(response){
+                clearErrors();
                 var d = new Date(response);
                 var formattedDate = d.getDate() + "-" + (d.getMonth() + 1) + "-" + d.getFullYear();
                 var hours = (d.getHours() < 10) ? "0" + d.getHours() : d.getHours();
@@ -74,6 +75,7 @@ var getFacilities = function(targetUrl){
        type: "GET",
        url: targetUrl,
        success: function(result){
+            clearErrors();
             if(result.length==0){
                 showErrors("No facility is available for given facility id/name")
             }
