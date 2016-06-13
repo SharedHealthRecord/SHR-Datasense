@@ -1,10 +1,9 @@
 package org.sharedhealth.datasense.handler;
 
 import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.resource.Immunization;
-import ca.uhn.fhir.model.dstu2.valueset.ImmunizationReasonCodesEnum;
 import org.sharedhealth.datasense.client.TrWebClient;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.ImmunizationReason;
@@ -70,8 +69,8 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         String hid = composition.getPatientReference().getValue().getHid();
         if (explanation != null) {
             List<ImmunizationReason> immunizationReasons = new ArrayList<ImmunizationReason>();
-            List<BoundCodeableConceptDt<ImmunizationReasonCodesEnum>> reasons = explanation.getReason();
-            for (BoundCodeableConceptDt<ImmunizationReasonCodesEnum> reason : reasons) {
+            List<CodeableConceptDt> reasons = explanation.getReason();
+            for (CodeableConceptDt reason : reasons) {
                 List<CodingDt> codings = reason.getCoding();
                 for (CodingDt coding : codings) {
                     ImmunizationReason immunizationReason = new ImmunizationReason();

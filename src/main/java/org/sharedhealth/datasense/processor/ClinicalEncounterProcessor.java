@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
-import ca.uhn.fhir.model.dstu2.composite.BoundCodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.valueset.EncounterTypeEnum;
+import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Facility;
@@ -69,7 +68,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     }
 
     private String getEncounterType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
-        List<BoundCodeableConceptDt<EncounterTypeEnum>> types = fhirEncounter.getType();
+        List<CodeableConceptDt> types = fhirEncounter.getType();
         if (types.isEmpty()) {
             return UNKNOWN_ENCOUNTER_TYPE;
         }
