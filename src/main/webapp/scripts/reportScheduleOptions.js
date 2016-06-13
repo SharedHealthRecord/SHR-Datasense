@@ -93,7 +93,7 @@ function ReportScheduleOptions(formErrors) {
        includeSelectAllOption: true
    });
 
-   $("#loadScheduleStatus").bind("click", function() {
+   $("#loadScheduleStatus, #tabViewScheduledJobs").bind("click", function() {
        var configId = $("#configId").val();
        var targetUrl = "/dhis2/reports/schedule/" + configId + "/jobs";
        $.ajax({

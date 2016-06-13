@@ -71,14 +71,16 @@
     </div>
 
     <div>
-        <h3>Results</h3>
         <div th:include="fragments/error :: error"/>
-        <div id="searchResultsContainer" class="search-results">
+        <div id="searchResultsContainer" class="search-results" hidden="true">
+            <h3>Results</h3>
+            <div id="searchResults" class="search-results">
+            </div>
         </div>
     </div>
 
     <br/>
-    <div id="suggestionContainer" class="row hidden">
+    <div id="suggestionContainer" class="row" hidden="true">
         <div>
             <span><b>Config Template Suggestion</b></span>
             <textarea class="col-md-12" rows="10" id="aqsConfigSuggestion"></textarea>

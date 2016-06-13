@@ -10,73 +10,76 @@ function DhisDataSetTemplate() {
    };
 
    this.generateTemplate = function(e) {
-      $("#suggestionContainer").addClass('hidden');
+      $("#suggestionContainer").hide();
       var dhisDatasetId = $(e.target).attr("data-datasetId");
       var targetUrl = "/dhis2/dataSets/" + dhisDatasetId + "/dataElements";
        $.ajax({
           type: "GET",
           url: targetUrl,
           success: function(result){
+              $("#searchResultsContainer").hide();
               var dataSetConfiguration = {};
               dataSetConfiguration.name = result.name;
               dataSetConfiguration.dataSetId = dhisDatasetId;
               dataSetConfiguration.reportName = result.name.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_').replace(/^(-)+|(_)+$/g,'');
               dataSetConfiguration.dataElementList =  [];
+              if(result.dataElements.length==0){
+                showErrors("Error occured");
+              }
+              else{
+                  result.dataElements.forEach(function(dataElement){
+                     var item = {};
+                     item.name = dataElement.name;
+                     item.dataElementId = dataElement.id;
+                     item.categoryComboId = null;
+                     item.categoryOptionCombos = [];
+                     dataSetConfiguration.dataElementList.push(item);
+                  });
 
-              result.dataElements.forEach(function(dataElement){
-                 var item = {};
-                 item.name = dataElement.name;
-                 item.dataElementId = dataElement.id;
-                 item.categoryComboId = null;
-                 item.categoryOptionCombos = [];
-                 dataSetConfiguration.dataElementList.push(item);
-              });
-
-              var deferredDataElementCalls = [];
-              $.each(dataSetConfiguration.dataElementList, function(index, item) {
-                  deferredDataElementCalls.push(
-                      $.ajax({
-                          url: "/dhis2/dataSets/dataElements/" + item.dataElementId,
-                          success: function(rs) {
-                             item.categoryComboId = rs.categoryCombo.id;
-                          }
-                      })
-                  );
-              });
-              // Can't pass a literal array, so use apply.
-              $.when.apply($, deferredDataElementCalls).then(function(data){
-                  var deferredCategoryComboCalls = [];
+                  var deferredDataElementCalls = [];
                   $.each(dataSetConfiguration.dataElementList, function(index, item) {
-                      deferredCategoryComboCalls.push(
+                      deferredDataElementCalls.push(
                           $.ajax({
-                              url: "/dhis2/dataSets/categoryCombos/" + item.categoryComboId,
+                              url: "/dhis2/dataSets/dataElements/" + item.dataElementId,
                               success: function(rs) {
-                                 item.categoryOptionCombos = rs.categoryOptionCombos;
-                                 item.categoryOptionCombos.forEach(function(coc) {
-                                      var query_name = item.name;
-                                      if (coc.name !== '(default)') {
-                                          query_name = query_name + ' ' + coc.name;
-                                      }
-                                      coc.queryName = query_name.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_').replace(/^(-)+|(_)+$/g,'').replace(/-/g, '_');
-                                      coc.dataElementId = item.dataElementId;
-                                 });
+                                 item.categoryComboId = rs.categoryCombo.id;
                               }
                           })
                       );
                   });
+                  // Can't pass a literal array, so use apply.
+                  $.when.apply($, deferredDataElementCalls).then(function(data){
+                      var deferredCategoryComboCalls = [];
+                      $.each(dataSetConfiguration.dataElementList, function(index, item) {
+                          deferredCategoryComboCalls.push(
+                              $.ajax({
+                                  url: "/dhis2/dataSets/categoryCombos/" + item.categoryComboId,
+                                  success: function(rs) {
+                                     item.categoryOptionCombos = rs.categoryOptionCombos;
+                                     item.categoryOptionCombos.forEach(function(coc) {
+                                          var query_name = item.name;
+                                          if (coc.name !== '(default)') {
+                                              query_name = query_name + ' ' + coc.name;
+                                          }
+                                          coc.queryName = query_name.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_').replace(/^(-)+|(_)+$/g,'').replace(/-/g, '_');
+                                          coc.dataElementId = item.dataElementId;
+                                     });
+                                  }
+                              })
+                          );
+                      });
 
-                  $.when.apply($, deferredCategoryComboCalls).then(function(data){
-                      stringifyAndDisplaySuggestion(dataSetConfiguration)
+                      $.when.apply($, deferredCategoryComboCalls).then(function(data){
+                          stringifyAndDisplaySuggestion(dataSetConfiguration)
+                      });
+
+                  }).fail(function(){
+                      // Probably want to catch failure
+                  }).always(function(){
+                      // Or use always if you want to do the same thing
+                      // whether the call succeeds or fails
                   });
-
-              }).fail(function(){
-                  // Probably want to catch failure
-              }).always(function(){
-                  // Or use always if you want to do the same thing
-                  // whether the call succeeds or fails
-              });
-
-            //stringifyAndDisplaySuggestion(suggestionTemplate
+              }
           },
           error: function(e) {
             showErrors(e);
@@ -106,6 +109,6 @@ function DhisDataSetTemplate() {
         Mustache.parse(postTemplate);
         var renderedQueryTemplate = Mustache.render(postTemplate, data);
         $('#aqsTemplateSuggestion').html(renderedQueryTemplate);
-        $('#suggestionContainer').removeClass('hidden');
+        $('#suggestionContainer').show();
     };
 }

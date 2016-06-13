@@ -6,6 +6,7 @@ function searchDHISDataset(searchTxt) {
         url: targetUrl,
         success : function(result){
             clearErrors();
+            $("#suggestionContainer").hide();
             if(result.dataSets.length <= 0){
                 showErrors("No match for " + searchTxt);
                 $('#searchResultsContainer').hide();
@@ -16,7 +17,7 @@ function searchDHISDataset(searchTxt) {
                 var template = $('#template_search_results').html();
                 Mustache.parse(template);
                 var rendered = Mustache.render(template, result.dataSets);
-                $('#searchResultsContainer').html(rendered);
+                $('#searchResults').html(rendered);
                 $('#searchResultsContainer').show();
                 $(".configure-btn").bind("click", configureDatasetForReport);
                 deferredRes.resolve();
