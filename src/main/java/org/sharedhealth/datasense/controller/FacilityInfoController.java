@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/facility")
@@ -20,8 +23,17 @@ public class FacilityInfoController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    Object showLastEncounter(@PathVariable String facilityId) {
+    Date showLastEncounter(@PathVariable String facilityId) {
         return facilityDataService.getLastEncounterDateTime(facilityId);
+    }
+
+    @RequestMapping(value = "/{facilityId}/visitTypes/forDate", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public
+    @ResponseBody
+    List<Map<String, Object>> showVisitType(@PathVariable String facilityId,
+                                            @RequestParam(value = "date", required = true) String date) {
+        return facilityDataService.getAllVisitTypes(facilityId, date);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -29,7 +41,7 @@ public class FacilityInfoController {
     public
     @ResponseBody
     Object searchFacility(@RequestParam(value = "name", required = false) String name,
-                                @RequestParam(value = "id", required = false) String id) throws IOException, URISyntaxException {
+                          @RequestParam(value = "id", required = false) String id) throws IOException, URISyntaxException {
         if (id != null) {
             return facilityDataService.getAvailableFacilitiesById(id);
         } else if (name != null) {
@@ -38,11 +50,5 @@ public class FacilityInfoController {
         return null;
     }
 
-//    @RequestMapping(value = "/searchById", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-//    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-//    public
-//    @ResponseBody
-//    Object searchFacilityById(@RequestParam(value = "id") String id) throws IOException, URISyntaxException {
-//        return facilityDataService.getAvailableFacilitiesById(id);
-//    }
+
 }

@@ -85,6 +85,10 @@ input.expression{
     color : white;
 }
 
+#visitWithCount{
+    width:inherit;
+}
+
 .dateInput {
     width: 150px;
 }

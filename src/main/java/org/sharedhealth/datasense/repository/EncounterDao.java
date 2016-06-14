@@ -1,12 +1,16 @@
 package org.sharedhealth.datasense.repository;
 
+import org.apache.commons.collections4.CollectionUtils;
 import org.sharedhealth.datasense.model.Encounter;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
-import java.util.Collections;
-import java.util.HashMap;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.*;
 
 @Repository
 public class EncounterDao {
@@ -14,7 +18,7 @@ public class EncounterDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
-    private final String qryGetLastEncounter = "select created_at from encounter where facility_id = :facility_id order by created_at  desc limit 1";
+    private final String qryGetLastEncounter = "SELECT created_at FROM encounter WHERE facility_id = :facility_id ORDER BY created_at DESC LIMIT 1";
 
     public void save(Encounter encounter) {
 
@@ -32,7 +36,7 @@ public class EncounterDao {
                 ":location_id, :facility_id)", map);
     }
 
-    public void deleteExisting(String healthId, String encounterId){
+    public void deleteExisting(String healthId, String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", encounterId);
         map.put("patient_hid", healthId);
@@ -41,8 +45,24 @@ public class EncounterDao {
 
     }
 
-    public Object getLastSyncedEncounterDateTime(String facilityId) {
-        Object createdDateAndTime = jdbcTemplate.queryForObject(qryGetLastEncounter, Collections.singletonMap("facility_id", facilityId),java.sql.Timestamp.class);
-        return createdDateAndTime;
+    public Date getLastSyncedEncounterDateTime(String facilityId) {
+        List<Date> results = jdbcTemplate.query(qryGetLastEncounter, Collections.singletonMap("facility_id", facilityId), new RowMapper<Date>() {
+            @Override
+            public Date mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new Date(rs.getTimestamp("created_at").getTime());
+            }
+        });
+        return CollectionUtils.isNotEmpty(results) ? results.get(0) : null;
     }
+
+    public List<Map<String, Object>> getVisitTypesWithCount(String facilityId, String date) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("encounter_date", date);
+        String query = "SELECT visit_type, COUNT(*) AS num FROM encounter WHERE facility_id = :facility_id AND DATE_FORMAT(encounter_datetime, '%d/%m/%Y') = :encounter_date GROUP BY visit_type";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
+    }
+
+
 }

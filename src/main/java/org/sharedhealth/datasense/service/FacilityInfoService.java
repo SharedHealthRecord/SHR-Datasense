@@ -7,7 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class FacilityInfoService {
@@ -18,7 +20,7 @@ public class FacilityInfoService {
     private FacilityDao facilityConfigDao;
 
     @Transactional
-    public Object getLastEncounterDateTime(String facilityId) {
+    public Date getLastEncounterDateTime(String facilityId) {
         return encounterDao.getLastSyncedEncounterDateTime(facilityId);
     }
 
@@ -30,5 +32,9 @@ public class FacilityInfoService {
     @Transactional
     public List<Facility> getAvailableFacilitiesBYName(String facility_name) {
         return facilityConfigDao.findFacilityByName(facility_name);
+    }
+
+    public List<Map<String, Object>> getAllVisitTypes(String facilityId, String date) {
+        return encounterDao.getVisitTypesWithCount(facilityId, date);
     }
 }

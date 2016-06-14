@@ -1,13 +1,15 @@
-var showErrors = function(errors) {
+var showErrors = function(errors, errorDivId) {
+    var errorDiv = errorDivId || "#errorBlock";
     if(errors != null && errors.length > 0) {
-      $("#errorBlock").prop("hidden", false);
+      $(errorDiv).prop("hidden", false);
        var template = $('#template_errors').html();
        Mustache.parse(template);
        var rendered = Mustache.render(template, errors);
-       $('#errorBlock').html(rendered);
+       $(errorDiv).html(rendered);
    }
 };
 
-var clearErrors = function() {
-    $("#errorBlock").prop("hidden", true);
+var clearErrors = function(errorDivId) {
+    var errorDiv = errorDivId || "#errorBlock";
+    $(errorDiv).prop("hidden", true);
 };
