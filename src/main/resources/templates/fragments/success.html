@@ -1,0 +1,13 @@
+<div th:fragment="success">
+    <div id="successBlock" hidden="true">
+    </div>
+
+    <script id="template_success" type="x-tmpl-mustache">
+        {{#.}}
+            <div id="success" class="alert alert-success show" role="alert">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                <span> {{ . }}</span>
+            </div>
+        {{/.}}
+    </script>
+</div>

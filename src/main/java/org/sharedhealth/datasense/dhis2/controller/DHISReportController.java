@@ -97,20 +97,27 @@ public class DHISReportController {
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView scheduleReportSubmission(ReportScheduleRequest scheduleRequest) {
-        String[] formErrors = new String[]{"Error Occurred."};
+        ArrayList<String> formErrors=new ArrayList<>();
+        ArrayList<String> success=new ArrayList<>();
         try {
             if (!scheduleRequest.getSelectedFacilities().isEmpty()) {
                 jobScheduler.scheduleJob(scheduleRequest);
-                return new ModelAndView("redirect:/dhis2/reports");
+                success.add("Successfully Posted");
             } else {
-                formErrors[0] = "Please select a facility/Organization Unit";
+                formErrors.add("Please select a facility/Organization Unit");
             }
         } catch (Exception e) {
             e.printStackTrace();
-            formErrors[0] = e.getMessage();
+            if(formErrors.size()>0){
+                formErrors.set(0,e.getMessage());
+            }
+            else{
+                formErrors.add(e.getMessage());
+            }
         }
         ModelAndView viewModel = viewModelForDataset(scheduleRequest.getConfigId());
         viewModel.addObject("formErrors", formErrors);
+        viewModel.addObject("success", success);
         return viewModel;
     }
 

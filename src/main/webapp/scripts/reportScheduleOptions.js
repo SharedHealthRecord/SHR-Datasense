@@ -1,4 +1,4 @@
-function ReportScheduleOptions(formErrors) {
+function ReportScheduleOptions(formErrors,success) {
    var periodId = "#periodType", startDtId = "#startDate", displayPeriodId =  "#reportingPeriod";
    var dtCh= "/",  minYear=1900, maxYear=2100;
    var applicableOrgUnits = [];
@@ -109,6 +109,8 @@ function ReportScheduleOptions(formErrors) {
    });
 
    $("input[name=selectedFacilities]").bind("click", function(e) {
+        clearErrors();
+        clearSuccess();
         var orgUnitId = $(e.target).attr("data-orgunit");
         var arrayLength = self.applicableOrgUnits.length;
         var found = false;
@@ -385,6 +387,7 @@ function ReportScheduleOptions(formErrors) {
 
    fetchOrgUnits();
    showErrors(formErrors);
+   showSuccess(success)
 }
 
 var toggleFacilityDetails = function(facilityId, show) {

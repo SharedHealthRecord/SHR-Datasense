@@ -14,12 +14,14 @@
     <script src="/scripts/bootstrap-multiselect.js"></script>
     <script src="/scripts/reportScheduleOptions.js"></script>
     <script src="/scripts/error.js"></script>
+    <script src="/scripts/success.js"></script>
     <script src="/scripts/spinner.js"></script>
     <script type="text/javascript" th:inline="javascript">
         $( document ).ready(function() {
             var formErrors = [[${formErrors}]];
+            var success = [[${success}]];
             document.getElementById("periodSpan").innerHTML = getPeriodType();
-            var scheduleOptions = new ReportScheduleOptions(formErrors);
+            var scheduleOptions = new ReportScheduleOptions(formErrors,success);
         });
     </script>
 </head>
@@ -61,6 +63,7 @@
                 <h3 th:text="'Schedule Dataset for:'+ ${reportConfig.datasetName}"></h3>
             </div>
             <div th:include="fragments/error :: error"/>
+            <div th:include="fragments/success :: success"/>
             <div id="createReportSchedule" th:if="!${orgUnits.isEmpty()}">
 
                 <form role="form" method="post" id="reportScheduleForm">
