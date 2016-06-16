@@ -135,11 +135,6 @@
                                         <input id="scheduleStartDate" name="scheduleStartDate" type="text"
                                                class="datepicker dateInput" placeholder="Today"/>
                                         <span>
-                                            post for previous</span>
-                                        <input class="number" type="number" name="previousPeriods" id="previousPeriods"
-                                               value="1" min="1"/>
-                                        <span id="periodSpan"/>
-                                        <span>
                                             , every
                                             <input class="number" type="number" id="cronFrequency" min="1" value="1"
                                                    hidden="true"/>
@@ -241,9 +236,10 @@
                         <thead>
                         <tr>
                             <th>Facility Name</th>
-                            <th>Reporting Period</th>
-                            <th>Prev Fire Time</th>
-                            <th>Next Fire Time</th>
+                            <th>Prev Post Time</th>
+                            <th>Period Posted For</th>
+                            <th>Next Post Time</th>
+                            <th>Period To Be Posted For</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -259,9 +255,10 @@
         {{#.}}
              <tr>
                 <td>{{ facilityId }}</td>
-                <td>{{ period }}</td>
                 <td>{{ prevFireTime }}</td>
+                <td>{{ previousPeriod }}</td>
                 <td>{{ nextFireTime }}</td>
+                <td>{{ nextPeriod }}</td>
              </tr>
         {{/.}}
 

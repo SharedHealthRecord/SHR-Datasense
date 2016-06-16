@@ -8,7 +8,8 @@ public class DatasetJobSchedule {
     private String startTime;
     private String endTime;
     private String facilityId;
-    private String period;
+    private String previousPeriod;
+    private String nextPeriod;
 
     public void setDatasetName(String datasetName) {
         this.datasetName = datasetName;
@@ -58,11 +59,19 @@ public class DatasetJobSchedule {
         return facilityId;
     }
 
-    public void setPeriod(String period) {
-        this.period = period;
+    public void setPreviousPeriod(String period) {
+        this.previousPeriod = period;
     }
 
-    public String getPeriod() {
-        return period;
+    public String getPreviousPeriod() {
+        return previousPeriod;
+    }
+
+    public void setNextPeriod(String nextPeriod) {
+        this.nextPeriod = nextPeriod;
+    }
+
+    public String getNextPeriod() {
+        return nextPeriod;
     }
 }

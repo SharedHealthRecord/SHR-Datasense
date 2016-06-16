@@ -1,5 +1,6 @@
 package org.sharedhealth.datasense.util;
 
+import org.apache.commons.lang3.time.DateUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.LocalDate;
 import org.joda.time.Period;
@@ -98,4 +99,7 @@ public class DateUtil {
         return new Period(new LocalDate(startDate.getTime()), new LocalDate(endDate.getTime()), PeriodType.days()).getDays();
     }
 
+    public static boolean isSameDay(Date date1, Date date2) {
+        return DateUtils.isSameDay(date1, date2);
+    }
 }

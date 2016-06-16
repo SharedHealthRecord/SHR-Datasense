@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.dhis2.service;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.joda.time.DateTime;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
 import org.sharedhealth.datasense.dhis2.controller.ReportFactory;
@@ -92,12 +93,15 @@ public class JobSchedulerService {
             TriggerBuilder<CronTrigger> triggerBuilder = newTrigger()
                     .withIdentity(triggerName, datasetName)
                     .withSchedule(cronSchedule(scheduleRequest.getCronExp()));
-            if(StringUtils.isNotBlank(scheduleRequest.getScheduleStartDate())) {
+            if (StringUtils.isNotBlank(scheduleRequest.getScheduleStartDate())) {
                 Date triggerStartTime = null;
                 try {
                     triggerStartTime = DateUtil.parseDate(scheduleRequest.getScheduleStartDate(), DateUtil.DATE_FMT_DD_MM_YYYY);
                 } catch (ParseException e) {
                     throw new RuntimeException("invalid date:" + scheduleRequest.getScheduleStartDate());
+                }
+                if (DateUtil.isSameDay(triggerStartTime, new Date())) {
+                    triggerStartTime = new DateTime(new Date()).plusSeconds(30).toDate();
                 }
                 triggerBuilder.startAt(triggerStartTime);
             }
@@ -136,25 +140,35 @@ public class JobSchedulerService {
         return parts[1];
     }
 
-    private String identifyPeriodForJob(JobKey jobKey) {
-        JobDataMap jobDataMap;
-        try {
-            jobDataMap = scheduler.getJobDetail(jobKey).getJobDataMap();
-        } catch (SchedulerException e) {
-            logger.debug("Could not retrive job details. SchedulerException thrown.", e);
-            throw new RuntimeException("Could not retrive job details. error : " + e.getMessage(), e);
+    private String identifyPreviousPeriodForJob(JobKey jobKey, JobDataMap jobDataMap, Date previousFireTime) {
+        if (previousFireTime == null) {
+            return null;
         }
-        
         if ("Once".equals(jobDataMap.get("paramScheduleType"))) {
             String[] parts = jobKey.getName().split("-");
             return parts[2];
         }
-        int previousPeriods = getPreviousPeriods(jobDataMap);
+        int previousPeriods = getPreviousPostPeriod(jobDataMap);
         String periodType = (String) jobDataMap.get("paramPeriodType");
-        String today = toGivenFormatString(new Date(), DATE_FMT_DD_MM_YYYY);
-        ReportScheduleRequest.ReportPeriod reportPeriod = ReportFactory.createReportPeriod(null, today,
+        String datePosted = toGivenFormatString(previousFireTime, DATE_FMT_DD_MM_YYYY);
+        ReportScheduleRequest.ReportPeriod previousReportPeriod = ReportFactory.createReportPeriod(null, datePosted,
                 periodType, SCHEDULE_TYPE_REPEAT, previousPeriods);
-        return reportPeriod.period();
+        return previousReportPeriod.period();
+    }
+
+    private String identifyNextPeriodForJob(JobDataMap jobDataMap, Date nextFireTime) {
+        if (nextFireTime == null) {
+            return null;
+        }
+        if ("Once".equals(jobDataMap.get("paramScheduleType"))) {
+            return null;
+        }
+        int nextPeriods = getPreviousPostPeriod(jobDataMap);
+        String periodType = (String) jobDataMap.get("paramPeriodType");
+        String datePosted = toGivenFormatString(nextFireTime, DATE_FMT_DD_MM_YYYY);
+        ReportScheduleRequest.ReportPeriod nextReportPeriod = ReportFactory.createReportPeriod(null, datePosted,
+                periodType, SCHEDULE_TYPE_REPEAT, nextPeriods);
+        return nextReportPeriod.period();
     }
 
     public List<DatasetJobSchedule> findAllJobsForDatasetConfig(Integer configId) throws SchedulerException {
@@ -175,18 +189,27 @@ public class JobSchedulerService {
                     continue;
                 }
 
-                String facilityId = identifyFacilityForJob(jobName);
-                String periodForJob = identifyPeriodForJob(jobKey);
+                JobDataMap jobDataMap;
+                try {
+                    jobDataMap = scheduler.getJobDetail(jobKey).getJobDataMap();
+                } catch (SchedulerException e) {
+                    logger.debug("Could not retrive job details. SchedulerException thrown.", e);
+                    throw new RuntimeException("Could not retrive job details. error : " + e.getMessage(), e);
+                }
 
+                String facilityId = identifyFacilityForJob(jobName);
                 String jobGroup = jobKey.getGroup();
                 //get job's trigger
                 List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
                 for (Trigger trigger : triggers) {
+                    String periodPostedForJob = identifyPreviousPeriodForJob(jobKey, jobDataMap, trigger.getPreviousFireTime());
+                    String periodToBePostedForJob = identifyNextPeriodForJob(jobDataMap, trigger.getNextFireTime());
                     DatasetJobSchedule reportSchedule = new DatasetJobSchedule();
                     System.out.println("[jobName] : " + jobName + " [groupName] : " + jobGroup + " - " + trigger.getNextFireTime());
                     reportSchedule.setDatasetName(reportConfig.getDatasetName());
                     reportSchedule.setFacilityId(facilityId);
-                    reportSchedule.setPeriod(periodForJob);
+                    reportSchedule.setPreviousPeriod(toNotNullString(periodPostedForJob));
+                    reportSchedule.setNextPeriod(toNotNullString(periodToBePostedForJob));
                     reportSchedule.setNextFireTime(toNotNullDateString(trigger.getNextFireTime()));
                     reportSchedule.setPrevFireTime(toNotNullDateString(trigger.getPreviousFireTime()));
                     reportSchedule.setStartTime(toNotNullDateString(trigger.getStartTime()));
@@ -201,11 +224,15 @@ public class JobSchedulerService {
         return reportSchedules;
     }
 
+    private String toNotNullString(String period) {
+        return (period != null) ? period : "";
+    }
+
     private String toNotNullDateString(Date date) {
         return (date != null) ? date.toString() : "";
     }
 
-    private int getPreviousPeriods(JobDataMap mergedJobDataMap) {
+    private int getPreviousPostPeriod(JobDataMap mergedJobDataMap) {
         Object configuredPreviousPeriods = mergedJobDataMap.get("paramPreviousPeriods");
         if (null != configuredPreviousPeriods) {
             try {
@@ -216,5 +243,4 @@ public class JobSchedulerService {
         }
         return 1;
     }
-
 }
