@@ -82,18 +82,23 @@
     <br/>
     <div id="suggestionContainer" class="row" hidden="true">
         <div>
-            <span><b>Config Template Suggestion</b></span>
-            <textarea class="col-md-12" rows="10" id="aqsConfigSuggestion"></textarea>
+            <div id="templateHeading" hidden="true"></div>
         </div>
-        <br/>
-        <div>
-            <span><b>Query Template Suggestion</b></span>
-            <textarea class="col-md-12" rows="10" id="aqsQuerySuggestion"></textarea>
-        </div>
-        <br/>
-        <div>
-            <span><b>Post Template Suggestion</b></span>
-            <textarea class="col-md-12" rows="10" id="aqsTemplateSuggestion"></textarea>
+        <div id="template">
+            <div>
+                <span><b>Config Template Suggestion</b></span>
+                <textarea class="col-md-12" rows="10" id="aqsConfigSuggestion"></textarea>
+            </div>
+            <br/>
+            <div>
+                <span><b>Query Template Suggestion</b></span>
+                <textarea class="col-md-12" rows="10" id="aqsQuerySuggestion"></textarea>
+            </div>
+            <br/>
+            <div>
+                <span><b>Post Template Suggestion</b></span>
+                <textarea class="col-md-12" rows="10" id="aqsTemplateSuggestion"></textarea>
+            </div>
         </div>
     </div>
 
@@ -112,9 +117,15 @@
             {{ id }}
         </div>
         <div class="col-md-2">
-            <button data-datasetId="{{ id }}" data-periodType="{{ periodType }}" class="template-btn btn">Generate Template</button>
+            <button data-datasetName="{{ name }}" data-datasetId="{{ id }}" data-periodType="{{ periodType }}" class="template-btn btn">Generate Template</button>
         </div>
     </div>
+    {{/.}}
+</script>
+
+<script id="template_heading" type="x-tmpl-mustache">
+    {{#.}}
+        <div><span><h4><b><u>Template for {{ data-datasetName }} ({{ data-datasetId }}) </u></b></h4></span></div>
     {{/.}}
 </script>
 

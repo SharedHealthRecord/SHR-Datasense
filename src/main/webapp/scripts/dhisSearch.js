@@ -1,6 +1,7 @@
 function searchDHISDataset(searchTxt) {
     var deferredRes = $.Deferred();
     var targetUrl = "/dhis2/reports/search?name=" + searchTxt;
+    $("#templateHeading").attr("hidden",true);
     $.ajax({
         type: "GET",
         url: targetUrl,

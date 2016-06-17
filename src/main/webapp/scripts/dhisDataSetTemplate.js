@@ -10,8 +10,10 @@ function DhisDataSetTemplate() {
    };
 
    this.generateTemplate = function(e) {
+//      $("#templateHeading").attr("hidden",true);
       $("#suggestionContainer").hide();
       var dhisDatasetId = $(e.target).attr("data-datasetId");
+      var dhisDatasetName = $(e.target).attr("data-datasetName");
       var targetUrl = "/dhis2/dataSets/" + dhisDatasetId + "/dataElements";
        $.ajax({
           type: "GET",
@@ -27,6 +29,7 @@ function DhisDataSetTemplate() {
                 showErrors("Error occured");
               }
               else{
+                  showHeading(dhisDatasetName,dhisDatasetId);
                   result.dataElements.forEach(function(dataElement){
                      var item = {};
                      item.name = dataElement.name;
@@ -86,6 +89,15 @@ function DhisDataSetTemplate() {
            }
       });
    };
+    var showHeading = function(dataElementName,dataElementId){
+        var data = {"data-datasetName" : dataElementName,"data-datasetId" : dataElementId}
+        var template = $('#template_heading').html();
+        Mustache.parse(template);
+        var rendered = Mustache.render(template, data);
+        $('#templateHeading').html(rendered);
+//        $("#templateHeading").attr("hidden",false);
+
+    }
 
     var stringifyAndDisplaySuggestion = function(data) {
         var lastDataElement = data["dataElementList"][data["dataElementList"].length -1 ];
@@ -110,5 +122,8 @@ function DhisDataSetTemplate() {
         var renderedQueryTemplate = Mustache.render(postTemplate, data);
         $('#aqsTemplateSuggestion').html(renderedQueryTemplate);
         $('#suggestionContainer').show();
+        $("#templateHeading").attr("hidden",false);
+
     };
+
 }
