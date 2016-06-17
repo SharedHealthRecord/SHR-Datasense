@@ -66,6 +66,13 @@ input.expression{
     opacity: 0.8;
     filter: alpha(opacity=80);
 }
+#facilityName{
+    width:13em;
+    word-wrap: break-word;
+}
+#template{
+     margin-top: 20px;
+}
 #loading {
     width: 50px;
     height: 57px;

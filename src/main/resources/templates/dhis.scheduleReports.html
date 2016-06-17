@@ -253,11 +253,10 @@
 
         </div>
     </div>
-
     <script id="template_scheduled_jobs_results" type="x-tmpl-mustache">
         {{#.}}
              <tr>
-                <td>{{ facilityId }}</td>
+                <td id="facilityName">{{ facilityName }}</td>
                 <td>{{ prevFireTime }}</td>
                 <td>{{ previousPeriod }}</td>
                 <td>{{ nextFireTime }}</td>

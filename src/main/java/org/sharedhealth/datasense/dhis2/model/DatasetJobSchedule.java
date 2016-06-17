@@ -10,6 +10,7 @@ public class DatasetJobSchedule {
     private String facilityId;
     private String previousPeriod;
     private String nextPeriod;
+    private String facilityName;
 
     public void setDatasetName(String datasetName) {
         this.datasetName = datasetName;
@@ -73,5 +74,13 @@ public class DatasetJobSchedule {
 
     public String getNextPeriod() {
         return nextPeriod;
+    }
+
+    public void setFacilityName(String facilityName) {
+        this.facilityName = facilityName;
+    }
+
+    public String getFacilityName() {
+        return facilityName;
     }
 }

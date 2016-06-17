@@ -198,6 +198,8 @@ public class JobSchedulerService {
                 }
 
                 String facilityId = identifyFacilityForJob(jobName);
+                DHISOrgUnitConfig orgUnitConfig = dhisMapDao.findOrgUnitConfigFor(facilityId);
+                String facilityName = orgUnitConfig.getFacilityName();
                 String jobGroup = jobKey.getGroup();
                 //get job's trigger
                 List<Trigger> triggers = (List<Trigger>) scheduler.getTriggersOfJob(jobKey);
@@ -208,6 +210,7 @@ public class JobSchedulerService {
                     System.out.println("[jobName] : " + jobName + " [groupName] : " + jobGroup + " - " + trigger.getNextFireTime());
                     reportSchedule.setDatasetName(reportConfig.getDatasetName());
                     reportSchedule.setFacilityId(facilityId);
+                    reportSchedule.setFacilityName(facilityName);
                     reportSchedule.setPreviousPeriod(toNotNullString(periodPostedForJob));
                     reportSchedule.setNextPeriod(toNotNullString(periodToBePostedForJob));
                     reportSchedule.setNextFireTime(toNotNullDateString(trigger.getNextFireTime()));
