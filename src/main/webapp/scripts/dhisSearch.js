@@ -18,7 +18,7 @@ function searchDHISDataset(searchTxt) {
                 var template = $('#template_search_results').html();
                 Mustache.parse(template);
                 var rendered = Mustache.render(template, result.dataSets);
-                $('#searchResults').html(rendered);
+                $('#searchResultsContainer').html(rendered);
                 $('#searchResultsContainer').show();
                 $(".configure-btn").bind("click", configureDatasetForReport);
                 deferredRes.resolve();
