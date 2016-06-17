@@ -80,7 +80,7 @@
         </div>
         <div class="panel-group" id="accordion" hidden="true">
             <div class="panel panel-default">
-                <div class="panel-heading">
+                <div class="panel-heading" id="lastEncounterDate">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
                             Last encounter date</a>
@@ -88,15 +88,7 @@
                 </div>
                 <div id="collapse1" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <div class="form-group" hidden="true" id="encounterDate">
-                            <div></div>
-                            <button id="getEncounterDate" class="btn btn-info">Show last encounter date</button>
-                        </div>
                         <div class="panel panel-default" id="lastEncounter" hidden="true">
-                            <div>
-                                <div id="searchResultsLastEncounter" class="search-results">
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -105,7 +97,7 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                            Types of visits for facility</a>
+                            Datewise visits for facility</a>
                     </h4>
                 </div>
                 <div id="collapse2" class="panel-collapse collapse">
@@ -119,7 +111,7 @@
                         <div class="form-group">
                             <div class="col-sm-offset-2 col-sm-10">
                                 <div id="getVisitTypeButton" hidden="true">
-                                    <button id="getVisitType" class="btn btn-info">Show types of visits for facility
+                                    <button id="getVisitType" class="btn btn-info">->
                                     </button>
                                 </div>
                             </div>

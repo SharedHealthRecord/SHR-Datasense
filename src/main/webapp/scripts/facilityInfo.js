@@ -13,11 +13,13 @@ function FacilityInformations() {
 
     $(document).on('click','input[name=selectedFacilities]',function(e){
         $('#lastEncounter').attr("hidden",true);
-        $("#encounterDate").attr("hidden", false);
         $("#accordion").attr("hidden",false);
         $('#visitWithCount').attr("hidden", true);
         $("#visitDate").val("");
+        $('#getVisitTypeButton').attr("hidden", true);
         clearErrors("#errorBlock1");
+         $("#collapse1").collapse('hide');
+         $("#collapse2").collapse('hide');
     });
 
     $("input[name=searchBy]").bind("click", function(e) {
@@ -25,11 +27,10 @@ function FacilityInformations() {
        clearErrors();
        $("#avalilableFacilities").attr("hidden",true);
        $("#accordion").attr("hidden",true);
-       $('#encounterDate').attr("hidden",true);
        $('#lastEncounter').attr("hidden",true);
     });
 
-    $('#getEncounterDate').bind("click", function(e) {
+    $('#lastEncounterDate').bind("click", function(e) {
         document.getElementById("searchTxt").value = "";
         var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
         var selectedFacilityName =$('input[name="selectedFacilities"]:checked').attr('id');
@@ -47,14 +48,13 @@ function FacilityInformations() {
 
                formattedDate = formattedDate + ", " + formattedTime;
                var result = {"facilityName":selectedFacilityName,"facilityId":selectedFacility,"encounterDate":formattedDate}
-               $('#searchResultsLastEncounter').hide();
+               $('#lastEncounter').hide();
                var template = $('#template_search_lastencounter').html();
                Mustache.parse(template);
                var rendered = Mustache.render(template, result);
-               $('#searchResultsLastEncounter').html(rendered);
+               $('#lastEncounter').html(rendered);
                $('#lastEncounter').attr("hidden",false);
-               $('#searchResultsLastEncounter').show();
-               $("#encounterDate").attr("hidden", true);
+               $('#lastEncounter').show();
             },
             error: function(e){
                 showErrors(e);
@@ -76,7 +76,7 @@ function FacilityInformations() {
             url: targetUrl,
             success: function(response){
                if(response.length==0){
-                   showErrors("No visit type for the date entered","#errorBlock1");
+                   showErrors("No visit for the date entered","#errorBlock1");
                }else{
                    var template = $('#template_scheduled_jobs_results').html();
                    var template = $("#template_visit_type_with_count").html();
