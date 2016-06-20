@@ -83,6 +83,9 @@ function ReportScheduleOptions(formErrors,success) {
                     } else {
                         getDhisNames(response);
                     }
+                },
+                error : function(e){
+                    showErrors("Error occured" + e);
                 }
             });
             e.preventDefault();
@@ -94,6 +97,7 @@ function ReportScheduleOptions(formErrors,success) {
    });
 
    $("#loadScheduleStatus, #tabViewScheduledJobs").bind("click", function() {
+       clearSuccess();
        var configId = $("#configId").val();
        var targetUrl = "/dhis2/reports/schedule/" + configId + "/jobs";
        $.ajax({
@@ -104,6 +108,9 @@ function ReportScheduleOptions(formErrors,success) {
                 Mustache.parse(template);
                 var rendered = Mustache.render(template, results);
                 $('#reportScheduleStatus tbody').html(rendered);
+            },
+            error : function(e){
+                showErrors("Error occured" + e);
             }
        });
    });
@@ -121,7 +128,7 @@ function ReportScheduleOptions(formErrors,success) {
             }
         }
         if (!found)  {
-            alert("The selected organization is not applicable for this report.");
+            showErrors("The selected organization is not applicable for this report.");
             e.preventDefault();
         }
    });
@@ -382,6 +389,9 @@ function ReportScheduleOptions(formErrors,success) {
            var rendered = Mustache.render(template, response);
            $('#previewModalContent').html(rendered);
            $('#previewModal').modal('show', {backdrop: 'static'});
+           var tableId = $('[id^="facility-table-"]').eq(0).attr('id');
+           var firstFacilityId = tableId.split("-").pop();
+           toggleFacilityDetails(firstFacilityId,true);
        });
    };
 
