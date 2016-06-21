@@ -92,6 +92,36 @@ function FacilityInformations() {
         });
     });
 
+    $('#getDiagnosisWithCountButton').bind("click",function(e){
+        clearErrors();
+        $('#getDiagnosis').attr("hidden",true);
+        $('#getDiagnosisWithCount').attr("hidden", true);
+        document.getElementById("searchTxt").value = "";
+        var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
+        var startDate = $('#startDate').val();
+        var endDate = $('#endDate').val();
+        var targetUrl =  "/facility/" + selectedFacility + "/diagnosis/withinDates?startDate=" + startDate+ "&endDate=" + endDate;
+        $.ajax({
+            type: "GET",
+            url: targetUrl,
+            success: function(response){
+            alert(response);
+               if(response.length==0){
+                   showErrors("No diagnosis within the dates entered","#errorBlock2");
+               }else{
+                   var template = $("#template_diagnosis_name_with_count").html();
+                   Mustache.parse(template);
+                   var rendered = Mustache.render(template,response);
+                   $('#diagnosisNameWithCount tbody').html(rendered);
+                   $('#getDiagnosisWithCount').attr("hidden", false);
+               }
+            },
+            error: function(e){
+                showErrors(e)
+            }
+        });
+    });
+
     $('#visitDate').datepicker({
              autoclose: true,
              onRender: function(dateTemp) {
@@ -106,6 +136,32 @@ function FacilityInformations() {
        $('#visitWithCount').attr("hidden", true);
        clearErrors("#errorBlock1");
     });
+
+    $('#startDate').datepicker({
+             autoclose: true,
+             onRender: function(dateTemp) {
+                var nowTemp = new Date();
+                var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
+                return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+             },
+             format: 'dd/mm/yyyy'
+    });
+
+    $('#endDate').datepicker({
+                 autoclose: true,
+                 onRender: function(dateTemp) {
+                    var nowTemp = new Date();
+                    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+                    var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
+                    return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+                 },
+                 format: 'dd/mm/yyyy'
+    }).on('changeDate', function (e) {
+        $('#getDiagnosis').attr("hidden",false);
+//       $('#visitWithCount').attr("hidden", true);
+     clearErrors("#errorBlock2");
+  });
 
     var validateFacilityId = function(searchTxt){
         if(searchTxt.match(/^\d+$/)) {

@@ -132,6 +132,52 @@
                     </div>
                 </div>
             </div>
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
+                            Diagnosis Names for facility</a>
+                    </h4>
+                </div>
+                <div id="collapse3" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <label for="startDate" class="control-label col-sm-2">Select start date:</label>
+                            <input id="startDate" name="startDate" type="text"
+                                   class="form-control startDate datepicker dateInput"
+                                   placeholder="Enter a date"/>
+                        </div>
+                        <div class="form-group">
+                            <label for="endDate" class="control-label col-sm-2">Select end date:</label>
+                            <input id="endDate" name="endDate" type="text"
+                                   class="form-control endDate datepicker dateInput"
+                                   placeholder="Enter a date"/>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-offset-2 col-sm-10">
+                                <div id="getDiagnosis" hidden="true">
+                                    <button id="getDiagnosisWithCountButton" class="btn btn-info">->
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="container" id="getDiagnosisWithCount" hidden="true">
+                            <table id="diagnosisNameWithCount" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Diagnosis Name</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div id="errorBlock2" hidden="true"></div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 
@@ -145,18 +191,14 @@
         </label>
         </div>
     {{/.}}
-
-
-
-
 </script>
+
 <script id="template_search_lastencounter" type="x-tmpl-mustache">
     {{#.}}
         Last encounter date and time for {{facilityName}}({{facilityId}}) is {{encounterDate}}
     {{/.}}
-
-
 </script>
+
 <script id="template_visit_type_with_count" type="x-tmpl-mustache">
         {{#.}}
              <tr>
@@ -164,9 +206,16 @@
                 <td>{{ num }}</td>
              </tr>
         {{/.}}
-
-
-
 </script>
+
+<script id="template_diagnosis_name_with_count" type="x-tmpl-mustache">
+        {{#.}}
+             <tr>
+                <td>{{ diagnosis_name }}</td>
+                <td>{{ count }}</td>
+             </tr>
+        {{/.}}
+</script>
+
 </body>
 </html>

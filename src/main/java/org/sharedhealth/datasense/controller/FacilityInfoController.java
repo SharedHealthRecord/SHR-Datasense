@@ -35,6 +35,15 @@ public class FacilityInfoController {
                                             @RequestParam(value = "date", required = true) String date) {
         return facilityDataService.getAllVisitTypes(facilityId, date);
     }
+    @RequestMapping(value = "/{facilityId}/diagnosis/withinDates", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public
+    @ResponseBody
+    List<Map<String, Object>> showDiagnosisNameWithCount(@PathVariable String facilityId,
+                                            @RequestParam(value = "startDate", required = true) String startDate,
+                                            @RequestParam(value = "endDate", required = true) String endDate) {
+        return facilityDataService.getDiagnosisNameWithCount(facilityId, startDate,endDate);
+    }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")

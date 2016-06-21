@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.service;
 
 import org.sharedhealth.datasense.model.Facility;
+import org.sharedhealth.datasense.repository.DiagnosisDao;
 import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +20,9 @@ public class FacilityInfoService {
     @Autowired
     private FacilityDao facilityConfigDao;
 
+    @Autowired
+    private DiagnosisDao diagnosisDao;
+
     @Transactional
     public Date getLastEncounterDateTime(String facilityId) {
         return encounterDao.getLastSyncedEncounterDateTime(facilityId);
@@ -34,7 +38,15 @@ public class FacilityInfoService {
         return facilityConfigDao.findFacilityByName(facility_name);
     }
 
+    @Transactional
     public List<Map<String, Object>> getAllVisitTypes(String facilityId, String date) {
         return encounterDao.getVisitTypesWithCount(facilityId, date);
     }
+
+    @Transactional
+    public List<Map<String, Object>> getDiagnosisNameWithCount(String facilityId, String startDate, String endDate) {
+        return diagnosisDao.getDiagosisWithCount(facilityId, startDate, endDate);
+    }
+
+
 }

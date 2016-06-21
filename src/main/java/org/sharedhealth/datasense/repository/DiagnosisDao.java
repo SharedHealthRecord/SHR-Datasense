@@ -2,10 +2,13 @@ package org.sharedhealth.datasense.repository;
 
 import org.sharedhealth.datasense.model.Diagnosis;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DiagnosisDao {
@@ -27,11 +30,24 @@ public class DiagnosisDao {
                 "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status, :uuid)", map);
     }
 
-    public void delete(String healthId, String encounterId){
+    public void delete(String healthId, String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
         jdbcTemplate.update("delete from diagnosis where patient_hid=:patient_hid and encounter_id=:encounter_id", map);
+    }
+
+    public List<Map<String, Object>> getDiagosisWithCount(String facilityId, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("start_date", startDate);
+        map.put("end_date", endDate);
+        String query = "SELECT c.name AS diagnosis_name , count(d.diagnosis_concept_id) AS count FROM diagnosis d  JOIN concept c WHERE d.encounter_id IN" +
+                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND DATE_FORMAT(encounter_datetime, '%d-%m-%Y')" +
+                " >= :start_date AND DATE_FORMAT(encounter_datetime, '%d/%m/%Y') <= :end_date)AND " +
+                " c.concept_uuid=d.diagnosis_concept_id GROUP BY d.diagnosis_concept_id;";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
     }
 }
