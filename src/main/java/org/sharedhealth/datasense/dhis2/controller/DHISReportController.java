@@ -109,10 +109,10 @@ public class DHISReportController {
         } catch (Exception e) {
             e.printStackTrace();
             if(formErrors.size()>0){
-                formErrors.set(0,e.getMessage());
+                formErrors.set(0,"Error occured, unable to post");
             }
             else{
-                formErrors.add(e.getMessage());
+                formErrors.add("Error occured, unable to post");
             }
         }
         ModelAndView viewModel = viewModelForDataset(scheduleRequest.getConfigId());

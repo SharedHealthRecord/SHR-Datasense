@@ -174,7 +174,7 @@ function ReportScheduleOptions(formErrors,success) {
             return true;
        }
        if (dateString === '') {
-          alert("Please select a valid date.");
+          showErrors("Please select a valid date.");
           return false;
        }
 
@@ -253,7 +253,7 @@ function ReportScheduleOptions(formErrors,success) {
         var currentYear = currentDate.getFullYear();
         var reportingYear = reportingDate.getFullYear();
         if (reportingYear >= currentYear) {
-            alert("Please select a valid date of past years. Reporting period must be in the past.");
+            showErrors("Please select a valid date of past years. Reporting period must be in the past.");
             return false;
         }
         $(displayPeriodId).text("Reporting Period:" + reportingYear);
@@ -264,7 +264,7 @@ function ReportScheduleOptions(formErrors,success) {
         var currentDate = new Date();
         currentDate = new Date(currentDate.getFullYear(), currentDate.getMonth(), currentDate.getDate());
         if (reportingDate >= currentDate) {
-            alert("Please select a valid date. Reporting period must be in the past.");
+            showErrors("Please select a valid date. Reporting period must be in the past.");
             return false;
         }
         return true;
@@ -277,13 +277,13 @@ function ReportScheduleOptions(formErrors,success) {
 
         var reportingYear = reportingDate.getFullYear();
         if (reportingYear > currentYear) {
-            alert("Please select a valid date of past months. Reporting period must be in the past.");
+            showErrors("Please select a valid date of past months. Reporting period must be in the past.");
             return false;
         }
 
         var reportingMonth = reportingDate.getMonth() + 1;
         if (reportingMonth >= currentMonth) {
-            alert("Please select a valid date of past months. Reporting period must be in the past.");
+            showErrors("Please select a valid date of past months. Reporting period must be in the past.");
             return false;
         }
 
@@ -304,7 +304,7 @@ function ReportScheduleOptions(formErrors,success) {
         today.setHours(0,0,0,0);
 
         if (lastDateOfQuarter >= today ) {
-            alert("Please select a valid date of past quarters. Reporting period must be in the past");
+            showErrors("Please select a valid date of past quarters. Reporting period must be in the past");
             return false;
         }
 
