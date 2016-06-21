@@ -15,9 +15,14 @@ function FacilityInformations() {
         $('#lastEncounter').attr("hidden",true);
         $("#accordion").attr("hidden",false);
         $('#visitWithCount').attr("hidden", true);
+        $('#getDiagnosisWithCount').attr("hidden", true);
         $("#visitDate").val("");
+        $("#startDate").val("");
+        $("#endDate").val("");
         $('#getVisitTypeButton').attr("hidden", true);
+        $('#getDiagnosis').attr("hidden", true);
         clearErrors("#errorBlock1");
+        clearErrors("#errorBlock2");
          $("#collapse1").collapse('hide');
          $("#collapse2").collapse('hide');
     });
@@ -105,9 +110,8 @@ function FacilityInformations() {
             type: "GET",
             url: targetUrl,
             success: function(response){
-            alert(response);
                if(response.length==0){
-                   showErrors("No diagnosis within the dates entered","#errorBlock2");
+                   showErrors("No diagnoses found for the selected dates","#errorBlock2");
                }else{
                    var template = $("#template_diagnosis_name_with_count").html();
                    Mustache.parse(template);
@@ -137,31 +141,42 @@ function FacilityInformations() {
        clearErrors("#errorBlock1");
     });
 
-    $('#startDate').datepicker({
-             autoclose: true,
-             onRender: function(dateTemp) {
-                var nowTemp = new Date();
-                var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
-                return now.valueOf() <= date.valueOf() ? 'disabled' : '';
-             },
-             format: 'dd/mm/yyyy'
-    });
-
-    $('#endDate').datepicker({
-                 autoclose: true,
-                 onRender: function(dateTemp) {
-                    var nowTemp = new Date();
-                    var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-                    var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
-                    return now.valueOf() <= date.valueOf() ? 'disabled' : '';
-                 },
-                 format: 'dd/mm/yyyy'
-    }).on('changeDate', function (e) {
-        $('#getDiagnosis').attr("hidden",false);
-//       $('#visitWithCount').attr("hidden", true);
-     clearErrors("#errorBlock2");
-  });
+    var startDatePicker = $('#startDate').datepicker({
+      autoclose: true,
+      onRender: function(dateTemp) {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
+        return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+      },
+      format: 'dd/mm/yyyy'
+    }).on('changeDate', function(ev) {
+      if (ev.date.valueOf() < endDatePicker.date.valueOf()) {
+        var newDate = new Date(ev.date)
+        newDate.setDate(newDate.getDate());
+        endDatePicker.setValue(newDate);
+      }
+      startDatePicker.hide();
+      $('#endDate')[0].focus();
+    }).data('datepicker');
+    var endDatePicker = $('#endDate').datepicker({
+      autoclose: true,
+      onRender: function(dateTemp) {
+        var nowTemp = new Date();
+        var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
+        if(dateTemp.valueOf() >= startDatePicker.date.valueOf() && now.valueOf() > dateTemp.valueOf()){
+            return '';
+        }
+        else{
+            return 'disabled';
+        }
+      },
+      format: 'dd/mm/yyyy'
+    }).on('changeDate', function(ev) {
+      $('#getDiagnosis').attr("hidden",false);
+      $('#getDiagnosisWithCount').attr("hidden", true);
+      clearErrors("#errorBlock2");
+    }).data('datepicker');
 
     var validateFacilityId = function(searchTxt){
         if(searchTxt.match(/^\d+$/)) {

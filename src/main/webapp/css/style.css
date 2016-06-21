@@ -92,7 +92,7 @@ input.expression{
     color : white;
 }
 
-#visitWithCount{
+#visitWithCount,#getDiagnosisWithCount{
     width:inherit;
 }
 

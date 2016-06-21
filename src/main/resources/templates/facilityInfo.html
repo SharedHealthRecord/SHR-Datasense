@@ -136,25 +136,27 @@
                 <div class="panel-heading">
                     <h4 class="panel-title">
                         <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                            Diagnosis Names for facility</a>
+                            Diagnoses posted by facility</a>
                     </h4>
                 </div>
                 <div id="collapse3" class="panel-collapse collapse">
                     <div class="panel-body">
-                        <div class="form-group">
-                            <label for="startDate" class="control-label col-sm-2">Select start date:</label>
-                            <input id="startDate" name="startDate" type="text"
-                                   class="form-control startDate datepicker dateInput"
-                                   placeholder="Enter a date"/>
+                        <div class="row">
+                            <div class="form-group col-xs-4">
+                                <label for="startDate" class="control-label col-sm-5">Select start date:</label>
+                                <input id="startDate" name="startDate" type="text"
+                                           class="form-control startDate datepicker dateInput"
+                                           placeholder="Enter a date"/>
+                            </div>
+                            <div class="form-group col-xs-3">
+                                <label for="endDate" class="control-label col-sm-4">end date:</label>
+                                <input id="endDate" name="endDate" type="text"
+                                           class="form-control endDate datepicker dateInput"
+                                           placeholder="Enter a date"/>
+                            </div>
                         </div>
                         <div class="form-group">
-                            <label for="endDate" class="control-label col-sm-2">Select end date:</label>
-                            <input id="endDate" name="endDate" type="text"
-                                   class="form-control endDate datepicker dateInput"
-                                   placeholder="Enter a date"/>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
+                            <div class="col-sm-offset-3 col-sm-10">
                                 <div id="getDiagnosis" hidden="true">
                                     <button id="getDiagnosisWithCountButton" class="btn btn-info">->
                                     </button>
