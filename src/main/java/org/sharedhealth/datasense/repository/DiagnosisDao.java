@@ -43,7 +43,7 @@ public class DiagnosisDao {
         map.put("facility_id", facilityId);
         map.put("start_date", startDate);
         map.put("end_date", endDate);
-        String query = "SELECT c.name AS diagnosis_name , count(d.diagnosis_concept_id) AS count FROM diagnosis d  JOIN concept c WHERE d.encounter_id IN" +
+        String query = "SELECT c.name AS diagnosis_name ,d.diagnosis_code AS code, count(d.diagnosis_concept_id) AS count FROM diagnosis d  JOIN concept c WHERE d.encounter_id IN" +
                 "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND DATE_FORMAT(encounter_datetime, '%d-%m-%Y')" +
                 " >= :start_date AND DATE_FORMAT(encounter_datetime, '%d/%m/%Y') <= :end_date)AND " +
                 " c.concept_uuid=d.diagnosis_concept_id GROUP BY d.diagnosis_concept_id;";

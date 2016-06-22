@@ -146,13 +146,13 @@
                                 <label for="startDate" class="control-label col-sm-5">Select start date:</label>
                                 <input id="startDate" name="startDate" type="text"
                                            class="form-control startDate datepicker dateInput"
-                                           placeholder="Enter a date"/>
+                                           placeholder="Enter a date" readonly='true'/>
                             </div>
                             <div class="form-group col-xs-3">
                                 <label for="endDate" class="control-label col-sm-4">end date:</label>
                                 <input id="endDate" name="endDate" type="text"
                                            class="form-control endDate datepicker dateInput"
-                                           placeholder="Enter a date"/>
+                                           placeholder="Enter a date" readonly='true'/>
                             </div>
                         </div>
                         <div class="form-group">
@@ -168,6 +168,7 @@
                                 <thead>
                                 <tr>
                                     <th>Diagnosis Name</th>
+                                    <th>ICD10 Code</th>
                                     <th>Count</th>
                                 </tr>
                                 </thead>
@@ -214,6 +215,7 @@
         {{#.}}
              <tr>
                 <td>{{ diagnosis_name }}</td>
+                <td>{{ code }}</td>
                 <td>{{ count }}</td>
              </tr>
         {{/.}}
