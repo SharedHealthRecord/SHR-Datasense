@@ -55,6 +55,9 @@ input.expression{
 .modal-dialog {
     overflow-y: initial !important;
 }
+.nav-pills>li.active>a,.nav-pills>li.active>a:focus,.nav-pills>li.active>a:hover{
+       background-color:#50a37e !important;
+}
 
 #overlay {
     position: absolute;
