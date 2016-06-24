@@ -32,25 +32,10 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
         prescribedDrug.setPatientHid(healthId);
         prescribedDrug.setEncounterId(encounterId);
         prescribedDrug.setPrescriptionDateTime(medicationOrder.getDateWritten());
-
-        CodeableConceptDt medication = (CodeableConceptDt) medicationOrder.getMedication();
-        CodingDt codingFirstRep = medication.getCodingFirstRep();
-
-        prescribedDrug.setDrugUuid(codingFirstRep.getCode());
-        prescribedDrug.setDrugName(codingFirstRep.getDisplay());
-
-
+        setDrugNameAndUuid(medicationOrder, prescribedDrug);
         prescribedDrug.setPrescriber(getMedicationPrescriber(medicationOrder));
 
         prescribedDrugDao.save(prescribedDrug);
-    }
-
-    private String getDispensedQuantity(MedicationOrder medicationOrder) {
-        return String.valueOf(medicationOrder.getDispenseRequest().getQuantity().getValue());
-    }
-
-    private String getMedicationPrescriber(MedicationOrder medicationOrder) {
-        return ProviderReference.parseUrl(medicationOrder.getPrescriber().getReference().getValue());
     }
 
     @Override
@@ -58,5 +43,17 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
         String encounterId = composition.getEncounterReference().getValue().getEncounterId();
         prescribedDrugDao.deleteExisting(encounterId);
 
+    }
+
+    private void setDrugNameAndUuid(MedicationOrder medicationOrder, PrescribedDrug prescribedDrug) {
+        CodeableConceptDt medication = (CodeableConceptDt) medicationOrder.getMedication();
+        CodingDt codingFirstRep = medication.getCodingFirstRep();
+
+        prescribedDrug.setDrugUuid(codingFirstRep.getCode());
+        prescribedDrug.setDrugName(codingFirstRep.getDisplay());
+    }
+
+    private String getMedicationPrescriber(MedicationOrder medicationOrder) {
+        return ProviderReference.parseUrl(medicationOrder.getPrescriber().getReference().getValue());
     }
 }

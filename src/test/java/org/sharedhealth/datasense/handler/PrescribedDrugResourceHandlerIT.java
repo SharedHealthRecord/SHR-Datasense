@@ -95,7 +95,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
     @Test
     public void shouldProcessMedicationOrderWithTRDrug() throws Exception {
         setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893");
-        prescribedDrugResourceHandler.process(resource,composition);
+        prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, byEncounterId.size());
@@ -103,14 +103,34 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
         PrescribedDrug prescribedDrug = byEncounterId.get(0);
         Date expectedDate = DateUtil.parseDate("23/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
+        String expectedDrugUuid = "cd89844d-8211-11e5-aa01-0050568276cf";
+        String expectedDrugName = "Paracetamol Tablet 500 mg";
+        String expectedPrescriberId = "20";
 
-        assertPrescription(prescribedDrug,expectedDate, "cd89844d-8211-11e5-aa01-0050568276cf", "Paracetamol Tablet 500 mg", "20", "20.0");
+        assertPrescription(prescribedDrug, expectedDate, expectedDrugUuid, expectedDrugName, expectedPrescriberId);
+    }
+
+    @Test
+    public void shouldProcessMedicationOrderWithLocalDrug() throws Exception {
+        setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:2d161c05-64be-4de4-a488-7ed499d2ccca");
+        prescribedDrugResourceHandler.process(resource, composition);
+
+        List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(1, byEncounterId.size());
+
+        PrescribedDrug prescribedDrug = byEncounterId.get(0);
+        Date expectedDate = DateUtil.parseDate("24/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
+        String expectedDrugName = "Asthalin";
+        String expectedPrescriberId = "20";
+
+
+        assertPrescription(prescribedDrug, expectedDate, null, expectedDrugName, expectedPrescriberId);
     }
 
     @Test
     public void shouldDeleteExistingPrescribedDrug() throws Exception {
         setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893");
-        prescribedDrugResourceHandler.process(resource,composition);
+        prescribedDrugResourceHandler.process(resource, composition);
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
 
         assertEquals(1, byEncounterId.size());
@@ -121,14 +141,14 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
     }
 
-    private void assertPrescription(PrescribedDrug prescribedDrug, Date expectedDate, String expectedDrugUui, String expectedDrugName, String expectedPrescriber, String expectedQuantity) throws ParseException {
+    private void assertPrescription(PrescribedDrug prescribedDrug, Date expectedDate, String expectedDrugUui, String expectedDrugName, String expectedPrescriber) throws ParseException {
 
         assertEquals(PATIENT_HID, prescribedDrug.getPatientHid());
         assertEquals(SHR_ENCOUNTER_ID, prescribedDrug.getEncounterId());
         assertEquals(expectedDate, prescribedDrug.getPrescriptionDateTime());
-        assertEquals(expectedDrugUui,prescribedDrug.getDrugUuid());
+        assertEquals(expectedDrugUui, prescribedDrug.getDrugUuid());
         assertEquals(expectedDrugName, prescribedDrug.getDrugName());
-        assertEquals(expectedPrescriber,prescribedDrug.getPrescriber());
+        assertEquals(expectedPrescriber, prescribedDrug.getPrescriber());
         assertNotNull(prescribedDrug.getUuid());
     }
 

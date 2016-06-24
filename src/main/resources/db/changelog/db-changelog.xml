@@ -961,5 +961,37 @@
             <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
     </changeSet>
-
+    <changeSet id="sharedhealth-datasense-20162406-1300" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_prescribed_drugs_encounter_id"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_prescribed_drugs_encounter_id"
+                     tableName="prescribed_drugs">
+            <column name="encounter_id"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20162406-1302" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_prescribed_drug_uuid"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_prescribed_drug_uuid"
+                     tableName="prescribed_drugs">
+            <column name="drug_uuid"/>
+        </createIndex>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20162406-1304" author="sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <not>
+                <indexExists indexName="idx_prescribed_drugs_datetime"/>
+            </not>
+        </preConditions>
+        <createIndex indexName="idx_prescribed_drugs_datetime"
+                     tableName="prescribed_drugs">
+            <column name="prescription_datetime"/>
+        </createIndex>
+    </changeSet>
 </databaseChangeLog>
