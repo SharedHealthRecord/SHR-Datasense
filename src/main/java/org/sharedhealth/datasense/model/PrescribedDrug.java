@@ -9,6 +9,9 @@ public class PrescribedDrug extends BaseResource {
     private String drugUuid;
     private String drugName;
     private String prescriber;
+    private String status;
+    private String shrMedicationOrderUuid;
+    private String priorShrMedicationOrderUuid;
 
     public String getDrugName() {
         return drugName;
@@ -56,5 +59,29 @@ public class PrescribedDrug extends BaseResource {
 
     public void setPrescriber(String provider) {
         this.prescriber = provider;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getShrMedicationOrderUuid() {
+        return shrMedicationOrderUuid;
+    }
+
+    public void setShrMedicationOrderUuid(String shrMedicationOrderUuid) {
+        this.shrMedicationOrderUuid = shrMedicationOrderUuid;
+    }
+
+    public String getPriorShrMedicationOrderUuid() {
+        return priorShrMedicationOrderUuid;
+    }
+
+    public void setPriorShrMedicationOrderUuid(String priorShrMedicationOrderUuid) {
+        this.priorShrMedicationOrderUuid = priorShrMedicationOrderUuid;
     }
 }

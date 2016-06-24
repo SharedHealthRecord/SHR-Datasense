@@ -11,6 +11,7 @@ import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
 import org.sharedhealth.datasense.repository.DiagnosticOrderDao;
 import org.sharedhealth.datasense.repository.DiagnosticReportDao;
+import org.sharedhealth.datasense.util.ResourceRefUtils;
 import org.sharedhealth.datasense.util.TrUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -102,16 +103,11 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     }
 
     private Integer getOrderIdFromShrOrderUuid(List<ResourceReferenceDt> request) {
-        String shrOrderUuid = getShrOrderUuid(request.get(0));
+        String shrOrderUuid = ResourceRefUtils.getOrderUuidFromResourceReference(request.get(0));
         return diagnosticOrderDao.getOrderId(shrOrderUuid);
 
     }
 
-    private String getShrOrderUuid(ResourceReferenceDt resourceReferenceDt) {
-        String referenceUrl = resourceReferenceDt.getReference().getValue();
-        if(referenceUrl.isEmpty()) return null;
-        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
-    }
 
     private Integer getOrderIdFromEncounter(DiagnosticReport fhirDiagnosticReport) {
         String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);

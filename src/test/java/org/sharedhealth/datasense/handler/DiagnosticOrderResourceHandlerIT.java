@@ -89,7 +89,6 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
         assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "RAD", "01-04-2016","e8436e26-a011-48e7-a4e8-a41465dfae34" );
-//        assertEquals("e8436e26-a011-48e7-a4e8-a41465dfae34", savedDiagnosticOrder.getShrOrderUuid());
     }
 
     @Test

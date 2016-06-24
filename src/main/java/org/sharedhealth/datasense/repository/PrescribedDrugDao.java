@@ -20,10 +20,13 @@ public class PrescribedDrugDao {
         map.put("drug_uuid",prescribedDrug.getDrugUuid());
         map.put("drug_name",prescribedDrug.getDrugName());
         map.put("prescriber",prescribedDrug.getPrescriber());
+        map.put("status",prescribedDrug.getStatus());
+        map.put("shr_medication_order_uuid", prescribedDrug.getShrMedicationOrderUuid());
+        map.put("prior_shr_medication_order_uuid", prescribedDrug.getPriorShrMedicationOrderUuid());
         map.put("uuid",prescribedDrug.getUuid());
 
-        String sql = "insert into prescribed_drugs (patient_hid, encounter_id, prescription_datetime, drug_uuid, drug_name, prescriber, uuid) " +
-                                              "values(:patient_hid, :encounter_id, :prescription_datetime, :drug_uuid, :drug_name, :prescriber, :uuid )";
+        String sql = "insert into prescribed_drugs (patient_hid, encounter_id, prescription_datetime, drug_uuid, drug_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid) " +
+                                              "values(:patient_hid, :encounter_id, :prescription_datetime, :drug_uuid, :drug_name, :prescriber, :status, :shr_medication_order_uuid, :prior_shr_medication_order_uuid, :uuid )";
         jdbcTemplate.update(sql, map);
     }
 
