@@ -943,5 +943,23 @@
             <column name="report_datetime"/>
         </createIndex>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20162306-1241" author="sukreet,Anjaly" context="setup">
+        <comment>creating prescribed drugs table</comment>
+        <createTable tableName="prescribed_drugs">
+            <column name="prescribed_drugs_id" type="int" autoIncrement="true">
+                <constraints nullable="false" primaryKey="true"/>
+            </column>
+            <column name="patient_hid" type="varchar(20)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="prescription_datetime" type="datetime"/>
+            <column name="drug_uuid" type="varchar(50)"/>
+            <column name="drug_name" type="varchar(50)"/>
+            <column name="prescriber" type="varchar(20)"/>
+            <column name="uuid" type="varchar(50)">
+                <constraints nullable="false" unique="true" />
+            </column>
+            <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
+        </createTable>
+    </changeSet>
 
 </databaseChangeLog>
