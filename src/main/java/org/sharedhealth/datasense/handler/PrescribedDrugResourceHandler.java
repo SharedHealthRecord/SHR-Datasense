@@ -10,7 +10,7 @@ import org.sharedhealth.datasense.model.PrescribedDrug;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
 import org.sharedhealth.datasense.repository.PrescribedDrugDao;
-import org.sharedhealth.datasense.util.ResourceRefUtils;
+import org.sharedhealth.datasense.util.ResourceReferenceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
@@ -42,16 +42,34 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
         setDrugNameAndUuid(medicationOrder, prescribedDrug);
         prescribedDrug.setPrescriber(getMedicationPrescriber(medicationOrder));
         setStatus(prescribedDrug, medicationOrder);
-        prescribedDrug.setShrMedicationOrderUuid(medicationOrder.getId().getIdPart());
-        prescribedDrug.setPriorShrMedicationOrderUuid(getOrderUuidFromPriorPrescription(medicationOrder));
+
+        setShrMedicationId(prescribedDrug, encounterId, medicationOrder);
+        setPriorMedicationId(prescribedDrug, medicationOrder);
+
         prescribedDrugDao.save(prescribedDrug);
     }
 
-    private String getOrderUuidFromPriorPrescription(MedicationOrder medicationOrder) {
-        ResourceReferenceDt priorPrescription = medicationOrder.getPriorPrescription();
-        if(priorPrescription.isEmpty()) return null;
-        return ResourceRefUtils.getOrderUuidFromResourceReference(priorPrescription);
+    private void setShrMedicationId(PrescribedDrug prescribedDrug, String encounterId, MedicationOrder medicationOrder) {
+        String medicationOrderUuid = medicationOrder.getId().getIdPart();
+        prescribedDrug.setShrMedicationOrderUuid(getConcatenatedShrMedicationOrderUuid(encounterId, medicationOrderUuid));
     }
+
+    private void setPriorMedicationId(PrescribedDrug prescribedDrug, MedicationOrder medicationOrder) {
+        ResourceReferenceDt priorPrescription = medicationOrder.getPriorPrescription();
+        if (priorPrescription.isEmpty()) return;
+
+        String referenceUrl = ResourceReferenceUtils.getReferenceUrlFromResourceReference(priorPrescription);
+        if (!referenceUrl.contains("#MedicationOrder/")) return;
+
+        String priorEncounterId = ResourceReferenceUtils.getEncounterUuidFromReferenceUrl(referenceUrl);
+        String priorOrderUuidFromPrescription = ResourceReferenceUtils.getOrderUuidFromReferenceUrl(referenceUrl);
+        prescribedDrug.setPriorShrMedicationOrderUuid(getConcatenatedShrMedicationOrderUuid(priorEncounterId, priorOrderUuidFromPrescription));
+    }
+
+    private String getConcatenatedShrMedicationOrderUuid(String encounterId, String medicationOrderUuid) {
+        return encounterId + ":" + medicationOrderUuid;
+    }
+
 
     @Override
     public void deleteExisting(EncounterComposition composition) {

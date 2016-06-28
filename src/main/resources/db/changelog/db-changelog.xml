@@ -956,8 +956,8 @@
             <column name="drug_name" type="varchar(50)"/>
             <column name="prescriber" type="varchar(20)"/>
             <column name="status" type="varchar(20)"/>
-            <column name="shr_medication_order_uuid" type="varchar(50)"/>
-            <column name="prior_shr_medication_order_uuid" type="varchar(50)"/>
+            <column name="shr_medication_order_uuid" type="varchar(100)"/>
+            <column name="prior_shr_medication_order_uuid" type="varchar(100)"/>
             <column name="uuid" type="varchar(50)">
                 <constraints nullable="false" unique="true" />
             </column>

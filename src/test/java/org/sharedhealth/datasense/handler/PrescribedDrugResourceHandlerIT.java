@@ -107,7 +107,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugName = "Paracetamol Tablet 500 mg";
         String expectedPrescriberId = "20";
         String expectedStatus = "NEW";
-        String expectedShrMedicationOrderUuid = "97711fe6-d025-4324-96a0-a480a49bb893";
+        String expectedShrMedicationOrderUuid = SHR_ENCOUNTER_ID + ":97711fe6-d025-4324-96a0-a480a49bb893";
 
         assertPrescription(prescribedDrug, SHR_ENCOUNTER_ID, expectedDate, expectedDrugUuid, expectedDrugName,
                 expectedPrescriberId, expectedStatus, expectedShrMedicationOrderUuid, null);
@@ -136,14 +136,33 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugName = "Diazepam Tablet 5 mg";
         String expectedPrescriberId = "20";
         String expectedStatus = "DISCONTINUE";
-        String expectedShrMedicationOrderUuid = "2af6380b-466f-447a-9bfa-b1d5f816e09c";
-        String expectedPriorShrMedicationUuid = "acaccc8b-a011-488d-bea3-d2c88a0b07c1";
+        String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":2af6380b-466f-447a-9bfa-b1d5f816e09c";
+        String expectedPriorShrMedicationUuid = SHR_ENCOUNTER_ID + ":acaccc8b-a011-488d-bea3-d2c88a0b07c1";
 
         assertPrescription(prescribedDrug, discontinuingEncounterId, expectedDate,expectedDrugUuid, expectedDrugName,
                 expectedPrescriberId,expectedStatus,expectedShrMedicationOrderUuid, expectedPriorShrMedicationUuid);
+    }
 
+    @Test
+    public void shouldProcessMedicationOrderWhenCancelledWithinSameEncounter() throws Exception {
 
+        String discontinuingEncounterId = "DiscontinuingEncounterId";
+        setUpData("dstu2/xmls/p98001046534_encounter_with_discontinued_presciption_within_same_encounter.xml", "urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4", discontinuingEncounterId);
+        prescribedDrugResourceHandler.process(resource, composition);
 
+        List<PrescribedDrug> byEncounterIdForDiscontinuing = findByEncounterId(discontinuingEncounterId);
+        assertEquals(1, byEncounterIdForDiscontinuing.size());
+        PrescribedDrug prescribedDrug = byEncounterIdForDiscontinuing.get(0);
+        Date expectedDate = DateUtil.parseDate("27/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
+        String expectedDrugUuid = "cd858ce0-8211-11e5-aa01-0050568276cf";
+        String expectedDrugName = "Pantoprazole Tablet 40 mg";
+        String expectedPrescriberId = "20";
+        String expectedStatus = "DISCONTINUE";
+        String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":efd4dc92-eb9f-4141-92fb-03e89c536fa4";
+        String expectedPriorShrMedicationUuid = null;
+
+        assertPrescription(prescribedDrug, discontinuingEncounterId, expectedDate,expectedDrugUuid, expectedDrugName,
+                expectedPrescriberId,expectedStatus,expectedShrMedicationOrderUuid, expectedPriorShrMedicationUuid);
     }
 
     @Test
@@ -159,7 +178,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugName = "Asthalin";
         String expectedPrescriberId = "20";
         String expectedStatus = "NEW";
-        String expectedShrMedicationOrderUuid = "2d161c05-64be-4de4-a488-7ed499d2ccca";
+        String expectedShrMedicationOrderUuid = SHR_ENCOUNTER_ID + ":2d161c05-64be-4de4-a488-7ed499d2ccca";
 
         assertPrescription(prescribedDrug, SHR_ENCOUNTER_ID, expectedDate, null, expectedDrugName,
                 expectedPrescriberId, expectedStatus, expectedShrMedicationOrderUuid, null);

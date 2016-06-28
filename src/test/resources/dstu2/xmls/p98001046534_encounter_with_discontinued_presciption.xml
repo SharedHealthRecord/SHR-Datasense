@@ -138,7 +138,7 @@
                     </quantity>
                 </dispenseRequest>
                 <priorPrescription>
-                    <reference value="http://172.18.46.57:8083/patients/98001046534/encounters/f1adeb4d-295c-45ef-a023-70cb97dbea43#MedicationOrder/acaccc8b-a011-488d-bea3-d2c88a0b07c1"/>
+                    <reference value="http://172.18.46.57:8083/patients/98001046534/encounters/shrEncounterId#MedicationOrder/acaccc8b-a011-488d-bea3-d2c88a0b07c1"/>
                 </priorPrescription>
             </MedicationOrder>
         </resource>
