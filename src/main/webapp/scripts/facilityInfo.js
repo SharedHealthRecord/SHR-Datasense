@@ -132,7 +132,7 @@ function FacilityInformations() {
                 var nowTemp = new Date();
                 var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
                 var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
-                return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+                return now.valueOf() < date.valueOf() ? 'disabled' : '';
              },
              format: 'dd/mm/yyyy'
     }).on('changeDate', function (e) {
@@ -147,7 +147,7 @@ function FacilityInformations() {
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
         var date = new Date(dateTemp.getFullYear(), dateTemp.getMonth(), dateTemp.getDate(), 0, 0, 0, 0);
-        return now.valueOf() <= date.valueOf() ? 'disabled' : '';
+        return now.valueOf() < date.valueOf() ? 'disabled' : '';
       },
       format: 'dd/mm/yyyy'
     }).on('changeDate', function(ev) {
@@ -164,7 +164,7 @@ function FacilityInformations() {
       onRender: function(dateTemp) {
         var nowTemp = new Date();
         var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
-        if(dateTemp.valueOf() >= startDatePicker.date.valueOf() && now.valueOf() > dateTemp.valueOf()){
+        if(dateTemp.valueOf() >= startDatePicker.date.valueOf() && now.valueOf() >= dateTemp.valueOf()){
             return '';
         }
         else{
