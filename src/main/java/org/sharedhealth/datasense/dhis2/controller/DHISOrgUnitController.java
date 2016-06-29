@@ -18,7 +18,7 @@ import java.net.URISyntaxException;
 @RequestMapping(value = "/dhis2/orgUnits")
 public class DHISOrgUnitController {
 
-    public static final String DHIS_ORGUNIT_SEARCH_FORMAT = "/api/organisationUnits?filter=name:like:%s&fields=id,name,href&pageSize=500";
+    public static final String DHIS_ORGUNIT_SEARCH_FORMAT = "/api/organisationUnits?filter=name:like:%s&fields=id,name,href&pageSize=100";
     @Autowired
     DHISMetaDataService metaDataService;
 

@@ -106,3 +106,7 @@ input.expression{
 .number {
     width: 40px;
 }
+
+.alert-warning{
+    margin-top : 10px;
+}

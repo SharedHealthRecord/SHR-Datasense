@@ -52,6 +52,7 @@ function configureDatasetForReport(e) {
 }
 
 function searchDHISOrgUnit(searchTxt) {
+    $("#sizeExceededAlert").attr("hidden",true);
     var targetUrl = "/dhis2/orgUnits/search?name=" + searchTxt;
     $.ajax({
         type: "GET",
@@ -61,6 +62,9 @@ function searchDHISOrgUnit(searchTxt) {
             if(result.organisationUnits.length <= 0){
                 showErrors("No match for " + searchTxt);
                 $('#searchResultsContainer').hide();
+            }
+            if(result.organisationUnits.length >= 100){
+                $("#sizeExceededAlert").attr("hidden",false);
             }
             $('#searchResultsContainer').hide();
             $(".configure-btn").unbind("click", configureOrgUnitForFacility);
