@@ -74,7 +74,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     public void mapObservation(EncounterComposition composition, Observation observation, IResource
-            resource, Integer report_id) {
+            resource, Integer reportId) {
         ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation =
                 (ca.uhn.fhir.model.dstu2.resource.Observation) resource;
 
@@ -92,12 +92,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
             observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
 
             observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
-            if(null != report_id) {
-                observation.setReportId(report_id);
+            if(null != reportId) {
+                observation.setReportId(reportId);
             }
             observation.setObservationId(observationDao.save(observation));
             parentObsUUID = observation.getUuid();
         }
-        mapRelatedComponents(composition, parentObsUUID, fhirObservation, report_id);
+        mapRelatedComponents(composition, parentObsUUID, fhirObservation, reportId);
     }
 }

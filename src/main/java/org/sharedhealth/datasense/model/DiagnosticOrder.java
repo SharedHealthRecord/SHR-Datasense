@@ -18,8 +18,8 @@ public class DiagnosticOrder extends BaseResource {
         return shrOrderUuid;
     }
 
-    public void setShrOrderUuuid(String shr_order_uuid) {
-        this.shrOrderUuid = shr_order_uuid;
+    public void setShrOrderUuid(String shrOrderUuid) {
+        this.shrOrderUuid = shrOrderUuid;
     }
 
     public String getPatientHid() {

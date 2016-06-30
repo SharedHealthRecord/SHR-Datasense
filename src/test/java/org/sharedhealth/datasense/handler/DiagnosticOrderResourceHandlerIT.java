@@ -88,7 +88,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "RAD", "01-04-2016","e8436e26-a011-48e7-a4e8-a41465dfae34" );
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested",
+                "RAD", "01-04-2016",SHR_ENCOUNTER_ID +":e8436e26-a011-48e7-a4e8-a41465dfae34" );
     }
 
     @Test
@@ -98,7 +99,8 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested", "LAB", "01-04-2016","e8436e26-a011-48e7-a4e8-a41465dfae34");
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested",
+                "LAB", "01-04-2016",SHR_ENCOUNTER_ID +":e8436e26-a011-48e7-a4e8-a41465dfae34");
     }
 
     @Test
@@ -109,8 +111,10 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
-        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested", "LAB", "04-04-2016", "bc82002c-2cac-4568-b7ed-f73688019b21" );
-        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested", "LAB", "04-04-2016", "bc82002c-2cac-4568-b7ed-f73688019b21");
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested",
+                "LAB", "04-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21" );
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested",
+                "LAB", "04-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
     }
 
     @Test
@@ -121,8 +125,10 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
-        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB", "05-04-2016", "bc82002c-2cac-4568-b7ed-f73688019b21");
-        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB", "05-04-2016", "bc82002c-2cac-4568-b7ed-f73688019b21");
+        assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB",
+                "05-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
+        assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB",
+                "05-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
     }
 
     @Test
@@ -165,7 +171,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
                 order.setOrderer(rs.getString("orderer"));
                 order.setOrderConcept(rs.getString("order_concept"));
                 order.setOrderStatus(rs.getString("order_status"));
-                order.setShrOrderUuuid(rs.getString("shr_order_uuid"));
+                order.setShrOrderUuid(rs.getString("shr_order_uuid"));
                 return order;
             }
         });

@@ -15,9 +15,10 @@ public class ResourceReferenceUtils {
     }
 
     public static  String getEncounterUuidFromReferenceUrl(String referenceUrl){
-        String sub = referenceUrl.substring(0, referenceUrl.lastIndexOf('#'));
-
-        return sub.substring(sub.lastIndexOf('/') + 1);
+        if (referenceUrl.isEmpty()) return null;
+        if (referenceUrl.contains("#"))
+            referenceUrl = referenceUrl.substring(0, referenceUrl.lastIndexOf('#'));
+        return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
     }
 
     public static String getReferenceUrlFromResourceReference(ResourceReferenceDt resourceReferenceDt) {

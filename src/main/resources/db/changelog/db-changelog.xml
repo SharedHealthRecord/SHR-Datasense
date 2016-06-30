@@ -997,4 +997,14 @@
             <column name="prescription_datetime"/>
         </createIndex>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20160630-1118" author="sukreet,anjaly" context="setup">
+        <comment>Changing the column size of shr_order_uuid</comment>
+        <modifyDataType tableName="diagnostic_order" columnName="shr_order_uuid" newDataType="varchar(100)" />
+    </changeSet>
+    <changeSet  id="sharedhealth-datasense-20160630-1152" author="Anjaly,Sukreet">
+        <comment>Populating shr_order_uuid as encounter_id:shr_order_uuid for diagnostic orders </comment>
+        <sql>
+            UPDATE diagnostic_order SET shr_order_uuid = CONCAT(encounter_id,':',shr_order_uuid);
+        </sql>
+    </changeSet>
 </databaseChangeLog>

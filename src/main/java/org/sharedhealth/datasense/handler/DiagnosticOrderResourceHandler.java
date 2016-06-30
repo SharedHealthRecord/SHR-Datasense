@@ -46,7 +46,7 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
         diagnosticOrder.setPatientHid(composition.getPatientReference().getHealthId());
         diagnosticOrder.setEncounterId(composition.getEncounterReference().getEncounterId());
         diagnosticOrder.setOrderStatus(item.getStatus());
-        diagnosticOrder.setShrOrderUuuid(fhirDiagnosticOrder.getId().getIdPart());
+        setConcatenatedShrOrderUuid(fhirDiagnosticOrder, diagnosticOrder);
         setCategory(diagnosticOrder, fhirDiagnosticOrder);
         populateOrderCodeAndConcept(item.getCode().getCoding(), diagnosticOrder);
         if (diagnosticOrder.getCode() == null && diagnosticOrder.getOrderConcept() == null) return;
@@ -54,6 +54,10 @@ public class DiagnosticOrderResourceHandler implements FhirResourceHandler {
         String ordererId = ProviderReference.parseUrl(fhirDiagnosticOrder.getOrderer().getReference().getValue());
         diagnosticOrder.setOrderer(ordererId);
         diagnosticOrderDao.save(diagnosticOrder);
+    }
+
+    private void setConcatenatedShrOrderUuid(ca.uhn.fhir.model.dstu2.resource.DiagnosticOrder fhirDiagnosticOrder, DiagnosticOrder diagnosticOrder) {
+        diagnosticOrder.setShrOrderUuid(diagnosticOrder.getEncounterId() + ":" + fhirDiagnosticOrder.getId().getIdPart());
     }
 
     private void setOrderDate(ca.uhn.fhir.model.dstu2.resource.DiagnosticOrder.Item item, DiagnosticOrder diagnosticOrder) {
