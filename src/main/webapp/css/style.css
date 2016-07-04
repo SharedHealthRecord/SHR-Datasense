@@ -11,9 +11,36 @@ body{
     margin: 0px auto;
     border: 1px solid;
 }
+.container{
+    width:1246px !important;
+}
 
 #container div{
     margin: 5px 0px 0px 0px;
+}
+
+.logo{
+    width:25%;
+    float:left;
+    font-size:20px;
+}
+.nav-main{
+    float:left;
+    width:50%;
+}
+.nav{
+    width:auto;
+    display:table;
+    margin:0 auto;
+    float:none;
+}
+.header-right{
+    float:right;
+    width:25%;
+}
+a.logout{
+    float:right;
+    margin:0;
 }
 
 input{
@@ -105,6 +132,61 @@ input.expression{
 
 .number {
     width: 40px;
+}
+.app-buttons-list {
+    min-height: 170px;
+    margin-top: -1px;
+    padding-top: 28px;
+    padding: 50px 0 10px;
+    border-top: 1px solid #ddd;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+    background: #fff;
+}
+.clearfix {
+    display: block;
+}
+
+.app-button-wrapper {
+    margin-bottom: 19px;
+    margin-left: 28px;
+    display: block;
+    width: 200px;
+    height: 205px;
+    margin: 0 0 32px 41px;
+    float: left;
+}
+.app-button {
+    box-sizing: border-box;
+    background-color:#50a37e !important;
+    border-radius: 10px;
+    border-color: #c3c3c3;
+    border-bottom-color: #bbb;
+    color: #fff !important;
+    display: block;
+    position: relative;
+    height: 200px;
+    width: 200px;
+    padding: 1px 0;
+    border-width: 1px;
+    border-style: solid;
+    text-align: center;
+}
+
+.app-button .name {
+    font-size:20px;
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    max-width: 104px;
+    max-height: 52px;
+    margin: auto;
+}
+
+.app-head{
+    text-align: center;
 }
 
 .alert-warning{

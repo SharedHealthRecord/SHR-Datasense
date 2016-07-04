@@ -1,13 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <script src="/scripts/jquery-2.1.3.min.js"></script>
+    <script src="/scripts/script.js"></script>
+
 </head>
 <body>
 <div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="/home">DataSense</a>
-            <a href="/logout" class="navbar-link navbar-text navbar-right">logout</a>
+            <div class="logo">
+                <span id="datasense" class="navbar-text">DataSense</span>
+            </div>
+            <div class="nav-main">
+                <ul class="nav navbar-nav" id="nav-header">
+                    <li><a id="dhis2" class="navbar-brand" href="/home">Dhis2</a></li>
+                    <li><a id="about" class="navbar-brand" href="/about">About</a></li>
+                </ul>
+            </div>
+            <div class="header-right">
+                <a id="logout" href="/logout" class="navbar-brand logout">Logout</a>
+            </div>
         </div>
     </div>
 </div>
