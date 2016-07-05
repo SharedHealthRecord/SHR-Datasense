@@ -68,120 +68,143 @@
         </div>
         <div th:include="fragments/error :: error"/>
         <div class="panel panel-default" id="avalilableFacilities" hidden="true">
-            <div class="panel-body">
-                <div>
-                    <h3>Available Facilities</h3>
+            <div class="panel-heading">
+                <h3>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFacility">
+                        Available Facilities</a>
+                </h3>
 
+            </div>
+            <div id="collapseFacility" class="panel-collapse collapse">
+                <div class="panel-body">
                     <div class="form-group" id="searchResultsContainerForFacility">
                     </div>
                 </div>
-                <div></div>
             </div>
+
         </div>
+
         <div class="panel-group" id="accordion" hidden="true">
             <div class="panel panel-default">
                 <div class="panel-heading" id="lastEncounterDate">
                     <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse1">
-                            Last encounter date</a>
+                        <span id="selectedFacilityName"></span>
                     </h4>
                 </div>
-                <div id="collapse1" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="panel panel-default" id="lastEncounter" hidden="true">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse2">
-                            Datewise visits for facility</a>
-                    </h4>
-                </div>
-                <div id="collapse2" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="form-group">
-                            <label for="visitDate" class="control-label col-sm-2">Select Date:</label>
-                            <input id="visitDate" name="startDate" type="text"
-                                   class="form-control startDate datepicker dateInput"
-                                   placeholder="Enter a date"/>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <div id="getVisitTypeButton" hidden="true">
-                                    <button id="getVisitType" class="btn btn-info">->
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container" id="visitWithCount" hidden="true">
-                            <table id="visitTypeWithCount" class="table">
-                                <thead>
-                                <tr>
-                                    <th>Visit type</th>
-                                    <th>Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="errorBlock1" hidden="true"></div>
-                    </div>
-                </div>
-            </div>
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <a data-toggle="collapse" data-parent="#accordion" href="#collapse3">
-                            Diagnoses posted by facility</a>
-                    </h4>
-                </div>
-                <div id="collapse3" class="panel-collapse collapse">
-                    <div class="panel-body">
-                        <div class="row">
-                            <div class="form-group col-xs-4">
-                                <label for="startDate" class="control-label col-sm-5">Select start date:</label>
-                                <input id="startDate" name="startDate" type="text"
-                                           class="form-control startDate datepicker dateInput"
-                                           placeholder="Enter a date" readonly='true'/>
-                            </div>
-                            <div class="form-group col-xs-3">
-                                <label for="endDate" class="control-label col-sm-4">end date:</label>
-                                <input id="endDate" name="endDate" type="text"
-                                           class="form-control endDate datepicker dateInput"
-                                           placeholder="Enter a date" readonly='true'/>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-10">
-                                <div id="getDiagnosis" hidden="true">
-                                    <button id="getDiagnosisWithCountButton" class="btn btn-info">->
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="container" id="getDiagnosisWithCount" hidden="true">
-                            <table id="diagnosisNameWithCount" class="table">
-                                <thead>
-                                <tr>
-                                    <th>Diagnosis Name</th>
-                                    <th>ICD10 Code</th>
-                                    <th>Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                        <div id="errorBlock2" hidden="true"></div>
-                    </div>
-                </div>
-            </div>
 
+                <div class="panel-body">
+                    <p class="col-xs-10">
+                        <span>Last encounter date and time is  </span>
+                        <b><span class="highlight" id="lastEncounter"></span></b>
+                    </p>
+                </div>
+                <hr/>
+                <div class="panel-body">
+                    <p class="col-xs-10">
+                        <span>Datewise visits for facility: </span>
+                        <span>Select Date
+                        <input id="visitDate" name="startDate" type="text"
+                               class="startDate datepicker dateInput" readonly="true"
+                               placeholder="Enter a date"/>
+
+                        </span>
+                    </p>
+                    <button id="getVisitTypeButton" class="btn btn-info" disabled="true">Submit</button>
+                </div>
+                <hr/>
+                <div class="panel-body">
+                    <p class="col-xs-10">
+                        <span>Diagnoses posted by facility:</span>
+                        <span>Select start date
+                            <input id="startDate" name="startDate" type="text"
+                                   class="startDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                        <span>end date
+                            <input id="endDate" name="endDate" type="text"
+                                   class="endDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                    </p>
+                    <button id="getDiagnosisWithCountButton" class="btn btn-info" disabled="true">Submit</button>
+                 </div>
+            </div>
         </div>
+        <div class="panel-group" id="visitWithCount" hidden="true">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <span>Types of visits for </span>
+                        <span id="dateSelectedForVisitType"></span>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table id="visitTypeWithCount" class="table">
+                        <thead>
+                        <tr>
+                            <th>Visit type</th>
+                            <th>Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <!--<div class="container" id="visitWithCount" hidden="true">-->
+            <!--<table id="visitTypeWithCount" class="table">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th>Visit type</th>-->
+                    <!--<th>Count</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+
+        <div class="panel-group" id="getDiagnosisWithCount" hidden="true">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <span>Diagnoses posted by facility for </span>
+                        <span id="dateRangeSelectedForDiagnosis"></span>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table id="diagnosisNameWithCount" class="table">
+                        <thead>
+                        <tr>
+                            <th>Diagnosis Name</th>
+                            <th>ICD10 Code</th>
+                            <th>Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="errorBlock1" hidden="true"></div>
+
+        <!--<div class="container" id="getDiagnosisWithCount" hidden="true">-->
+            <!--<table id="diagnosisNameWithCount" class="table">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                    <!--<th>Diagnosis Name</th>-->
+                    <!--<th>ICD10 Code</th>-->
+                    <!--<th>Count</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--</tbody>-->
+            <!--</table>-->
+        <!--</div>-->
+        <!--<div id="errorBlock2" hidden="true"></div>-->
     </div>
 
     <div th:replace="fragments/footer :: footer"></div>
@@ -198,7 +221,22 @@
 
 <script id="template_search_lastencounter" type="x-tmpl-mustache">
     {{#.}}
-        Last encounter date and time for {{facilityName}}({{facilityId}}) is {{encounterDate}}
+        {{encounterDate}}
+    {{/.}}
+</script>
+<script id="template_date_selected_for_visit" type="x-tmpl-mustache">
+    {{#.}}
+        {{date}}
+    {{/.}}
+</script>
+<script id="template_date_selected_for_diagnosis" type="x-tmpl-mustache">
+    {{#.}}
+        {{startDate}} to {{endDate}}
+    {{/.}}
+</script>
+<script id="template_facility_name" type="x-tmpl-mustache">
+    {{#.}}
+        {{facilityName}}({{facilityId}})
     {{/.}}
 </script>
 

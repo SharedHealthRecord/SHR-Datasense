@@ -192,3 +192,7 @@ input.expression{
 .alert-warning{
     margin-top : 10px;
 }
+
+span.highlight {
+    background-color: #e0e0e0;
+}

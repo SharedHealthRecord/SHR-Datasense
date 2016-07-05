@@ -12,19 +12,25 @@ function FacilityInformations() {
     });
 
     $(document).on('click','input[name=selectedFacilities]',function(e){
-        $('#lastEncounter').attr("hidden",true);
+        var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
+        var selectedFacilityName =$('input[name="selectedFacilities"]:checked').attr('id');
+        var result = {"facilityName":selectedFacilityName,"facilityId":selectedFacility}
+
         $("#accordion").attr("hidden",false);
-        $('#visitWithCount').attr("hidden", true);
-        $('#getDiagnosisWithCount').attr("hidden", true);
+        disableAllResult();
         $("#visitDate").val("");
         $("#startDate").val("");
         $("#endDate").val("");
-        $('#getVisitTypeButton').attr("hidden", true);
-        $('#getDiagnosis').attr("hidden", true);
+        $('#getVisitTypeButton').attr("disabled", true);
+        $('#getDiagnosisWithCountButton').attr("disabled", true);
         clearErrors("#errorBlock1");
-        clearErrors("#errorBlock2");
-         $("#collapse1").collapse('hide');
-         $("#collapse2").collapse('hide');
+//        clearErrors("#errorBlock");
+         var template = $('#template_facility_name').html();
+         Mustache.parse(template);
+         var rendered = Mustache.render(template, result);
+         $('#selectedFacilityName').html(rendered);
+         getLastEncounterDate();
+
     });
 
     $("input[name=searchBy]").bind("click", function(e) {
@@ -35,7 +41,7 @@ function FacilityInformations() {
        $('#lastEncounter').attr("hidden",true);
     });
 
-    $('#lastEncounterDate').bind("click", function(e) {
+    var getLastEncounterDate= function() {
         document.getElementById("searchTxt").value = "";
         var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
         var selectedFacilityName =$('input[name="selectedFacilities"]:checked').attr('id');
@@ -66,12 +72,14 @@ function FacilityInformations() {
             }
         });
         e.preventDefault();
-    });
+    };
 
-    $('#getVisitType').bind("click",function(e){
+    $('#getVisitTypeButton').bind("click",function(e){
         clearErrors();
-        $('#getVisitTypeButton').attr("hidden",true);
-        $('#visitWithCount').attr("hidden", true);
+        clearErrors("#errorBlock1");
+//        $('#getVisitTypeButton').attr("disabled",true);
+        disableAllResult();
+//        $('#visitWithCount').attr("hidden", true);
         document.getElementById("searchTxt").value = "";
         var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
         var date = $('#visitDate').val();
@@ -83,7 +91,10 @@ function FacilityInformations() {
                if(response.length==0){
                    showErrors("No visit for the date entered","#errorBlock1");
                }else{
-                   var template = $('#template_scheduled_jobs_results').html();
+                   var dateTemplate = $("#template_date_selected_for_visit").html();
+                   Mustache.parse(dateTemplate);
+                   var htmlRendered = Mustache.render(dateTemplate,{"date":date})
+                   $("#dateSelectedForVisitType").html(htmlRendered);
                    var template = $("#template_visit_type_with_count").html();
                    Mustache.parse(template);
                    var rendered = Mustache.render(template,response);
@@ -99,8 +110,10 @@ function FacilityInformations() {
 
     $('#getDiagnosisWithCountButton').bind("click",function(e){
         clearErrors();
-        $('#getDiagnosis').attr("hidden",true);
-        $('#getDiagnosisWithCount').attr("hidden", true);
+        clearErrors("#errorBlock1");
+//        $('#getDiagnosisWithCountButton').attr("disabled",true);
+        disableAllResult();
+//        $('#getDiagnosisWithCount').attr("hidden", true);
         document.getElementById("searchTxt").value = "";
         var selectedFacility = $('input[name="selectedFacilities"]:checked').val();
         var startDate = $('#startDate').val();
@@ -111,8 +124,12 @@ function FacilityInformations() {
             url: targetUrl,
             success: function(response){
                if(response.length==0){
-                   showErrors("No diagnoses found for the selected dates","#errorBlock2");
+                   showErrors("No diagnoses found for the selected dates","#errorBlock1");
                }else{
+                   var dateTemplate = $("#template_date_selected_for_diagnosis").html();
+                   Mustache.parse(dateTemplate);
+                   var htmlRendered = Mustache.render(dateTemplate,{"startDate":startDate, "endDate":endDate})
+                   $("#dateRangeSelectedForDiagnosis").html(htmlRendered);
                    var template = $("#template_diagnosis_name_with_count").html();
                    Mustache.parse(template);
                    var rendered = Mustache.render(template,response);
@@ -136,7 +153,7 @@ function FacilityInformations() {
              },
              format: 'dd/mm/yyyy'
     }).on('changeDate', function (e) {
-       $('#getVisitTypeButton').attr("hidden",false);
+       $('#getVisitTypeButton').attr("disabled",false);
        $('#visitWithCount').attr("hidden", true);
        clearErrors("#errorBlock1");
     });
@@ -173,9 +190,9 @@ function FacilityInformations() {
       },
       format: 'dd/mm/yyyy'
     }).on('changeDate', function(ev) {
-      $('#getDiagnosis').attr("hidden",false);
+      $('#getDiagnosisWithCountButton').attr("disabled",false);
       $('#getDiagnosisWithCount').attr("hidden", true);
-      clearErrors("#errorBlock2");
+      clearErrors("#errorBlock1");
     }).data('datepicker');
 
     var validateFacilityId = function(searchTxt){
@@ -230,5 +247,10 @@ function FacilityInformations() {
                 getFacilities(targetUrl);
         }
 
+    }
+
+    var disableAllResult = function(){
+        $('#getDiagnosisWithCount').attr("hidden", true);
+        $('#visitWithCount').attr("hidden",true);
     }
 }
