@@ -44,8 +44,8 @@ public class DiagnosisDao {
         map.put("start_date", startDate);
         map.put("end_date", endDate);
         String query = "SELECT c.name AS diagnosis_name ,d.diagnosis_code AS code, count(d.diagnosis_concept_id) AS count FROM diagnosis d  JOIN concept c WHERE d.encounter_id IN" +
-                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y')" +
-                " AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y'))AND " +
+                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y %H:%i:%s')" +
+                " AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y %H:%i:%s'))AND " +
                 " c.concept_uuid=d.diagnosis_concept_id GROUP BY d.diagnosis_concept_id;";
         List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
         return maps;

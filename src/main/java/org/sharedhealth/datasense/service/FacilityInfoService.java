@@ -45,7 +45,13 @@ public class FacilityInfoService {
 
     @Transactional
     public List<Map<String, Object>> getDiagnosisNameWithCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
         return diagnosisDao.getDiagosisWithCount(facilityId, startDate, endDate);
+    }
+
+    private String changeEndDateToEndOfDay(String endDate) {
+        endDate = endDate + " 23:59:59";
+        return endDate;
     }
 
 
