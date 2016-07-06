@@ -41,10 +41,7 @@
         <h2>&nbsp;</h2>
     </div>
     <div class="tab-content">
-        <div class="panel panel-default">
-            <div class="panel-body">
-                <h2>Search for facility by</h2>
-
+        <div class="panel panel-default panel-body">
                 <div class="form-group">
                     <label class="radio-inline">
                         <input type="radio" name="searchBy" value="FacilityId" checked="checked"/>
@@ -53,35 +50,26 @@
                         <input type="radio" name="searchBy" value="FacilityName"/>
                         Facility Name</label>
                 </div>
-                <div class="row">
-                    <div class="col-lg-6">
-                        <div class="input-group">
-                            <input id="searchTxt" type="text" class="form-control"
-                                   placeholder="Enter Facility Id or Facility Name"/>
+                <div class="col-lg-6 input-group">
+                    <input id="searchTxt" type="text" class="form-control"
+                           placeholder="Search for Facility"/>
                     <span class="input-group-btn">
-                    <button id="searchBtn" class="btn btn-default" type="button">Go!</button>
+                        <button id="searchBtn" class="btn btn-default" type="button">Go!</button>
                     </span>
-                        </div>
-                    </div>
                 </div>
-            </div>
         </div>
         <div th:include="fragments/error :: error"/>
         <div class="panel panel-default" id="avalilableFacilities" hidden="true">
             <div class="panel-heading">
-                <h3>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFacility">
+                <h4>
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFacility" aria-expanded="true" >
                         Available Facilities</a>
-                </h3>
-
+                </h4>
             </div>
-            <div id="collapseFacility" class="panel-collapse collapse">
-                <div class="panel-body">
-                    <div class="form-group" id="searchResultsContainerForFacility">
-                    </div>
+            <div id="collapseFacility" class="panel-body panel-collapse in" >
+                <div class="form-group" id="searchResultsContainerForFacility">
                 </div>
             </div>
-
         </div>
 
         <div class="panel-group" id="accordion" hidden="true">
@@ -152,19 +140,6 @@
                 </div>
             </div>
         </div>
-        <!--<div class="container" id="visitWithCount" hidden="true">-->
-            <!--<table id="visitTypeWithCount" class="table">-->
-                <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th>Visit type</th>-->
-                    <!--<th>Count</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
-                <!--<tbody>-->
-                <!--</tbody>-->
-            <!--</table>-->
-        <!--</div>-->
-
         <div class="panel-group" id="getDiagnosisWithCount" hidden="true">
             <div class="panel panel-default">
                 <div class="panel-heading">
@@ -190,21 +165,6 @@
         </div>
 
         <div id="errorBlock1" hidden="true"></div>
-
-        <!--<div class="container" id="getDiagnosisWithCount" hidden="true">-->
-            <!--<table id="diagnosisNameWithCount" class="table">-->
-                <!--<thead>-->
-                <!--<tr>-->
-                    <!--<th>Diagnosis Name</th>-->
-                    <!--<th>ICD10 Code</th>-->
-                    <!--<th>Count</th>-->
-                <!--</tr>-->
-                <!--</thead>-->
-                <!--<tbody>-->
-                <!--</tbody>-->
-            <!--</table>-->
-        <!--</div>-->
-        <!--<div id="errorBlock2" hidden="true"></div>-->
     </div>
 
     <div th:replace="fragments/footer :: footer"></div>
