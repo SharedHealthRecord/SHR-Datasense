@@ -8,6 +8,7 @@ import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.namedparam.SqlParameterSource;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -21,33 +22,31 @@ public class DHISConfigDao {
     private NamedParameterJdbcTemplate jdbcTemplate;
     private String DATASET_CFG_ALL_FIELDS = "id, name, config_file, dataset_name, dataset_id, period_type";
 
-    private final String qryOrgUnitInclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "left outer join dhis_orgunit_map ou on (f.facility_id=ou.facility_id and ou.voided = 0)";
+    private final String qryOrgUnitInclusive = "SELECT f.facility_id, f.name AS facility_name, ou.org_unit_id, ou.org_unit_name FROM facility f " +
+            "LEFT OUTER JOIN dhis_orgunit_map ou ON (f.facility_id=ou.facility_id AND ou.voided = 0)";
 
-    private final String qryOrgUnitExclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where ou.voided = 0";
+    private final String qryOrgUnitExclusive = "SELECT f.facility_id, f.name AS facility_name, ou.org_unit_id, ou.org_unit_name FROM facility f " +
+            "INNER JOIN dhis_orgunit_map ou ON f.facility_id=ou.facility_id WHERE ou.voided = 0";
 
-    private final String qryOrgUnitByFacilityId = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where f.facility_id = :facility_id and ou.voided = 0";
+    private final String qryOrgUnitByFacilityId = "SELECT f.facility_id, f.name AS facility_name, ou.org_unit_id, ou.org_unit_name FROM facility f " +
+            "INNER JOIN dhis_orgunit_map ou ON f.facility_id=ou.facility_id WHERE f.facility_id = :facility_id AND ou.voided = 0";
 
 
     public java.util.List<DHISReportConfig> findAllMappedDatasets() {
         return jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map", DATASET_CFG_ALL_FIELDS),
+                String.format("SELECT %s FROM dhis_dataset_map WHERE voided = 0", DATASET_CFG_ALL_FIELDS),
                 rowMapperForDataset());
     }
 
     public void save(DHISReportConfig config) {
         List<DHISReportConfig> configs = jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map where name=:name", DATASET_CFG_ALL_FIELDS),
+                String.format("SELECT %s FROM dhis_dataset_map WHERE name=:name AND voided = 0", DATASET_CFG_ALL_FIELDS),
                 Collections.singletonMap("name", config.getName()),
                 rowMapperForDataset());
         DHISReportConfig dhisReportConfig = configs.isEmpty() ? null : configs.get(0);
 
         if (dhisReportConfig != null) {
-            String SQL = "DELETE FROM dhis_dataset_map WHERE id = :id";
-            SqlParameterSource namedParameters = new MapSqlParameterSource("id", Integer.valueOf(dhisReportConfig.getId()));
-            jdbcTemplate.update(SQL, namedParameters);
+            voidReportConfig(dhisReportConfig.getId());
         }
 
         HashMap<String, Object> map = new HashMap<>();
@@ -56,14 +55,20 @@ public class DHISConfigDao {
         map.put("dataset_name", config.getDatasetName());
         map.put("dataset_id", config.getDatasetId());
         map.put("period_type", config.getPeriodType());
-        String query = "insert into dhis_dataset_map (name, config_file, dataset_name, dataset_id, period_type) " +
-                "values (:name, :config_file, :dataset_name, :dataset_id, :period_type)";
+        String query = "INSERT INTO dhis_dataset_map (name, config_file, dataset_name, dataset_id, period_type) " +
+                "VALUES (:name, :config_file, :dataset_name, :dataset_id, :period_type)";
         jdbcTemplate.update(query, map);
+    }
+
+    public void voidReportConfig(Integer reportId) {
+        String SQL = "UPDATE dhis_dataset_map SET voided = 1, date_voided = now() WHERE id = :id";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("id", Integer.valueOf(reportId));
+        jdbcTemplate.update(SQL, namedParameters);
     }
 
     public DHISReportConfig getMappedConfigForDataset(String datasetId) {
         List<DHISReportConfig> configs = jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map where dataset_id=:dataset_id", DATASET_CFG_ALL_FIELDS),
+                String.format("SELECT %s FROM dhis_dataset_map WHERE dataset_id=:dataset_id AND voided = 0", DATASET_CFG_ALL_FIELDS),
                 Collections.singletonMap("dataset_id", datasetId),
                 rowMapperForDataset());
         return configs.isEmpty() ? null : configs.get(0);
@@ -71,7 +76,7 @@ public class DHISConfigDao {
 
     public DHISReportConfig getReportConfig(Integer configId) {
         List<DHISReportConfig> configs = jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map where id=:configId", DATASET_CFG_ALL_FIELDS),
+                String.format("SELECT %s FROM dhis_dataset_map WHERE id=:configId AND voided = 0", DATASET_CFG_ALL_FIELDS),
                 Collections.singletonMap("configId", configId),
                 rowMapperForDataset());
         return configs.isEmpty() ? null : configs.get(0);
@@ -92,8 +97,8 @@ public class DHISConfigDao {
         map.put("facility_id", config.getFacilityId());
         map.put("org_unit_id", config.getOrgUnitId());
         map.put("org_unit_name", config.getOrgUnitName());
-        String query = "insert into dhis_orgunit_map (facility_id, org_unit_id, org_unit_name) " +
-                "values (:facility_id, :org_unit_id, :org_unit_name)";
+        String query = "INSERT INTO dhis_orgunit_map (facility_id, org_unit_id, org_unit_name) " +
+                "VALUES (:facility_id, :org_unit_id, :org_unit_name)";
         jdbcTemplate.update(query, map);
     }
 

@@ -40,7 +40,6 @@ public class BaseIntegrationTest {
         try {
             input = BaseIntegrationTest.class.getClassLoader().getResourceAsStream(filename);
             if(input==null){
-                System.out.println("Sorry, unable to find " + filename);
                 return prop;
             }
             prop.load(input);

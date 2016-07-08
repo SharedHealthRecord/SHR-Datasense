@@ -10,6 +10,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -72,6 +73,10 @@ public class DHISMetaDataService {
     @Transactional
     public void save(DHISReportConfig config) {
         dhisConfigDao.save(config);
+    }
+
+    public void resetReportMap(Integer reportId) {
+        dhisConfigDao.voidReportConfig(reportId);
     }
 
     public List<DHISOrgUnitConfig> getAvailableOrgUnits(boolean includeNotConfigured) {

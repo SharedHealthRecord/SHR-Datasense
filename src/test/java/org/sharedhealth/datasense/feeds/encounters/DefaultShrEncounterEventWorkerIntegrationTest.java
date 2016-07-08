@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.feeds.encounters;
 
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -254,7 +255,6 @@ public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrati
             for (String field : fields) {
                 sb.append(String.format("%s=%s, ", field, map.get(field)));
             }
-            System.out.printf(sb.toString());
         }
     }
 

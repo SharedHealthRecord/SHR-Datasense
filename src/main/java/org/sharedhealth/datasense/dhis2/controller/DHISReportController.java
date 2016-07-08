@@ -67,6 +67,15 @@ public class DHISReportController {
         return "{}";
     }
 
+    @RequestMapping(value = "/reset", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public
+    @ResponseBody
+    ModelAndView resetReportMapping(@RequestParam Integer reportId) {
+        metaDataService.resetReportMap(reportId);
+        return new ModelAndView("redirect:/dhis2/reports");
+    }
+
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
@@ -78,6 +87,7 @@ public class DHISReportController {
         return dhis2Client.get(searchUri);
     }
 
+
     @RequestMapping(value = "/{datasetId}/applicableOrgUnits", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
@@ -86,7 +96,6 @@ public class DHISReportController {
         String searchUri = String.format(DHIS_DATASET_ORGUNIT_FORMAT, datasetId);
         return dhis2Client.get(searchUri);
     }
-
 
     @RequestMapping(value = "/schedule/{configId}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")

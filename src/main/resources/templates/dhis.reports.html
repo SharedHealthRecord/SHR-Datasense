@@ -41,37 +41,40 @@
             <tr>
                 <th>Report to Submit</th>
                 <th>Dataset Name</th>
-                <th>Action</th>
+                <th style="text-align: center;">Action</th>
             </tr>
             </thead>
             <tbody>
             <tr th:class="${report.datasetName}? 'success' : 'info' " th:each="report: ${availableReports}">
-                <td th:text="${report.name}">Configuration name</td>
-                <td th:text="${report.datasetId} != null ? ${report.datasetName} + ' (' + ${report.datasetId} + ')' : ''">Dataset Name</td>
-                <td>
-                    <a th:href="|/dhis2/reports/configure?reportName=${report.name}|" >
-                        <img src="/images/configure.png" alt="Configure" class="button-in-td"/>
-                    </a>
-                    <a th:class="${report.datasetName}? 'show' : 'hidden' "
-                       th:href="|/dhis2/reports/schedule/${report.id}|" >
-                        <img src="/images/schedule.png" alt="Schedule"/>
-                    </a>
+                <td class="col-md-5" th:text="${report.name}">Configuration name</td>
+                <td class="col-md-5"
+                    th:text="${report.datasetId} != null ? ${report.datasetName} + ' (' + ${report.datasetId} + ')' : ''">
+                    Dataset Name
+                </td>
+                <td class="col-md-2">
+                    <div class="col-sm-4">
+                        <a th:classappend="${report.datasetName}? 'show' : 'hidden' "
+                           th:href="|/dhis2/reports/schedule/${report.id}|">
+                            <img src="/images/schedule.png" alt="Schedule Report" title="Schedule Report"/>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a th:href="|/dhis2/reports/configure?reportName=${report.name}|">
+                            <img src="/images/configure.png" alt="Configure Mapping" title="Configure Mapping"/>
+                        </a>
+                    </div>
+                    <div class="col-sm-4">
+                        <a th:classappend="${report.datasetName}? 'show' : 'hidden' "
+                           th:href="|/dhis2/reports/reset?reportId=${report.id}|">
+                            <img src="/images/trash.png" alt="Delete Mapping" title="Delete Mapping"/>
+                        </a>
+                    </div>
                 </td>
             </tr>
             </tbody>
         </table>
     </div>
 </div>
-
-
-
-
-
-
 <div th:replace="fragments/footer :: footer"></div>
-
-
-
 </body>
 </html>
-

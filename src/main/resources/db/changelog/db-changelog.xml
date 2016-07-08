@@ -1020,4 +1020,11 @@
             ALTER TABLE facility DROP COLUMN dhis_org_unit_uid;
         </sql>
     </changeSet>
+    <changeSet  id="sharedhealth-datasense-20160707-1341" author="Neha">
+        <comment>Adding void columns for dhis_orgunit_map</comment>
+        <sql>
+            ALTER TABLE dhis_dataset_map ADD COLUMN voided INT DEFAULT 0;
+            ALTER TABLE dhis_dataset_map ADD COLUMN date_voided DATETIME;
+        </sql>
+    </changeSet>
 </databaseChangeLog>

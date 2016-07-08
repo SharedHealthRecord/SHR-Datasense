@@ -50,11 +50,6 @@ input.expression{
     font-size : 14px;
 }
 
-.button-in-td {
- float: left;
- margin-right: 5px;
-}
-
 .modal-body {
     max-height: calc(100vh - 200px) !important;
     overflow-y: auto !important;

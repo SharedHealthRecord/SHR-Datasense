@@ -46,16 +46,25 @@
             </thead>
             <tbody>
             <tr th:class="${orgUnit.orgUnitId}? 'success' : 'info' " th:each="orgUnit: ${allOrgUnits}">
-                <td th:text="${orgUnit.facilityName} + ' (' + ${orgUnit.facilityId} + ')'">Configuration name</td>
-                <td th:text="${orgUnit.orgUnitName} != null ? ${orgUnit.orgUnitName} + ' (' + ${orgUnit.orgUnitId} + ')' : ''">Organization Name</td>
-                <td>
-                    <a th:href="|/dhis2/orgUnits/configure?facilityId=${orgUnit.facilityId}|" >
-                        <img src="/images/configure.png" alt="Configure Mapping" class="button-in-td" title="Configure Mapping"/>
+                <td class="col-md-5" th:text="${orgUnit.facilityName} + ' (' + ${orgUnit.facilityId} + ')'">
+                    Configuration name
+                </td>
+                <td class="col-md-6"
+                    th:text="${orgUnit.orgUnitName} != null ? ${orgUnit.orgUnitName} + ' (' + ${orgUnit.orgUnitId} + ')' : ''">
+                    Organization Name
+                </td>
+                <td class="col-md-1">
+                    <div class="col-sm-6">
+                        <a th:href="|/dhis2/orgUnits/configure?facilityId=${orgUnit.facilityId}|">
+                            <img src="/images/configure.png" alt="Configure Mapping" title="Configure Mapping"/>
                     </a>
-                    <a th:class="${orgUnit.orgUnitName} != null? 'show' : 'hidden' "
-                       th:href="|/dhis2/orgUnits/reset?facilityId=${orgUnit.facilityId}|">
+                    </div>
+                    <div class="col-sm-6">
+                        <a th:class="${orgUnit.orgUnitName} != null? 'show' : 'hidden' "
+                           th:href="|/dhis2/orgUnits/reset?facilityId=${orgUnit.facilityId}|">
                         <img src="/images/trash.png" alt="Remove Mapping" title="Remove Mapping"/>
                     </a>
+                    </div>
                 </td>
             </tr>
             </tbody>

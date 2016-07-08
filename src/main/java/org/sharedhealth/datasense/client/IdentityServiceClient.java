@@ -4,24 +4,18 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.message.BasicNameValuePair;
+import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.security.IdentityStore;
 import org.sharedhealth.datasense.security.IdentityToken;
-import org.sharedhealth.datasense.security.TokenAuthentication;
 import org.sharedhealth.datasense.security.UserInfo;
 import org.sharedhealth.datasense.util.MapperUtil;
 import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationServiceException;
 import org.springframework.stereotype.Component;
-import org.springframework.util.concurrent.ListenableFuture;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -37,6 +31,8 @@ public class IdentityServiceClient {
     private static final String PASSWORD_KEY = "password";
     private DatasenseProperties properties;
     private IdentityStore identityStore;
+
+    private static final Logger logger = Logger.getLogger(IdentityServiceClient.class);
 
     @Autowired
     public IdentityServiceClient(DatasenseProperties properties, IdentityStore identityStore) {
@@ -95,13 +91,13 @@ public class IdentityServiceClient {
             String response = new WebClient().get(new URI(userInfoUrl),getHrmAuthTokenHeaders(properties));
             return MapperUtil.readFrom(response, UserInfo.class);
         } catch (IOException e) {
-            e.printStackTrace();
+            logger.error("Unable to authenticate user.", e);
             throw new AuthenticationServiceException("Unable to authenticate user.");
         } catch (URISyntaxException e) {
-            e.printStackTrace();
+            logger.error("Unable to authenticate user.", e);
             throw new AuthenticationServiceException("Unable to authenticate user.");
         } catch (Exception e) {
-            System.out.println(String.format("Error while validating client %s", tokenForUser.toString()));
+            logger.error(String.format("Error while validating client %s", tokenForUser.toString()));
             throw new AuthenticationServiceException("Unable to authenticate user.");
         }
 

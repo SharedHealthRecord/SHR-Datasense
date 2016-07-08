@@ -207,7 +207,6 @@ public class JobSchedulerService {
                     String periodPostedForJob = identifyPreviousPeriodForJob(jobKey, jobDataMap, trigger.getPreviousFireTime());
                     String periodToBePostedForJob = identifyNextPeriodForJob(jobDataMap, trigger.getNextFireTime());
                     DatasetJobSchedule reportSchedule = new DatasetJobSchedule();
-                    System.out.println("[jobName] : " + jobName + " [groupName] : " + jobGroup + " - " + trigger.getNextFireTime());
                     reportSchedule.setDatasetName(reportConfig.getDatasetName());
                     reportSchedule.setFacilityId(facilityId);
                     reportSchedule.setFacilityName(facilityName);
