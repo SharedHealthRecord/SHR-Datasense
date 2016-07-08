@@ -51,7 +51,6 @@ public class FacilityDaoIT {
         facility.setFacilityId("2000");
         facility.setFacilityLocationCode("302610");
         facility.setFacilityName("Test Facility");
-        facility.setDhisOrgUnitUid("dhis org uid");
         facility.setFacilityType("Upazila Health Complex");
 
         facilityDao.save(facility);
@@ -60,7 +59,6 @@ public class FacilityDaoIT {
         assertEquals(facility.getFacilityName(), savedFacility.getFacilityName());
         assertEquals(facility.getFacilityType(), savedFacility.getFacilityType());
         assertEquals(facility.getFacilityLocationCode(), savedFacility.getFacilityLocationCode());
-        assertEquals(facility.getDhisOrgUnitUid(), savedFacility.getDhisOrgUnitUid());
     }
 
     @After

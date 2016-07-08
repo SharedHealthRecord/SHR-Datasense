@@ -16,7 +16,7 @@ import java.util.List;
 @Repository
 public class FacilityDao {
 
-    private static final String ALL_FIELDS = "facility_id, name, type, location_id, dhis_org_unit_uid";
+    private static final String ALL_FIELDS = "facility_id, name, type, location_id";
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -43,9 +43,8 @@ public class FacilityDao {
         map.put("facility_name", facility.getFacilityName());
         map.put("facility_type", facility.getFacilityType());
         map.put("facility_location", facility.getFacilityLocationCode());
-        map.put("dhis_org_unit_uid", facility.getDhisOrgUnitUid());
         String query = "insert into facility (" + ALL_FIELDS + ") values " +
-                "(:facility_id, :facility_name, :facility_type, :facility_location, :dhis_org_unit_uid)";
+                "(:facility_id, :facility_name, :facility_type, :facility_location, )";
         jdbcTemplate.update(query, map);
     }
 
@@ -62,8 +61,7 @@ public class FacilityDao {
                         rs.getString("facility_id"),
                         rs.getString("name"),
                         rs.getString("type"),
-                        rs.getString("location_id"),
-                        rs.getString("dhis_org_unit_uid"));
+                        rs.getString("location_id"));
             }
         };
     }

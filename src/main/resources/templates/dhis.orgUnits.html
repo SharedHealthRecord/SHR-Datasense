@@ -50,7 +50,11 @@
                 <td th:text="${orgUnit.orgUnitName} != null ? ${orgUnit.orgUnitName} + ' (' + ${orgUnit.orgUnitId} + ')' : ''">Organization Name</td>
                 <td>
                     <a th:href="|/dhis2/orgUnits/configure?facilityId=${orgUnit.facilityId}|" >
-                        <img src="/images/configure.png" alt="Configure" class="button-in-td"/>
+                        <img src="/images/configure.png" alt="Configure Mapping" class="button-in-td" title="Configure Mapping"/>
+                    </a>
+                    <a th:class="${orgUnit.orgUnitName} != null? 'show' : 'hidden' "
+                       th:href="|/dhis2/orgUnits/reset?facilityId=${orgUnit.facilityId}|">
+                        <img src="/images/trash.png" alt="Remove Mapping" title="Remove Mapping"/>
                     </a>
                 </td>
             </tr>

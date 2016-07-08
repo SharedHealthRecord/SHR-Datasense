@@ -2,12 +2,10 @@ package org.sharedhealth.datasense.helpers;
 
 import org.apache.commons.dbcp.BasicDataSource;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
-import org.springframework.core.io.ClassPathResource;
 
 import javax.sql.DataSource;
 
@@ -28,13 +26,6 @@ public class TestConfig {
 
     @Autowired
     Environment environment;
-    
-    @Bean(name = "dhisFacilitiesMap")
-    public PropertiesFactoryBean dhisFacilitiesMap() {
-        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
-        return propertiesFactoryBean;
-    }
 
     @Bean
     public DataSource dataSource() {

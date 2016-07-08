@@ -6,7 +6,6 @@ import org.quartz.spi.JobFactory;
 import org.sharedhealth.datasense.export.dhis.reports.DHISDynamicReport;
 import org.sharedhealth.datasense.scheduler.AutowiringSpringBeanJobFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.context.embedded.EmbeddedServletContainerFactory;
 import org.springframework.boot.context.embedded.ServletContextInitializer;
@@ -120,13 +119,6 @@ public class Main {
         HashMap<String, Object> ctx = new HashMap<>();
         ctx.put("dhisDynamicReport", dhisDynamicReport);
         return ctx;
-    }
-
-    @Bean(name = "dhisFacilitiesMap")
-    public PropertiesFactoryBean dhisFacilitiesMap() {
-        PropertiesFactoryBean propertiesFactoryBean = new PropertiesFactoryBean();
-        propertiesFactoryBean.setLocation(new ClassPathResource("dhis_facilities.properties"));
-        return propertiesFactoryBean;
     }
 
     public static void main(String[] args) throws Exception {

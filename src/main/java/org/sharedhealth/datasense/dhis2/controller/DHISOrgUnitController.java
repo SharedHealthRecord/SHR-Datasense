@@ -41,6 +41,13 @@ public class DHISOrgUnitController {
         return modelAndView;
     }
 
+    @RequestMapping(value = "/reset", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public ModelAndView reset(@RequestParam(value = "facilityId") String facilityId) {
+        metaDataService.resetOrgUnitMap(facilityId);
+        return new ModelAndView("redirect:/dhis2/orgUnits");
+    }
+
     @RequestMapping(value = "/configure", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public @ResponseBody

@@ -78,8 +78,13 @@ public class DHISMetaDataService {
         return dhisConfigDao.findAllOrgUnits(includeNotConfigured);
     }
 
+    @Transactional
     public void save(DHISOrgUnitConfig config) {
         dhisConfigDao.save(config);
+    }
+
+    public void resetOrgUnitMap(String facilityId) {
+        dhisConfigDao.voidOrgUnitMap(facilityId);
     }
 
     public DHISReportConfig getReportConfigForDataset(String datasetId) {

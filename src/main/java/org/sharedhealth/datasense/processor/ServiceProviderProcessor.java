@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.processor;
 
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Encounter;
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.client.FacilityWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
@@ -14,11 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.stereotype.Component;
-
-import java.io.IOException;
-import java.util.List;
 
 @Component("serviceProviderProcessor")
 public class ServiceProviderProcessor implements ResourceProcessor {
@@ -26,7 +21,6 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     private ResourceProcessor nextProcessor;
     private FacilityDao facilityDao;
     private FacilityWebClient facilityWebClient;
-    private PropertiesFactoryBean dhisFacilitiesMap;
     private ProviderProcessor providerProcessor;
     private DatasenseProperties datasenseProperties;
     private static final Logger logger = LoggerFactory.getLogger(ServiceProviderProcessor.class);
@@ -35,13 +29,11 @@ public class ServiceProviderProcessor implements ResourceProcessor {
     public ServiceProviderProcessor(@Qualifier("clinicalEncounterProcessor") ResourceProcessor nextProcessor,
                                     FacilityDao facilityDao,
                                     FacilityWebClient facilityWebClient,
-                                    @Qualifier("dhisFacilitiesMap") PropertiesFactoryBean dhisFacilitiesMap,
                                     ProviderProcessor providerProcessor, DatasenseProperties datasenseProperties) {
 
         this.nextProcessor = nextProcessor;
         this.facilityDao = facilityDao;
         this.facilityWebClient = facilityWebClient;
-        this.dhisFacilitiesMap = dhisFacilitiesMap;
         this.providerProcessor = providerProcessor;
         this.datasenseProperties = datasenseProperties;
     }
@@ -63,10 +55,6 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         setFacilityValue(composition, facility);
         saveEncounterProviders(composition);
         callNextIfGiven(composition);
-    }
-
-    private boolean isBahmniCloud(String facilityId) {
-        return datasenseProperties.getCloudHostedFacilityIds().contains(facilityId);
     }
 
     private Facility loadFacilityFromParticipant(EncounterComposition composition) {
@@ -116,18 +104,8 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         if (facility == null) {
             return null;
         }
-        facility.setDhisOrgUnitUid(identifyDhisOrgUnitUid(facilityId));
         facilityDao.save(facility);
         return facility;
-    }
-
-    private String identifyDhisOrgUnitUid(String facilityId) {
-        try {
-            return (String) dhisFacilitiesMap.getObject().get(facilityId);
-        } catch (IOException e) {
-            logger.error(String.format("DHIS Organisation Unit Uid not found for facility %s", facilityId), e);
-        }
-        return null;
     }
 
     @Override

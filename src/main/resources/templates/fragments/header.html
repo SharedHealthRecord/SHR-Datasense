@@ -6,23 +6,21 @@
 
 </head>
 <body>
-<div class="navbar navbar-inverse navbar-fixed-top" th:fragment="header">
-    <div class="container">
-        <div class="navbar-header">
-            <div class="logo">
-                <span id="datasense" class="navbar-text">DataSense</span>
+<div th:fragment="header">
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <b><span class="navbar-brand">DATASENSE</span></b>
             </div>
-            <div class="nav-main">
-                <ul class="nav navbar-nav" id="nav-header">
-                    <li><a id="dhis2" class="navbar-brand" href="/home">DHIS2</a></li>
-                    <li><a id="about" class="navbar-brand" href="/about">ABOUT</a></li>
-                </ul>
-            </div>
-            <div class="header-right">
-                <a id="logout" href="/logout" class="navbar-brand logout">Logout</a>
-            </div>
+            <ul class="nav navbar-nav">
+                <li class="active"><a id="dhis2" href="/home">DHIS2</a></li>
+                <li class=""><a id="about" href="/about">ABOUT</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-right">
+                <li><a id="logout" href="/logout" class="navbar-brand">Logout</a></li>
+            </ul>
         </div>
-    </div>
+    </nav>
 </div>
 </body>
 </html>

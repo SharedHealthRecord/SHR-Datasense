@@ -6,17 +6,15 @@ public class Facility {
     private String facilityType;
     private Address facilityLocation;
     private String facilityLocationCode;
-    private String dhisOrgUnitUid;
 
-    public Facility() {}
+    public Facility() {
+    }
 
-    public Facility(String facilityId, String facilityName, String facilityType, String facilityLocationCode, String
-            dhisOrgUnitUid) {
+    public Facility(String facilityId, String facilityName, String facilityType, String facilityLocationCode) {
         this.facilityId = facilityId;
         this.facilityName = facilityName;
         this.facilityType = facilityType;
         this.facilityLocationCode = facilityLocationCode;
-        this.dhisOrgUnitUid = dhisOrgUnitUid;
     }
 
     public String getFacilityType() {
@@ -61,13 +59,5 @@ public class Facility {
 
     public void setFacilityLocationCode(String facilityLocationCode) {
         this.facilityLocationCode = facilityLocationCode;
-    }
-
-    public String getDhisOrgUnitUid() {
-        return dhisOrgUnitUid;
-    }
-
-    public void setDhisOrgUnitUid(String dhisOrgUnitUid) {
-        this.dhisOrgUnitUid = dhisOrgUnitUid;
     }
 }

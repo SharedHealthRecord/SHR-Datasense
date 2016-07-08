@@ -15,8 +15,6 @@ import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.FacilityDao;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.config.PropertiesFactoryBean;
 import org.springframework.jdbc.core.namedparam.EmptySqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.test.context.ContextConfiguration;
@@ -44,8 +42,6 @@ public class ServiceProviderProcessorIT {
     @Autowired
     private FacilityWebClient webClient;
     @Autowired
-    @Qualifier("dhisFacilitiesMap")
-    private PropertiesFactoryBean dhisFacilitiesMap;
     @Mock
     private ProviderProcessor providerProcessor;
     @Mock
@@ -59,7 +55,7 @@ public class ServiceProviderProcessorIT {
     @Before
     public void setUp() throws Exception {
         initMocks(this);
-        processor = new ServiceProviderProcessor(null, facilityDao, webClient, dhisFacilitiesMap, providerProcessor, datasenseProperties);
+        processor = new ServiceProviderProcessor(null, facilityDao, webClient, providerProcessor, datasenseProperties);
     }
 
     @After
@@ -94,8 +90,8 @@ public class ServiceProviderProcessorIT {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
-        jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
-                "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
+        jdbcTemplate.update("insert into facility (facility_id, name, type, location_id) " +
+                "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618');", new EmptySqlParameterSource());
 
         when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
 
@@ -112,9 +108,8 @@ public class ServiceProviderProcessorIT {
     public void shouldFetchFacilityFromProviderIfNotPresentInEncounter() throws Exception {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_without_serviceProvider.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
-//
-        jdbcTemplate.update("insert into facility (facility_id, name, type, location_id, dhis_org_unit_uid) " +
-                "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618', 'nRm6mKjJsaE');", new EmptySqlParameterSource());
+        jdbcTemplate.update("insert into facility (facility_id, name, type, location_id) " +
+                "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618');", new EmptySqlParameterSource());
 
         when(datasenseProperties.getCloudHostedFacilityIds()).thenReturn(asList("12345"));
         when(providerProcessor.process(any(EncounterComposition.class))).thenReturn(VALID_FACILITY_ID);

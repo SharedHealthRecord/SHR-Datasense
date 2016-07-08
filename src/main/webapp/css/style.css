@@ -24,25 +24,6 @@ body{
     float:left;
     font-size:20px;
 }
-.nav-main{
-    float:left;
-    width:50%;
-}
-.nav{
-    width:auto;
-    display:table;
-    margin:0 auto;
-    float:none;
-}
-.header-right{
-    float:right;
-    width:25%;
-}
-a.logout{
-    float:right;
-    margin:0;
-}
-
 input{
     width: 200px;
     font-size : 14px;

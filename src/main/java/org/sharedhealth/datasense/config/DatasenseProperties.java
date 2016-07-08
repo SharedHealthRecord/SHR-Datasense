@@ -170,7 +170,7 @@ public class DatasenseProperties implements EnvironmentAware {
     }
 
     public String getAqsConfigLocationPath() {
-        return dhisAqsConfigPath;
+        return StringUtil.ensureSuffix(dhisAqsConfigPath, URL_SEPARATOR);
     }
 
     public String getPrProviderUrl() {

@@ -22,34 +22,19 @@ public class DHISConfigDao {
     private String DATASET_CFG_ALL_FIELDS = "id, name, config_file, dataset_name, dataset_id, period_type";
 
     private final String qryOrgUnitInclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "left outer join dhis_orgunit_map ou on f.facility_id=ou.facility_id";
+            "left outer join dhis_orgunit_map ou on (f.facility_id=ou.facility_id and ou.voided = 0)";
 
     private final String qryOrgUnitExclusive = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id";
+            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where ou.voided = 0";
 
     private final String qryOrgUnitByFacilityId = "select f.facility_id, f.name as facility_name, ou.org_unit_id, ou.org_unit_name from facility f " +
-            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where f.facility_id = :facility_id";
+            "inner join dhis_orgunit_map ou on f.facility_id=ou.facility_id where f.facility_id = :facility_id and ou.voided = 0";
 
 
     public java.util.List<DHISReportConfig> findAllMappedDatasets() {
         return jdbcTemplate.query(
                 String.format("select %s from dhis_dataset_map", DATASET_CFG_ALL_FIELDS),
                 rowMapperForDataset());
-    }
-
-    private RowMapper<DHISReportConfig> rowMapperForDataset() {
-        return new RowMapper<DHISReportConfig>() {
-            @Override
-            public DHISReportConfig mapRow(ResultSet rs, int rowNum) throws SQLException {
-                return new DHISReportConfig(
-                        rs.getInt("id"),
-                        rs.getString("name"),
-                        rs.getString("config_file"),
-                        rs.getString("dataset_name"),
-                        rs.getString("dataset_id"),
-                        rs.getString("period_type"));
-            }
-        };
     }
 
     public void save(DHISReportConfig config) {
@@ -76,10 +61,69 @@ public class DHISConfigDao {
         jdbcTemplate.update(query, map);
     }
 
+    public DHISReportConfig getMappedConfigForDataset(String datasetId) {
+        List<DHISReportConfig> configs = jdbcTemplate.query(
+                String.format("select %s from dhis_dataset_map where dataset_id=:dataset_id", DATASET_CFG_ALL_FIELDS),
+                Collections.singletonMap("dataset_id", datasetId),
+                rowMapperForDataset());
+        return configs.isEmpty() ? null : configs.get(0);
+    }
+
+    public DHISReportConfig getReportConfig(Integer configId) {
+        List<DHISReportConfig> configs = jdbcTemplate.query(
+                String.format("select %s from dhis_dataset_map where id=:configId", DATASET_CFG_ALL_FIELDS),
+                Collections.singletonMap("configId", configId),
+                rowMapperForDataset());
+        return configs.isEmpty() ? null : configs.get(0);
+    }
+
     public List<DHISOrgUnitConfig> findAllOrgUnits(boolean includeNotConfigured) {
         String queryStr = includeNotConfigured ? qryOrgUnitInclusive : qryOrgUnitExclusive;
         return jdbcTemplate.query(queryStr, rowMapperForOrgUnit());
 
+    }
+
+    public void save(DHISOrgUnitConfig config) {
+        if (config.getFacilityId() != null) {
+            voidOrgUnitMap(config.getFacilityId());
+        }
+
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", config.getFacilityId());
+        map.put("org_unit_id", config.getOrgUnitId());
+        map.put("org_unit_name", config.getOrgUnitName());
+        String query = "insert into dhis_orgunit_map (facility_id, org_unit_id, org_unit_name) " +
+                "values (:facility_id, :org_unit_id, :org_unit_name)";
+        jdbcTemplate.update(query, map);
+    }
+
+    public DHISOrgUnitConfig findOrgUnitConfigFor(String facilityId) {
+        List<DHISOrgUnitConfig> orgUnitConfigs = jdbcTemplate.query(qryOrgUnitByFacilityId,
+                Collections.singletonMap("facility_id", facilityId),
+                rowMapperForOrgUnit());
+
+        return orgUnitConfigs.isEmpty() ? null : orgUnitConfigs.get(0);
+    }
+
+    public void voidOrgUnitMap(String facilityId) {
+        String SQL = "UPDATE dhis_orgunit_map SET voided = 1, date_voided = now() WHERE facility_id = :facilityId";
+        SqlParameterSource namedParameters = new MapSqlParameterSource("facilityId", Integer.valueOf(facilityId));
+        jdbcTemplate.update(SQL, namedParameters);
+    }
+
+    private RowMapper<DHISReportConfig> rowMapperForDataset() {
+        return new RowMapper<DHISReportConfig>() {
+            @Override
+            public DHISReportConfig mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return new DHISReportConfig(
+                        rs.getInt("id"),
+                        rs.getString("name"),
+                        rs.getString("config_file"),
+                        rs.getString("dataset_name"),
+                        rs.getString("dataset_id"),
+                        rs.getString("period_type"));
+            }
+        };
     }
 
     private RowMapper<DHISOrgUnitConfig> rowMapperForOrgUnit() {
@@ -93,45 +137,5 @@ public class DHISConfigDao {
                         rs.getString("org_unit_name"));
             }
         };
-    }
-
-    public void save(DHISOrgUnitConfig config) {
-        if (config.getFacilityId() != null) {
-            String SQL = "DELETE FROM dhis_orgunit_map WHERE facility_id = :facilityId";
-            SqlParameterSource namedParameters = new MapSqlParameterSource("facilityId", Integer.valueOf(config.getFacilityId()));
-            jdbcTemplate.update(SQL, namedParameters);
-        }
-
-        HashMap<String, Object> map = new HashMap<>();
-        map.put("facility_id", config.getFacilityId());
-        map.put("org_unit_id", config.getOrgUnitId());
-        map.put("org_unit_name", config.getOrgUnitName());
-        String query = "insert into dhis_orgunit_map (facility_id, org_unit_id, org_unit_name) " +
-                "values (:facility_id, :org_unit_id, :org_unit_name)";
-        jdbcTemplate.update(query, map);
-    }
-
-    public DHISReportConfig getMappedConfigForDataset(String datasetId) {
-        List<DHISReportConfig> configs = jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map where dataset_id=:dataset_id", DATASET_CFG_ALL_FIELDS),
-                Collections.singletonMap("dataset_id", datasetId),
-                rowMapperForDataset());
-        return configs.isEmpty() ? null : configs.get(0);
-    }
-
-    public DHISOrgUnitConfig findOrgUnitConfigFor(String facilityId) {
-        List<DHISOrgUnitConfig> orgUnitConfigs = jdbcTemplate.query(qryOrgUnitByFacilityId,
-                Collections.singletonMap("facility_id", facilityId),
-                rowMapperForOrgUnit());
-
-        return orgUnitConfigs.isEmpty() ? null : orgUnitConfigs.get(0);
-    }
-
-    public DHISReportConfig getReportConfig(Integer configId) {
-        List<DHISReportConfig> configs = jdbcTemplate.query(
-                String.format("select %s from dhis_dataset_map where id=:configId", DATASET_CFG_ALL_FIELDS),
-                Collections.singletonMap("configId", configId),
-                rowMapperForDataset());
-        return configs.isEmpty() ? null : configs.get(0);
     }
 }
