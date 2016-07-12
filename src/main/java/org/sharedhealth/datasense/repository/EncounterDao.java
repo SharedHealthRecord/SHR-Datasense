@@ -65,4 +65,15 @@ public class EncounterDao {
     }
 
 
+    public List<Map<String, Object>> getEncounterTypesWithCount(String facilityId, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("start_date", startDate);
+        map.put("end_date", endDate);
+        String query = "SELECT encounter_type ,count(*) as count FROM encounter WHERE facility_id = :facility_id AND \n" +
+                "encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y')\n" +
+                "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y') group by encounter_type";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
+    }
 }

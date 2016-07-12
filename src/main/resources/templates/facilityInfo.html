@@ -72,7 +72,7 @@
             </div>
         </div>
 
-        <div class="panel-group" id="accordion" hidden="true">
+        <div class="panel-group" id="facilityInformations" hidden="true">
             <div class="panel panel-default">
                 <div class="panel-heading" id="lastEncounterDate">
                     <h4 class="panel-title">
@@ -116,6 +116,23 @@
                     </p>
                     <button id="getDiagnosisWithCountButton" class="btn btn-info" disabled="true">Submit</button>
                  </div>
+                <hr/>
+                <div class="panel-body">
+                    <p class="col-xs-10">
+                        <span>Encounters occurred in facility:</span>
+                        <span>Select start date
+                            <input id="startDateForEncounter" name="startDate" type="text"
+                                   class="startDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                        <span>end date
+                            <input id="endDateForEncounter" name="endDate" type="text"
+                                   class="endDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                    </p>
+                    <button id="getEncounterTypesWithCountButton" class="btn btn-info" disabled="true">Submit</button>
+                </div>
             </div>
         </div>
         <div class="panel-group" id="visitWithCount" hidden="true">
@@ -163,6 +180,28 @@
                 </div>
             </div>
         </div>
+        <div class="panel-group" id="encounterTypesWithCount" hidden="true">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <span>Types of encounters for </span>
+                        <span id="dateSelectedForEncounterType"></span>
+                    </h4>
+                </div>
+                <div class="panel-body">
+                    <table id="encounterWithCount" class="table">
+                        <thead>
+                        <tr>
+                            <th>Encounter type</th>
+                            <th>Count</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
         <div id="errorBlock1" hidden="true"></div>
     </div>
@@ -189,7 +228,7 @@
         {{date}}
     {{/.}}
 </script>
-<script id="template_date_selected_for_diagnosis" type="x-tmpl-mustache">
+<script id="template_for_selected_date_range" type="x-tmpl-mustache">
     {{#.}}
         {{startDate}} to {{endDate}}
     {{/.}}
@@ -205,6 +244,15 @@
              <tr>
                 <td>{{ visit_type }}</td>
                 <td>{{ num }}</td>
+             </tr>
+        {{/.}}
+</script>
+
+<script id="template_encounter_type_with_count" type="x-tmpl-mustache">
+        {{#.}}
+             <tr>
+                <td>{{ encounter_type }}</td>
+                <td>{{ count }}</td>
              </tr>
         {{/.}}
 </script>

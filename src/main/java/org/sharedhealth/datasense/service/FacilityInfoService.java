@@ -55,4 +55,8 @@ public class FacilityInfoService {
     }
 
 
+    public List<Map<String, Object>> getEncounterTypesWithCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
+        return encounterDao.getEncounterTypesWithCount(facilityId,startDate,endDate);
+    }
 }
