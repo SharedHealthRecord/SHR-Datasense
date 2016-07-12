@@ -18,23 +18,10 @@
         $( document ).ready(function() {
             var facilityInfo = new FacilityInformations();
         });
-
     </script>
 </head>
 <body>
 <div th:replace="fragments/header :: header">
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">Static header</a>
-            </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li class="active"><a href="#">Home</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
 </div>
 <div class="container">
     <div>
@@ -42,230 +29,43 @@
     </div>
     <div class="tab-content">
         <div class="panel panel-default panel-body">
-                <div class="form-group">
-                    <label class="radio-inline">
-                        <input type="radio" name="searchBy" value="FacilityId" checked="checked"/>
-                        Facility Id</label>
-                    <label class="radio-inline">
-                        <input type="radio" name="searchBy" value="FacilityName"/>
-                        Facility Name</label>
-                </div>
-                <div class="col-lg-6 input-group">
-                    <input id="searchTxt" type="text" class="form-control"
-                           placeholder="Search for Facility"/>
+            <div class="form-group">
+                <label class="radio-inline">
+                    <input type="radio" name="searchBy" value="FacilityId" checked="checked"/>
+                    Facility Id</label>
+                <label class="radio-inline">
+                    <input type="radio" name="searchBy" value="FacilityName"/>
+                    Facility Name</label>
+            </div>
+            <div class="col-lg-6 input-group">
+                <input id="searchTxt" type="text" class="form-control"
+                       placeholder="Search for Facility"/>
                     <span class="input-group-btn">
                         <button id="searchBtn" class="btn btn-default" type="button">Go!</button>
                     </span>
-                </div>
+            </div>
         </div>
         <div th:include="fragments/error :: error"/>
-        <div class="panel panel-default" id="avalilableFacilities" hidden="true">
-            <div class="panel-heading">
-                <h4>
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseFacility" aria-expanded="true" >
-                        Available Facilities</a>
-                </h4>
-            </div>
-            <div id="collapseFacility" class="panel-body panel-collapse in" >
-                <div class="form-group" id="searchResultsContainerForFacility">
-                </div>
-            </div>
-        </div>
+        <div id="searchResult">
+            <h3><span id="avalilableFacilities" hidden="true">
+                    Results
+                    </span>
+            </h3>
 
-        <div class="panel-group" id="facilityInformations" hidden="true">
-            <div class="panel panel-default">
-                <div class="panel-heading" id="lastEncounterDate">
-                    <h4 class="panel-title">
-                        <span id="selectedFacilityName"></span>
-                    </h4>
-                </div>
-
-                <div class="panel-body">
-                    <p class="col-xs-10">
-                        <span>Last encounter date and time is  </span>
-                        <b><span class="highlight" id="lastEncounter"></span></b>
-                    </p>
-                </div>
-                <hr/>
-                <div class="panel-body">
-                    <p class="col-xs-10">
-                        <span>Datewise visits for facility: </span>
-                        <span>Select Date
-                        <input id="visitDate" name="startDate" type="text"
-                               class="startDate datepicker dateInput" readonly="true"
-                               placeholder="Enter a date"/>
-
-                        </span>
-                    </p>
-                    <button id="getVisitTypeButton" class="btn btn-info" disabled="true">Submit</button>
-                </div>
-                <hr/>
-                <div class="panel-body">
-                    <p class="col-xs-10">
-                        <span>Diagnoses posted by facility:</span>
-                        <span>Select start date
-                            <input id="startDate" name="startDate" type="text"
-                                   class="startDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                        <span>end date
-                            <input id="endDate" name="endDate" type="text"
-                                   class="endDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                    </p>
-                    <button id="getDiagnosisWithCountButton" class="btn btn-info" disabled="true">Submit</button>
-                 </div>
-                <hr/>
-                <div class="panel-body">
-                    <p class="col-xs-10">
-                        <span>Encounters occurred in facility:</span>
-                        <span>Select start date
-                            <input id="startDateForEncounter" name="startDate" type="text"
-                                   class="startDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                        <span>end date
-                            <input id="endDateForEncounter" name="endDate" type="text"
-                                   class="endDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                    </p>
-                    <button id="getEncounterTypesWithCountButton" class="btn btn-info" disabled="true">Submit</button>
-                </div>
+            <div class="form-group" id="searchResultsContainerForFacility">
             </div>
         </div>
-        <div class="panel-group" id="visitWithCount" hidden="true">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <span>Types of visits for </span>
-                        <span id="dateSelectedForVisitType"></span>
-                    </h4>
-                </div>
-                <div class="panel-body">
-                    <table id="visitTypeWithCount" class="table">
-                        <thead>
-                        <tr>
-                            <th>Visit type</th>
-                            <th>Count</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="panel-group" id="getDiagnosisWithCount" hidden="true">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <span>Diagnoses posted by facility for </span>
-                        <span id="dateRangeSelectedForDiagnosis"></span>
-                    </h4>
-                </div>
-                <div class="panel-body">
-                    <table id="diagnosisNameWithCount" class="table">
-                        <thead>
-                        <tr>
-                            <th>Diagnosis Name</th>
-                            <th>ICD10 Code</th>
-                            <th>Count</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-        <div class="panel-group" id="encounterTypesWithCount" hidden="true">
-            <div class="panel panel-default">
-                <div class="panel-heading">
-                    <h4 class="panel-title">
-                        <span>Types of encounters for </span>
-                        <span id="dateSelectedForEncounterType"></span>
-                    </h4>
-                </div>
-                <div class="panel-body">
-                    <table id="encounterWithCount" class="table">
-                        <thead>
-                        <tr>
-                            <th>Encounter type</th>
-                            <th>Count</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <div id="errorBlock1" hidden="true"></div>
     </div>
-
     <div th:replace="fragments/footer :: footer"></div>
 </div>
 <script id="template_search_facilities" type="x-tmpl-mustache">
     {{#.}}
-        <div class="radio">
+        <div class="">
         <label>
-        <input type="radio" name="selectedFacilities" id="{{facilityName}}" value="{{facilityId}}">{{facilityName}}</input>
+        <a name="selectedFacilities" id="{{facilityId}}" href="/facility/{{facilityId}}/dashboard">{{facilityName}}</a>
         </label>
         </div>
     {{/.}}
 </script>
-
-<script id="template_search_lastencounter" type="x-tmpl-mustache">
-    {{#.}}
-        {{encounterDate}}
-    {{/.}}
-</script>
-<script id="template_date_selected_for_visit" type="x-tmpl-mustache">
-    {{#.}}
-        {{date}}
-    {{/.}}
-</script>
-<script id="template_for_selected_date_range" type="x-tmpl-mustache">
-    {{#.}}
-        {{startDate}} to {{endDate}}
-    {{/.}}
-</script>
-<script id="template_facility_name" type="x-tmpl-mustache">
-    {{#.}}
-        {{facilityName}}({{facilityId}})
-    {{/.}}
-</script>
-
-<script id="template_visit_type_with_count" type="x-tmpl-mustache">
-        {{#.}}
-             <tr>
-                <td>{{ visit_type }}</td>
-                <td>{{ num }}</td>
-             </tr>
-        {{/.}}
-</script>
-
-<script id="template_encounter_type_with_count" type="x-tmpl-mustache">
-        {{#.}}
-             <tr>
-                <td>{{ encounter_type }}</td>
-                <td>{{ count }}</td>
-             </tr>
-        {{/.}}
-</script>
-
-<script id="template_diagnosis_name_with_count" type="x-tmpl-mustache">
-        {{#.}}
-             <tr>
-                <td>{{ diagnosis_name }}</td>
-                <td>{{ code }}</td>
-                <td>{{ count }}</td>
-             </tr>
-        {{/.}}
-</script>
-
 </body>
 </html>

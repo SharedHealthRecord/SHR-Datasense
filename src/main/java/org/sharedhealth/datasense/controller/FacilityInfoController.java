@@ -6,10 +6,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -19,12 +19,11 @@ public class FacilityInfoController {
     @Autowired
     private FacilityInfoService facilityDataService;
 
-    @RequestMapping(value = "/{facilityId}/lastEncounterDate", method = RequestMethod.GET)
+    @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public
-    @ResponseBody
-    Date showLastEncounter(@PathVariable String facilityId) {
-        return facilityDataService.getLastEncounterDateTime(facilityId);
+    public ModelAndView showFacilityInfo() {
+        ModelAndView modelAndView = new ModelAndView("facilityInfo");
+        return modelAndView;
     }
 
     @RequestMapping(value = "/{facilityId}/visitTypes/forDate", method = RequestMethod.GET)
@@ -35,38 +34,47 @@ public class FacilityInfoController {
                                             @RequestParam(value = "date", required = true) String date) {
         return facilityDataService.getAllVisitTypes(facilityId, date);
     }
+
     @RequestMapping(value = "/{facilityId}/diagnosis/withinDates", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
     List<Map<String, Object>> showDiagnosisNameWithCount(@PathVariable String facilityId,
-                                            @RequestParam(value = "startDate", required = true) String startDate,
-                                            @RequestParam(value = "endDate", required = true) String endDate) {
-        return facilityDataService.getDiagnosisNameWithCount(facilityId, startDate,endDate);
+                                                         @RequestParam(value = "startDate", required = true) String startDate,
+                                                         @RequestParam(value = "endDate", required = true) String endDate) {
+        return facilityDataService.getDiagnosisNameWithCount(facilityId, startDate, endDate);
     }
+
     @RequestMapping(value = "/{facilityId}/encounterTypes/withinDates", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
     List<Map<String, Object>> showEncounterTypesWithCount(@PathVariable String facilityId,
-                                            @RequestParam(value = "startDate", required = true) String startDate,
-                                            @RequestParam(value = "endDate", required = true) String endDate) {
-        return facilityDataService.getEncounterTypesWithCount(facilityId, startDate,endDate);
+                                                          @RequestParam(value = "startDate", required = true) String startDate,
+                                                          @RequestParam(value = "endDate", required = true) String endDate) {
+        return facilityDataService.getEncounterTypesWithCount(facilityId, startDate, endDate);
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    Object searchFacility(@RequestParam(value = "name", required = false) String name,
-                          @RequestParam(value = "id", required = false) String id) throws IOException, URISyntaxException {
-        if (id != null) {
-            return facilityDataService.getAvailableFacilitiesById(id);
-        } else if (name != null) {
-            return facilityDataService.getAvailableFacilitiesBYName(name);
+    Object searchFacility(@RequestParam(value = "name", required = false) String facilityName,
+                          @RequestParam(value = "id", required = false) String facilityId) throws IOException, URISyntaxException {
+        if (facilityId != null) {
+            return facilityDataService.getAvailableFacilitiesById(facilityId);
+        } else if (facilityName != null) {
+            return facilityDataService.getAvailableFacilitiesBYName(facilityName);
         }
         return null;
     }
 
-
+    @RequestMapping(value = "/{facilityId}/dashboard", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public ModelAndView getFacilityDashboard(@PathVariable(value = "facilityId") String facilityId) throws IOException, URISyntaxException {
+        ModelAndView dashboard = new ModelAndView("facilityDashboard");
+        dashboard.addObject("facility", facilityDataService.getAvailableFacilitiesById(facilityId));
+        dashboard.addObject("lastEncounterDate", facilityDataService.getLastEncounterDateTime(facilityId));
+        return dashboard;
+    }
 }

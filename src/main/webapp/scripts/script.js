@@ -28,19 +28,17 @@ $(document).ready(loadComponents);
 
 $(document).ready(function () {
     $(function(){
-        var current_page_URL = location.href;
-
+        var current_page_path = location.pathname;
         $( "a" ).each(function() {
-
             if ($(this).attr("href") !== "#") {
-
-                var target_URL = $(this).prop("href");
-
-                    if (target_URL == current_page_URL) {
-                        $('nav a').parents('li, ul').removeClass('active');
-                        $(this).parent('li').addClass('active');
-
-                        return false;
-                    }
+                var hrefPath = $(this).prop("pathname").split("/");
+                var target_path = "/" + hrefPath[1];
+                if (current_page_path.startsWith(target_path)) {
+                    $('nav a').parents('li, ul').removeClass('active');
+                    $(this).parent('li').addClass('active');
+                    return false;
+                }
             }
-        }); }); });
+        });
+    });
+});
