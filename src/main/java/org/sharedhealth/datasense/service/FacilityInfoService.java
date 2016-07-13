@@ -4,6 +4,7 @@ import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.repository.DiagnosisDao;
 import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.FacilityDao;
+import org.sharedhealth.datasense.repository.PrescribedDrugDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,6 +23,9 @@ public class FacilityInfoService {
 
     @Autowired
     private DiagnosisDao diagnosisDao;
+
+    @Autowired
+    private PrescribedDrugDao prescribedDrugDao;
 
     @Transactional
     public Date getLastEncounterDateTime(String facilityId) {
@@ -49,14 +53,19 @@ public class FacilityInfoService {
         return diagnosisDao.getDiagosisWithCount(facilityId, startDate, endDate);
     }
 
-    private String changeEndDateToEndOfDay(String endDate) {
-        endDate = endDate + " 23:59:59";
-        return endDate;
-    }
-
-
     public List<Map<String, Object>> getEncounterTypesWithCount(String facilityId, String startDate, String endDate) {
         endDate = changeEndDateToEndOfDay(endDate);
         return encounterDao.getEncounterTypesWithCount(facilityId,startDate,endDate);
+    }
+
+
+    public List<Map<String, Object>> getFreeTextCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
+        return prescribedDrugDao.getTotalFreeTextCount(facilityId,startDate,endDate);
+    }
+
+    private String changeEndDateToEndOfDay(String endDate) {
+        endDate = endDate + " 23:59:59";
+        return endDate;
     }
 }

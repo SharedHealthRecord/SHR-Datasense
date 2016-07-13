@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,7 +22,7 @@ public class FacilityInfoController {
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public ModelAndView showFacilityInfo() {
+    public ModelAndView getFacilityInfo() {
         ModelAndView modelAndView = new ModelAndView("facilityInfo");
         return modelAndView;
     }
@@ -30,7 +31,7 @@ public class FacilityInfoController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    List<Map<String, Object>> showVisitType(@PathVariable String facilityId,
+    List<Map<String, Object>> getVisitType(@PathVariable String facilityId,
                                             @RequestParam(value = "date", required = true) String date) {
         return facilityDataService.getAllVisitTypes(facilityId, date);
     }
@@ -39,7 +40,7 @@ public class FacilityInfoController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    List<Map<String, Object>> showDiagnosisNameWithCount(@PathVariable String facilityId,
+    List<Map<String, Object>> getDiagnosisNameWithCount(@PathVariable String facilityId,
                                                          @RequestParam(value = "startDate", required = true) String startDate,
                                                          @RequestParam(value = "endDate", required = true) String endDate) {
         return facilityDataService.getDiagnosisNameWithCount(facilityId, startDate, endDate);
@@ -49,10 +50,22 @@ public class FacilityInfoController {
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public
     @ResponseBody
-    List<Map<String, Object>> showEncounterTypesWithCount(@PathVariable String facilityId,
+    List<Map<String, Object>> getEncounterTypesWithCount(@PathVariable String facilityId,
                                                           @RequestParam(value = "startDate", required = true) String startDate,
                                                           @RequestParam(value = "endDate", required = true) String endDate) {
         return facilityDataService.getEncounterTypesWithCount(facilityId, startDate, endDate);
+    }
+
+    @RequestMapping(value = "/{facilityId}/prescribedDrugs/withinDates", method = RequestMethod.GET)
+    @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
+    public
+    @ResponseBody
+    HashMap<String, List<Map<String, Object>>> getPrescribedDrugsWithCount(@PathVariable String facilityId,
+                                                                           @RequestParam(value = "startDate", required = true) String startDate,
+                                                                           @RequestParam(value = "endDate", required = true) String endDate) {
+        HashMap<String, List<Map<String, Object>>> prescribedDrugs = new HashMap<>();
+        prescribedDrugs.put("freetextCount",facilityDataService.getFreeTextCount(facilityId, startDate, endDate));
+        return prescribedDrugs;
     }
 
     @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)

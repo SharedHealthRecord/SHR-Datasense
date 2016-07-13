@@ -74,6 +74,24 @@ function FacilityInformation(facilityId, facilityName) {
         });
     });
 
+    $('#getDrugsWithCountButton').bind("click",function(e){
+        clearErrors();
+        disableAllResult();
+        var startDate = $('#drugStartDate').val();
+        var endDate = $('#drugEndDate').val();
+        var targetUrl =  "/facility/" + facilityId + "/prescribedDrugs/withinDates?startDate=" + startDate+ "&endDate=" + endDate;
+        $.ajax({
+            type: "GET",
+            url: targetUrl,
+            success: function(response){
+                alert(response[0])
+            },
+            error: function(e){
+                showErrors(e)
+            }
+        });
+    });
+
     $('#visitDate').datepicker({
          onRender: function(dateTemp) {
             var nowTemp = new Date();
@@ -134,6 +152,12 @@ function FacilityInformation(facilityId, facilityName) {
       $(this).datepicker('hide');
       clearErrors();
     }
+    var endDateChangeforDrug= function(ev) {
+          $('#getDrugsWithCountButton').attr("disabled",false);
+//          $('#encounterTypesWithCount').attr("hidden", true);
+          $(this).datepicker('hide');
+          clearErrors();
+        }
 
     var getFormattedDate = function(date){
         var d = new Date(date);
@@ -161,5 +185,6 @@ function FacilityInformation(facilityId, facilityName) {
 
     createStartEndDatePicker('#diagnosisStartDate', '#diagnosisEndDate', endDateChangeforDiagnosis);
     createStartEndDatePicker('#encounterStartDate', '#encounterEndDate', endDateChangeforEncounter);
+    createStartEndDatePicker('#drugStartDate', '#drugEndDate', endDateChangeforDrug);
 
 }
