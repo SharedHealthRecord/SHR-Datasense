@@ -75,7 +75,6 @@ function FacilityInformation(facilityId, facilityName) {
     });
 
     $('#visitDate').datepicker({
-         autoclose: true,
          onRender: function(dateTemp) {
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -86,12 +85,12 @@ function FacilityInformation(facilityId, facilityName) {
     }).on('changeDate', function (e) {
        $('#getVisitTypeButton').attr("disabled",false);
        $('#visitWithCount').attr("hidden", true);
+       $(this).datepicker('hide');
        clearErrors();
     });
 
     var createStartEndDatePicker = function(startDateId, endDateId, endDateChange){
         var startDatePicker = $(startDateId).datepicker({
-          autoclose: true,
           onRender: function(dateTemp) {
             var nowTemp = new Date();
             var now = new Date(nowTemp.getFullYear(), nowTemp.getMonth(), nowTemp.getDate(), 0, 0, 0, 0);
@@ -100,13 +99,11 @@ function FacilityInformation(facilityId, facilityName) {
           },
           format: 'dd/mm/yyyy'
         }).on('changeDate', function(ev) {
-          if (ev.date.valueOf() < endDatePicker.date.valueOf()) {
-            var newDate = new Date(ev.date)
-            newDate.setDate(newDate.getDate());
-            endDatePicker.setValue(newDate);
-          }
-          startDatePicker.hide();
-          $(endDateId)[0].focus();
+           var newDate = new Date(ev.date)
+           newDate.setDate(newDate.getDate());
+           endDatePicker.setValue(newDate);
+           startDatePicker.hide();
+           $(endDateId)[0].focus();
         }).data('datepicker');
         var endDatePicker = $(endDateId).datepicker({
           autoclose: true,
@@ -127,12 +124,14 @@ function FacilityInformation(facilityId, facilityName) {
     var endDateChangeforDiagnosis= function(ev) {
       $('#getDiagnosisWithCountButton').attr("disabled",false);
       $('#getDiagnosisWithCount').attr("hidden", true);
+      $(this).datepicker('hide');
       clearErrors();
     }
 
     var endDateChangeforEncounter= function(ev) {
       $('#getEncounterTypesWithCountButton').attr("disabled",false);
       $('#encounterTypesWithCount').attr("hidden", true);
+      $(this).datepicker('hide');
       clearErrors();
     }
 
