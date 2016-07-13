@@ -6,6 +6,7 @@ import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.MedicationOrder;
+import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.model.PrescribedDrug;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
@@ -89,9 +90,12 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
     private void setDrugNameAndUuid(MedicationOrder medicationOrder, PrescribedDrug prescribedDrug) {
         CodeableConceptDt medication = (CodeableConceptDt) medicationOrder.getMedication();
         CodingDt codingFirstRep = medication.getCodingFirstRep();
+        if (StringUtils.isNotBlank(codingFirstRep.getCode())) {
+            prescribedDrug.setDrugCode(codingFirstRep.getCode());
+        } else {
+            prescribedDrug.setNonCodedName(codingFirstRep.getDisplay());
+        }
 
-        prescribedDrug.setDrugUuid(codingFirstRep.getCode());
-        prescribedDrug.setDrugName(codingFirstRep.getDisplay());
     }
 
     private String getMedicationPrescriber(MedicationOrder medicationOrder) {

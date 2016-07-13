@@ -17,16 +17,16 @@ public class PrescribedDrugDao {
         map.put("patient_hid", prescribedDrug.getPatientHid());
         map.put("encounter_id", prescribedDrug.getEncounterId());
         map.put("prescription_datetime", prescribedDrug.getPrescriptionDateTime());
-        map.put("drug_uuid",prescribedDrug.getDrugUuid());
-        map.put("drug_name",prescribedDrug.getDrugName());
+        map.put("drug_code",prescribedDrug.getDrugCode());
+        map.put("non_coded_name",prescribedDrug.getNonCodedName());
         map.put("prescriber",prescribedDrug.getPrescriber());
         map.put("status",prescribedDrug.getStatus());
         map.put("shr_medication_order_uuid", prescribedDrug.getShrMedicationOrderUuid());
         map.put("prior_shr_medication_order_uuid", prescribedDrug.getPriorShrMedicationOrderUuid());
         map.put("uuid",prescribedDrug.getUuid());
 
-        String sql = "insert into prescribed_drugs (patient_hid, encounter_id, prescription_datetime, drug_uuid, drug_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid) " +
-                                              "values(:patient_hid, :encounter_id, :prescription_datetime, :drug_uuid, :drug_name, :prescriber, :status, :shr_medication_order_uuid, :prior_shr_medication_order_uuid, :uuid )";
+        String sql = "insert into prescribed_drugs (patient_hid, encounter_id, prescription_datetime, drug_code, non_coded_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid) " +
+                                              "values(:patient_hid, :encounter_id, :prescription_datetime, :drug_code, :non_coded_name, :prescriber, :status, :shr_medication_order_uuid, :prior_shr_medication_order_uuid, :uuid )";
         jdbcTemplate.update(sql, map);
     }
 

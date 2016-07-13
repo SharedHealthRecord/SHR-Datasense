@@ -104,7 +104,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         PrescribedDrug prescribedDrug = byEncounterId.get(0);
         Date expectedDate = DateUtil.parseDate("23/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
         String expectedDrugUuid = "cd89844d-8211-11e5-aa01-0050568276cf";
-        String expectedDrugName = "Paracetamol Tablet 500 mg";
+        String expectedDrugName = null;
         String expectedPrescriberId = "20";
         String expectedStatus = "NEW";
         String expectedShrMedicationOrderUuid = SHR_ENCOUNTER_ID + ":97711fe6-d025-4324-96a0-a480a49bb893";
@@ -203,8 +203,8 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(PATIENT_HID, prescribedDrug.getPatientHid());
         assertEquals(shrEncounterId, prescribedDrug.getEncounterId());
         assertEquals(expectedDate, prescribedDrug.getPrescriptionDateTime());
-        assertEquals(expectedDrugUuid, prescribedDrug.getDrugUuid());
-        assertEquals(expectedDrugName, prescribedDrug.getDrugName());
+        assertEquals(expectedDrugUuid, prescribedDrug.getDrugCode());
+        assertEquals(expectedDrugName, prescribedDrug.getNonCodedName());
         assertEquals(expectedPrescriber, prescribedDrug.getPrescriber());
         assertEquals(expectedStatus, prescribedDrug.getStatus());
         assertEquals(expectedShrMedicationOrderUuid, prescribedDrug.getShrMedicationOrderUuid());
@@ -214,7 +214,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
     }
 
     private List<PrescribedDrug> findByEncounterId(String shrEncounterId) {
-        String sql = "select patient_hid, encounter_id, prescription_datetime, drug_uuid, drug_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid from prescribed_drugs where encounter_id= :encounter_id";
+        String sql = "select patient_hid, encounter_id, prescription_datetime, drug_code, non_coded_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid from prescribed_drugs where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
         return jdbcTemplate.query(sql, map, new RowMapper<PrescribedDrug>() {
@@ -225,8 +225,8 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
                 prescribedDrug.setPatientHid(rs.getString("patient_hid"));
                 prescribedDrug.setEncounterId(rs.getString("encounter_id"));
                 prescribedDrug.setPrescriptionDateTime(rs.getDate("prescription_datetime"));
-                prescribedDrug.setDrugUuid(rs.getString("drug_uuid"));
-                prescribedDrug.setDrugName(rs.getString("drug_name"));
+                prescribedDrug.setDrugCode(rs.getString("drug_code"));
+                prescribedDrug.setNonCodedName(rs.getString("non_coded_name"));
                 prescribedDrug.setPrescriber(rs.getString("prescriber"));
                 prescribedDrug.setStatus(rs.getString("status"));
                 prescribedDrug.setShrMedicationOrderUuid(rs.getString("shr_medication_order_uuid"));

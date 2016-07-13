@@ -6,27 +6,27 @@ public class PrescribedDrug extends BaseResource {
     private String patientHid;
     private String encounterId;
     private Date prescriptionDateTime;
-    private String drugUuid;
-    private String drugName;
+    private String drugCode;
+    private String nonCodedName;
     private String prescriber;
     private String status;
     private String shrMedicationOrderUuid;
     private String priorShrMedicationOrderUuid;
 
-    public String getDrugName() {
-        return drugName;
+    public String getNonCodedName() {
+        return nonCodedName;
     }
 
-    public void setDrugName(String drugName) {
-        this.drugName = drugName;
+    public void setNonCodedName(String nonCodedName) {
+        this.nonCodedName = nonCodedName;
     }
 
-    public String getDrugUuid() {
-        return drugUuid;
+    public String getDrugCode() {
+        return drugCode;
     }
 
-    public void setDrugUuid(String drugUuid) {
-        this.drugUuid = drugUuid;
+    public void setDrugCode(String drugCode) {
+        this.drugCode = drugCode;
     }
 
     public String getEncounterId() {

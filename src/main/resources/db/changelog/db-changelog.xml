@@ -1027,4 +1027,11 @@
             ALTER TABLE dhis_dataset_map ADD COLUMN date_voided DATETIME;
         </sql>
     </changeSet>
+    <changeSet  id="sharedhealth-datasense-20160713-1457" author="Neha,Anjaly">
+        <comment>Renaming column names for prescribed drugs</comment>
+        <sql>
+            ALTER TABLE prescribed_drugs CHANGE drug_uuid drug_code varchar(50);
+            ALTER TABLE prescribed_drugs CHANGE drug_name non_coded_name varchar(50);
+        </sql>
+    </changeSet>
 </databaseChangeLog>
