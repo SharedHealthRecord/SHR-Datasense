@@ -173,6 +173,69 @@
             </div>
         </div>
     </div>
+   
+    <div class="panel-group" id="prescribedDrugs" hidden="true">
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <span>Types of prescribed drugs for </span>
+                    <span id="dateSelectedForprescribedDrugs"></span>
+                </h4>
+            </div>
+            <div class="panel-body">
+                <div id="accordion" role="tablist">
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#nonCodedDrug" aria-expanded="true" aria-controls="nonCodedDrug">
+                                    <span>Non-coded drugs</span>
+                                    <span id="freetextCount"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nonCodedDrug" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <table id="nonCodedDrugs" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#codedDrug" aria-expanded="true" aria-controls="codedDrug">
+                                    <span>Coded drugs</span>
+                                    <span id="DrugCount"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="codedDrug" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <table id="CodedDrugs" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Drug</th>
+                                    <th>Concept</th>
+                                    <th>Reference Term</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div th:include="fragments/error :: error"/>
 </div>
 
@@ -211,6 +274,24 @@
              </tr>
         {{/.}}
 </script>
+<script id="template_noncoded_drug_with_count" type="x-tmpl-mustache">
+        {{#.}}
+             <tr>
+                <td>{{ drug }}</td>
+                <td>{{ count }}</td>
+             </tr>
+        {{/.}}
+</script>
+<script id="template_coded_drug_with_count" type="x-tmpl-mustache">
+        {{#.}}
+             <tr>
+                <td class="col-md-3">{{ drug }}</td>
+                <td class="col-md-4">{{ concept }}</td>
+                <td class="col-md-4">{{ reference }}</td>
+                <td class="col-md-1">{{ count }}</td>
+             </tr>
+        {{/.}}
+</script>
 
 <script id="template_diagnosis_name_with_count" type="x-tmpl-mustache">
         {{#.}}
@@ -220,6 +301,11 @@
                 <td>{{ count }}</td>
              </tr>
         {{/.}}
+</script>
+<script id="template_drug_count" type="x-tmpl-mustache">
+    {{#.}}
+        ({{count}})
+    {{/.}}
 </script>
 </body>
 </html>

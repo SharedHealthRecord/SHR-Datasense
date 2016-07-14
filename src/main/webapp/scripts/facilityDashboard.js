@@ -65,7 +65,6 @@ function FacilityInformation(facilityId, facilityName) {
                  renderDataToTemplate("#template_for_selected_date_range",dates,"#dateSelectedForEncounterType");
                  renderDataToTemplate("#template_encounter_type_with_count",response,'#encounterWithCount tbody');
                  $('#encounterTypesWithCount').attr("hidden", false);
-
                }
             },
             error: function(e){
@@ -84,7 +83,22 @@ function FacilityInformation(facilityId, facilityName) {
             type: "GET",
             url: targetUrl,
             success: function(response){
-                alert(response[0])
+                if(response.length==0){
+                  showErrors("No encounter types for the date entered");
+                }
+                else{
+                    var dates = {"startDate":startDate, "endDate":endDate};
+                    var freeTextCount = response.freetextCount[0];
+                    var noncodedDrugWithCount = response.nonCodedDrugsWithCount;
+                    var drugCount = response.codedDrugCount[0];
+                    var codedDrugWithCount = response.codedDrugWithCount;
+                    renderDataToTemplate("#template_for_selected_date_range",dates,"#dateSelectedForprescribedDrugs");
+                    renderDataToTemplate("#template_drug_count",freeTextCount,"#freetextCount");
+                    renderDataToTemplate("#template_noncoded_drug_with_count",noncodedDrugWithCount,"#nonCodedDrugs tbody")
+                    renderDataToTemplate("#template_drug_count",drugCount,"#DrugCount");
+                    renderDataToTemplate("#template_coded_drug_with_count",codedDrugWithCount,"#CodedDrugs tbody")
+                    $('#prescribedDrugs').attr("hidden",false);
+                }
             },
             error: function(e){
                 showErrors(e)
@@ -154,7 +168,7 @@ function FacilityInformation(facilityId, facilityName) {
     }
     var endDateChangeforDrug= function(ev) {
           $('#getDrugsWithCountButton').attr("disabled",false);
-//          $('#encounterTypesWithCount').attr("hidden", true);
+          $('#prescribedDrugs').attr("hidden", true);
           $(this).datepicker('hide');
           clearErrors();
         }
@@ -181,6 +195,7 @@ function FacilityInformation(facilityId, facilityName) {
        $('#getDiagnosisWithCount').attr("hidden", true);
        $('#encounterTypesWithCount').attr("hidden", true);
        $('#visitWithCount').attr("hidden",true);
+       $('#prescribedDrugs').attr("hidden",true);
     }
 
     createStartEndDatePicker('#diagnosisStartDate', '#diagnosisEndDate', endDateChangeforDiagnosis);

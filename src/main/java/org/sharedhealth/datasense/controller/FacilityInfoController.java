@@ -65,6 +65,9 @@ public class FacilityInfoController {
                                                                            @RequestParam(value = "endDate", required = true) String endDate) {
         HashMap<String, List<Map<String, Object>>> prescribedDrugs = new HashMap<>();
         prescribedDrugs.put("freetextCount",facilityDataService.getFreeTextCount(facilityId, startDate, endDate));
+        prescribedDrugs.put("nonCodedDrugsWithCount",facilityDataService.getnonCodedDrugsWithCount(facilityId,startDate,endDate));
+        prescribedDrugs.put("codedDrugCount",facilityDataService.getCodedDrugCount(facilityId,startDate,endDate));
+        prescribedDrugs.put("codedDrugWithCount",facilityDataService.getCodedDrugWithCount(facilityId,startDate,endDate));
         return prescribedDrugs;
     }
 

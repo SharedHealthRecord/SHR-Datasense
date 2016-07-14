@@ -53,4 +53,52 @@ public class PrescribedDrugDao {
         List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
         return maps;
     }
+
+    public List<Map<String, Object>> getNonCodedDrugs(String facilityId, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("start_date", startDate);
+        map.put("end_date", endDate);
+        String query = "SELECT d.non_coded_name AS drug,count(d.non_coded_name) AS count FROM prescribed_drugs d WHERE d.encounter_id IN" +
+                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND " +
+                "encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y %H:%i:%s')" +
+                "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y %H:%i:%s')) " +
+                "AND d.non_coded_name IS NOT NULL GROUP BY d.non_coded_name";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
+    }
+
+    public List<Map<String, Object>> getCodedDrugCount(String facilityId, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("start_date", startDate);
+        map.put("end_date", endDate);
+        String query = "SELECT count(d.uuid)AS count FROM prescribed_drugs d WHERE d.encounter_id IN" +
+                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND " +
+                "encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y %H:%i:%s')" +
+                "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y %H:%i:%s')) " +
+                "AND d.drug_code IS NOT NULL";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
+    }
+
+    public List<Map<String, Object>> getCodedDrugs(String facilityId, String startDate, String endDate) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("facility_id", facilityId);
+        map.put("start_date", startDate);
+        map.put("end_date", endDate);
+        String query = "SELECT d.name AS drug," +
+                "(SELECT c.name FROM concept c WHERE d.concept_uuid = c.concept_uuid) AS concept, " +
+                "(SELECT r.name FROM reference_term r WHERE d.reference_term_uuid = r.reference_term_uuid) AS reference," +
+                "count(pd.drug_code) AS count " +
+                "FROM prescribed_drugs pd " +
+                "JOIN drug d ON pd.drug_code = d.drug_uuid " +
+                "WHERE pd.encounter_id IN " +
+                "(SELECT encounter_id FROM encounter WHERE facility_id = :facility_id AND " +
+                "encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y %H:%i:%s') " +
+                "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y %H:%i:%s')) " +
+                "AND pd.drug_code IS NOT NULL GROUP BY pd.drug_code";
+        List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
+        return maps;
+    }
 }

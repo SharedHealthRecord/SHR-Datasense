@@ -64,6 +64,21 @@ public class FacilityInfoService {
         return prescribedDrugDao.getTotalFreeTextCount(facilityId,startDate,endDate);
     }
 
+    public List<Map<String, Object>> getnonCodedDrugsWithCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
+        return prescribedDrugDao.getNonCodedDrugs(facilityId,startDate,endDate);
+    }
+
+    public List<Map<String, Object>> getCodedDrugCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
+        return prescribedDrugDao.getCodedDrugCount(facilityId,startDate,endDate);
+    }
+
+    public List<Map<String, Object>> getCodedDrugWithCount(String facilityId, String startDate, String endDate) {
+        endDate = changeEndDateToEndOfDay(endDate);
+        return prescribedDrugDao.getCodedDrugs(facilityId, startDate, endDate);
+    }
+
     private String changeEndDateToEndOfDay(String endDate) {
         endDate = endDate + " 23:59:59";
         return endDate;
