@@ -175,7 +175,7 @@
     </div>
 
     <div class="panel-group" id="prescribedDrugs" hidden="true">
-        <div class="panel panel-default">
+        <div class="panel panel-default ">
             <div class="panel-heading">
                 <h4 class="panel-title">
                     <span>Types of prescribed drugs for </span>
@@ -285,9 +285,16 @@
 <script id="template_coded_drug_with_count" type="x-tmpl-mustache">
         {{#.}}
              <tr>
-                <td class="col-md-3">{{ drug }}</td>
-                <td class="col-md-4">{{ concept }}</td>
-                <td class="col-md-4">{{ reference }}</td>
+                <td class="col-md-3">{{ drug_name }}</td>
+                <td class="col-md-4">{{ concept_name }}</td>
+                <td class="col-md-4">
+                    {{^reference_term_name}}
+                        No reference code mapping
+                    {{/reference_term_name}}
+                    {{#reference_term_name}}
+                        {{ reference_term_name }}({{reference_term_code}})
+                    {{/reference_term_name}}
+                </td>
                 <td class="col-md-1">{{ count }}</td>
              </tr>
         {{/.}}

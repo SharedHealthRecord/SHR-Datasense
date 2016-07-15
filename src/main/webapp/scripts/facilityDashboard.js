@@ -83,14 +83,14 @@ function FacilityInformation(facilityId, facilityName) {
             type: "GET",
             url: targetUrl,
             success: function(response){
-                if(response.length==0){
-                  showErrors("No encounter types for the date entered");
+                var freeTextCount = response.freetextCount[0];
+                var drugCount = response.codedDrugCount[0];
+                if(freeTextCount.count==0 && drugCount.count==0){
+                  showErrors("No drugs prescribed to be displayed");
                 }
                 else{
                     var dates = {"startDate":startDate, "endDate":endDate};
-                    var freeTextCount = response.freetextCount[0];
                     var noncodedDrugWithCount = response.nonCodedDrugsWithCount;
-                    var drugCount = response.codedDrugCount[0];
                     var codedDrugWithCount = response.codedDrugWithCount;
                     renderDataToTemplate("#template_for_selected_date_range",dates,"#dateSelectedForprescribedDrugs");
                     renderDataToTemplate("#template_drug_count",freeTextCount,"#freetextCount");
@@ -169,6 +169,7 @@ function FacilityInformation(facilityId, facilityName) {
     var endDateChangeforDrug= function(ev) {
           $('#getDrugsWithCountButton').attr("disabled",false);
           $('#prescribedDrugs').attr("hidden", true);
+          $('.panel-collapse.in').collapse('hide');
           $(this).datepicker('hide');
           clearErrors();
         }
