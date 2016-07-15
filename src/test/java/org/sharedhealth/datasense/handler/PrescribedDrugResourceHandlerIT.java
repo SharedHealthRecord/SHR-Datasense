@@ -133,7 +133,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         PrescribedDrug prescribedDrug = byEncounterIdForDiscontinuing.get(0);
         Date expectedDate = DateUtil.parseDate("24/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
         String expectedDrugUuid = "cd74d25f-8211-11e5-aa01-0050568276cf";
-        String expectedDrugName = "Diazepam Tablet 5 mg";
+        String expectedDrugName = null;
         String expectedPrescriberId = "20";
         String expectedStatus = "DISCONTINUE";
         String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":2af6380b-466f-447a-9bfa-b1d5f816e09c";
@@ -155,7 +155,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         PrescribedDrug prescribedDrug = byEncounterIdForDiscontinuing.get(0);
         Date expectedDate = DateUtil.parseDate("27/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
         String expectedDrugUuid = "cd858ce0-8211-11e5-aa01-0050568276cf";
-        String expectedDrugName = "Pantoprazole Tablet 40 mg";
+        String expectedDrugName = null;
         String expectedPrescriberId = "20";
         String expectedStatus = "DISCONTINUE";
         String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":efd4dc92-eb9f-4141-92fb-03e89c536fa4";
