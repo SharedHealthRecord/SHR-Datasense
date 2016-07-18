@@ -44,7 +44,7 @@ public class FacilityDao {
         map.put("facility_type", facility.getFacilityType());
         map.put("facility_location", facility.getFacilityLocationCode());
         String query = "insert into facility (" + ALL_FIELDS + ") values " +
-                "(:facility_id, :facility_name, :facility_type, :facility_location, )";
+                "(:facility_id, :facility_name, :facility_type, :facility_location)";
         jdbcTemplate.update(query, map);
     }
 

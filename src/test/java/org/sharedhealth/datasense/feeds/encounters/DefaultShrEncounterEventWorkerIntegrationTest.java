@@ -2,7 +2,6 @@ package org.sharedhealth.datasense.feeds.encounters;
 
 
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
-import org.apache.log4j.Logger;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -111,7 +110,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrati
         assertEquals(1, getPatientDeathList(shrEncounterId).size());
         assertEquals(1, getProcedureIdList(shrEncounterId).size());
         assertEquals(1, getDiagnosisIdList(shrEncounterId).size());
-        assertEquals(1, getMedicationIdList(shrEncounterId).size());
+        assertEquals(1, getImmunizationIdList(shrEncounterId).size());
     }
 
     @Test
@@ -162,7 +161,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrati
         bundle.addContent(loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml"));
         encounterEventWorker.process(bundle);
         assertEquals(1, getEncounterIdList(shrEncounterId).size());
-        assertEquals(1, getMedicationIdList(shrEncounterId).size());
+        assertEquals(1, getImmunizationIdList(shrEncounterId).size());
         assertEquals(0, getDiagnosisIdList(shrEncounterId).size());
         assertEquals(0, getObservationIdList(shrEncounterId).size());
         assertEquals(0, getProcedureIdList(shrEncounterId).size());
@@ -215,9 +214,9 @@ public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrati
 
     }
 
-    private List<Integer> getMedicationIdList(String shrEncounterId) {
+    private List<Integer> getImmunizationIdList(String shrEncounterId) {
         return jdbcTemplate.queryForList(
-                "select medication_id from medication where encounter_id= :encounter_id",
+                "select immunization_id from immunizations where encounter_id= :encounter_id",
                 Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
 
     }

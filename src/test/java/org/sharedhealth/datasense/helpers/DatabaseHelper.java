@@ -11,7 +11,7 @@ public class DatabaseHelper {
         template.update("delete from concept", new EmptySqlParameterSource());
         template.update("delete from patient_death_details", new EmptySqlParameterSource());
         template.update("delete from observation", new EmptySqlParameterSource());
-        template.update("delete from medication", new EmptySqlParameterSource());
+        template.update("delete from immunizations", new EmptySqlParameterSource());
         template.update("delete from diagnosis", new EmptySqlParameterSource());
         template.update("delete from provider", new EmptySqlParameterSource());
         template.update("delete from facility", new EmptySqlParameterSource());

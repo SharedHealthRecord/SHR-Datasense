@@ -5,7 +5,6 @@ import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
 import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.Immunization;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
 import org.junit.After;
 import org.junit.Before;
@@ -92,52 +91,52 @@ public class ImmunizationResourceHandlerIT {
     public void shouldSaveImmunizationDateTimeAndEncounterAndPatient() throws Exception {
         immunizationResourceHandler.process(immunizationResource,
                 bundleContext.getEncounterCompositions().get(0));
-        Medication medication = getMedication();
-        assertEquals(DateUtil.parseDate("2015-09-03T00:00:00.000+05:30"), medication.getDateTime());
-        assertEquals("shrEncounterId", medication.getEncounter().getEncounterId());
-        assertEquals(HEALTH_ID, medication.getPatient().getHid());
+        Immunization immunization = getImmunization();
+        assertEquals(DateUtil.parseDate("2015-09-03T00:00:00.000+05:30"), immunization.getDateTime());
+        assertEquals("shrEncounterId", immunization.getEncounter().getEncounterId());
+        assertEquals(HEALTH_ID, immunization.getPatient().getHid());
         List<ImmunizationReason> reasons = findImmunizationReasonsByEncounterId("shrEncounterId");
         assertTrue(reasons.size() > 0);
     }
 
     @Test
     public void shouldSaveEncounterDateTimeIfImmunizationDateNotGiven() throws Exception {
-        ((Immunization) immunizationResource).setDate(null);
+        ((ca.uhn.fhir.model.dstu2.resource.Immunization) immunizationResource).setDate(null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        Medication medication = getMedication();
-        assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), medication.getDateTime());
+        Immunization immunization = getImmunization();
+        assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), immunization.getDateTime());
     }
 
     @Test
     public void shouldSaveImmunizationStatusAndUuid() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        Medication medication = getMedication();
-        assertEquals("IA", medication.getStatus().getValue());
-        assertNotNull(medication.getUuid());
+        Immunization immunization = getImmunization();
+        assertEquals("IA", immunization.getStatus().getValue());
+        assertNotNull(immunization.getUuid());
     }
 
     @Test
     public void shouldSaveDrugId() throws Exception {
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        Medication medication = getMedication();
-        assertEquals(TR_DRUG_UUID, medication.getDrugId());
+        Immunization immunization = getImmunization();
+        assertEquals(TR_DRUG_UUID, immunization.getDrugId());
     }
 
     @Test
     public void shouldNotSaveNonCodedImmunization() throws Exception {
-        CodeableConceptDt vaccineType = ((Immunization) immunizationResource).getVaccineCode();
+        CodeableConceptDt vaccineType = ((ca.uhn.fhir.model.dstu2.resource.Immunization) immunizationResource).getVaccineCode();
         CodingDt codingDt = vaccineType.getCoding().get(0);
         codingDt.setSystem((String) null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
-        List<Medication> medications = findMedicationsFor(bundleContext.getShrEncounterId());
-        assertTrue(medications.isEmpty());
+        List<Immunization> immunizations = findImmunizationsFor(bundleContext.getShrEncounterId());
+        assertTrue(immunizations.isEmpty());
     }
 
-    private Medication getMedication() {
-        List<Medication> medications = findMedicationsFor(bundleContext.getShrEncounterId());
-        assertFalse(medications.isEmpty());
-        assertEquals(1, medications.size());
-        return medications.get(0);
+    private Immunization getImmunization() {
+        List<Immunization> immunizations = findImmunizationsFor(bundleContext.getShrEncounterId());
+        assertFalse(immunizations.isEmpty());
+        assertEquals(1, immunizations.size());
+        return immunizations.get(0);
     }
 
     @After
@@ -145,31 +144,31 @@ public class ImmunizationResourceHandlerIT {
         DatabaseHelper.clearDatasenseTables(jdbcTemplate);
     }
 
-    private List<Medication> findMedicationsFor(String shrEncounterId) {
+    private List<Immunization> findImmunizationsFor(String shrEncounterId) {
         String sql = "select datetime, encounter_id, patient_hid, status, drug_id, uuid from " +
-                "medication where encounter_id= :encounter_id";
+                "immunizations where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
-                RowMapper<Medication>() {
+                RowMapper<Immunization>() {
                     @Override
-                    public Medication mapRow(ResultSet rs, int rowNum) throws SQLException {
-                        Medication medication = new Medication();
+                    public Immunization mapRow(ResultSet rs, int rowNum) throws SQLException {
+                        Immunization immunization = new Immunization();
 
                         Date medicationDatetime = new Date(rs.getTimestamp("datetime").getTime());
-                        medication.setDateTime(medicationDatetime);
+                        immunization.setDateTime(medicationDatetime);
 
                         Encounter encounter = new Encounter();
                         encounter.setEncounterId(rs.getString("encounter_id"));
-                        medication.setEncounter(encounter);
+                        immunization.setEncounter(encounter);
 
                         Patient patient = new Patient();
                         patient.setHid(rs.getString("patient_hid"));
                         String status = rs.getString("status");
-                        medication.setStatus(MedicationStatus.getMedicationStatus(status));
-                        medication.setPatient(patient);
-                        medication.setDrugId(rs.getString("drug_id"));
-                        medication.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
-                        medication.setUuid(rs.getString("uuid"));
-                        return medication;
+                        immunization.setStatus(MedicationStatus.getMedicationStatus(status));
+                        immunization.setPatient(patient);
+                        immunization.setDrugId(rs.getString("drug_id"));
+                        immunization.setStatus(MedicationStatus.getMedicationStatus(rs.getString("status")));
+                        immunization.setUuid(rs.getString("uuid"));
+                        return immunization;
                     }
                 });
     }

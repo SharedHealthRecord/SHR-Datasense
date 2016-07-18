@@ -3,14 +3,12 @@ package org.sharedhealth.datasense.handler;
 import ca.uhn.fhir.model.api.IResource;
 import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.resource.Immunization;
-import org.sharedhealth.datasense.client.TrWebClient;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.ImmunizationReason;
-import org.sharedhealth.datasense.model.Medication;
+import org.sharedhealth.datasense.model.Immunization;
 import org.sharedhealth.datasense.model.MedicationStatus;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
-import org.sharedhealth.datasense.repository.MedicationDao;
+import org.sharedhealth.datasense.repository.ImmunizationDao;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -25,19 +23,17 @@ import static org.sharedhealth.datasense.util.TrUrl.isTrMedicationUrl;
 public class ImmunizationResourceHandler implements FhirResourceHandler {
 
     @Autowired
-    private MedicationDao medicationDao;
-    @Autowired
-    private TrWebClient trWebClient;
+    private ImmunizationDao immunizationDao;
 
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ImmunizationResourceHandler.class);
 
     @Override
     public boolean canHandle(IResource resource) {
-        return resource instanceof Immunization;
+        return resource instanceof ca.uhn.fhir.model.dstu2.resource.Immunization;
     }
 
     private boolean isVaccinationRefused(IResource resource) {
-        Immunization immunization = (Immunization) resource;
+        ca.uhn.fhir.model.dstu2.resource.Immunization immunization = (ca.uhn.fhir.model.dstu2.resource.Immunization) resource;
         Boolean given = immunization.getWasNotGiven();
         return given == null ? false : given;
     }
@@ -47,24 +43,24 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         if (isVaccinationRefused(resource)) {
             return;
         }
-        Immunization immunization = (Immunization) resource;
-        Medication medication = new Medication();
-        medication.setStatus(MedicationStatus.ImmunizationAdministered);
+        ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization = (ca.uhn.fhir.model.dstu2.resource.Immunization) resource;
+        Immunization immunization = new Immunization();
+        immunization.setStatus(MedicationStatus.ImmunizationAdministered);
         Encounter encounter = composition.getEncounterReference().getValue();
-        medication.setEncounter(encounter);
-        medication.setPatient(composition.getPatientReference().getValue());
-        medication.setDateTime(getDateTime(immunization, encounter));
-        setMedicationCodes(immunization, medication);
-        if (medication.getDrugId() == null) {
+        immunization.setEncounter(encounter);
+        immunization.setPatient(composition.getPatientReference().getValue());
+        immunization.setDateTime(getDateTime(fhirImmunization, encounter));
+        setImmunizationCodes(fhirImmunization, immunization);
+        if (immunization.getDrugId() == null) {
             logger.warn("Cannot save non-coded immunizations.");
             return;
         }
-        medicationDao.save(medication);
-        processImmunizationReason(immunization, medication, composition);
+        immunizationDao.save(immunization);
+        processImmunizationReason(fhirImmunization, immunization, composition);
     }
 
-    private void processImmunizationReason(Immunization immunization, Medication medication, EncounterComposition composition) {
-        Immunization.Explanation explanation = immunization.getExplanation();
+    private void processImmunizationReason(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Immunization immunization, EncounterComposition composition) {
+        ca.uhn.fhir.model.dstu2.resource.Immunization.Explanation explanation = fhirImmunization.getExplanation();
         String encounterId = composition.getEncounterReference().getValue().getEncounterId();
         String hid = composition.getPatientReference().getValue().getHid();
         if (explanation != null) {
@@ -76,13 +72,13 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
                     ImmunizationReason immunizationReason = new ImmunizationReason();
                     immunizationReason.setCode(coding.getCode());
                     immunizationReason.setDescr(coding.getDisplay());
-                    immunizationReason.setIncidentUuid(medication.getUuid());
+                    immunizationReason.setIncidentUuid(immunization.getUuid());
                     immunizationReason.setEncounterId(encounterId);
                     immunizationReason.setHid(hid);
                     immunizationReasons.add(immunizationReason);
                 }
             }
-            medicationDao.save(immunizationReasons);
+            immunizationDao.save(immunizationReasons);
         }
     }
 
@@ -90,23 +86,23 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     public void deleteExisting(EncounterComposition composition) {
         String healthId = composition.getPatientReference().getHealthId();
         String encounterId = composition.getEncounterReference().getEncounterId();
-        medicationDao.deleteExisting(healthId, encounterId);
-        medicationDao.deleteExistingImmunizationReasons(healthId, encounterId);
+        immunizationDao.deleteExisting(healthId, encounterId);
+        immunizationDao.deleteExistingImmunizationReasons(healthId, encounterId);
     }
 
-    private void setMedicationCodes(Immunization immunization, Medication medication) {
-        List<CodingDt> codings = immunization.getVaccineCode().getCoding();
+    private void setImmunizationCodes(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Immunization immunization) {
+        List<CodingDt> codings = fhirImmunization.getVaccineCode().getCoding();
         for (CodingDt coding : codings) {
             String system = coding.getSystem();
             if (system != null && isTrMedicationUrl(system)) {
-                medication.setDrugId(coding.getCode());
+                immunization.setDrugId(coding.getCode());
                 break;
             }
         }
     }
 
-    private Date getDateTime(Immunization immunization, Encounter encounter) {
-        Date date = immunization.getDate();
+    private Date getDateTime(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Encounter encounter) {
+        Date date = fhirImmunization.getDate();
         return date != null ? date : encounter.getEncounterDateTime();
     }
 }

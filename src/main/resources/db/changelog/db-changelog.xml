@@ -1034,4 +1034,21 @@
             ALTER TABLE prescribed_drugs CHANGE drug_name non_coded_name varchar(50);
         </sql>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20160715-1514" author="Anjaly,Sukreet">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="medication"/>
+        </preConditions>
+        <comment>Renaming the table medication to immunizations</comment>
+        <renameTable newTableName="immunizations" oldTableName="medication"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20160715-1516" author="Anjaly,Sukreet" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="medication_id" tableName="immunizations"/>
+        </preConditions>
+        <comment>change immunizations table, medication_id column to immunization_id</comment>
+        <sql>
+            ALTER TABLE immunizations CHANGE medication_id immunization_id int auto_increment;
+        </sql>
+    </changeSet>
+
 </databaseChangeLog>

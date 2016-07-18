@@ -2,7 +2,7 @@ package org.sharedhealth.datasense.model;
 
 import java.util.Date;
 
-public class Medication extends BaseResource {
+public class Immunization extends BaseResource {
     private Date dateTime;
     private Encounter encounter;
     private MedicationStatus status;
@@ -17,7 +17,7 @@ public class Medication extends BaseResource {
         this.encounter = encounter;
     }
 
-    public Medication() {
+    public Immunization() {
     }
 
     public Date getDateTime() {
@@ -32,8 +32,8 @@ public class Medication extends BaseResource {
         return status;
     }
 
-    public void setStatus(MedicationStatus status) {
-        this.status = status;
+    public void setStatus(MedicationStatus medicationStatus) {
+        this.status = medicationStatus;
     }
 
     public void setPatient(Patient patient) {
