@@ -146,7 +146,7 @@ public class ImmunizationResourceHandlerIT {
 
     private List<Immunization> findImmunizationsFor(String shrEncounterId) {
         String sql = "select datetime, encounter_id, patient_hid, status, drug_id, uuid from " +
-                "immunizations where encounter_id= :encounter_id";
+                "immunization where encounter_id= :encounter_id";
         return jdbcTemplate.query(sql, Collections.singletonMap("encounter_id", shrEncounterId), new
                 RowMapper<Immunization>() {
                     @Override

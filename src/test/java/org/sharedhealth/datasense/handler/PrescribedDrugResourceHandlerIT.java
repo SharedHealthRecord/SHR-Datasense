@@ -214,7 +214,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
     }
 
     private List<PrescribedDrug> findByEncounterId(String shrEncounterId) {
-        String sql = "select patient_hid, encounter_id, prescription_datetime, drug_code, non_coded_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid from prescribed_drugs where encounter_id= :encounter_id";
+        String sql = "select patient_hid, encounter_id, prescription_datetime, drug_code, non_coded_name, prescriber, status, shr_medication_order_uuid, prior_shr_medication_order_uuid, uuid from prescribed_drug where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
         return jdbcTemplate.query(sql, map, new RowMapper<PrescribedDrug>() {

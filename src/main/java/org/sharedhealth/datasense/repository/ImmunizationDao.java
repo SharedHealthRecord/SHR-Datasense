@@ -21,7 +21,7 @@ public class ImmunizationDao {
         map.put("status", immunization.getStatus().getValue());
         map.put("drug_id", immunization.getDrugId());
         map.put("uuid", immunization.getUuid());
-        String sql = "insert into immunizations (patient_hid, encounter_id, datetime, status,  drug_id, uuid) " +
+        String sql = "insert into immunization (patient_hid, encounter_id, datetime, status,  drug_id, uuid) " +
                 "values(:patient_hid, :encounter_id, :datetime, :status,  :drug_id, :uuid)";
         jdbcTemplate.update(sql, map);
     }
@@ -31,7 +31,7 @@ public class ImmunizationDao {
         map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        String medicationSql = "delete from immunizations where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        String medicationSql = "delete from immunization where patient_hid = :patient_hid and encounter_id = :encounter_id";
         jdbcTemplate.update(medicationSql, map);
     }
 

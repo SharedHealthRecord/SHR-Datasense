@@ -11,7 +11,7 @@ public class DatabaseHelper {
         template.update("delete from concept", new EmptySqlParameterSource());
         template.update("delete from patient_death_details", new EmptySqlParameterSource());
         template.update("delete from observation", new EmptySqlParameterSource());
-        template.update("delete from immunizations", new EmptySqlParameterSource());
+        template.update("delete from immunization", new EmptySqlParameterSource());
         template.update("delete from diagnosis", new EmptySqlParameterSource());
         template.update("delete from provider", new EmptySqlParameterSource());
         template.update("delete from facility", new EmptySqlParameterSource());
@@ -21,6 +21,6 @@ public class DatabaseHelper {
         template.update("delete from procedures", new EmptySqlParameterSource());
         template.update("delete from diagnostic_order", new EmptySqlParameterSource());
         template.update("delete from diagnostic_report", new EmptySqlParameterSource());
-        template.update("delete from prescribed_drugs", new EmptySqlParameterSource());
+        template.update("delete from prescribed_drug", new EmptySqlParameterSource());
     }
 }

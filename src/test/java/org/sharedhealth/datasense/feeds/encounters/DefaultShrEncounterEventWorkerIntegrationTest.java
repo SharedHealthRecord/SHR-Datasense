@@ -216,7 +216,7 @@ public class DefaultShrEncounterEventWorkerIntegrationTest extends BaseIntegrati
 
     private List<Integer> getImmunizationIdList(String shrEncounterId) {
         return jdbcTemplate.queryForList(
-                "select immunization_id from immunizations where encounter_id= :encounter_id",
+                "select immunization_id from immunization where encounter_id= :encounter_id",
                 Collections.singletonMap("encounter_id", shrEncounterId), Integer.class);
 
     }

@@ -1038,17 +1038,24 @@
         <preConditions onFail="MARK_RAN">
             <tableExists tableName="medication"/>
         </preConditions>
-        <comment>Renaming the table medication to immunizations</comment>
-        <renameTable newTableName="immunizations" oldTableName="medication"/>
+        <comment>Renaming the table medication to immunization</comment>
+        <renameTable newTableName="immunization" oldTableName="medication"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20160715-1516" author="Anjaly,Sukreet" context="setup">
         <preConditions onFail="MARK_RAN">
-            <columnExists columnName="medication_id" tableName="immunizations"/>
+            <columnExists columnName="medication_id" tableName="immunization"/>
         </preConditions>
-        <comment>change immunizations table, medication_id column to immunization_id</comment>
+        <comment>change immunization table, medication_id column to immunization_id</comment>
         <sql>
-            ALTER TABLE immunizations CHANGE medication_id immunization_id int auto_increment;
+            ALTER TABLE immunization CHANGE medication_id immunization_id int auto_increment;
         </sql>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20160718-1657" author="Anjaly,Sukreet">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="prescribed_drugs"/>
+        </preConditions>
+        <comment>Renaming the table prescribed_drugs to prescribed_drug</comment>
+        <renameTable newTableName="prescribed_drug" oldTableName="prescribed_drugs"/>
     </changeSet>
 
 </databaseChangeLog>
