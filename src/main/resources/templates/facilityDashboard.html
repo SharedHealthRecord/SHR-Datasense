@@ -16,6 +16,7 @@
     <script src="/scripts/facilityDashboard.js"/>
     <script type="text/javascript" th:inline="javascript">
         $( document ).ready(function() {
+            $('[data-toggle="tooltip"]').tooltip();
             var facilityDashboard = new FacilityInformation([[${facility.facilityId}]], [[${facility.facilityName}]]);
         });
     </script>
@@ -188,7 +189,7 @@
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#codedDrug" aria-expanded="true" aria-controls="codedDrug">
-                                    <span>Coded drugs</span>
+                                    <span data-toggle="tooltip" title="Drugs defined in terminology registry.">Coded drugs</span>
                                     <span id="DrugCount"></span>
                                 </a>
                             </h4>
@@ -212,7 +213,7 @@
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#nonCodedDrug" aria-expanded="true" aria-controls="nonCodedDrug">
-                                    <span>Non-coded drugs</span>
+                                    <span data-toggle="tooltip" title="Drugs prescribed, but not defined in terminology registry.">Non-coded drugs</span>
                                     <span id="freetextCount"></span>
                                 </a>
                             </h4>
