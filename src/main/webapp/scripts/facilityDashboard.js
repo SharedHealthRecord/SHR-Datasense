@@ -9,7 +9,7 @@ function FacilityInformation(facilityId, facilityName) {
             url: targetUrl,
             success: function(response){
                if(response.length==0){
-                   showErrors("No visit for the date entered");
+                   showErrors("No visits found for the selected dates");
                }else{
                    var selectedDate = {"date":date};
                    renderDataToTemplate("#template_date_selected_for_visit",selectedDate,"#dateSelectedForVisitType");
@@ -59,7 +59,7 @@ function FacilityInformation(facilityId, facilityName) {
             url: targetUrl,
             success: function(response){
                if(response.length==0){
-                 showErrors("No encounter types for the date entered");
+                 showErrors("No encounter types found for the selected dates");
                }else{
                  var dates = {"startDate":startDate, "endDate":endDate};
                  renderDataToTemplate("#template_for_selected_date_range",dates,"#dateSelectedForEncounterType");
@@ -86,7 +86,7 @@ function FacilityInformation(facilityId, facilityName) {
                 var freeTextCount = response.freetextCount[0];
                 var drugCount = response.codedDrugCount[0];
                 if(freeTextCount.count==0 && drugCount.count==0){
-                  showErrors("No drugs prescribed to be displayed");
+                  showErrors("No drugs found for the selected dates");
                 }
                 else{
                     var dates = {"startDate":startDate, "endDate":endDate};

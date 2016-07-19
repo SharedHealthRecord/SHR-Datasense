@@ -24,10 +24,6 @@ body{
     float:left;
     font-size:20px;
 }
-input{
-    width: 200px;
-    font-size : 14px;
-}
 
 optgroup{
     font-size : 14px;

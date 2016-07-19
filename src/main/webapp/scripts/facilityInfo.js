@@ -14,7 +14,7 @@ function FacilityInformations() {
     $("input[name=searchBy]").bind("click", function(e) {
        document.getElementById("searchTxt").value = "";
        clearErrors();
-       $("#avalilableFacilities").attr("hidden",true);
+       $("#searchResult").attr("hidden",true);
     });
 
     var validateFacilityId = function(searchTxt){
@@ -42,7 +42,7 @@ function FacilityInformations() {
                    var rendered = Mustache.render(template, result);
                    $('#searchResultsContainerForFacility').html(rendered);
                    $('#searchResultsContainerForFacility').show();
-                   $("#avalilableFacilities").attr("hidden",false);
+                   $("#searchResult").attr("hidden",false);
 
                 }
            }
@@ -50,7 +50,7 @@ function FacilityInformations() {
     }
 
     var searchFacility = function(searchTxt){
-        $("#avalilableFacilities").attr("hidden",true);
+        $("#searchResult").attr("hidden",true);
         var targetUrl;
         var selectedOption = $('input[name="searchBy"]:checked').val();
         if(selectedOption == "FacilityId"){

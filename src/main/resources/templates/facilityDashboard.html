@@ -55,23 +55,6 @@
                 <hr/>
                 <div>
                     <p class="col-xs-10">
-                        <span>Diagnoses posted by facility:</span>
-                        <span>Select start date
-                            <input id="diagnosisStartDate" name="startDate" type="text"
-                                   class="startDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                        <span>end date
-                            <input id="diagnosisEndDate" name="endDate" type="text"
-                                   class="endDate datepicker dateInput"
-                                   placeholder="Enter a date" readonly='true'/>
-                        </span>
-                    </p>
-                    <button id="getDiagnosisWithCountButton" class="btn btn-info" disabled="true">Submit</button>
-                </div>
-                <hr/>
-                <div>
-                    <p class="col-xs-10">
                         <span>Encounters occurred in facility:</span>
                         <span>Select start date
                             <input id="encounterStartDate" name="startDate" type="text"
@@ -85,6 +68,23 @@
                         </span>
                     </p>
                     <button id="getEncounterTypesWithCountButton" class="btn btn-info" disabled="true">Submit</button>
+                </div>
+                <hr/>
+                <div>
+                    <p class="col-xs-10">
+                        <span>Diagnoses posted by facility:</span>
+                        <span>Select start date
+                            <input id="diagnosisStartDate" name="startDate" type="text"
+                                   class="startDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                        <span>end date
+                            <input id="diagnosisEndDate" name="endDate" type="text"
+                                   class="endDate datepicker dateInput"
+                                   placeholder="Enter a date" readonly='true'/>
+                        </span>
+                    </p>
+                    <button id="getDiagnosisWithCountButton" class="btn btn-info" disabled="true">Submit</button>
                 </div>
                 <hr/>
                 <div>
@@ -187,28 +187,6 @@
                     <div class="panel panel-default">
                         <div class="panel-heading" role="tab">
                             <h4 class="panel-title">
-                                <a data-toggle="collapse" data-parent="#accordion" href="#nonCodedDrug" aria-expanded="true" aria-controls="nonCodedDrug">
-                                    <span>Non-coded drugs</span>
-                                    <span id="freetextCount"></span>
-                                </a>
-                            </h4>
-                        </div>
-                        <div id="nonCodedDrug" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                            <table id="nonCodedDrugs" class="table">
-                                <thead>
-                                <tr>
-                                    <th>Trade name</th>
-                                    <th>Count</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="panel panel-default">
-                        <div class="panel-heading" role="tab">
-                            <h4 class="panel-title">
                                 <a data-toggle="collapse" data-parent="#accordion" href="#codedDrug" aria-expanded="true" aria-controls="codedDrug">
                                     <span>Coded drugs</span>
                                     <span id="DrugCount"></span>
@@ -222,6 +200,28 @@
                                     <th>Trade name</th>
                                     <th>Generic name</th>
                                     <th>Reference code</th>
+                                    <th>Count</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab">
+                            <h4 class="panel-title">
+                                <a data-toggle="collapse" data-parent="#accordion" href="#nonCodedDrug" aria-expanded="true" aria-controls="nonCodedDrug">
+                                    <span>Non-coded drugs</span>
+                                    <span id="freetextCount"></span>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="nonCodedDrug" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <table id="nonCodedDrugs" class="table">
+                                <thead>
+                                <tr>
+                                    <th>Trade name</th>
                                     <th>Count</th>
                                 </tr>
                                 </thead>
