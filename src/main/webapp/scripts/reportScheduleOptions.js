@@ -1,4 +1,4 @@
-function ReportScheduleOptions(formErrors,success) {
+function ReportScheduleOptions(orgUnits,formErrors,success) {
    var periodId = "#periodType", startDtId = "#startDate", displayPeriodId =  "#reportingPeriod";
    var dtCh= "/",  minYear=1900, maxYear=2100;
    var applicableOrgUnits = [];
@@ -9,17 +9,6 @@ function ReportScheduleOptions(formErrors,success) {
 
    $(periodId).change(function() {
         self.validateInput($(this).val());
-   });
-
-   var checkboxes = $("input[type='checkbox']");
-   checkboxes.click(function() {
-        if(checkboxes.is(":checked")){
-            isChecked = true;
-        }
-        else{
-            isChecked = false;
-        }
-        self.disableSubmitAndPreview();
    });
 
    $('#scheduleStartDate').datepicker({
@@ -113,24 +102,6 @@ function ReportScheduleOptions(formErrors,success) {
                 showErrors("Error occured" + e);
             }
        });
-   });
-
-   $("input[name=selectedFacilities]").bind("click", function(e) {
-        clearErrors();
-        clearSuccess();
-        var orgUnitId = $(e.target).attr("data-orgunit");
-        var arrayLength = self.applicableOrgUnits.length;
-        var found = false;
-        for (var i = 0; i < arrayLength; i++) {
-            var orgUnit = self.applicableOrgUnits[i];
-            if (orgUnit.id === orgUnitId) {
-                found = true;
-            }
-        }
-        if (!found)  {
-            showErrors("The selected organization is not applicable for this report.");
-            e.preventDefault();
-        }
    });
 
    $("input[name=scheduleType]").bind("click", function(e) {
@@ -332,6 +303,7 @@ function ReportScheduleOptions(formErrors,success) {
            if (results) {
               if (results.hasOwnProperty('organisationUnits')) {
                  self.applicableOrgUnits = results.organisationUnits;
+                 showApplicableOrgUnits(orgUnits);
               }
            }
        }).fail(function(){
@@ -339,6 +311,39 @@ function ReportScheduleOptions(formErrors,success) {
             $('#createReportSchedule').attr('hidden', true);
        });
    };
+
+   var showApplicableOrgUnits = function(availableOrgUnits){
+         var availableApplicableOrgUnits = getAvailableApplicableOrgUnits(availableOrgUnits, self.applicableOrgUnits);
+         if(availableApplicableOrgUnits.length==0){
+            showErrors("This report is not applicable to any of the available facilities.");
+            $('#createReportSchedule').attr('hidden', true);
+         }
+         else{
+             var template = $('#template_applicable_org_units').html();
+             Mustache.parse(template);
+             var rendered = Mustache.render(template,availableApplicableOrgUnits);
+             $('#applicableOrgUnits').html(rendered);
+             $('#applicableOrgUnits').attr('hidden',false);
+             var checkboxes = $("input[type='checkbox']");
+             checkboxes.click(function() {
+                 if(checkboxes.is(":checked")){
+                     isChecked = true;
+                 }
+                 else{
+                     isChecked = false;
+                 }
+                 self.disableSubmitAndPreview();
+             });
+         }
+   }
+
+    var getAvailableApplicableOrgUnits = function(availableOrgUnits, applicableOrgUnits){
+         var filteredOrgUnits = availableOrgUnits.filter(function(availableUnit) {
+            return applicableOrgUnits.find(function(applicableUnit) {
+                return applicableUnit.id == availableUnit.orgUnitId})
+         });
+         return filteredOrgUnits;
+    }
 
    var getDhisNames = function(response) {
        var dataElements = {};
@@ -397,7 +402,7 @@ function ReportScheduleOptions(formErrors,success) {
 
    fetchOrgUnits();
    showErrors(formErrors);
-   showSuccess(success)
+   showSuccess(success);
 }
 
 var toggleFacilityDetails = function(facilityId, show) {

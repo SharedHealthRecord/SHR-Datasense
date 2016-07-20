@@ -20,8 +20,9 @@
         $( document ).ready(function() {
             var formErrors = [[${formErrors}]];
             var success = [[${success}]];
+            var orgUnits =[[${orgUnits}]]
             document.getElementById("periodSpan").innerHTML = getPeriodType();
-            var scheduleOptions = new ReportScheduleOptions(formErrors,success);
+            var scheduleOptions = new ReportScheduleOptions(orgUnits,formErrors,success);
         });
     </script>
 </head>
@@ -71,12 +72,7 @@
                         <div class="panel-body">
                             <h4>Select Facilities and schedule submission</h4>
 
-                            <div class="checkbox" th:each="org: ${orgUnits}">
-                                <label>
-                                    <input type="checkbox" name="selectedFacilities" th:value="${org.facilityId}"
-                                           th:attr="data-orgunit=${org.orgUnitId}"/>
-                                    <span th:utext="${org.facilityName}">name</span>
-                                </label>
+                            <div id="applicableOrgUnits" hidden="true">
                             </div>
                         </div>
                     </div>
@@ -264,6 +260,17 @@
              </tr>
         {{/.}}
 
+    </script>
+    <script id="template_applicable_org_units" type="x-tmpl-mustache">
+        {{#.}}
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox" name="selectedFacilities" value="{{facilityId}}"
+                           data-orgunit="{{orgUnitId}}"/>
+                    <span>{{facilityName}}</span>
+                </label>
+            </div>
+        {{/.}}
     </script>
 </div>
 <div class="container">
