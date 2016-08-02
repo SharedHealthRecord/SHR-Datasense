@@ -1057,5 +1057,14 @@
         <comment>Renaming the table prescribed_drugs to prescribed_drug</comment>
         <renameTable newTableName="prescribed_drug" oldTableName="prescribed_drugs"/>
     </changeSet>
+    <changeSet id="sharedhealth-datasense-20160802-1356" author="Anjaly" context="setup">
+        <preConditions onFail="MARK_RAN">
+            <columnExists columnName="prescribed_drugs_id" tableName="prescribed_drug"/>
+        </preConditions>
+        <comment>change prescribed_drug table, prescribed_drugs_id column to prescribed_drug_id</comment>
+        <sql>
+            ALTER TABLE prescribed_drug CHANGE prescribed_drugs_id prescribed_drug_id int auto_increment;
+        </sql>
+    </changeSet>
 
 </databaseChangeLog>
