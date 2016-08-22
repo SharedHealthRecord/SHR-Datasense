@@ -11,14 +11,12 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-import static org.sharedhealth.datasense.util.DateUtil.toGivenFormatString;
-
 public class ReportScheduleRequest {
     public static final String DAILY_PERIOD_TYPE = "Daily";
     public static final String MONTHLY_PERIOD_TYPE = "Monthly";
     public static final String YEARLY_PERIOD_TYPE = "Yearly";
-    private static final String WEEKLY_PERIOD_TYPE = "Weekly";
-    private static final String QUARTERLY_PERIOD_TYPE = "Quarterly";
+    public static final String WEEKLY_PERIOD_TYPE = "Weekly";
+    public static final String QUARTERLY_PERIOD_TYPE = "Quarterly";
 
     public static final String SCHEDULE_TYPE_ONCE = "once";
     public static final String SCHEDULE_TYPE_REPEAT = "repeat";
@@ -145,45 +143,8 @@ public class ReportScheduleRequest {
             }
         }
 
-        this.reportPeriod = createReportPeriod();
+        this.reportPeriod = ReportFactory.createReportPeriod(startDate, scheduleStartDate, periodType, scheduleType, previousPeriods);
         return this.reportPeriod;
-    }
-
-    private ReportPeriod createReportPeriod() {
-        if (periodType.equalsIgnoreCase(DAILY_PERIOD_TYPE)) {
-            startDate = calculateStartDateForRecurring(Calendar.DATE, previousPeriods);
-            return new DailyReportPeriod(startDate);
-        }
-
-        if (periodType.equalsIgnoreCase(MONTHLY_PERIOD_TYPE)) {
-            startDate = calculateStartDateForRecurring(Calendar.MONTH, previousPeriods);
-            return new MonthlyReportPeriod(startDate);
-        }
-
-        if (periodType.equalsIgnoreCase(YEARLY_PERIOD_TYPE)) {
-            startDate = calculateStartDateForRecurring(Calendar.YEAR, previousPeriods);
-            return new YearlyReportPeriod(startDate);
-        }
-
-        if (periodType.equalsIgnoreCase(WEEKLY_PERIOD_TYPE)) {
-            startDate = calculateStartDateForRecurring(Calendar.WEEK_OF_YEAR, previousPeriods);
-            return new WeeklyReportPeriod(startDate);
-        }
-
-        if (periodType.equalsIgnoreCase(QUARTERLY_PERIOD_TYPE)) {
-            startDate = calculateStartDateForRecurring(Calendar.MONTH, 3 * previousPeriods);
-            return new QuarterlyReportPeriod(startDate);
-        }
-        return new NotImplementedPeriod(startDate);
-    }
-
-    private String calculateStartDateForRecurring(int unitForPeriod, int periodsToReduce) {
-        if (SCHEDULE_TYPE_ONCE.equalsIgnoreCase(scheduleType)) {
-            return startDate;
-        }
-        Calendar calendar = fromDateString(this.scheduleStartDate);
-        calendar.add(unitForPeriod, -periodsToReduce);
-        return toGivenFormatString(calendar.getTime(), DateUtil.DATE_FMT_DD_MM_YYYY);
     }
 
     public String getCronExp() {
@@ -298,25 +259,32 @@ public class ReportScheduleRequest {
 
         @Override
         public String period() {
-            return String.format("%04dW%d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.WEEK_OF_YEAR));
+            Calendar calendarFromStartOfWeek = getCalendarForFirstDayOfWeek();
+            calendarFromStartOfWeek.setMinimalDaysInFirstWeek(7);
+            return String.format("%04dW%d", calendarFromStartOfWeek.get(Calendar.YEAR),
+                    calendarFromStartOfWeek.get(Calendar.WEEK_OF_YEAR));
         }
         @Override
         public String startDate() {
-            Calendar first = (Calendar) reportCalendar.clone();
-            first.setFirstDayOfWeek(Calendar.MONDAY);
-            first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            Calendar first = getCalendarForFirstDayOfWeek();
             //return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 1, 1);
             return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(first.getTime());
         }
+
         @Override
         public String endDate() {
-            Calendar first = (Calendar) reportCalendar.clone();
-            first.setFirstDayOfWeek(Calendar.MONDAY);
-            first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            Calendar first = getCalendarForFirstDayOfWeek();
             Calendar last = (Calendar) first.clone();
             last.setFirstDayOfWeek(Calendar.MONDAY);
             last.add(Calendar.DAY_OF_YEAR, 6);
             return new SimpleDateFormat(DateUtil.SIMPLE_DATE_FORMAT).format(last.getTime());
+        }
+
+        private Calendar getCalendarForFirstDayOfWeek() {
+            Calendar first = (Calendar) reportCalendar.clone();
+            first.setFirstDayOfWeek(Calendar.MONDAY);
+            first.add(Calendar.DAY_OF_WEEK, first.getFirstDayOfWeek() - first.get(Calendar.DAY_OF_WEEK));
+            return first;
         }
     }
 

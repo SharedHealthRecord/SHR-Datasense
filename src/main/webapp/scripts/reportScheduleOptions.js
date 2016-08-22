@@ -6,6 +6,7 @@ function ReportScheduleOptions(formErrors) {
    var isDateSelected=false;
    var self = this;
 
+
    $(periodId).change(function() {
         self.validateInput($(this).val());
    });
@@ -407,3 +408,17 @@ var toggleFacilityDetails = function(facilityId, show) {
        $("#" + closeButtonId).prop("hidden", false);
    }
 };
+
+var getPeriodType = function(){
+       var periodTypeToPeriodUnitMap = {};
+       periodTypeToPeriodUnitMap["Daily"] = "day(s)";
+       periodTypeToPeriodUnitMap["Monthly"] = "month(s)";
+       periodTypeToPeriodUnitMap["Quarterly"] = "quarter(s)";
+       periodTypeToPeriodUnitMap["Weekly"] = "week(s)";
+       periodTypeToPeriodUnitMap["Yearly"] = "year(s)";
+
+       var periodType = $("#periodType").val();
+       return periodTypeToPeriodUnitMap[periodType] || "unknown";
+   }
+
+

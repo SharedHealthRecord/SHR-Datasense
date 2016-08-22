@@ -6,11 +6,11 @@ import org.quartz.JobDataMap;
 import org.sharedhealth.datasense.aqs.AqsFTLProcessor;
 import org.sharedhealth.datasense.client.DHIS2Client;
 import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.sharedhealth.datasense.dhis2.controller.ReportFactory;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.model.Parameter;
 import org.sharedhealth.datasense.service.ConfigurationService;
-import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -20,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest.*;
+import static org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest.SCHEDULE_TYPE_REPEAT;
 import static org.sharedhealth.datasense.util.DateUtil.DATE_FMT_DD_MM_YYYY;
 import static org.sharedhealth.datasense.util.DateUtil.toGivenFormatString;
 
@@ -48,26 +48,20 @@ public class DHISDynamicReport {
     }
 
     public void processAndPost(JobDataMap mergedJobDataMap) {
-
-        /*
-        todo changes for recurring
-        if pastPeriod is not null
-        change reportingPeriod to
-        start date
-        end date
-        today - add(days,month,quarter)
-        */
-
-
         String reportingStartDate = (String) mergedJobDataMap.get("paramStartDate");
         String reportingEndDate = (String) mergedJobDataMap.get("paramEndDate");
         String reportingPeriod = (String) mergedJobDataMap.get("paramReportingPeriod");
 
+        String periodType = (String) mergedJobDataMap.get("paramPeriodType");
+
         if (SCHEDULE_TYPE_REPEAT.equals(mergedJobDataMap.get("paramScheduleType"))) {
             int previousPeriods = getPreviousPeriods(mergedJobDataMap);
             String today = toGivenFormatString(new Date(), DATE_FMT_DD_MM_YYYY);
-            ReportScheduleRequest reportScheduleRequest = new ReportScheduleRequest();
-            ReportScheduleRequest.DailyReportPeriod dailyReportPeriod = reportScheduleRequest.new DailyReportPeriod(today);
+            ReportScheduleRequest.ReportPeriod reportPeriod = ReportFactory.createReportPeriod(null, today,
+                    periodType, SCHEDULE_TYPE_REPEAT, previousPeriods);
+            reportingStartDate = reportPeriod.startDate();
+            reportingEndDate = reportPeriod.endDate();
+            reportingPeriod = reportPeriod.period();
         }
 
         String facilityId = (String) mergedJobDataMap.get("paramFacilityId");
@@ -75,7 +69,6 @@ public class DHISDynamicReport {
         String datasetId = (String) mergedJobDataMap.get("paramDatasetId");
 
         String configFile = (String) mergedJobDataMap.get("paramConfigFile");
-        String periodType = (String) mergedJobDataMap.get("paramPeriodType");
 
         HashMap<String, String> queryParams = getQueryParams(reportingStartDate, reportingEndDate, facilityId, orgUnitId, datasetId, periodType);
         HashMap<String, String> extraParams = getExtraParams(reportingPeriod, orgUnitId, datasetId);
@@ -157,7 +150,7 @@ public class DHISDynamicReport {
         Object configuredPreviousPeriods = mergedJobDataMap.get("paramPreviousPeriods");
         if (null != configuredPreviousPeriods) {
             try {
-                return Integer.parseInt((String) configuredPreviousPeriods);
+                return Integer.parseInt(String.valueOf(configuredPreviousPeriods));
             } catch (NumberFormatException e) {
                 return 1;
             }

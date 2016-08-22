@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.quartz.*;
 import org.quartz.impl.matchers.GroupMatcher;
+import org.sharedhealth.datasense.dhis2.controller.ReportFactory;
 import org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
@@ -22,6 +23,9 @@ import java.util.Calendar;
 import static org.quartz.CronScheduleBuilder.cronSchedule;
 import static org.quartz.TriggerBuilder.newTrigger;
 import static org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest.SCHEDULE_TYPE_ONCE;
+import static org.sharedhealth.datasense.dhis2.controller.ReportScheduleRequest.SCHEDULE_TYPE_REPEAT;
+import static org.sharedhealth.datasense.util.DateUtil.DATE_FMT_DD_MM_YYYY;
+import static org.sharedhealth.datasense.util.DateUtil.toGivenFormatString;
 
 @Service
 public class JobSchedulerService {
@@ -132,9 +136,25 @@ public class JobSchedulerService {
         return parts[1];
     }
 
-    private String identifyPeriodForJob(String jobName) {
-        String[] parts = jobName.split("-");
-        return parts[2];
+    private String identifyPeriodForJob(JobKey jobKey) {
+        JobDataMap jobDataMap;
+        try {
+            jobDataMap = scheduler.getJobDetail(jobKey).getJobDataMap();
+        } catch (SchedulerException e) {
+            logger.debug("Could not retrive job details. SchedulerException thrown.", e);
+            throw new RuntimeException("Could not retrive job details. error : " + e.getMessage(), e);
+        }
+        
+        if ("Once".equals(jobDataMap.get("paramScheduleType"))) {
+            String[] parts = jobKey.getName().split("-");
+            return parts[2];
+        }
+        int previousPeriods = getPreviousPeriods(jobDataMap);
+        String periodType = (String) jobDataMap.get("paramPeriodType");
+        String today = toGivenFormatString(new Date(), DATE_FMT_DD_MM_YYYY);
+        ReportScheduleRequest.ReportPeriod reportPeriod = ReportFactory.createReportPeriod(null, today,
+                periodType, SCHEDULE_TYPE_REPEAT, previousPeriods);
+        return reportPeriod.period();
     }
 
     public List<DatasetJobSchedule> findAllJobsForDatasetConfig(Integer configId) throws SchedulerException {
@@ -156,7 +176,7 @@ public class JobSchedulerService {
                 }
 
                 String facilityId = identifyFacilityForJob(jobName);
-                String periodForJob = identifyPeriodForJob(jobName);
+                String periodForJob = identifyPeriodForJob(jobKey);
 
                 String jobGroup = jobKey.getGroup();
                 //get job's trigger
@@ -184,4 +204,17 @@ public class JobSchedulerService {
     private String toNotNullDateString(Date date) {
         return (date != null) ? date.toString() : "";
     }
+
+    private int getPreviousPeriods(JobDataMap mergedJobDataMap) {
+        Object configuredPreviousPeriods = mergedJobDataMap.get("paramPreviousPeriods");
+        if (null != configuredPreviousPeriods) {
+            try {
+                return Integer.parseInt(String.valueOf(configuredPreviousPeriods));
+            } catch (NumberFormatException e) {
+                return 1;
+            }
+        }
+        return 1;
+    }
+
 }

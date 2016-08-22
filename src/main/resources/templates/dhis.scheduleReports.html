@@ -17,6 +17,7 @@
     <script type="text/javascript" th:inline="javascript">
         $( document ).ready(function() {
             var formErrors = [[${formErrors}]];
+            document.getElementById("periodSpan").innerHTML = getPeriodType();
             var scheduleOptions = new ReportScheduleOptions(formErrors);
         });
     </script>
@@ -110,8 +111,9 @@
                                         <span>
                                             post for previous</span>
                                             <input class = "number" type="number" name="previousPeriods" id="previousPeriods" value="1" min="1"/>
+                                        <span id="periodSpan"/>
                                         <span>
-                                            , Every
+                                            , every
                                             <input class="number" type="number" id="cronFrequency" min="1" value="1" hidden="true"/>
                                             <select name="schedulePeriod" id="schedulePeriod">
                                                 <option value="daily">Day</option>

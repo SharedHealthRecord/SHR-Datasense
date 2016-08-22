@@ -46,7 +46,7 @@ public class DHISDynamicReportTest {
     public void shouldInvokeAqsFTLProcessorWithGivenParams() throws Exception {
         String configFile = "some.json";
         String period = "20161010";
-        String startAndEndDates = "10/10/2016";
+        String startAndEndDates = "2016-10-10";
 
         JobDataMap jobDataMap = new JobDataMap();
 
@@ -90,7 +90,7 @@ public class DHISDynamicReportTest {
     public void shouldCalculateReportingPeriodAndStartEndDatesForDailyRecurringReports() throws Exception {
         String configFile = "some.json";
         String period = "20161010";
-        String startAndEndDates = "10/10/2016";
+        String startAndEndDates = "2016-10-10";
 
         JobDataMap jobDataMap = new JobDataMap();
 
@@ -103,7 +103,7 @@ public class DHISDynamicReportTest {
         jobDataMap.put("paramConfigFile", configFile);
         jobDataMap.put("paramReportingPeriod", period);
         jobDataMap.put("paramScheduleType", "repeat");
-        jobDataMap.put("paramPreviousPeriods", 3);
+        jobDataMap.put("paramPreviousPeriods", "3");
 
         dhisDynamicReport.processAndPost(jobDataMap);
 
@@ -111,9 +111,9 @@ public class DHISDynamicReportTest {
         verify(aqsFTLProcessor).process(eq(configFile), paramsCaptor.capture());
 
         Map paramsCaptorValue = paramsCaptor.getValue();
-        assertEquals("07/10/2016", paramsCaptorValue.get("paramStartDate"));
-        assertEquals("07/10/2016", paramsCaptorValue.get("paramEndDate"));
-        assertEquals("20161007", paramsCaptorValue.get("paramReportingPeriod"));
+        assertEquals("2016-05-16", paramsCaptorValue.get("paramStartDate"));
+        assertEquals("2016-05-16", paramsCaptorValue.get("paramEndDate"));
+        assertEquals("20160516", paramsCaptorValue.get("paramReportingPeriod"));
         assertNull(paramsCaptorValue.get("paramScheduleType"));
         assertNull(paramsCaptorValue.get("paramPreviousPeriods"));
     }
