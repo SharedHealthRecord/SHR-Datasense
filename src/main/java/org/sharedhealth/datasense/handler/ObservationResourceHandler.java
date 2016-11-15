@@ -54,8 +54,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     @Override
     public void deleteExisting(EncounterComposition composition) {
         String encounterId = composition.getEncounterReference().getValue().getEncounterId();
-        String healthId = composition.getPatientReference().getHealthId();
-        observationDao.deleteExisting(healthId, encounterId);
+        observationDao.deleteExisting(encounterId);
 
     }
 

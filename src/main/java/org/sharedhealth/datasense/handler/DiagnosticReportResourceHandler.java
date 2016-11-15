@@ -59,7 +59,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        diagnosticReportDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        diagnosticReportDao.deleteExisting(composition.getEncounterReference().getEncounterId());
     }
 
 

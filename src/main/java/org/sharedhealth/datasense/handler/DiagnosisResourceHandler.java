@@ -57,7 +57,7 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        diagnosisDao.delete(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        diagnosisDao.delete(composition.getEncounterReference().getEncounterId());
     }
 
     private void populateDiagnosisCodes(Diagnosis diagnosis, List<CodingDt> coding) {

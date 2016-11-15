@@ -50,7 +50,7 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        procedureDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        procedureDao.deleteExisting(composition.getEncounterReference().getEncounterId());
     }
 
     private void setProcedureDiagnosis(org.sharedhealth.datasense.model.Procedure procedure,

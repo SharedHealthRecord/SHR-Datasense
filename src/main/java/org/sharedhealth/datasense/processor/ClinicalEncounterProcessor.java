@@ -36,7 +36,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = composition.getEncounterReference().getResource();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         composition.getEncounterReference().setValue(encounter);
-        encounterDao.deleteExisting(composition.getPatientReference().getHealthId(), composition.getEncounterReference().getEncounterId());
+        encounterDao.deleteExisting(composition.getEncounterReference().getEncounterId());
         encounterDao.save(encounter);
         if (nextProcessor != null) {
             log.debug("Invoking next processor:" + nextProcessor.getClass().getName());

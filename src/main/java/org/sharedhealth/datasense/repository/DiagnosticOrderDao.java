@@ -70,12 +70,11 @@ public class DiagnosticOrderDao {
         return order_id.get(0);
     }
 
-    public void deleteExisting(String healthId, String encounterId) {
+    public void deleteExisting(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        jdbcTemplate.update("delete from diagnostic_order where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
+        jdbcTemplate.update("delete from diagnostic_order where encounter_id = :encounter_id", map);
 
     }
 }

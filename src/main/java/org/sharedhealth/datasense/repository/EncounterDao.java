@@ -36,12 +36,11 @@ public class EncounterDao {
                 ":location_id, :facility_id)", map);
     }
 
-    public void deleteExisting(String healthId, String encounterId) {
+    public void deleteExisting(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", encounterId);
-        map.put("patient_hid", healthId);
 
-        jdbcTemplate.update("delete from encounter where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
+        jdbcTemplate.update("delete from encounter where encounter_id = :encounter_id", map);
 
     }
 

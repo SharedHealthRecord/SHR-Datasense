@@ -30,12 +30,11 @@ public class DiagnosisDao {
                 "(:patient_hid, :encounter_id, :diagnosis_datetime, :code, :concept_id, :status, :uuid)", map);
     }
 
-    public void delete(String healthId, String encounterId) {
+    public void delete(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        jdbcTemplate.update("delete from diagnosis where patient_hid=:patient_hid and encounter_id=:encounter_id", map);
+        jdbcTemplate.update("delete from diagnosis where encounter_id=:encounter_id", map);
     }
 
     public List<Map<String, Object>> getDiagosisWithCount(String facilityId, String startDate, String endDate) {

@@ -40,11 +40,10 @@ public class PatientDeathDetailsDao {
         jdbcTemplate.update(sql, map);
     }
 
-    public void deleteExisting(String healthId, String encounterId){
+    public void deleteExisting(String encounterId){
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        jdbcTemplate.update("delete from patient_death_details where patient_hid = :patient_hid and encounter_id = :encounter_id", map);
+        jdbcTemplate.update("delete from patient_death_details where encounter_id = :encounter_id", map);
     }
 }

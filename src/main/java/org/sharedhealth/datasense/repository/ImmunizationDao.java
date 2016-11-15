@@ -26,12 +26,11 @@ public class ImmunizationDao {
         jdbcTemplate.update(sql, map);
     }
 
-    public void deleteExisting(String healthId, String encounterId) {
+    public void deleteExisting(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        String medicationSql = "delete from immunization where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        String medicationSql = "delete from immunization where encounter_id = :encounter_id";
         jdbcTemplate.update(medicationSql, map);
     }
 
@@ -50,12 +49,11 @@ public class ImmunizationDao {
         }
     }
 
-    public void deleteExistingImmunizationReasons(String healthId, String encounterId) {
+    public void deleteExistingImmunizationReasons(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", healthId);
         map.put("encounter_id", encounterId);
 
-        String immunizationSql = "delete from immunization_reason where patient_hid = :patient_hid and encounter_id = :encounter_id";
+        String immunizationSql = "delete from immunization_reason where encounter_id = :encounter_id";
         jdbcTemplate.update(immunizationSql, map);
 
     }
