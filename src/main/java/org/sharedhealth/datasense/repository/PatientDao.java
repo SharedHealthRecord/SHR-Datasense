@@ -65,4 +65,11 @@ public class PatientDao {
 
         jdbcTemplate.update(query.toString(), map);
     }
+
+    public void deletePatient(String healthId) {
+        HashMap<String, Object> map = new HashMap<>();
+
+        map.put("patient_hid", healthId);
+        jdbcTemplate.update("delete from patient where patient_hid = :patient_hid", map);
+    }
 }

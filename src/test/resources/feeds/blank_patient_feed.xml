@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feed
+        xmlns="http://www.w3.org/2005/Atom">
+    <title>Patients</title>
+    <link rel="self" type="application/atom+xml" href="http://localhost:9997/api/default/feed/patients?last_marker=caed6a71-acaf-11e6-8bea-0050568276cf" />
+    <link rel="via" type="application/atom+xml" href="http://localhost:9997/api/default/feed/patients?last_marker=caed6a71-acaf-11e6-8bea-0050568276cf" />
+    <author>
+        <name>MCI</name>
+    </author>
+    <id>a3b5e3cb-f887-4513-9931-d5b30ab8eb48</id>
+    <generator uri="https://github.com/ICT4H/atomfeed">Atomfeed</generator>
+</feed>

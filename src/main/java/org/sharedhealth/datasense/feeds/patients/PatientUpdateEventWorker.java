@@ -27,6 +27,10 @@ public class PatientUpdateEventWorker implements EventWorker {
     public void process(Event event) {
         try {
             final PatientUpdate patientUpdate = readFrom(extractContent(event.getContent()), PatientUpdate.class);
+            if (patientUpdate.hasMergedWithChanges()){
+                patientDao.deletePatient(patientUpdate.getHealthId());
+                return;
+            }
             patientDao.update(patientUpdate);
         } catch (IOException e) {
             LOG.error(e.getMessage(), e);

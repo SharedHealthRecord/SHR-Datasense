@@ -25,6 +25,12 @@ public class PatientData {
     @JsonProperty("present_address")
     private AddressChange addressChange = new AddressChange();
 
+    @JsonProperty("active")
+    private Change activeChange = new Change();
+
+    @JsonProperty("merged_with")
+    private Change mergedWithChange = new Change();
+
     public Address getAddressChange() {
         return addressChange.getNewValue();
     }
@@ -37,6 +43,18 @@ public class PatientData {
         this.genderChange = genderChange;
     }
 
+    public void setActiveChange(Change activeChange) {
+        this.activeChange = activeChange;
+    }
+
+    public void setMergedWithChange(Change mergedWithChange) {
+        this.mergedWithChange = mergedWithChange;
+    }
+
+    public boolean hasMergedChanges() {
+        return activeChange.getNewValue() != null && (!(boolean) activeChange.getNewValue() && mergedWithChange.getNewValue() != null);
+    }
+
     public String getGenderChange() {
         return (String) genderChange.getNewValue();
     }
@@ -45,7 +63,7 @@ public class PatientData {
         return (String) dobChange.getNewValue();
     }
 
-    public void setDobChange(Change dobChange){
+    public void setDobChange(Change dobChange) {
         this.dobChange = dobChange;
     }
 
@@ -68,10 +86,10 @@ public class PatientData {
     }
 
     private String getLocationCodeChange() {
-        return getAddressChange()!= null ? getAddressChange().getLocationCode() : null;
+        return getAddressChange() != null ? getAddressChange().getLocationCode() : null;
     }
 
-    private String getFormattedDobChange(){
+    private String getFormattedDobChange() {
         String dobChange = getDobChange();
         return StringUtils.isEmpty(dobChange) ? null : DateUtil.format(DateUtil.parseDate(dobChange));
     }
