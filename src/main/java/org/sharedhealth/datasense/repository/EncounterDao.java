@@ -21,7 +21,6 @@ public class EncounterDao {
     private final String qryGetLastEncounter = "SELECT created_at FROM encounter WHERE facility_id = :facility_id ORDER BY created_at DESC LIMIT 1";
 
     public void save(Encounter encounter) {
-
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", encounter.getEncounterId());
         map.put("encounter_datetime", encounter.getEncounterDateTime());
@@ -74,5 +73,18 @@ public class EncounterDao {
                 "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y') group by encounter_type";
         List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
         return maps;
+    }
+
+    public int getEncounterCountForPatient(String healthId) {
+        HashMap<String, Object> map = new HashMap<>();
+        map.put("patient_hid", healthId);
+
+        List<Integer> result = jdbcTemplate.query("select count(*) from encounter where patient_hid = :patient_hid", map, new RowMapper<Integer>() {
+            @Override
+            public Integer mapRow(ResultSet rs, int rowNum) throws SQLException {
+                return rs.getInt(1);
+            }
+        });
+        return result.get(0);
     }
 }

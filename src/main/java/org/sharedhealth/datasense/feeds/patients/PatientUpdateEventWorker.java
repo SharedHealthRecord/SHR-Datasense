@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.service.EventWorker;
+import org.sharedhealth.datasense.repository.EncounterDao;
 import org.sharedhealth.datasense.repository.PatientDao;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,18 +18,26 @@ import java.io.IOException;
 public class PatientUpdateEventWorker implements EventWorker {
     private static final Logger LOG = LoggerFactory.getLogger(PatientUpdateEventWorker.class);
     private PatientDao patientDao;
+    private EncounterDao encounterDao;
 
     @Autowired
-    public PatientUpdateEventWorker(PatientDao patientDao) {
+    public PatientUpdateEventWorker(PatientDao patientDao, EncounterDao encounterDao) {
         this.patientDao = patientDao;
+        this.encounterDao = encounterDao;
     }
 
     @Override
     public void process(Event event) {
         try {
             final PatientUpdate patientUpdate = readFrom(extractContent(event.getContent()), PatientUpdate.class);
-            if (patientUpdate.hasMergedWithChanges()){
-                patientDao.deletePatient(patientUpdate.getHealthId());
+            if (patientUpdate.hasMergedWithChanges()) {
+                String healthId = patientUpdate.getHealthId();
+                if (encounterDao.getEncounterCountForPatient(healthId) > 0) {
+                    String message = String.format("Cannot delete merged patient %s because there are encounters associated with it", healthId);
+                    LOG.error(message);
+                    throw new RuntimeException(message);
+                }
+                patientDao.deletePatient(healthId);
                 return;
             }
             patientDao.update(patientUpdate);

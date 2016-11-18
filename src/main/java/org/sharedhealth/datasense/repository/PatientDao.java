@@ -57,7 +57,7 @@ public class PatientDao {
         }
 
         query.append("updated_at = :updated_at ")
-            .append("where patient_hid = :patient_hid");
+                .append("where patient_hid = :patient_hid");
 
         map.put("patient_hid", patientUpdate.getHealthId());
         map.put("updated_at", new Date());

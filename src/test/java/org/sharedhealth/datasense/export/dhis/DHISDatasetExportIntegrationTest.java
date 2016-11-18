@@ -43,7 +43,7 @@ public class DHISDatasetExportIntegrationTest {
 
     @Before
     public void setup() throws IOException {
-        cfg = new Configuration();
+        cfg = new Configuration(Configuration.DEFAULT_INCOMPATIBLE_IMPROVEMENTS);
         cfg.setClassForTemplateLoading(this.getClass(), "/dhis/templates/");
         cfg.setDefaultEncoding("UTF-8");
         cfg.setTemplateExceptionHandler(TemplateExceptionHandler.RETHROW_HANDLER);
