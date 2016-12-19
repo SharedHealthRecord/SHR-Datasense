@@ -28,6 +28,8 @@ public class TrDrugSyncJob {
     @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 120000)
     public void start() {
         String trMedicationAtomfeedUrl = properties.getTrMedicationfeedUrl();
+        log.info("Crawling feed:" + trMedicationAtomfeedUrl);
+
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
         TRFeedProcessor feedProcessor =
                 new TRFeedProcessor(drugEventWorker,

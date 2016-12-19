@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.client;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.sharedhealth.datasense.client.exceptions.ConnectionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Provider;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
@@ -41,7 +42,7 @@ public class ProviderWebClient {
         provider.setId(providerMap.get("id").toString());
         provider.setName((String) providerMap.get("name"));
         Map organization = (Map) providerMap.get("organization");
-        if(organization != null) {
+        if (organization != null) {
             String reference = (String) organization.get("reference");
             provider.setFacilityId(ProviderReference.parseUrl(reference));
         }
@@ -50,10 +51,18 @@ public class ProviderWebClient {
 
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         URI providerUrl = getProviderUrl(facilityId);
-        log.debug("Reading from " + providerUrl);
+        log.info("Reading from " + providerUrl);
         Map<String, String> headers = getHrmAuthTokenHeaders(properties);
         headers.put("Accept", "application/json");
-        return new WebClient().get(providerUrl, headers);
+        String response = null;
+        try {
+            response = new WebClient().get(providerUrl, headers);
+        } catch (ConnectionException e) {
+            log.error("Could not fetch facility");
+            if (e.getErrorCode() == 401)
+                log.error("Unauthorized.");
+        }
+        return response;
     }
 
     private URI getProviderUrl(String providerId) throws URISyntaxException {

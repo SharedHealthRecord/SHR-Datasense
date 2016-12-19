@@ -30,6 +30,7 @@ public class PatientUpdateCrawlerJob {
     @Scheduled(fixedDelayString = "${PATIENT_UPDATE_SYNC_JOB_INTERVAL}", initialDelay = 10000)
     public void start() {
         String feedUrl = properties.getMciPatientUpdateFeedUrl();
+        log.info("Crawling feed:" + feedUrl);
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
 
         MciFeedProcessor feedProcessor = new MciFeedProcessor(feedUrl, transactionManager, mciWebClient, patientUpdateEventWorker, properties);

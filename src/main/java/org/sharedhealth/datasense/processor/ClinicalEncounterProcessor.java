@@ -32,7 +32,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        log.debug("Processing encounters for patient:" + composition.getPatientReference().getHealthId());
+        log.info("Processing encounters for patient:" + composition.getPatientReference().getHealthId());
         ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = composition.getEncounterReference().getResource();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         composition.getEncounterReference().setValue(encounter);

@@ -33,6 +33,7 @@ public class ReferenceTermEventWorker implements EventWorker{
     public void process(Event event) {
         String referenceTermUri = datasenseProperties.getTrBasePath() + event.getContent();
         String errorMessage = String.format("Could not connect to [ %s ]", referenceTermUri);
+        log.info("Getting TR reference term for " + referenceTermUri);
         try {
             TrReferenceTerm trReferenceTerm = trWebClient.getTrReferenceTerm(referenceTermUri);
             referenceTermProcessor.process(trReferenceTerm);

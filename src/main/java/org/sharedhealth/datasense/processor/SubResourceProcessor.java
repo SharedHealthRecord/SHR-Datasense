@@ -20,7 +20,7 @@ public class SubResourceProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        logger.debug("Processing sub resources of encounters for patient:" + composition.getPatientReference().getHealthId());
+        logger.info("Processing sub resources of encounters for patient:" + composition.getPatientReference().getHealthId());
         deleteExistingEncounter(composition);
         for (IResource resource : composition.getTopLevelResources()) {
             for (FhirResourceHandler fhirResourceHandler : this.fhirResourceHandlers) {

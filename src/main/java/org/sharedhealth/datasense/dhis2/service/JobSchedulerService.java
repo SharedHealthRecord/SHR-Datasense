@@ -66,16 +66,17 @@ public class JobSchedulerService {
             String datasetName = scheduleRequest.getDatasetName();
 
             String triggerName = jobName + "-TRIGGER";
+            logger.info(String.format("Job %s starting", jobName));
             Trigger trigger = getTrigger(scheduleRequest, datasetName, triggerName);
             try {
                 if (!scheduler.checkExists(trigger.getKey())) {
                     scheduler.scheduleJob(jobDetail, trigger);
                 } else {
-                    logger.debug(String.format("A schedule already exists for this period, report and facility configuration."));
+                    logger.error(String.format("A schedule already exists for this period, report and facility configuration."));
                     throw new RuntimeException("A schedule already exists for this period, report and facility configuration.");
                 }
             } catch (SchedulerException e) {
-                logger.debug("Could not schedule job. SchedulerException thrown.", e);
+                logger.error("Could not schedule job. SchedulerException thrown.", e);
                 throw new RuntimeException("Could not schedule job. error : " + e.getMessage(), e);
             }
             logger.info(String.format("Job %s starred", jobName));
@@ -189,11 +190,12 @@ public class JobSchedulerService {
                     continue;
                 }
 
+                logger.info(String.format("Getting job details for %s", jobKey ));
                 JobDataMap jobDataMap;
                 try {
                     jobDataMap = scheduler.getJobDetail(jobKey).getJobDataMap();
                 } catch (SchedulerException e) {
-                    logger.debug("Could not retrive job details. SchedulerException thrown.", e);
+                    logger.error("Could not retrive job details. SchedulerException thrown.", e);
                     throw new RuntimeException("Could not retrive job details. error : " + e.getMessage(), e);
                 }
 

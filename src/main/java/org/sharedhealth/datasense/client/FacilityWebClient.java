@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.client;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.sharedhealth.datasense.client.exceptions.ConnectionException;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Address;
 import org.sharedhealth.datasense.model.Facility;
@@ -63,10 +64,18 @@ public class FacilityWebClient {
 
     private String getResponse(String facilityId) throws URISyntaxException, IOException {
         URI facilityUrl = getFacilityUrl(facilityId);
-        log.debug("Reading from " + facilityUrl);
+        log.info("Reading from " + facilityUrl);
         Map<String, String> headers = getHrmAuthTokenHeaders(properties);
         headers.put("Accept", "application/json");
-        return new WebClient().get(facilityUrl, headers);
+        String response = null;
+        try {
+            response = new WebClient().get(facilityUrl, headers);
+        } catch (ConnectionException e) {
+            log.error("Could not fetch facility");
+            if (e.getErrorCode() == 401)
+                log.error("Unauthorized");
+        }
+        return response;
     }
 
     private URI getFacilityUrl(String facilityId) throws URISyntaxException {

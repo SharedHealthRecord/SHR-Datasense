@@ -1,7 +1,5 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
-import org.apache.commons.lang3.time.DateUtils;
-import org.h2.util.DateTimeUtils;
 import org.joda.time.DateTime;
 import org.junit.Before;
 import org.junit.Test;
@@ -21,7 +19,6 @@ import java.util.Map;
 
 import static junit.framework.Assert.assertEquals;
 import static junit.framework.Assert.assertNull;
-import static junit.framework.Assert.assertTrue;
 import static org.mockito.Matchers.anyMap;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Matchers.eq;
@@ -167,6 +164,7 @@ public class DHISDynamicReportTest {
         assertNull(paramsCaptorValue.get("paramScheduleType"));
         assertNull(paramsCaptorValue.get("paramPreviousPeriods"));
     }
+
     @Test
     public void shouldCalculateReportingPeriodAndStartEndDatesForMonthlyRecurringReports() throws Exception {
         String configFile = "some.json";
@@ -202,6 +200,7 @@ public class DHISDynamicReportTest {
         assertNull(paramsCaptorValue.get("paramScheduleType"));
         assertNull(paramsCaptorValue.get("paramPreviousPeriods"));
     }
+
     @Test
     public void shouldCalculateReportingPeriodAndStartEndDatesForWeeklyRecurringReports() throws Exception {
         String configFile = "some.json";
@@ -237,6 +236,7 @@ public class DHISDynamicReportTest {
         assertNull(paramsCaptorValue.get("paramScheduleType"));
         assertNull(paramsCaptorValue.get("paramPreviousPeriods"));
     }
+
     @Test
     public void shouldCalculateReportingPeriodAndStartEndDatesForYearlyRecurringReports() throws Exception {
         String configFile = "some.json";

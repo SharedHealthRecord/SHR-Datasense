@@ -26,11 +26,14 @@ public class DHISDataPreviewService {
     private DHISDynamicReport dhisDynamicReport;
 
     public List<Map> fetchResults(ReportScheduleRequest scheduleRequest, List<String> formErrors) {
+        logger.info("Fetching results inorder to preview");
         List<Map> arrayList = new ArrayList<>();
         for (String facilityId : scheduleRequest.getSelectedFacilities()) {
             DHISOrgUnitConfig orgUnitConfig = dhisConfigDao.findOrgUnitConfigFor(facilityId);
             if(orgUnitConfig == null) {
-                formErrors.add(String.format("Facility with id [%s] is not configured with a valid DHIS Organization", facilityId));
+                String message = "Facility with id [%s] is not configured with a valid DHIS Organization";
+                logger.error(String.format(message, facilityId));
+                formErrors.add(String.format(message, facilityId));
                 return null;
             }
             try {

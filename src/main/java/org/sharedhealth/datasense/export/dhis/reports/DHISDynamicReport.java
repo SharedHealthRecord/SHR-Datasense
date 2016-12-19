@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.export.dhis.reports;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
 import org.joda.time.DateTime;
 import org.quartz.JobDataMap;
@@ -16,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.sql.DataSource;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -135,19 +133,6 @@ public class DHISDynamicReport {
         return new JProcessor(configFile, queryParams, extraParams).invoke();
     }
 
-    private void logWhenErroredOut(String status, String dhisResponse) {
-        if ((status != null) && (status.equalsIgnoreCase("200") || status.equalsIgnoreCase("201"))) {
-            if (!StringUtils.isBlank(dhisResponse)) {
-                if (dhisResponse.toUpperCase().contains("ERROR")) {
-                    logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
-                }
-            }
-        } else {
-            logger.error(String.format("DHIS Submission failed. Status %s. Response:%s", status, dhisResponse));
-        }
-
-    }
-
     private int getPreviousPeriods(JobDataMap mergedJobDataMap) {
         Object configuredPreviousPeriods = mergedJobDataMap.get("paramPreviousPeriods");
         if (null != configuredPreviousPeriods) {
@@ -183,7 +168,6 @@ public class DHISDynamicReport {
             HashMap<String, Object> params = getContent(queryParams, extraParams);
             try {
                 String content = aqsFTLProcessor.process(configFile, params);
-                logger.debug(String.format("Posting contents to DHIS2:- %s", content));
                 DHISResponse dhisResponse = dhis2Client.post(content);
                 logger.debug(dhisResponse.getValue());
             } catch (Exception e) {

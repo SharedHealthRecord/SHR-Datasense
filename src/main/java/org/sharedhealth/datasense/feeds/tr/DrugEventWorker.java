@@ -33,6 +33,7 @@ public class DrugEventWorker implements EventWorker{
     public void process(Event event) {
         String drugUri = datasenseProperties.getTrBasePath() + event.getContent();
         String errorMessage = String.format("Could not connect to [ %s ]", drugUri);
+        log.info("Getting TR medication for " + drugUri);
         try {
             TrMedication trDrug = trWebClient.getTrMedication(drugUri);
             drugProcessor.process(trDrug);

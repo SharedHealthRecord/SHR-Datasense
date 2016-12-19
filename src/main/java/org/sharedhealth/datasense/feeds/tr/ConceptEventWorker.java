@@ -31,6 +31,7 @@ public class ConceptEventWorker implements EventWorker {
     public void process(Event event) {
         String conceptUri = datasenseProperties.getTrBasePath() + event.getContent();
         String errorMessage = String.format("Could not connect to [ %s ]", conceptUri);
+        log.info("Getting TR concept for " + conceptUri);
         try {
             TrConcept trConcept = trWebClient.getTrConcept(conceptUri);
             conceptProcessor.process(trConcept);

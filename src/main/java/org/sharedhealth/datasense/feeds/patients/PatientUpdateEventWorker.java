@@ -16,7 +16,7 @@ import java.io.IOException;
 
 @Component
 public class PatientUpdateEventWorker implements EventWorker {
-    private static final Logger LOG = LoggerFactory.getLogger(PatientUpdateEventWorker.class);
+    private static final Logger logger = LoggerFactory.getLogger(PatientUpdateEventWorker.class);
     private PatientDao patientDao;
     private EncounterDao encounterDao;
 
@@ -34,15 +34,16 @@ public class PatientUpdateEventWorker implements EventWorker {
                 String healthId = patientUpdate.getHealthId();
                 if (encounterDao.getEncounterCountForPatient(healthId) > 0) {
                     String message = String.format("Cannot delete merged patient %s because there are encounters associated with it", healthId);
-                    LOG.error(message);
+                    logger.error(message);
                     throw new RuntimeException(message);
                 }
+                logger.info(String.format("Deleting inactive patient %s because it is merged.", healthId));
                 patientDao.deletePatient(healthId);
                 return;
             }
             patientDao.update(patientUpdate);
         } catch (IOException e) {
-            LOG.error(e.getMessage(), e);
+            logger.error(e.getMessage(), e);
         }
     }
 

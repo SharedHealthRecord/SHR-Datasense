@@ -61,12 +61,13 @@ public class ParameterController {
     @RequestMapping(value = "/define", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView saveParam(Parameter parameter) {
+        String message = "Error occurred while trying to save parameter.";
         try {
             configurationService.save(parameter);
             return new ModelAndView("redirect:/config/parameters");
         } catch (Exception e) {
-            logger.error("Error occurred while trying to save parameter.", e);
-            String[] formErrors = new String[] {"Error occurred while trying to save parameter." + e.getMessage()};
+            logger.error(message, e);
+            String[] formErrors = new String[] {message + e.getMessage()};
             ModelAndView modelAndView = new ModelAndView("config.defineParameter");
             modelAndView.addObject("configParameter", parameter);
             modelAndView.addObject("supportedParameterTypes", new String[] {Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});

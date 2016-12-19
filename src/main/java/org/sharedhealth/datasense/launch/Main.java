@@ -97,9 +97,9 @@ public class Main {
         try {
             quartzScheduler.afterPropertiesSet();
         } catch (Exception e) {
-            log.error("Cannot start scheduler", e);
-            //:todo this should be thrown
-            throw new RuntimeException("Cannot start scheduler:-", e);
+            String message = "Cannot start scheduler :";
+            log.error(message, e);
+            throw new RuntimeException(message, e);
         }
         return quartzScheduler;
     }

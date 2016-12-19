@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.client;
 
-import javassist.NotFoundException;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.ResponseHandler;

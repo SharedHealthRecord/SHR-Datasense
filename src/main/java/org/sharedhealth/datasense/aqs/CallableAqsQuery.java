@@ -45,8 +45,8 @@ public class CallableAqsQuery implements Callable<HashMap<String, List<Map<Strin
             }
             queryString = queryString.replace(String.format(":%s:", paramName), String.format("%s", paramValue));
         }
-        //TODO: use logger
-        logger.debug("executing query:" + queryString);
+        logger.info("Executing query");
+        logger.debug(queryString);
         List<Map<String, Object>> queryResults = jdbcTemplate.query(queryString, new RowMapper<Map<String, Object>>() {
             @Override
             public Map<String, Object> mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -48,7 +48,7 @@ public class TrWebClient {
         try {
             response = new WebClient().get(uri, headers);
         } catch (ConnectionException e) {
-            log.error(String.format("Could not fetch feed for URI [%s]", uri), e);
+            log.error(String.format("Could not fetch feed for URI [%s] ", uri), e);
             throw new IOException(e);
         }
         return response;

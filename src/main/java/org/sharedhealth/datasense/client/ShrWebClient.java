@@ -26,6 +26,7 @@ public class ShrWebClient {
     }
 
     public String getEncounterFeedContent(URI uri) throws IOException {
+        log.info("Reading from " + uri);
         IdentityToken accessToken = identityServiceClient.getOrCreateToken();
         Map<String, String> headers = getHrmAccessTokenHeaders(accessToken, properties);
         headers.put("Accept", "application/atom+xml");
@@ -35,6 +36,7 @@ public class ShrWebClient {
         } catch (ConnectionException e) {
             log.error(String.format("Could not fetch feed for URI [%s]", uri.toString()), e);
             if (e.getErrorCode() == 401) {
+                log.error("Unauthorized, clearing token.");
                 identityServiceClient.clearToken();
             }
             throw new IOException(e);

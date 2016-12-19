@@ -28,6 +28,8 @@ public class TrReferenceTermSyncJob {
     @Scheduled(fixedDelayString = "${TR_SYNC_JOB_INTERVAL}", initialDelay = 10000)
     public void start() {
         String trReferenceTermAtomfeedUrl = properties.getTrReferenceTermAtomfeedUrl();
+        log.info("Crawling feed:" + trReferenceTermAtomfeedUrl);
+
         AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
         TRFeedProcessor feedProcessor =
                 new TRFeedProcessor(

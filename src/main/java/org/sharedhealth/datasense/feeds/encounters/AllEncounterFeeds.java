@@ -25,6 +25,7 @@ public class AllEncounterFeeds extends AllFeeds {
     @Override
     public Feed getFor(URI uri) {
         try {
+            logger.info("Getting feed for " + uri);
             String response = shrWebClient.getEncounterFeedContent(uri);
             WireFeedInput input = new WireFeedInput();
             return (Feed) input.build(new StringReader(response));

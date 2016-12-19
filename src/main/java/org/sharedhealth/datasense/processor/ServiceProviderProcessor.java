@@ -40,7 +40,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     @Override
     public void process(EncounterComposition composition) {
-        logger.debug("Resolving service provider for encounter of patient:" + composition.getPatientReference().getHealthId());
+        logger.info("Resolving service provider for encounter of patient:" + composition.getPatientReference().getHealthId());
         String facilityId = null;
         Facility facility = null;
         ServiceProviderReference serviceProviderReference = composition.getServiceProviderReference();
@@ -95,6 +95,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
 
     private Facility downloadAndSaveFacility(final String facilityId) {
         Facility facility = null;
+        logger.info("Downloading facility " + facilityId);
         try {
             facility = facilityWebClient.findById(facilityId);
         } catch (Exception e) {

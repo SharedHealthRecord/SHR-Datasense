@@ -45,6 +45,7 @@ public class ProviderProcessor {
 
     private Provider downloadAndSaveProvider(String providerId) {
         Provider provider = null;
+        logger.info("Finding provider with Id :" + providerId);
         try {
             provider = providerWebClient.findById(providerId);
         } catch (Exception e) {
