@@ -15,6 +15,16 @@
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{1} - %m%n"/>
         </layout>
+        <filter class="org.sharedhealth.datasense.util.log4j.NormalLogFilter"/>
+    </appender>
+
+    <appender name="ACCESS_LOG" class="org.apache.log4j.DailyRollingFileAppender">
+        <param name="file" value="/var/log/datasense/access.log"/>
+        <param name="DatePattern" value="'.'dd-MM-yyyy"/>
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%d{dd-MM-yyyy HH:mm:ss} [%-5p] %c{1} - %m%n"/>
+        </layout>
+        <filter class="org.sharedhealth.datasense.util.log4j.AccessLogFilter"/>
     </appender>
 
     <logger name="org.sharedhealth.datasense" additivity="false">
@@ -22,9 +32,20 @@
         <appender-ref ref="VAR_LOG"/>
     </logger>
 
+    <logger name="org.sharedhealth.datasense.controller">
+        <level value="${DATASENSE_LOG_LEVEL}"/>
+        <appender-ref ref="ACCESS_LOG"/>
+    </logger>
+
+    <logger name="org.sharedhealth.datasense.dhis2.controller">
+        <level value="${DATASENSE_LOG_LEVEL}"/>
+        <appender-ref ref="ACCESS_LOG"/>
+    </logger>
+
     <root>
         <priority value="${DATASENSE_LOG_LEVEL}"/>
         <appender-ref ref="VAR_LOG"/>
+        <appender-ref ref="ACCESS_LOG"/>
     </root>
 
 </log4j:configuration>

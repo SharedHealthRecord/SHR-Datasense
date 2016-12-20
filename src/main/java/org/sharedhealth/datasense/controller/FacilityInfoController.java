@@ -1,9 +1,13 @@
 package org.sharedhealth.datasense.controller;
 
+import org.apache.log4j.Logger;
+import org.sharedhealth.datasense.client.IdentityServiceClient;
+import org.sharedhealth.datasense.security.UserInfo;
 import org.sharedhealth.datasense.service.FacilityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -17,8 +21,12 @@ import java.util.Map;
 @Controller
 @RequestMapping(value = "/facility")
 public class FacilityInfoController {
+
+    Logger log = Logger.getLogger(FacilityInfoController.class);
     @Autowired
     private FacilityInfoService facilityDataService;
+    @Autowired
+    private IdentityServiceClient identityServiceClient;
 
     @RequestMapping(value = {"/", ""}, method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
@@ -32,7 +40,8 @@ public class FacilityInfoController {
     public
     @ResponseBody
     List<Map<String, Object>> getVisitType(@PathVariable String facilityId,
-                                            @RequestParam(value = "date", required = true) String date) {
+                                           @RequestParam(value = "date", required = true) String date) {
+        logAccessDetails("Getting visit type with count.");
         return facilityDataService.getAllVisitTypes(facilityId, date);
     }
 
@@ -41,8 +50,9 @@ public class FacilityInfoController {
     public
     @ResponseBody
     List<Map<String, Object>> getDiagnosisNameWithCount(@PathVariable String facilityId,
-                                                         @RequestParam(value = "startDate", required = true) String startDate,
-                                                         @RequestParam(value = "endDate", required = true) String endDate) {
+                                                        @RequestParam(value = "startDate", required = true) String startDate,
+                                                        @RequestParam(value = "endDate", required = true) String endDate) {
+        logAccessDetails("Getting diagnosis name with count.");
         return facilityDataService.getDiagnosisNameWithCount(facilityId, startDate, endDate);
     }
 
@@ -51,8 +61,9 @@ public class FacilityInfoController {
     public
     @ResponseBody
     List<Map<String, Object>> getEncounterTypesWithCount(@PathVariable String facilityId,
-                                                          @RequestParam(value = "startDate", required = true) String startDate,
-                                                          @RequestParam(value = "endDate", required = true) String endDate) {
+                                                         @RequestParam(value = "startDate", required = true) String startDate,
+                                                         @RequestParam(value = "endDate", required = true) String endDate) {
+        logAccessDetails("Getting encounter types with count");
         return facilityDataService.getEncounterTypesWithCount(facilityId, startDate, endDate);
     }
 
@@ -63,11 +74,12 @@ public class FacilityInfoController {
     HashMap<String, List<Map<String, Object>>> getPrescribedDrugsWithCount(@PathVariable String facilityId,
                                                                            @RequestParam(value = "startDate", required = true) String startDate,
                                                                            @RequestParam(value = "endDate", required = true) String endDate) {
+        logAccessDetails("Getting prescribed drugs with count");
         HashMap<String, List<Map<String, Object>>> prescribedDrugs = new HashMap<>();
-        prescribedDrugs.put("freetextCount",facilityDataService.getFreeTextCount(facilityId, startDate, endDate));
-        prescribedDrugs.put("nonCodedDrugsWithCount",facilityDataService.getnonCodedDrugsWithCount(facilityId,startDate,endDate));
-        prescribedDrugs.put("codedDrugCount",facilityDataService.getCodedDrugCount(facilityId,startDate,endDate));
-        prescribedDrugs.put("codedDrugWithCount",facilityDataService.getCodedDrugWithCount(facilityId,startDate,endDate));
+        prescribedDrugs.put("freetextCount", facilityDataService.getFreeTextCount(facilityId, startDate, endDate));
+        prescribedDrugs.put("nonCodedDrugsWithCount", facilityDataService.getnonCodedDrugsWithCount(facilityId, startDate, endDate));
+        prescribedDrugs.put("codedDrugCount", facilityDataService.getCodedDrugCount(facilityId, startDate, endDate));
+        prescribedDrugs.put("codedDrugWithCount", facilityDataService.getCodedDrugWithCount(facilityId, startDate, endDate));
         return prescribedDrugs;
     }
 
@@ -78,8 +90,10 @@ public class FacilityInfoController {
     Object searchFacility(@RequestParam(value = "name", required = false) String facilityName,
                           @RequestParam(value = "id", required = false) String facilityId) throws IOException, URISyntaxException {
         if (facilityId != null) {
+            logAccessDetails(String.format("Searching facility %s", facilityId));
             return facilityDataService.getAvailableFacilitiesById(facilityId);
         } else if (facilityName != null) {
+            logAccessDetails(String.format("Searching facility %s", facilityName));
             return facilityDataService.getAvailableFacilitiesBYName(facilityName);
         }
         return null;
@@ -92,5 +106,14 @@ public class FacilityInfoController {
         dashboard.addObject("facility", facilityDataService.getAvailableFacilitiesById(facilityId));
         dashboard.addObject("lastEncounterDate", facilityDataService.getLastEncounterDateTime(facilityId));
         return dashboard;
+    }
+
+    private UserInfo getUserInfo() {
+        return (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    }
+
+    private void logAccessDetails(String action) {
+        UserInfo userInfo = getUserInfo();
+        log.info(String.format("ACCESS: EMAIL=%s ACTION=%s", userInfo.getProperties().getEmail(), action));
     }
 }
