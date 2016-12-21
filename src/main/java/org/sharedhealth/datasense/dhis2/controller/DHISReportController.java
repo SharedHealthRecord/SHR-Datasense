@@ -3,6 +3,7 @@ package org.sharedhealth.datasense.dhis2.controller;
 import org.apache.commons.collections4.CollectionUtils;
 import org.quartz.SchedulerException;
 import org.sharedhealth.datasense.client.DHIS2Client;
+import org.sharedhealth.datasense.controller.DatasenseController;
 import org.sharedhealth.datasense.dhis2.model.DHISReportConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.dhis2.model.DatasetJobSchedule;
@@ -23,7 +24,7 @@ import java.util.*;
 
 @Controller
 @RequestMapping(value = "/dhis2/reports")
-public class DHISReportController {
+public class DHISReportController extends DatasenseController {
 
 
     public static final String DHIS_DATASET_SEARCH_FORMAT = "/api/dataSets?filter=name:like:%s&fields=id,name,href,periodType&pageSize=500";
@@ -72,6 +73,7 @@ public class DHISReportController {
     public
     @ResponseBody
     ModelAndView resetReportMapping(@RequestParam Integer reportId) {
+        logAccessDetails(String.format("Resetting report mapping for report-%s. ", reportId));
         metaDataService.resetReportMap(reportId);
         return new ModelAndView("redirect:/dhis2/reports");
     }
@@ -82,6 +84,7 @@ public class DHISReportController {
     @ResponseBody
     DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) throws IOException, URISyntaxException {
         String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
+        logAccessDetails(String.format("Searching DHIS dataset-%s. ", searchString));
         String searchUri =
                 String.format(DHIS_DATASET_SEARCH_FORMAT, searchString);
         return dhis2Client.get(searchUri);
@@ -93,6 +96,7 @@ public class DHISReportController {
     public
     @ResponseBody
     DHISResponse getOrgUnits(@PathVariable String datasetId) throws IOException, URISyntaxException {
+        logAccessDetails(String.format("Get Org units for %s. ", datasetId));
         String searchUri = String.format(DHIS_DATASET_ORGUNIT_FORMAT, datasetId);
         return dhis2Client.get(searchUri);
     }
@@ -100,14 +104,16 @@ public class DHISReportController {
     @RequestMapping(value = "/schedule/{configId}", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView showScheduleOptions(@PathVariable Integer configId) {
+        logAccessDetails("Retrive Scheduler Details for" + configId);
         return viewModelForDataset(configId);
     }
 
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView scheduleReportSubmission(ReportScheduleRequest scheduleRequest) {
-        ArrayList<String> formErrors=new ArrayList<>();
-        ArrayList<String> success=new ArrayList<>();
+        logAccessDetails("Scheduling report submissiom for " + scheduleRequest. getDatasetName());
+        ArrayList<String> formErrors = new ArrayList<>();
+        ArrayList<String> success = new ArrayList<>();
         try {
             if (!scheduleRequest.getSelectedFacilities().isEmpty()) {
                 jobScheduler.scheduleJob(scheduleRequest);
@@ -117,10 +123,9 @@ public class DHISReportController {
             }
         } catch (Exception e) {
             e.printStackTrace();
-            if(formErrors.size()>0){
-                formErrors.set(0,"Error occured, unable to post");
-            }
-            else{
+            if (formErrors.size() > 0) {
+                formErrors.set(0, "Error occured, unable to post");
+            } else {
                 formErrors.add("Error occured, unable to post");
             }
         }
@@ -135,6 +140,7 @@ public class DHISReportController {
     public
     @ResponseBody
     Map<String, Object> previewReportSubmission(@PathVariable String datasetId, ReportScheduleRequest scheduleRequest, Model model) {
+        logAccessDetails(String.format("Preview report submission for %s", scheduleRequest.getDatasetName()));
         List<String> formErrors = new ArrayList<>();
         List<Map> reports = dhisDataPreviewService.fetchResults(scheduleRequest, formErrors);
         Map<String, Object> map = new HashMap<>();
@@ -154,6 +160,7 @@ public class DHISReportController {
     public
     @ResponseBody
     List<DatasetJobSchedule> showScheduleForDataset(@PathVariable Integer configId) {
+        logAccessDetails("Show Schedule For Datasense.");
         try {
             return jobScheduler.findAllJobsForDatasetConfig(configId);
         } catch (SchedulerException e) {

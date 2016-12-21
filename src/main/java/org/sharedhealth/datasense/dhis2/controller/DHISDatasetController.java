@@ -2,6 +2,7 @@ package org.sharedhealth.datasense.dhis2.controller;
 
 
 import org.sharedhealth.datasense.client.DHIS2Client;
+import org.sharedhealth.datasense.controller.DatasenseController;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -18,7 +19,7 @@ import java.net.URISyntaxException;
 
 @Controller
 @RequestMapping(value = "/dhis2/dataSets")
-public class DHISDatasetController {
+public class DHISDatasetController extends DatasenseController {
 
     private static final String DHIS_DATASET_DATA_ELEMENTS_FORMAT = "/api/dataSets/%s?fields=id,name,dataElements,categoryCombo";
     private static final String DHIS_DATA_ELEMENTS_FORMAT = "/api/dataElements/%s";
@@ -35,34 +36,42 @@ public class DHISDatasetController {
         return modelAndView;
     }
 
-    @RequestMapping(value = "/{datasetId}/dataElements", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/{datasetId}/dataElements", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DHISResponse getDataElementsForDataSet(@PathVariable String datasetId) throws IOException, URISyntaxException {
+        logAccessDetails(String.format("Getting data elements for dataset-%s", datasetId));
         String searchUri = String.format(DHIS_DATASET_DATA_ELEMENTS_FORMAT, datasetId);
         return dhis2Client.get(searchUri);
     }
 
-    @RequestMapping(value = "/dataElements/{dataElementId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/dataElements/{dataElementId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DHISResponse getDataElementDetails(@PathVariable String dataElementId) throws IOException, URISyntaxException {
+        logAccessDetails(String.format("Getting details for data element-%s", dataElementId));
         String searchUri = String.format(DHIS_DATA_ELEMENTS_FORMAT, dataElementId);
         return dhis2Client.get(searchUri);
     }
 
-    @RequestMapping(value = "/categoryCombos/{categoryComboId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/categoryCombos/{categoryComboId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DHISResponse getCategoryComboDetails(@PathVariable String categoryComboId) throws IOException, URISyntaxException {
+        logAccessDetails(String.format("Getting details for category combo-%s", categoryComboId));
         String searchUri = String.format(DHIS_CAT_COMBO_FORMAT, categoryComboId);
         return dhis2Client.get(searchUri);
     }
 
-    @RequestMapping(value = "/categoryOptionCombos/{categoryOptionComboId}", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/categoryOptionCombos/{categoryOptionComboId}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DHISResponse getCategoryOptionComboDetails(@PathVariable String categoryOptionComboId) throws IOException, URISyntaxException {
+        logAccessDetails(String.format("Getting details for category option combo-%s", categoryOptionComboId));
         String searchUri = String.format(DHIS_CAT_OPT_COMBO_FORMAT, categoryOptionComboId);
         return dhis2Client.get(searchUri);
     }

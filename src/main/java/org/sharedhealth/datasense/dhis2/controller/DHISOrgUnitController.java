@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.dhis2.controller;
 
 import org.sharedhealth.datasense.client.DHIS2Client;
+import org.sharedhealth.datasense.controller.DatasenseController;
 import org.sharedhealth.datasense.dhis2.model.DHISOrgUnitConfig;
 import org.sharedhealth.datasense.dhis2.model.DHISResponse;
 import org.sharedhealth.datasense.dhis2.service.DHISMetaDataService;
@@ -16,7 +17,7 @@ import java.net.URISyntaxException;
 
 @Controller
 @RequestMapping(value = "/dhis2/orgUnits")
-public class DHISOrgUnitController {
+public class DHISOrgUnitController extends DatasenseController {
 
     public static final String DHIS_ORGUNIT_SEARCH_FORMAT = "/api/organisationUnits?filter=name:like:%s&fields=id,name,href&pageSize=100";
     @Autowired
@@ -50,15 +51,17 @@ public class DHISOrgUnitController {
 
     @RequestMapping(value = "/configure", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     String configure(@RequestBody DHISOrgUnitConfig config) {
         metaDataService.save(config);
         return "{}";
     }
 
-    @RequestMapping(value = "/search", method = RequestMethod.GET, produces= MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/search", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
-    public @ResponseBody
+    public
+    @ResponseBody
     DHISResponse searchDHISDataset(@RequestParam(value = "name") String name) throws IOException, URISyntaxException {
         String searchString = name.replaceAll("  ", " ").replaceAll(" ", "%20");
         String searchUri =

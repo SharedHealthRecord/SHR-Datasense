@@ -1,13 +1,10 @@
 package org.sharedhealth.datasense.controller;
 
-import org.apache.log4j.Logger;
 import org.sharedhealth.datasense.client.IdentityServiceClient;
-import org.sharedhealth.datasense.security.UserInfo;
 import org.sharedhealth.datasense.service.FacilityInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -20,9 +17,8 @@ import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/facility")
-public class FacilityInfoController {
+public class FacilityInfoController extends DatasenseController {
 
-    Logger log = Logger.getLogger(FacilityInfoController.class);
     @Autowired
     private FacilityInfoService facilityDataService;
     @Autowired
@@ -106,14 +102,5 @@ public class FacilityInfoController {
         dashboard.addObject("facility", facilityDataService.getAvailableFacilitiesById(facilityId));
         dashboard.addObject("lastEncounterDate", facilityDataService.getLastEncounterDateTime(facilityId));
         return dashboard;
-    }
-
-    private UserInfo getUserInfo() {
-        return (UserInfo) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-    }
-
-    private void logAccessDetails(String action) {
-        UserInfo userInfo = getUserInfo();
-        log.info(String.format("ACCESS: EMAIL=%s ACTION=%s", userInfo.getProperties().getEmail(), action));
     }
 }

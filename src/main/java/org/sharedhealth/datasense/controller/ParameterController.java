@@ -15,7 +15,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/config/parameters")
-public class ParameterController {
+public class ParameterController extends DatasenseController{
 
     private static final Logger logger = Logger.getLogger(ParameterController.class);
     private static final String[] supportedParamDataTypes = new String[] { "String" };
@@ -35,6 +35,7 @@ public class ParameterController {
     @RequestMapping(value = "/{paramId}/edit", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView editParam(@PathVariable int paramId) {
+        logAccessDetails("Editing parameter");
         ModelAndView modelAndView = new ModelAndView("config.defineParameter");
         Parameter param = configurationService.parameterById(paramId);
         modelAndView.addObject("configParameter", param);
@@ -46,6 +47,7 @@ public class ParameterController {
     @RequestMapping(value = "/define", method = RequestMethod.GET)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView defineParam() {
+        logAccessDetails("Defining parameter");
         ModelAndView modelAndView = new ModelAndView("config.defineParameter");
         Parameter parameter = new Parameter();
         parameter.setDataType("String");
@@ -61,6 +63,7 @@ public class ParameterController {
     @RequestMapping(value = "/define", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView saveParam(Parameter parameter) {
+        logAccessDetails("Saving parameter");
         String message = "Error occurred while trying to save parameter.";
         try {
             configurationService.save(parameter);
