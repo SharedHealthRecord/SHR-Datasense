@@ -37,10 +37,7 @@ public class DrugEventWorker implements EventWorker{
         try {
             TrMedication trDrug = trWebClient.getTrMedication(drugUri);
             drugProcessor.process(trDrug);
-        } catch (URISyntaxException e) {
-            log.error(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(errorMessage, e);
             throw new RuntimeException(errorMessage, e);
         }

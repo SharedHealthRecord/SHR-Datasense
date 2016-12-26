@@ -37,10 +37,7 @@ public class ReferenceTermEventWorker implements EventWorker{
         try {
             TrReferenceTerm trReferenceTerm = trWebClient.getTrReferenceTerm(referenceTermUri);
             referenceTermProcessor.process(trReferenceTerm);
-        } catch (URISyntaxException e) {
-            log.error(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(errorMessage, e);
             throw new RuntimeException(errorMessage, e);
         }

@@ -42,7 +42,7 @@ public class PatientUpdateEventWorker implements EventWorker {
                 return;
             }
             patientDao.update(patientUpdate);
-        } catch (IOException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage(), e);
         }
     }

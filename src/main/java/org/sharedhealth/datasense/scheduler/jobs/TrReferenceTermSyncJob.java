@@ -40,7 +40,7 @@ public class TrReferenceTermSyncJob {
                         transactionManager, properties);
         try {
             feedProcessor.process();
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             String message = String.format("Unable to process reference term feed [%s]", trReferenceTermAtomfeedUrl);
             log.error(message, e);
             throw new RuntimeException(message, e);

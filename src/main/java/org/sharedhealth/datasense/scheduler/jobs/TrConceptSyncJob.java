@@ -39,7 +39,7 @@ public class TrConceptSyncJob {
                         transactionManager, properties);
         try {
             feedProcessor.process();
-        } catch (URISyntaxException e) {
+        } catch (Exception e) {
             String message = String.format("Unable to process concept feed [%s]", trConceptAtomfeedUrl);
             log.error(message, e);
             throw new RuntimeException(message, e);

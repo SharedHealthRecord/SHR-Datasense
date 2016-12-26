@@ -35,10 +35,7 @@ public class ConceptEventWorker implements EventWorker {
         try {
             TrConcept trConcept = trWebClient.getTrConcept(conceptUri);
             conceptProcessor.process(trConcept);
-        } catch (URISyntaxException e) {
-            log.error(errorMessage, e);
-            throw new RuntimeException(errorMessage, e);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error(errorMessage, e);
             throw new RuntimeException(errorMessage, e);
         }
