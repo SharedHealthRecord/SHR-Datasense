@@ -116,6 +116,7 @@ public class MciFeedProcessorIT {
         assertEquals("F", patient.getGender());
         assertEquals(DateUtil.parseDate("1976-01-13T16:50:00.000+05:30"), patient.getDateOfBirth());
         assertEquals("303334", patient.getPresentLocationCode());
+        assertEquals("ISSUED", patient.getHidCardStatus());
     }
 
     @Test
@@ -183,6 +184,7 @@ public class MciFeedProcessorIT {
         patient.setHid(hid);
         patient.setDateOfBirth(DateUtil.parseDate("1976-01-12T16:50:00.000+05:30"));
         patient.setGender("M");
+        patient.setHidCardStatus("REGISTERED");
         Address address = createAddress("1st lane", "30", "26", "07");
         patient.setPresentAddress(address);
         patient.setPresentAddressCode("302607");

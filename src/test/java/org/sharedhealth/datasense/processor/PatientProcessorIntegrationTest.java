@@ -85,6 +85,8 @@ public class PatientProcessorIntegrationTest {
         assertEquals(VALID_HEALTH_ID, patient.getHid());
         Date dateOfBirth = patient.getDateOfBirth();
         assertEquals("1970-09-18", new SimpleDateFormat("yyyy-MM-dd").format(dateOfBirth));
+        String hidCardStatus = patient.getHidCardStatus();
+        assertEquals("REGISTERED", hidCardStatus);
     }
 
     @Test(expected = RuntimeException.class)

@@ -31,6 +31,9 @@ public class PatientData {
     @JsonProperty("merged_with")
     private Change mergedWithChange = new Change();
 
+    @JsonProperty("hid_card_status")
+    private Change hidCardStatusChange = new Change() ;
+
     public Address getAddressChange() {
         return addressChange.getNewValue();
     }
@@ -76,6 +79,7 @@ public class PatientData {
         changes.put(GENDER, getGenderChange());
         changes.put(PRESENT_LOCATION_ID, getLocationCodeChange());
         changes.put(DOB, getFormattedDobChange());
+        changes.put(HID_CARD_STATUS, getHidCardStatusChange());
 
         return Maps.filterValues(changes, new Predicate<Object>() {
             @Override
@@ -92,5 +96,13 @@ public class PatientData {
     private String getFormattedDobChange() {
         String dobChange = getDobChange();
         return StringUtils.isEmpty(dobChange) ? null : DateUtil.format(DateUtil.parseDate(dobChange));
+    }
+
+    public String getHidCardStatusChange() {
+        return (String) hidCardStatusChange.getNewValue();
+    }
+
+    public void setHidCardStatusChange(Change hidCardStatusChange) {
+        this.hidCardStatusChange = hidCardStatusChange;
     }
 }

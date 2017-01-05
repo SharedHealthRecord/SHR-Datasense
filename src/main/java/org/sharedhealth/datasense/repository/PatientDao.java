@@ -18,7 +18,7 @@ public class PatientDao {
 
     public Patient findPatientById(String healthId) {
         List<Patient> patients = jdbcTemplate.query(
-                "select patient_hid, dob, gender, present_location_id from patient where patient_hid= :patient_hid",
+                "select patient_hid, dob, gender, present_location_id, hid_card_status from patient where patient_hid= :patient_hid",
                 Collections.singletonMap("patient_hid", healthId),
                 new RowMapper<Patient>() {
                     @Override
@@ -28,6 +28,7 @@ public class PatientDao {
                         patient.setDateOfBirth(new Date(rs.getTimestamp("dob").getTime()));
                         patient.setGender(rs.getString("gender"));
                         patient.setPresentAddressCode(rs.getString("present_location_id"));
+                        patient.setHidCardStatus(rs.getString("hid_card_status"));
                         return patient;
                     }
                 });
@@ -40,8 +41,9 @@ public class PatientDao {
         map.put("dob", patient.getDateOfBirth());
         map.put("gender", patient.getGender());
         map.put("present_location_id", patient.getPresentLocationCode());
-        jdbcTemplate.update("insert into patient (patient_hid, dob, gender, present_location_id) values" +
-                "(:patient_hid, :dob, :gender, :present_location_id)", map);
+        map.put("hid_card_status", patient.getHidCardStatus());
+        jdbcTemplate.update("insert into patient (patient_hid, dob, gender, present_location_id, hid_card_status) values" +
+                "(:patient_hid, :dob, :gender, :present_location_id, :hid_card_status)", map);
     }
 
     public void update(PatientUpdate patientUpdate) {

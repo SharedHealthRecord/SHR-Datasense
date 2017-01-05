@@ -248,8 +248,8 @@
             <column name="concept_uuid" type="varchar(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
-            <column name="class" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
+            <column name="class" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150127-1059" author="sharedhealth" context="setup">
@@ -258,48 +258,48 @@
             <column name="reference_term_uuid" type="varchar(50)">
                 <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
-            <column name="code" type="varchar(50)" />
-            <column name="source" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
+            <column name="code" type="varchar(50)"/>
+            <column name="source" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150127-1060" author="sharedhealth" context="setup">
         <comment>creating tr reference term map table</comment>
         <createTable tableName="reference_term_map">
             <column name="reference_term_map_id" type="int" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="concept_uuid" type="varchar(50)" />
-            <column name="reference_term_uuid" type="varchar(50)" />
-            <column name="relationship_type" type="varchar(50)" />
+            <column name="concept_uuid" type="varchar(50)"/>
+            <column name="reference_term_uuid" type="varchar(50)"/>
+            <column name="relationship_type" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150130-1635" author="sharedhealth" context="setup">
         <comment>creating patient death details table</comment>
         <createTable tableName="patient_death_details">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="patient_hid" type="varchar(50)" />
-            <column name="encounter_id" type="varchar(50)" />
-            <column name="date_of_death" type="datetime" />
-            <column name="cause_concept_uuid" type="varchar(50)" />
-            <column name="cause_code" type="varchar(50)" />
-            <column name="circumstances_of_death" type="varchar(50)" />
-            <column name="patient_age_years" type="int" />
-            <column name="patient_age_months" type="int" />
-            <column name="patient_age_days" type="int" />
-            <column name="uuid" type="varchar(50)" />
+            <column name="patient_hid" type="varchar(50)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="date_of_death" type="datetime"/>
+            <column name="cause_concept_uuid" type="varchar(50)"/>
+            <column name="cause_code" type="varchar(50)"/>
+            <column name="circumstances_of_death" type="varchar(50)"/>
+            <column name="patient_age_years" type="int"/>
+            <column name="patient_age_months" type="int"/>
+            <column name="patient_age_days" type="int"/>
+            <column name="uuid" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150130-1653" author="sharedhealth" context="setup">
-            <comment>creating tr drug table</comment>
-            <createTable tableName="drug">
-                <column name="drug_uuid" type="varchar(50)" />
-                <column name="concept_uuid" type="varchar(50)" />
-                <column name="name" type="varchar(255)" />
-                <column name="reference_term_uuid" type="varchar(255)" />
-            </createTable>
+        <comment>creating tr drug table</comment>
+        <createTable tableName="drug">
+            <column name="drug_uuid" type="varchar(50)"/>
+            <column name="concept_uuid" type="varchar(50)"/>
+            <column name="name" type="varchar(255)"/>
+            <column name="reference_term_uuid" type="varchar(255)"/>
+        </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150203-1151" author="sharedhealth" context="setup">
         <comment>alter medication table</comment>
@@ -309,34 +309,34 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150203-1208" author="sharedhealth" context="setup">
         <modifyDataType columnName="circumstances_of_death"
-                newDataType="varchar(500)"
-                tableName="patient_death_details"/>
+                        newDataType="varchar(500)"
+                        tableName="patient_death_details"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150204-1635" author="sharedhealth" context="setup">
         <comment>creating patient procedure details table</comment>
         <createTable tableName="procedures">
             <column name="procedure_id" type="int" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="patient_hid" type="varchar(50)" />
-            <column name="encounter_id" type="varchar(50)" />
-            <column name="date" type="datetime" />
-            <column name="start_date" type="datetime" />
-            <column name="end_date" type="datetime" />
-            <column name="procedure_uuid" type="varchar(50)" />
-            <column name="procedure_code" type="varchar(50)" />
-            <column name="diagnosis_uuid" type="varchar(50)" />
-            <column name="diagnosis_code" type="varchar(50)" />
+            <column name="patient_hid" type="varchar(50)"/>
+            <column name="encounter_id" type="varchar(50)"/>
+            <column name="date" type="datetime"/>
+            <column name="start_date" type="datetime"/>
+            <column name="end_date" type="datetime"/>
+            <column name="procedure_uuid" type="varchar(50)"/>
+            <column name="procedure_code" type="varchar(50)"/>
+            <column name="diagnosis_uuid" type="varchar(50)"/>
+            <column name="diagnosis_code" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150219-1433" author="sharedhealth" context="setup">
         <comment>creating provider table</comment>
         <createTable tableName="provider">
             <column name="id" type="varchar(20)">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(50)" />
-            <column name="facility_id" type="varchar(50)" />
+            <column name="name" type="varchar(50)"/>
+            <column name="facility_id" type="varchar(50)"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150423-1351" author="sanjana" context="setup">
@@ -414,35 +414,35 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150508-1900" author="angshu">
         <comment>Change reference_term.name size to varchar 255</comment>
-        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
+        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150521-1550" author="sanjana">
         <comment>Change facility.type size to varchar 255</comment>
-        <modifyDataType tableName="facility" columnName="type" newDataType="varchar(255)" />
+        <modifyDataType tableName="facility" columnName="type" newDataType="varchar(255)"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150529-1205" author="angshu" context="setup">
         <comment>creating mapping table for datasense report to dhis2 datasets</comment>
         <createTable tableName="dhis_dataset_map">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="name" type="varchar(255)" />
-            <column name="config_file" type="varchar(255)" />
-            <column name="dataset_id" type="varchar(20)" />
-            <column name="dataset_name" type="varchar(255)" />
-            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+            <column name="name" type="varchar(255)"/>
+            <column name="config_file" type="varchar(255)"/>
+            <column name="dataset_id" type="varchar(20)"/>
+            <column name="dataset_name" type="varchar(255)"/>
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150530-1253" author="angshu" context="setup">
         <comment>creating mapping table for datasense facility to dhis2 org unit</comment>
         <createTable tableName="dhis_orgunit_map">
             <column name="id" type="int" autoIncrement="true">
-                <constraints nullable="false" primaryKey="true" />
+                <constraints nullable="false" primaryKey="true"/>
             </column>
-            <column name="facility_id" type="varchar(20)" />
-            <column name="org_unit_id" type="varchar(20)" />
-            <column name="org_unit_name" type="varchar(255)" />
-            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+            <column name="facility_id" type="varchar(20)"/>
+            <column name="org_unit_id" type="varchar(20)"/>
+            <column name="org_unit_name" type="varchar(255)"/>
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150602-1405" author="angshu" context="setup">
@@ -468,7 +468,7 @@
             <column name="code" type="varchar(20)"/>
             <column name="uuid" type="varchar(50)"/>
             <column name="incident_uuid" type="varchar(50)"/>
-            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1226" author="sharedhealth" context="setup">
@@ -484,7 +484,7 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1227" author="sharedhealth" context="setup">
         <comment>Change reference term name column size to 100 from 255</comment>
-        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(100)" />
+        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(100)"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1228" author="sharedhealth" context="setup">
         <preConditions onFail="MARK_RAN">
@@ -548,8 +548,8 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1303" author="sharedhealth" context="setup">
         <comment>Change drug.reference_term_uuid column size to 50 from 255 and drug name to 100</comment>
-        <modifyDataType tableName="drug" columnName="reference_term_uuid" newDataType="varchar(50)" />
-        <modifyDataType tableName="drug" columnName="name" newDataType="varchar(100)" />
+        <modifyDataType tableName="drug" columnName="reference_term_uuid" newDataType="varchar(50)"/>
+        <modifyDataType tableName="drug" columnName="name" newDataType="varchar(100)"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20150619-1309-3" author="sharedhealth" context="setup">
         <preConditions onFail="MARK_RAN">
@@ -731,23 +731,28 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151007-1746" author="Angshu" context="config">
         <sql>
-            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'DATE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
+            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT
+            'DATE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'DATE_OF_DEATH_UUID' ) LIMIT 1;
 
-            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'DEATH_CODES', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
+            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT
+            'DEATH_CODES', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'DEATH_CODES' ) LIMIT 1;
 
-            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'CIRCUMSTANCES_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
-            WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'CIRCUMSTANCES_OF_DEATH_UUID' ) LIMIT 1;
+            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT
+            'CIRCUMSTANCES_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
+            WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'CIRCUMSTANCES_OF_DEATH_UUID' )
+            LIMIT 1;
 
-            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'CAUSE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
+            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT
+            'CAUSE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'CAUSE_OF_DEATH_UUID' ) LIMIT 1;
         </sql>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151026-1818" author="sharedhealth" context="setup">
         <comment>Change reference term and drug name column size to 255 from 100</comment>
-        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)" />
-        <modifyDataType tableName="drug" columnName="name" newDataType="varchar(255)" />
+        <modifyDataType tableName="reference_term" columnName="name" newDataType="varchar(255)"/>
+        <modifyDataType tableName="drug" columnName="name" newDataType="varchar(255)"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151102-1948" author="angshu" context="setup">
         <renameColumn columnDataType="varchar(50)"
@@ -776,17 +781,18 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151102-2008" author="Angshu" context="config">
         <sql>
-            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT 'PLACE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
+            INSERT INTO param_config (param_name, param_value, param_type, data_type) SELECT * FROM (SELECT
+            'PLACE_OF_DEATH_UUID', 'NEED-TO-CONFIGURE', 'SYSTEM', 'String') AS tmp
             WHERE NOT EXISTS (SELECT param_name FROM param_config WHERE param_name = 'PLACE_OF_DEATH_UUID' ) LIMIT 1;
         </sql>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151109-1818" author="sharedhealth" context="setup">
         <comment>Change event content column type</comment>
-        <modifyDataType tableName="failed_events" columnName="event_content" newDataType="mediumtext" />
+        <modifyDataType tableName="failed_events" columnName="event_content" newDataType="mediumtext"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151119-1718" author="sharedhealth" context="setup">
         <comment>Change event content column type for failed_event_retry_log</comment>
-        <modifyDataType tableName="failed_event_retry_log" columnName="event_content" newDataType="mediumtext" />
+        <modifyDataType tableName="failed_event_retry_log" columnName="event_content" newDataType="mediumtext"/>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20151231-1301" context="setup" author="neha, dubey">
         <preConditions onFail="MARK_RAN">
@@ -794,7 +800,8 @@
                 <columnExists columnName="tags" tableName="failed_events"/>
             </not>
         </preConditions>
-        <comment>Creating column tags for failed_events table. This is same as atom spec feed.entry.categories.</comment>
+        <comment>Creating column tags for failed_events table. This is same as atom spec feed.entry.categories.
+        </comment>
         <addColumn tableName="failed_events">
             <column name="tags" type="varchar(255)"/>
         </addColumn>
@@ -811,7 +818,7 @@
             </column>
             <column name="encounter_id" type="varchar(50)"/>
             <column name="provider_id" type="varchar(50)"/>
-            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP" />
+            <column name="date_created" type="datetime" defaultValueComputed="CURRENT_TIMESTAMP"/>
         </createTable>
     </changeSet>
     <changeSet id="sharedhealth-datasense-20160502-1500" author="sharedhealth" context="setup">
@@ -840,7 +847,7 @@
             <column name="order_concept" type="varchar(50)"/>
             <column name="order_status" type="varchar(20)"/>
             <column name="uuid" type="varchar(50)">
-                    <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
@@ -860,7 +867,7 @@
             <column name="fulfiller " type="varchar(100)"/>
             <column name="report_concept" type="varchar(50)"/>
             <column name="uuid" type="varchar(50)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
@@ -872,7 +879,7 @@
             ADD report_id int;
         </sql>
     </changeSet>
-    <changeSet id="sharedhealth-datasense-20161504-1130" author="sukreet"  context="setup">
+    <changeSet id="sharedhealth-datasense-20161504-1130" author="sukreet" context="setup">
         <addColumn tableName="diagnostic_order">
             <column name="shr_order_uuid" type="varchar(50)"/>
         </addColumn>
@@ -959,7 +966,7 @@
             <column name="shr_medication_order_uuid" type="varchar(100)"/>
             <column name="prior_shr_medication_order_uuid" type="varchar(100)"/>
             <column name="uuid" type="varchar(50)">
-                <constraints nullable="false" unique="true" />
+                <constraints nullable="false" unique="true"/>
             </column>
             <column name="created_at" type="timestamp" defaultValueComputed="now()"/>
         </createTable>
@@ -999,35 +1006,35 @@
     </changeSet>
     <changeSet id="sharedhealth-datasense-20160630-1118" author="sukreet,anjaly" context="setup">
         <comment>Changing the column size of shr_order_uuid</comment>
-        <modifyDataType tableName="diagnostic_order" columnName="shr_order_uuid" newDataType="varchar(100)" />
+        <modifyDataType tableName="diagnostic_order" columnName="shr_order_uuid" newDataType="varchar(100)"/>
     </changeSet>
-    <changeSet  id="sharedhealth-datasense-20160630-1152" author="Anjaly,Sukreet">
-        <comment>Populating shr_order_uuid as encounter_id:shr_order_uuid for diagnostic orders </comment>
+    <changeSet id="sharedhealth-datasense-20160630-1152" author="Anjaly,Sukreet">
+        <comment>Populating shr_order_uuid as encounter_id:shr_order_uuid for diagnostic orders</comment>
         <sql>
             UPDATE diagnostic_order SET shr_order_uuid = CONCAT(encounter_id,':',shr_order_uuid);
         </sql>
     </changeSet>
-    <changeSet  id="sharedhealth-datasense-20160706-1741" author="Anjaly,Neha">
+    <changeSet id="sharedhealth-datasense-20160706-1741" author="Anjaly,Neha">
         <comment>Adding void columns for dhis_orgunit_map</comment>
         <sql>
             ALTER TABLE dhis_orgunit_map ADD COLUMN voided INT DEFAULT 0;
             ALTER TABLE dhis_orgunit_map ADD COLUMN date_voided DATETIME;
         </sql>
     </changeSet>
-    <changeSet  id="sharedhealth-datasense-20160706-1746" author="Anjaly,Neha">
+    <changeSet id="sharedhealth-datasense-20160706-1746" author="Anjaly,Neha">
         <comment>Deleting dhis_org_unit_uid column from facility</comment>
         <sql>
             ALTER TABLE facility DROP COLUMN dhis_org_unit_uid;
         </sql>
     </changeSet>
-    <changeSet  id="sharedhealth-datasense-20160707-1341" author="Neha">
+    <changeSet id="sharedhealth-datasense-20160707-1341" author="Neha">
         <comment>Adding void columns for dhis_orgunit_map</comment>
         <sql>
             ALTER TABLE dhis_dataset_map ADD COLUMN voided INT DEFAULT 0;
             ALTER TABLE dhis_dataset_map ADD COLUMN date_voided DATETIME;
         </sql>
     </changeSet>
-    <changeSet  id="sharedhealth-datasense-20160713-1457" author="Neha,Anjaly">
+    <changeSet id="sharedhealth-datasense-20160713-1457" author="Neha,Anjaly">
         <comment>Renaming column names for prescribed drugs</comment>
         <sql>
             ALTER TABLE prescribed_drugs CHANGE drug_uuid drug_code varchar(50);
@@ -1065,6 +1072,15 @@
         <sql>
             ALTER TABLE prescribed_drug CHANGE prescribed_drugs_id prescribed_drug_id int auto_increment;
         </sql>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20170104-1600" author="Sukreet,Abhilash">
+        <preConditions onFail="MARK_RAN">
+           <not> <columnExists columnName="hid_card_status" tableName="patient"/></not>
+        </preConditions>
+        <comment>introducing hid card status to patient table</comment>
+        <addColumn tableName="patient">
+            <column name="hid_card_status" type="varchar(15)"/>
+        </addColumn>
     </changeSet>
 
 </databaseChangeLog>

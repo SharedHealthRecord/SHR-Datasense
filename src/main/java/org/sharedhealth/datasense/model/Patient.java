@@ -13,6 +13,8 @@ public class Patient {
     private String gender;
     @JsonProperty("present_address")
     private Address presentAddress;
+    @JsonProperty("hid_card_status")
+    private String hidCardStatus;
 
     private String presentAddressCode;
 
@@ -58,5 +60,13 @@ public class Patient {
 
     public String getGender() {
         return gender;
+    }
+
+    public String getHidCardStatus() {
+        return hidCardStatus;
+    }
+
+    public void setHidCardStatus(String hidCardStatus) {
+        this.hidCardStatus = hidCardStatus;
     }
 }
