@@ -44,6 +44,7 @@ public class PatientUpdateEventWorker implements EventWorker {
             patientDao.update(patientUpdate);
         } catch (Exception e) {
             logger.error(e.getMessage(), e);
+            throw new RuntimeException(e.getMessage());
         }
     }
 

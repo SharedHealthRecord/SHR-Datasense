@@ -71,7 +71,8 @@ public class FacilityWebClient {
         try {
             response = new WebClient().get(facilityUrl, headers);
         } catch (ConnectionException e) {
-            log.error("Could not fetch facility");
+            String message = "Could not fetch facility";
+            log.error(message);
             if (e.getErrorCode() == 401)
                 log.error("Unauthorized");
         }

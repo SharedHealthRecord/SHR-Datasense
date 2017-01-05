@@ -58,9 +58,11 @@ public class ProviderWebClient {
         try {
             response = new WebClient().get(providerUrl, headers);
         } catch (ConnectionException e) {
-            log.error("Could not fetch facility");
+            String message = "Could not fetch provider";
+            log.error(message);
             if (e.getErrorCode() == 401)
                 log.error("Unauthorized.");
+            throw new IOException(message);
         }
         return response;
     }

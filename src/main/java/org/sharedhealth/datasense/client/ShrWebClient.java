@@ -39,8 +39,6 @@ public class ShrWebClient {
                 log.error("Unauthorized, clearing token.");
                 identityServiceClient.clearToken();
             }
-            throw new IOException(e);
-        } catch (Exception e) {
             log.error(String.format("Could not fetch feed for URI [%s]", uri.toString()), e);
             throw new IOException(e);
         }
