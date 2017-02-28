@@ -26,8 +26,9 @@ public class DateUtil {
     public static final String[] DATE_FORMATS = new String[]{
             ISO_DATE_IN_MILLIS_FORMAT, ISO_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_IN_MILLIS_FORMAT,
             UTC_DATE_IN_MILLIS_FORMAT, UTC_DATE_IN_SECS_FORMAT, FHIR_ISO_DATE_TIME_FORMAT,
-            SIMPLE_DATE_WITH_SECS_FORMAT, SIMPLE_DATE_FORMAT};
+            SIMPLE_DATE_WITH_SECS_FORMAT, SIMPLE_DATE_FORMAT, DATE_FMT_DD_MM_YYYY};
     private static final Logger logger = Logger.getLogger(DateUtil.class);
+
     public static String getCurrentTimeInUTCString() {
         SimpleDateFormat dateFormat = new SimpleDateFormat(UTC_DATE_IN_MILLIS_FORMAT);
         return dateFormat.format(new Date());

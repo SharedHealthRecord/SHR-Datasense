@@ -1,7 +1,9 @@
 package org.sharedhealth.datasense.repository;
 
 import org.apache.commons.collections4.CollectionUtils;
+import org.joda.time.DateTime;
 import org.sharedhealth.datasense.model.Encounter;
+import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.RowMapper;
@@ -56,21 +58,22 @@ public class EncounterDao {
     public List<Map<String, Object>> getVisitTypesWithCount(String facilityId, String date) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("facility_id", facilityId);
-        map.put("encounter_date", date);
-        String query = "SELECT visit_type, COUNT(*) AS num FROM encounter WHERE facility_id = :facility_id AND DATE_FORMAT(encounter_datetime, '%d/%m/%Y') = :encounter_date GROUP BY visit_type";
+        map.put("encounter_date", DateUtil.parseDate(date));
+        String query = "SELECT visit_type, COUNT(*) AS num FROM encounter WHERE facility_id = :facility_id AND DATE(encounter_datetime) = :encounter_date GROUP BY visit_type";
         List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
         return maps;
     }
 
-
     public List<Map<String, Object>> getEncounterTypesWithCount(String facilityId, String startDate, String endDate) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("facility_id", facilityId);
-        map.put("start_date", startDate);
-        map.put("end_date", endDate);
+        Date modifiedStartDate = DateUtil.parseDate(startDate);
+        Date modifiedEndDate = DateUtil.parseDate(endDate);
+        map.put("start_date", modifiedStartDate);
+        map.put("end_date", modifiedEndDate);
         String query = "SELECT encounter_type ,count(*) as count FROM encounter WHERE facility_id = :facility_id AND \n" +
-                "encounter_datetime >= STR_TO_DATE(:start_date, '%d/%m/%Y')\n" +
-                "AND encounter_datetime <= STR_TO_DATE(:end_date, '%d/%m/%Y') group by encounter_type";
+                "date(encounter_datetime) >= date(:start_date)\n" +
+                "AND date(encounter_datetime) <= date(:end_date) group by encounter_type";
         List<Map<String, Object>> maps = jdbcTemplate.query(query, map, new ColumnMapRowMapper());
         return maps;
     }
