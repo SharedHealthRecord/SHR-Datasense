@@ -253,7 +253,7 @@ function ReportScheduleOptions(orgUnits,formErrors,success) {
         }
 
         var reportingMonth = reportingDate.getMonth() + 1;
-        if (reportingMonth >= currentMonth) {
+        if (reportingMonth >= currentMonth && reportingYear === currentYear) {
             showErrors("Please select a valid date of past months. Reporting period must be in the past.");
             return false;
         }
