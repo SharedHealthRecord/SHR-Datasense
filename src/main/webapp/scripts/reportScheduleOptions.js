@@ -324,8 +324,40 @@ function ReportScheduleOptions(orgUnits,formErrors,success) {
              var rendered = Mustache.render(template,availableApplicableOrgUnits);
              $('#applicableOrgUnits').html(rendered);
              $('#applicableOrgUnits').attr('hidden',false);
-             var checkboxes = $("input[type='checkbox']");
+
+             var selectAll = $("input[name='selectAllFacilities']");
+             var checkboxes = $("input[name='selectedFacilities']");
+
+             selectAll.click(function () {
+                 if (selectAll.is(":checked")) {
+                     $("input[name='selectedFacilities']").prop('checked', true)
+                 } else {
+                     $("input[name='selectedFacilities']").prop('checked', false)
+                 }
+                 if(availableApplicableOrgUnits.length == $('input[name="selectedFacilities"]:checked').length){
+                     selectAll.prop('checked',true);
+                     $("#selectAllLabel").text("Unselect All")
+                 }
+                 else{
+                     $("#selectAllLabel").text("Select All")
+                 }
+                 if($('input[name="selectedFacilities"]:checked').length == 0){
+                     selectAll.prop('checked',false);
+                 }
+             });
+
+
              checkboxes.click(function() {
+                 if(availableApplicableOrgUnits.length == $('input[name="selectedFacilities"]:checked').length){
+                     selectAll.prop('checked',true);
+                     $("#selectAllLabel").text("Unselect All")
+                 }
+                 else{
+                     $("#selectAllLabel").text("Select All")
+                 }
+                 if($('input[name="selectedFacilities"]:checked').length == 0){
+                     selectAll.prop('checked',false);
+                 }
                  if(checkboxes.is(":checked")){
                      isChecked = true;
                  }
