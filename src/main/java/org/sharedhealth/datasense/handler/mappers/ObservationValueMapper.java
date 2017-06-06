@@ -1,10 +1,7 @@
 package org.sharedhealth.datasense.handler.mappers;
 
-import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.QuantityDt;
 import ca.uhn.fhir.model.primitive.*;
+import org.hl7.fhir.dstu3.model.*;
 import org.sharedhealth.datasense.util.DateUtil;
 
 import java.util.List;
@@ -23,24 +20,24 @@ public class ObservationValueMapper {
      * @param value
      * @return
      */
-    public String getObservationValue(IDatatype value) {
-        if (value instanceof StringDt) {
-            return ((StringDt) value).getValue();
-        } else if (value instanceof DecimalDt) {
-            return ((DecimalDt) value).getValue().toString();
-        } else if (value instanceof DateDt) {
-            return DateUtil.parseToString(((DateDt) value).getValue());
-        } else if (value instanceof DateTimeDt) {
-            return DateUtil.parseToString(((DateTimeDt) value).getValue());
-        } else if (value instanceof BooleanDt) {
-            return ((BooleanDt) value).getValue().toString();
-        } else if (value instanceof QuantityDt) {
-            return ((QuantityDt) value).getValue().toString();
+    public String getObservationValue(Type value) {
+        if (value instanceof StringType) {
+            return ((StringType) value).getValue();
+        } else if (value instanceof DecimalType) {
+            return ((DecimalType) value).getValue().toString();
+        } else if (value instanceof DateType) {
+            return DateUtil.parseToString(((DateType) value).getValue());
+        } else if (value instanceof DateTimeType) {
+            return DateUtil.parseToString(((DateTimeType) value).getValue());
+        } else if (value instanceof BooleanType) {
+            return ((BooleanType) value).getValue().toString();
+        } else if (value instanceof Quantity) {
+            return ((Quantity) value).getValue().toString();
         }
         //TODO : Codeable concept should point to concept synced from TR (Can be done after we sync all concepts from
         // TR).
-        else if (value instanceof CodeableConceptDt) {
-            List<CodingDt> codings = ((CodeableConceptDt) value).getCoding();
+        else if (value instanceof CodeableConcept) {
+            List<Coding> codings = ((CodeableConcept) value).getCoding();
             if (isValueBoolean(codings)) {
                 return getValueBoolean(codings);
             }
@@ -54,7 +51,7 @@ public class ObservationValueMapper {
         return null;
     }
 
-    private boolean isValueBoolean(List<CodingDt> codings) {
+    private boolean isValueBoolean(List<Coding> codings) {
         if (!codings.isEmpty()) {
             String system = codings.get(0).getSystem();
             return HL7_FHIR_VS_URL_FOR_BOOLEAN.equalsIgnoreCase(system) || HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN.equalsIgnoreCase(system);
@@ -62,9 +59,9 @@ public class ObservationValueMapper {
         return false;
     }
 
-    private String getValueBoolean(List<CodingDt> codings) {
+    private String getValueBoolean(List<Coding> codings) {
         if (!codings.isEmpty()) {
-            CodingDt coding = codings.get(0);
+            Coding coding = codings.get(0);
             String system = coding.getSystem();
             if (system.equalsIgnoreCase(HL7_FHIR_VS_URL_FOR_BOOLEAN) || system.equalsIgnoreCase(HL7_FHIR_VS_SYSTEM_FOR_BOOLEAN)) {
                 return String.valueOf(coding.getCode().equalsIgnoreCase("Y"));

@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.codec.binary.Base64;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;

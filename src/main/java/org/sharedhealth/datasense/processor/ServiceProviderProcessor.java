@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.sharedhealth.datasense.client.FacilityWebClient;
 import org.sharedhealth.datasense.config.DatasenseProperties;
 import org.sharedhealth.datasense.model.Facility;
@@ -118,7 +118,7 @@ public class ServiceProviderProcessor implements ResourceProcessor {
         final ProviderReference providerReference = composition.getProviderReference();
         final String encounterId = composition.getContext().getShrEncounterId();
         providerProcessor.deleteEncounterProviders(encounterId);
-        for (ResourceReferenceDt reference : providerReference.getReferences()) {
+        for (Reference reference : providerReference.getReferences()) {
             String providerId = providerReference.getProviderId(reference);
             if (!StringUtils.isBlank(providerId)) {
                 providerProcessor.saveEncounterProviders(encounterId, providerId);

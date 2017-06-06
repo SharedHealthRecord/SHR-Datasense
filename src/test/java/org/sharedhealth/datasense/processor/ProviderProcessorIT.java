@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;

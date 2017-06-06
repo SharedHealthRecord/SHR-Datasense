@@ -72,7 +72,7 @@ ext.libraries = [
         spring_web           : "org.springframework:spring-web:4.1.0.RELEASE",
         guava                : "com.google.guava:guava:18.0",
         hapi_fhir_base       : 'ca.uhn.hapi.fhir:hapi-fhir-base:1.5',
-        hapi_fhir_structures : 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu2:1.5',
+        hapi_fhir_structures : 'ca.uhn.hapi.fhir:hapi-fhir-structures-dstu3:2.3',
         phloc_schematron       : 'com.phloc:phloc-schematron:2.7.1',
         phloc_commons          : 'com.phloc:phloc-commons:4.3.6'
 ]

@@ -1,8 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import org.sharedhealth.datasense.config.DatasenseProperties;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Observation;
@@ -31,12 +30,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public boolean canHandle(IResource resource) {
-        if (!(resource instanceof ca.uhn.fhir.model.dstu2.resource.Observation)) {
+    public boolean canHandle(Resource resource) {
+        if (!(resource instanceof org.hl7.fhir.dstu3.model.Observation)) {
             return false;
         } else {
-            List<CodingDt> codingDts = ((ca.uhn.fhir.model.dstu2.resource.Observation) resource).getCode().getCoding();
-            for (CodingDt coding : codingDts) {
+            List<Coding> codingDts = ((org.hl7.fhir.dstu3.model.Observation) resource).getCode().getCoding();
+            for (Coding coding : codingDts) {
                 if (configurationService.getDeathCodes().contains(coding.getCode())) {
                     return false;
                 }
@@ -46,7 +45,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     @Override
-    public void process(IResource resource, EncounterComposition composition) {
+    public void process(Resource resource, EncounterComposition composition) {
         Observation observation = new Observation();
         mapObservation(composition, observation, resource, null);
     }
@@ -59,11 +58,11 @@ public class ObservationResourceHandler implements FhirResourceHandler {
     }
 
     private void mapRelatedComponents(EncounterComposition composition, String parentObsUUID,
-                                      ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation, Integer reportId) {
+                                      org.hl7.fhir.dstu3.model.Observation fhirObservation, Integer reportId) {
 
-        List<ca.uhn.fhir.model.dstu2.resource.Observation.Related> relatedObservations = fhirObservation.getRelated();
-        for (ca.uhn.fhir.model.dstu2.resource.Observation.Related relatedObservation : relatedObservations) {
-            IResource resource = composition.getContext().getResourceForReference(relatedObservation.getTarget());
+        List<org.hl7.fhir.dstu3.model.Observation.ObservationRelatedComponent> relatedObservations = fhirObservation.getRelated();
+        for (org.hl7.fhir.dstu3.model.Observation.ObservationRelatedComponent relatedObservation : relatedObservations) {
+            Resource resource = composition.getContext().getResourceForReference(relatedObservation.getTarget());
             Observation childObservation;
             childObservation = new Observation();
             mapObservation(composition, childObservation, resource, reportId);
@@ -72,12 +71,12 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         }
     }
 
-    public void mapObservation(EncounterComposition composition, Observation observation, IResource
+    public void mapObservation(EncounterComposition composition, Observation observation, Resource
             resource, Integer reportId) {
-        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation =
-                (ca.uhn.fhir.model.dstu2.resource.Observation) resource;
+        org.hl7.fhir.dstu3.model.Observation fhirObservation =
+                (org.hl7.fhir.dstu3.model.Observation) resource;
 
-        List<CodingDt> codings = fhirObservation.getCode().getCoding();
+        List<Coding> codings = fhirObservation.getCode().getCoding();
         String conceptId = getConceptId(codings);
         String code = getReferenceCode(codings);
         String parentObsUUID = null;

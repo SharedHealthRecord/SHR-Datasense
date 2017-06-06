@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -43,7 +43,7 @@ public class ProcedureResourceHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private EncounterComposition composition;
-    private IResource procedureResource;
+    private Resource procedureResource;
 
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
     private static final String PATIENT_HID = "98001046534";
@@ -62,7 +62,7 @@ public class ProcedureResourceHandlerIT {
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
 
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb");
+        Reference resourceReference = new Reference().setReference("urn:uuid:4db65ed8-4cc4-428b-895d-da81d20b82fb");
         procedureResource = bundleContext.getResourceForReference(resourceReference);
 
     }

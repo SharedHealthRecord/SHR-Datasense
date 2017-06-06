@@ -1,13 +1,13 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
 import org.apache.commons.lang3.StringUtils;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.sharedhealth.datasense.model.Facility;
 
 
 public class ServiceProviderReference {
     public static final String EXTENSION = ".json";
-    private ResourceReferenceDt referenceDt;
+    private Reference referenceDt;
     private Facility value;
 
     public String getFacilityId() {
@@ -16,7 +16,7 @@ public class ServiceProviderReference {
 
     private String parseUrl() {
         if (referenceDt == null) return null;
-        String s = StringUtils.substringAfterLast(referenceDt.getReference().getValue(), "/");
+        String s = StringUtils.substringAfterLast(referenceDt.getReference(), "/");
         return StringUtils.substringBefore(s, EXTENSION);
     }
 
@@ -28,11 +28,11 @@ public class ServiceProviderReference {
         return value;
     }
 
-    public void setReference(ResourceReferenceDt serviceProvider) {
+    public void setReference(Reference serviceProvider) {
         this.referenceDt = serviceProvider;
     }
 
-    public ResourceReferenceDt getReference() {
+    public Reference getReference() {
         return referenceDt;
     }
 }

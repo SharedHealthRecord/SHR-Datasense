@@ -1,9 +1,9 @@
 package org.sharedhealth.datasense.model.fhir;
 
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import ca.uhn.fhir.model.dstu2.resource.Encounter;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Encounter;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.junit.Test;
 
 import java.util.ArrayList;
@@ -29,8 +29,8 @@ public class EncounterCompositionTest {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/encounter_with_condition.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
-        ArrayList<IResource> resources = composition.getCompositionRefResources();
-        for (IResource resource : resources) {
+        ArrayList<Resource> resources = composition.getCompositionRefResources();
+        for (Resource resource : resources) {
             if (resource instanceof Encounter) {
                 fail("Fetching section resources from composition should not return Encounter as it is fetched by composition.encounter");
             }
@@ -43,9 +43,9 @@ public class EncounterCompositionTest {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
-        List<IResource> topLevelResources = composition.getTopLevelResources();
+        List<Resource> topLevelResources = composition.getTopLevelResources();
         assertEquals(1, topLevelResources.size());
-        assertEquals("urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1", topLevelResources.get(0).getId().getValue());
+        assertEquals("urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1", topLevelResources.get(0).getId());
     }
 
     @Test
@@ -53,7 +53,7 @@ public class EncounterCompositionTest {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnosticReport.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
-        List<IResource> topLevelResources = composition.getTopLevelResources();
+        List<Resource> topLevelResources = composition.getTopLevelResources();
         assertEquals(4, topLevelResources.size());
     }
 

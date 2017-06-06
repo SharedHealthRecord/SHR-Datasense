@@ -1,10 +1,10 @@
 package org.sharedhealth.datasense.util;
 
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
+import org.hl7.fhir.dstu3.model.Reference;
 
 public class ResourceReferenceUtils {
 
-    public static String getOrderUuidFromResourceReference(ResourceReferenceDt resourceReferenceDt) {
+    public static String getOrderUuidFromResourceReference(Reference resourceReferenceDt) {
         String referenceUrl = getReferenceUrlFromResourceReference(resourceReferenceDt);
         return getOrderUuidFromReferenceUrl(referenceUrl);
     }
@@ -21,7 +21,7 @@ public class ResourceReferenceUtils {
         return referenceUrl.substring(referenceUrl.lastIndexOf('/') + 1);
     }
 
-    public static String getReferenceUrlFromResourceReference(ResourceReferenceDt resourceReferenceDt) {
-        return resourceReferenceDt.getReference().getValue();
+    public static String getReferenceUrlFromResourceReference(Reference resourceReferenceDt) {
+        return resourceReferenceDt.getReference();
     }
 }

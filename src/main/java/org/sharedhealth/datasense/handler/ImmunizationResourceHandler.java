@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.ImmunizationReason;
 import org.sharedhealth.datasense.model.Immunization;
@@ -28,22 +28,22 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
     private static final org.slf4j.Logger logger = LoggerFactory.getLogger(ImmunizationResourceHandler.class);
 
     @Override
-    public boolean canHandle(IResource resource) {
-        return resource instanceof ca.uhn.fhir.model.dstu2.resource.Immunization;
+    public boolean canHandle(Resource resource) {
+        return resource instanceof org.hl7.fhir.dstu3.model.Immunization;
     }
 
-    private boolean isVaccinationRefused(IResource resource) {
-        ca.uhn.fhir.model.dstu2.resource.Immunization immunization = (ca.uhn.fhir.model.dstu2.resource.Immunization) resource;
-        Boolean given = immunization.getWasNotGiven();
+    private boolean isVaccinationRefused(Resource resource) {
+        org.hl7.fhir.dstu3.model.Immunization immunization = (org.hl7.fhir.dstu3.model.Immunization) resource;
+        Boolean given = immunization.getNotGiven();
         return given == null ? false : given;
     }
 
     @Override
-    public void process(IResource resource, EncounterComposition composition) {
+    public void process(Resource resource, EncounterComposition composition) {
         if (isVaccinationRefused(resource)) {
             return;
         }
-        ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization = (ca.uhn.fhir.model.dstu2.resource.Immunization) resource;
+        org.hl7.fhir.dstu3.model.Immunization fhirImmunization = (org.hl7.fhir.dstu3.model.Immunization) resource;
         Immunization immunization = new Immunization();
         immunization.setStatus(MedicationStatus.ImmunizationAdministered);
         Encounter encounter = composition.getEncounterReference().getValue();
@@ -59,16 +59,16 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         processImmunizationReason(fhirImmunization, immunization, composition);
     }
 
-    private void processImmunizationReason(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Immunization immunization, EncounterComposition composition) {
-        ca.uhn.fhir.model.dstu2.resource.Immunization.Explanation explanation = fhirImmunization.getExplanation();
+    private void processImmunizationReason(org.hl7.fhir.dstu3.model.Immunization fhirImmunization, Immunization immunization, EncounterComposition composition) {
+        org.hl7.fhir.dstu3.model.Immunization.ImmunizationExplanationComponent explanation = fhirImmunization.getExplanation();
         String encounterId = composition.getEncounterReference().getValue().getEncounterId();
         String hid = composition.getPatientReference().getValue().getHid();
         if (explanation != null) {
             List<ImmunizationReason> immunizationReasons = new ArrayList<ImmunizationReason>();
-            List<CodeableConceptDt> reasons = explanation.getReason();
-            for (CodeableConceptDt reason : reasons) {
-                List<CodingDt> codings = reason.getCoding();
-                for (CodingDt coding : codings) {
+            List<CodeableConcept> reasons = explanation.getReason();
+            for (CodeableConcept reason : reasons) {
+                List<Coding> codings = reason.getCoding();
+                for (Coding coding : codings) {
                     ImmunizationReason immunizationReason = new ImmunizationReason();
                     immunizationReason.setCode(coding.getCode());
                     immunizationReason.setDescr(coding.getDisplay());
@@ -89,9 +89,9 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         immunizationDao.deleteExistingImmunizationReasons(encounterId);
     }
 
-    private void setImmunizationCodes(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Immunization immunization) {
-        List<CodingDt> codings = fhirImmunization.getVaccineCode().getCoding();
-        for (CodingDt coding : codings) {
+    private void setImmunizationCodes(org.hl7.fhir.dstu3.model.Immunization fhirImmunization, Immunization immunization) {
+        List<Coding> codings = fhirImmunization.getVaccineCode().getCoding();
+        for (Coding coding : codings) {
             String system = coding.getSystem();
             if (system != null && isTrMedicationUrl(system)) {
                 immunization.setDrugId(coding.getCode());
@@ -100,7 +100,7 @@ public class ImmunizationResourceHandler implements FhirResourceHandler {
         }
     }
 
-    private Date getDateTime(ca.uhn.fhir.model.dstu2.resource.Immunization fhirImmunization, Encounter encounter) {
+    private Date getDateTime(org.hl7.fhir.dstu3.model.Immunization fhirImmunization, Encounter encounter) {
         Date date = fhirImmunization.getDate();
         return date != null ? date : encounter.getEncounterDateTime();
     }

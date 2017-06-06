@@ -1,11 +1,9 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
-import org.hl7.fhir.instance.model.api.IBaseResource;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
+import org.hl7.fhir.instance.model.api.IBaseDatatype;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,9 +33,7 @@ import java.util.Date;
 import java.util.List;
 
 import static org.junit.Assert.*;
-import static org.junit.Assert.assertEquals;
 import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
-import static org.sharedhealth.datasense.helpers.ResourceHelper.loadResourceFromXmlFile;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
@@ -71,9 +67,9 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
         bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
         String topLevelVitalsObs = "urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1";
-        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(topLevelVitalsObs);
+        Reference obsReference = new Reference().setReference(topLevelVitalsObs);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        IResource obsResource = bundleContext.getResourceForReference(obsReference);
+        Resource obsResource = bundleContext.getResourceForReference(obsReference);
         observationResourceHandler.process(obsResource, composition);
         List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
         assertEquals(4, observations.size()); //should find Systolic, Diastolic, Pulse and Temperature
@@ -85,21 +81,21 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
         Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
         BundleContext deathNoteBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         String deathNoteObsResId = "urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c";
-        ResourceReferenceDt deathReference = new ResourceReferenceDt().setReference(deathNoteObsResId);
-        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) deathNoteBundleContext.getResourceForReference(deathReference);
+        Reference deathReference = new Reference().setReference(deathNoteObsResId);
+        org.hl7.fhir.dstu3.model.Observation fhirObservation = (org.hl7.fhir.dstu3.model.Observation) deathNoteBundleContext.getResourceForReference(deathReference);
         assertFalse(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
     public void shouldHandleVitalsObservations() throws Exception {
-        ResourceReferenceDt vitalsReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
-        ca.uhn.fhir.model.dstu2.resource.Observation fhirObservation = (ca.uhn.fhir.model.dstu2.resource.Observation) bundleContext.getResourceForReference(vitalsReference);
+        Reference vitalsReference = new Reference().setReference(VITALS_RESOURCE_REFERENCE);
+        org.hl7.fhir.dstu3.model.Observation fhirObservation = (org.hl7.fhir.dstu3.model.Observation) bundleContext.getResourceForReference(vitalsReference);
         assertTrue(observationResourceHandler.canHandle(fhirObservation));
     }
 
     @Test
     public void shouldSaveSimpleObservation() throws Exception {
-        ResourceReferenceDt pulseResourceReference = new ResourceReferenceDt().setReference(PULSE_RESOURCE_REFERENCE);
+        Reference pulseResourceReference = new Reference().setReference(PULSE_RESOURCE_REFERENCE);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(bundleContext.getResourceForReference(pulseResourceReference), composition);
         List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
@@ -117,7 +113,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveNestedObservationAlongWithRelatedObservations() throws Exception {
-        ResourceReferenceDt vitalReference = new ResourceReferenceDt().setReference(VITALS_RESOURCE_REFERENCE);
+        Reference vitalReference = new Reference().setReference(VITALS_RESOURCE_REFERENCE);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(bundleContext.getResourceForReference(vitalReference),
                 composition);
@@ -136,7 +132,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
     @Test
     public void shouldSaveObservationIfParentObsIsNonCoded() throws Exception {
         String bloodPressureObsRef = "urn:uuid:cb144010-c38c-4fcc-975e-ab831ab991ad";
-        ResourceReferenceDt bpReference = new ResourceReferenceDt().setReference(bloodPressureObsRef);
+        Reference bpReference = new Reference().setReference(bloodPressureObsRef);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
         observationResourceHandler.process(bundleContext.getResourceForReference(bpReference),
                 composition);
@@ -158,11 +154,11 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
         String obsRef4PncWithin48HoursAfterBirth = "urn:uuid:68b6c450-4dec-41d3-aa05-464c2bdaeb98";
         //String obsRef4PncWithin48HoursAfterBirth = "PNC Within 48 Hours After Birth";
-        ResourceReferenceDt obsReference = new ResourceReferenceDt().setReference(obsRef4PncWithin48HoursAfterBirth);
+        Reference obsReference = new Reference().setReference(obsRef4PncWithin48HoursAfterBirth);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);
-        IResource obsResource = bundleContext.getResourceForReference(obsReference);
-        IDatatype obsValue = ((ca.uhn.fhir.model.dstu2.resource.Observation) obsResource).getValue();
-        assertTrue(obsValue instanceof CodeableConceptDt);
+        Resource obsResource = bundleContext.getResourceForReference(obsReference);
+        IBaseDatatype obsValue = ((org.hl7.fhir.dstu3.model.Observation) obsResource).getValue();
+        assertTrue(obsValue instanceof CodeableConcept);
         observationResourceHandler.process(obsResource, composition);
         List<Observation> observations = findObsByEncounterId(bundleContext.getShrEncounterId());
         assertEquals(1, observations.size());

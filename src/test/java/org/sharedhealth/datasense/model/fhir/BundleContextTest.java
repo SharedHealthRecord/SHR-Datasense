@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.model.fhir;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.Test;
 
 import java.util.List;

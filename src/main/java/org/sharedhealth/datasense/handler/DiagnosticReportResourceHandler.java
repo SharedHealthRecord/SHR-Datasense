@@ -1,11 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.DiagnosticOrder;
-import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.*;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
@@ -30,12 +26,12 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     DiagnosticOrderDao diagnosticOrderDao;
 
     @Override
-    public boolean canHandle(IResource resource) {
+    public boolean canHandle(Resource resource) {
         return resource instanceof DiagnosticReport;
     }
 
     @Override
-    public void process(IResource resource, EncounterComposition composition) {
+    public void process(Resource resource, EncounterComposition composition) {
 
         DiagnosticReport fhirDiagnosticReport = (DiagnosticReport) resource;
 
@@ -45,7 +41,8 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         diagnosticReport.setEncounterId(encounterId);
         diagnosticReport.setPatientHid(composition.getPatientReference().getHealthId());
         diagnosticReport.setReportDate(fhirDiagnosticReport.getIssued());
-        diagnosticReport.setFulfiller(ProviderReference.parseUrl(fhirDiagnosticReport.getPerformer().getReference().getValue()));
+        List<DiagnosticReport.DiagnosticReportPerformerComponent> performer = fhirDiagnosticReport.getPerformer();
+        diagnosticReport.setFulfiller(ProviderReference.parseUrl(performer.get(0).getActor().getReference()));
         setCategory(fhirDiagnosticReport, diagnosticReport);
         populateOrderCodeAndConcept(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport);
 
@@ -64,9 +61,9 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
 
 
     private void saveResultObservations(EncounterComposition composition, DiagnosticReport fhirDiagnosticReport, int reportId) {
-        List<ResourceReferenceDt> resultReferences = fhirDiagnosticReport.getResult();
-        for (ResourceReferenceDt resultReference : resultReferences) {
-            IResource observationForReference = composition.getResourceByReference(resultReference);
+        List<Reference> resultReferences = fhirDiagnosticReport.getResult();
+        for (Reference resultReference : resultReferences) {
+            Resource observationForReference = composition.getResourceByReference(resultReference);
             observationResourceHandler.mapObservation(composition, new Observation(), observationForReference, reportId);
         }
     }
@@ -78,8 +75,8 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
             diagnosticReport.setReportCategory("LAB");
     }
 
-    private void populateOrderCodeAndConcept(List<CodingDt> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport) {
-        for (CodingDt codingDt : coding) {
+    private void populateOrderCodeAndConcept(List<Coding> coding, org.sharedhealth.datasense.model.DiagnosticReport diagnosticReport) {
+        for (Coding codingDt : coding) {
             if (isConceptUrl(codingDt.getSystem())) {
                 diagnosticReport.setReportConcept(codingDt.getCode());
             } else if (TrUrl.isReferenceTermUrl(codingDt.getSystem())) {
@@ -89,19 +86,19 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     }
 
     private Integer populateShrOrderId(DiagnosticReport fhirDiagnosticReport) {
-        if (hasShrOrderUuid(fhirDiagnosticReport.getRequest()))
-            return getConcatenatedShrOrderUuidFromRequest(fhirDiagnosticReport.getRequest());
+        if (hasShrOrderUuid(fhirDiagnosticReport.getBasedOn()))
+            return getConcatenatedShrOrderUuidFromRequest(fhirDiagnosticReport.getBasedOn());
         return getShrOrderIdFromEncounter(fhirDiagnosticReport);
     }
 
-    private boolean hasShrOrderUuid(List<ResourceReferenceDt> request) {
+    private boolean hasShrOrderUuid(List<Reference> request) {
         if (null == request) return false;
         String referenceUrl = getReferenceUrlFromResourceReference(request.get(0));
         if (referenceUrl.isEmpty()) return false;
-        return referenceUrl.contains("#" + new DiagnosticOrder().getResourceName());
+        return referenceUrl.contains("#" + new ProcedureRequest().getResourceType().name());
     }
 
-    private Integer getConcatenatedShrOrderUuidFromRequest(List<ResourceReferenceDt> request) {
+    private Integer getConcatenatedShrOrderUuidFromRequest(List<Reference> request) {
         String referenceUrl = getReferenceUrlFromResourceReference(request.get(0));
         String orderEncounterId = getEncounterUuidFromReferenceUrl(referenceUrl);
         String shrOrderUuid = getOrderUuidFromReferenceUrl(referenceUrl);
@@ -114,7 +111,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
 
     private Integer getShrOrderIdFromEncounter(DiagnosticReport fhirDiagnosticReport) {
         String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
-        for (CodingDt codingDt : fhirDiagnosticReport.getCode().getCoding()) {
+        for (Coding codingDt : fhirDiagnosticReport.getCode().getCoding()) {
             if (isConceptUrl(codingDt.getSystem())) {
                 return diagnosticOrderDao.getOrderId(orderEncounterId, codingDt.getCode());
             }
@@ -123,7 +120,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     }
 
     private String getOrderEncounterId(DiagnosticReport fhirDiagnosticReport) {
-        List<ResourceReferenceDt> request = fhirDiagnosticReport.getRequest();
+        List<Reference> request = fhirDiagnosticReport.getBasedOn();
         if (null == request) return null;
         String referenceUrl = getReferenceUrlFromResourceReference(request.get(0));
         return getEncounterUuidFromReferenceUrl(referenceUrl);

@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Facility;
 import org.sharedhealth.datasense.model.Patient;
@@ -33,7 +33,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
     @Override
     public void process(EncounterComposition composition) {
         log.info("Processing encounters for patient:" + composition.getPatientReference().getHealthId());
-        ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter = composition.getEncounterReference().getResource();
+        org.hl7.fhir.dstu3.model.Encounter fhirEncounter = composition.getEncounterReference().getResource();
         Encounter encounter = mapEncounterFields(fhirEncounter, composition);
         composition.getEncounterReference().setValue(encounter);
         encounterDao.deleteExisting(composition.getEncounterReference().getEncounterId());
@@ -44,7 +44,7 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         }
     }
 
-    private Encounter mapEncounterFields(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter, EncounterComposition
+    private Encounter mapEncounterFields(org.hl7.fhir.dstu3.model.Encounter fhirEncounter, EncounterComposition
             composition) {
         Encounter encounter = new Encounter();
         encounter.setEncounterType(getEncounterType(fhirEncounter));
@@ -63,12 +63,12 @@ public class ClinicalEncounterProcessor implements ResourceProcessor {
         return encounter;
     }
 
-    private String getVisitType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
-        return fhirEncounter.getClassElement();
+    private String getVisitType(org.hl7.fhir.dstu3.model.Encounter fhirEncounter) {
+        return fhirEncounter.getClass_().getCode();
     }
 
-    private String getEncounterType(ca.uhn.fhir.model.dstu2.resource.Encounter fhirEncounter) {
-        List<CodeableConceptDt> types = fhirEncounter.getType();
+    private String getEncounterType(org.hl7.fhir.dstu3.model.Encounter fhirEncounter) {
+        List<CodeableConcept> types = fhirEncounter.getType();
         if (types.isEmpty()) {
             return UNKNOWN_ENCOUNTER_TYPE;
         }

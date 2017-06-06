@@ -1,10 +1,7 @@
 package org.sharedhealth.datasense.model.fhir;
 
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Composition;
-import ca.uhn.fhir.model.dstu2.resource.Encounter;
+import org.hl7.fhir.dstu3.model.*;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -23,29 +20,29 @@ public class EncounterComposition {
         this.context = context;
         Encounter encounter = (Encounter) context.getResourceForReference(composition.getEncounter());
         encounterReference = new EncounterReference(composition.getEncounter(), encounter);
-        patientReference = new PatientReference(encounterReference.getResource().getPatient());
+        patientReference = new PatientReference(encounterReference.getResource().getSubject());
         serviceProviderReference = new ServiceProviderReference();
-        ResourceReferenceDt serviceProvider = encounterReference.getResource().getServiceProvider();
+        Reference serviceProvider = encounterReference.getResource().getServiceProvider();
         if (serviceProvider != null) {
             serviceProviderReference.setReference(serviceProvider);
         }
         providerReference = new ProviderReference();
-        List<Encounter.Participant> participants = encounterReference.getResource().getParticipant();
-        if(!participants.isEmpty()) {
-            for (Encounter.Participant participant : participants) {
+        List<Encounter.EncounterParticipantComponent> participants = encounterReference.getResource().getParticipant();
+        if (!participants.isEmpty()) {
+            for (Encounter.EncounterParticipantComponent participant : participants) {
                 providerReference.addReference(participant.getIndividual());
             }
         }
     }
 
-    public ArrayList<IResource> getCompositionRefResources() {
-        ArrayList<IResource> resources = new ArrayList<>();
-        for (Composition.Section section : composition.getSection()) {
-            List<ResourceReferenceDt> entry = section.getEntry();
+    public ArrayList<Resource> getCompositionRefResources() {
+        ArrayList<Resource> resources = new ArrayList<>();
+        for (Composition.SectionComponent section : composition.getSection()) {
+            List<Reference> entry = section.getEntry();
             if (entry.isEmpty()) {
                 break;
             }
-            IResource resourceForReference = context.getResourceForReference(entry.get(0));
+            Resource resourceForReference = context.getResourceForReference(entry.get(0));
             if (!(resourceForReference instanceof Encounter)) {
                 resources.add(resourceForReference);
             }
@@ -53,47 +50,91 @@ public class EncounterComposition {
         return resources;
     }
 
-    public List<IResource> getTopLevelResources() {
+    public List<Resource> getTopLevelResources() {
         return identifyTopLevelResourcesByExclusion();
     }
 
-    public ArrayList<IResource> getOnlyParents() {
-        ArrayList<IResource> compositionRefResources = getCompositionRefResources();
-        for (IResource compositionRefResource : compositionRefResources) {
-            //
-        }
-        return null;
-    }
+    // todo: remove    public ArrayList<Resource> getOnlyParents() {
+    //        ArrayList<Resource> compositionRefResources = getCompositionRefResources();
+    //        for (Resource compositionRefResource : compositionRefResources) {
+    //            //
+    //        }
+    //        return null;
+    //    }
 
 
+    private List<Resource> identifyTopLevelResourcesByExclusion() {
+        ArrayList<Resource> compositionRefResources = getCompositionRefResources();
+        HashSet<Reference> childRef = getChildReferences(compositionRefResources);
 
-    private List<IResource> identifyTopLevelResourcesByExclusion() {
-        ArrayList<IResource> compositionRefResources = getCompositionRefResources();
-        List<ResourceReferenceDt> childResourceReferences = new ArrayList<>();
-        for (IResource compositionRefResource : compositionRefResources) {
-             childResourceReferences.addAll(compositionRefResource.getAllPopulatedChildElementsOfType(ResourceReferenceDt.class));
-        }
-        HashSet<ResourceReferenceDt> childRef = new HashSet<>();
-        childRef.addAll(childResourceReferences);
+        List<Resource> topLevelResources = new ArrayList<>();
 
-        ArrayList<IResource> topLevelResources = new ArrayList<>();
-
-        for (IResource compositionRefResource : compositionRefResources) {
-            if(!isChildReference(childRef, compositionRefResource.getId().getValue())) {
+        for (Resource compositionRefResource : compositionRefResources) {
+            if (!isChildReference(childRef, compositionRefResource.getId())) {
                 topLevelResources.add(compositionRefResource);
             }
         }
         return topLevelResources;
+        //        List<Reference> childResourceReferences = new ArrayList<>();
+        //        for (Resource compositionRefResource : compositionRefResources) {
+        //             childResourceReferences.addAll(compositionRefResource.getAllPopulatedChildElementsOfType(Reference.class));
+        //        }
+        //        HashSet<Reference> childRef = new HashSet<>();
+        //        childRef.addAll(childResourceReferences);
+        //
+        //        ArrayList<Resource> topLevelResources = new ArrayList<>();
+        //
+        //        for (Resource compositionRefResource : compositionRefResources) {
+        //            if(!isChildReference(childRef, compositionRefResource.getId())) {
+        //                topLevelResources.add(compositionRefResource);
+        //            }
+        //        }
+        //        return topLevelResources;
     }
 
-    private boolean isChildReference(HashSet<ResourceReferenceDt> childReferenceDts, String resourceRef) {
-        for (ResourceReferenceDt childRef : childReferenceDts) {
-            if(!childRef.getReference().isEmpty() && childRef.getReference().getValue().equals(resourceRef)) {
+    private static HashSet<Reference> getChildReferences(List<Resource> compositionRefResources) {
+        List<Reference> childResourceReferences = new ArrayList<>();
+        for (Resource compositionRefResource : compositionRefResources) {
+            // add all observation as part of observation target
+            // add all observation as part of diagnosticreport result
+            // add all diagnostic reports as part of procedure.report
+            // add all medication requests as part of medicationrequest.priorprescription
+            if (compositionRefResource instanceof DiagnosticReport) {
+                DiagnosticReport diagnosticReport = (DiagnosticReport) compositionRefResource;
+                childResourceReferences.addAll(diagnosticReport.getResult());
+            }
+            if (compositionRefResource instanceof MedicationRequest) {
+                MedicationRequest medicationRequest = (MedicationRequest) compositionRefResource;
+                Reference priorPrescription = medicationRequest.getPriorPrescription();
+                if (!priorPrescription.isEmpty()) {
+                    childResourceReferences.add(priorPrescription);
+                }
+            }
+            if (compositionRefResource instanceof Procedure) {
+                Procedure procedure = (Procedure) compositionRefResource;
+                childResourceReferences.addAll(procedure.getReport());
+            }
+            if (compositionRefResource instanceof Observation) {
+                List<Observation.ObservationRelatedComponent> related = ((Observation) compositionRefResource).getRelated();
+                for (Observation.ObservationRelatedComponent observationRelatedComponent : related) {
+                    childResourceReferences.add(observationRelatedComponent.getTarget());
+                }
+            }
+        }
+        HashSet<Reference> childRef = new HashSet<>();
+        childRef.addAll(childResourceReferences);
+        return childRef;
+    }
+
+    private boolean isChildReference(HashSet<Reference> childReferenceDts, String resourceRef) {
+        for (Reference childRef : childReferenceDts) {
+            if (!childRef.getReference().isEmpty() && childRef.getReference().equals(resourceRef)) {
                 return true;
             }
         }
         return false;
     }
+
 
     public EncounterReference getEncounterReference() {
         return encounterReference;
@@ -119,66 +160,23 @@ public class EncounterComposition {
         return composition;
     }
 
-    public ArrayList<IResource> getParentResources(String referenceId) {
-        ArrayList<IResource> refResources = getCompositionRefResources();
-        ArrayList<IResource> parentRefs = new ArrayList<>();
-        for (IResource refResource : refResources) {
-            if (!refResource.getId().getValue().equals(referenceId)) {
-                List<ResourceReferenceDt> childReferences = refResource.getAllPopulatedChildElementsOfType(ResourceReferenceDt.class);
-                for (ResourceReferenceDt childReference : childReferences) {
-                    if (childReference.getReference().getValue().equals(referenceId)) {
-                        parentRefs.add(refResource);
-                    }
-                }
-            }
-        }
-        return parentRefs;
-    }
+    // todo: fix if needed   public ArrayList<Resource> getParentResources(String referenceId) {
+    //        ArrayList<Resource> refResources = getCompositionRefResources();
+    //        ArrayList<Resource> parentRefs = new ArrayList<>();
+    //        for (Resource refResource : refResources) {
+    //            if (!refResource.getId().getValue().equals(referenceId)) {
+    //                List<Reference> childReferences = refResource.getAllPopulatedChildElementsOfType(Reference.class);
+    //                for (Reference childReference : childReferences) {
+    //                    if (childReference.getReference().getValue().equals(referenceId)) {
+    //                        parentRefs.add(refResource);
+    //                    }
+    //                }
+    //            }
+    //        }
+    //        return parentRefs;
+    //    }
 
-    public IResource getResourceByReference(ResourceReferenceDt resultReerence) {
+    public Resource getResourceByReference(Reference resultReerence) {
         return context.getResourceForReference(resultReerence);
     }
-
-////    private ArrayList<AtomEntry<? extends Resource>> loadAtomEntriesFromComposition() {
-////        ArrayList<AtomEntry<? extends Resource>> atomEntries = new ArrayList<>();
-////        for (Composition.SectionComponent sectionComponent : composition.getSection()) {
-////            if (!sectionComponent.getContent().getDisplaySimple().equalsIgnoreCase("encounter")) {
-////                atomEntries.add(context.getAtomEntryFromFeed(sectionComponent.getContent()));
-////            }
-////        }
-////        return atomEntries;
-////    }
-////
-//    private ArrayList<IResource> getTopLevelResources(HashSet<String> references) {
-//        ArrayList<IResource> parentResources = new ArrayList<>();
-//        for (AtomEntry<? extends Resource> atomEntry : loadAtomEntriesFromComposition()) {
-//            if(!references.contains(atomEntry.getReportId())) {
-//                parentResources.add(atomEntry.getResource());
-//            }
-//        }
-//        return parentResources;
-//    }
-
-//    private HashSet<String> getChildResourceReferences() {
-//        HashSet<String> references = new HashSet<>();
-//        for (Resource resource : getCompositionRefResources()) {
-//            List<Property> children = resource.children();
-//            addResourceReferences(children, references);
-//        }
-//        return references;
-//    }
-
-//    private void addResourceReferences(List<Property> children, HashSet<String> references) {
-//        for (Property child : children) {
-//            if(child.hasValues()) {
-//                for (Element element : child.getValues()) {
-//                    if((element instanceof ResourceReference)) {
-//                        references.add(((ResourceReference) element).getReferenceSimple());
-//                    } else {
-//                        addResourceReferences(element.children(), references);
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

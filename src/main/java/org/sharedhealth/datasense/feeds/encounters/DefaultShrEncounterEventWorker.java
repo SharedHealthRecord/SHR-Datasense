@@ -1,6 +1,6 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.sharedhealth.datasense.model.EncounterBundle;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;

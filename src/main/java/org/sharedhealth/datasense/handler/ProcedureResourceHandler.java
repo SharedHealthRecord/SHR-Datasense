@@ -1,13 +1,6 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IDatatype;
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.PeriodDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.DiagnosticReport;
-import ca.uhn.fhir.model.dstu2.resource.Procedure;
+import org.hl7.fhir.dstu3.model.*;
 import org.sharedhealth.datasense.handler.mappers.ObservationValueMapper;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.repository.ProcedureDao;
@@ -29,12 +22,12 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     private ObservationValueMapper observationValueMapper;
 
     @Override
-    public boolean canHandle(IResource resource) {
+    public boolean canHandle(Resource resource) {
         return resource instanceof Procedure;
     }
 
     @Override
-    public void process(IResource resource, EncounterComposition composition) {
+    public void process(Resource resource, EncounterComposition composition) {
         observationValueMapper = new ObservationValueMapper();
         Procedure procedureResource = (Procedure) resource;
         org.sharedhealth.datasense.model.Procedure procedure = new org.sharedhealth.datasense.model.Procedure();
@@ -55,26 +48,26 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
 
     private void setProcedureDiagnosis(org.sharedhealth.datasense.model.Procedure procedure,
                                        Procedure procedureResource, EncounterComposition composition) {
-        List<ResourceReferenceDt> diagnosisReportReferences = procedureResource.getReport();
+        List<Reference> diagnosisReportReferences = procedureResource.getReport();
         if (diagnosisReportReferences.size() == 0) {
             return;
         }
-        ResourceReferenceDt resourceReference = diagnosisReportReferences.get(0);
-        IResource report = composition.getContext().getResourceForReference(resourceReference);
+        Reference resourceReference = diagnosisReportReferences.get(0);
+        Resource report = composition.getContext().getResourceForReference(resourceReference);
         if (report == null || !(report instanceof DiagnosticReport)) {
             return;
         }
 
         DiagnosticReport diagnosticReport = (DiagnosticReport) report;
-        List<CodeableConceptDt> codeableConcepts = diagnosticReport.getCodedDiagnosis();
+        List<CodeableConcept> codeableConcepts = diagnosticReport.getCodedDiagnosis();
         if (codeableConcepts.size() == 0 ) {
             return;
         }
-        CodeableConceptDt codeableConcept = codeableConcepts.get(0);
-        List<CodingDt> codings = codeableConcept.getCoding();
+        CodeableConcept codeableConcept = codeableConcepts.get(0);
+        List<Coding> codings = codeableConcept.getCoding();
         boolean isUuidSet = false;
         boolean isCodeSet = false;
-        for (CodingDt code : codings) {
+        for (Coding code : codings) {
             if (isUuidSet && isCodeSet) {
                 break;
             }
@@ -89,14 +82,14 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     }
 
     private void setProcedureType(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
-        CodeableConceptDt codeableConcept = procedureResource.getCode();
+        CodeableConcept codeableConcept = procedureResource.getCode();
         if (codeableConcept == null) {
             return;
         }
-        List<CodingDt> codings = codeableConcept.getCoding();
+        List<Coding> codings = codeableConcept.getCoding();
         boolean isUuidSet = false;
         boolean isCodeSet = false;
-        for (CodingDt code : codings) {
+        for (Coding code : codings) {
             if (isUuidSet && isCodeSet) {
                 break;
             }
@@ -111,9 +104,9 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
     }
 
     private void setStartAndEndDate(org.sharedhealth.datasense.model.Procedure procedure, Procedure procedureResource) {
-        IDatatype performed = procedureResource.getPerformed();
-        if (performed instanceof PeriodDt) {
-            PeriodDt period = (PeriodDt) performed;
+        Type performed = procedureResource.getPerformed();
+        if (performed instanceof Period) {
+            Period period = (Period) performed;
             if (period != null) {
                 if (period.getStart() != null) {
                     procedure.setStartDate(period.getStart());

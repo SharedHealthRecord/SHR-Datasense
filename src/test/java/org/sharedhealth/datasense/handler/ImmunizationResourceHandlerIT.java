@@ -1,11 +1,7 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.api.IResource;
-import ca.uhn.fhir.model.dstu2.composite.CodeableConceptDt;
-import ca.uhn.fhir.model.dstu2.composite.CodingDt;
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.hl7.fhir.dstu3.model.*;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -14,7 +10,10 @@ import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
+import org.sharedhealth.datasense.model.Encounter;
+import org.sharedhealth.datasense.model.Immunization;
 import org.sharedhealth.datasense.model.*;
+import org.sharedhealth.datasense.model.Patient;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.util.DateUtil;
@@ -50,7 +49,7 @@ public class ImmunizationResourceHandlerIT {
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private BundleContext bundleContext;
-    private IResource immunizationResource;
+    private Resource immunizationResource;
 
     @Rule
     public WireMockRule wireMockRule = new WireMockRule(9997);
@@ -77,7 +76,7 @@ public class ImmunizationResourceHandlerIT {
         encounter.setEncounterId(shrEncounterId);
         encounter.setEncounterDateTime(DateUtil.parseDate("2015-01-14T15:04:57+05:30"));
         composition.getEncounterReference().setValue(encounter);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt().setReference("urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be");
+        Reference resourceReference = new Reference().setReference("urn:uuid:554e13d9-25f9-4802-8f21-669249bf51be");
         immunizationResource = bundleContext.getResourceForReference(resourceReference);
     }
 
@@ -101,7 +100,7 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldSaveEncounterDateTimeIfImmunizationDateNotGiven() throws Exception {
-        ((ca.uhn.fhir.model.dstu2.resource.Immunization) immunizationResource).setDate(null);
+        ((org.hl7.fhir.dstu3.model.Immunization) immunizationResource).setDate(null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         Immunization immunization = getImmunization();
         assertEquals(DateUtil.parseDate("2015-01-14T15:04:57+05:30"), immunization.getDateTime());
@@ -124,8 +123,8 @@ public class ImmunizationResourceHandlerIT {
 
     @Test
     public void shouldNotSaveNonCodedImmunization() throws Exception {
-        CodeableConceptDt vaccineType = ((ca.uhn.fhir.model.dstu2.resource.Immunization) immunizationResource).getVaccineCode();
-        CodingDt codingDt = vaccineType.getCoding().get(0);
+        CodeableConcept vaccineType = ((org.hl7.fhir.dstu3.model.Immunization) immunizationResource).getVaccineCode();
+        Coding codingDt = vaccineType.getCoding().get(0);
         codingDt.setSystem((String) null);
         immunizationResourceHandler.process(immunizationResource, bundleContext.getEncounterCompositions().get(0));
         List<Immunization> immunizations = findImmunizationsFor(bundleContext.getShrEncounterId());

@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.processor;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;

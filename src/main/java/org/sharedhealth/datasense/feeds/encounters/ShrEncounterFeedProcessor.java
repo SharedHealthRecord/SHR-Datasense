@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.feeds.encounters;
 
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.log4j.Logger;
+import org.hl7.fhir.dstu3.model.Bundle;
 import org.ict4h.atomfeed.client.AtomFeedProperties;
 import org.ict4h.atomfeed.client.domain.Event;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;

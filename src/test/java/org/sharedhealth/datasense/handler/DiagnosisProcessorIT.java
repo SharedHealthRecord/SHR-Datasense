@@ -1,8 +1,8 @@
 package org.sharedhealth.datasense.handler;
 
-import ca.uhn.fhir.model.dstu2.composite.ResourceReferenceDt;
-import ca.uhn.fhir.model.dstu2.resource.Bundle;
 import com.github.tomakehurst.wiremock.junit.WireMockRule;
+import org.hl7.fhir.dstu3.model.Bundle;
+import org.hl7.fhir.dstu3.model.Reference;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Rule;
@@ -71,7 +71,7 @@ public class DiagnosisProcessorIT {
         String hid = "98001046534";
         patient.setHid(hid);
         composition.getPatientReference().setValue(patient);
-        ResourceReferenceDt resourceReference = new ResourceReferenceDt();
+        Reference resourceReference = new Reference();
         resourceReference.setReference("urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b");
         processor.process(context.getResourceForReference(resourceReference), composition);
         List<Diagnosis> diagnoses = findByEncounterId(shrEncounterId);
