@@ -16,7 +16,7 @@ public class EncounterCompositionTest {
 
     @Test
     public void shouldParseFeedAndIdentifyPatient() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/encounter_with_condition.xml");
+        Bundle bundle = loadFromXmlFile("stu3/encounter_with_condition.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());
@@ -26,7 +26,7 @@ public class EncounterCompositionTest {
 
     @Test
     public void shouldGetAllCompositionResourcesOtherThanEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/encounter_with_condition.xml");
+        Bundle bundle = loadFromXmlFile("stu3/encounter_with_condition.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         ArrayList<Resource> resources = composition.getCompositionRefResources();
@@ -40,7 +40,7 @@ public class EncounterCompositionTest {
 
     @Test
     public void shouldFetchVitalsOnly() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_vitals.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         List<Resource> topLevelResources = composition.getTopLevelResources();
@@ -50,7 +50,7 @@ public class EncounterCompositionTest {
 
     @Test
     public void shouldFetchTopLevelResourcesForDiagnositicReport() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnosticReport.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_diagnosticReport.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         EncounterComposition composition = context.getEncounterCompositions().get(0);
         List<Resource> topLevelResources = composition.getTopLevelResources();

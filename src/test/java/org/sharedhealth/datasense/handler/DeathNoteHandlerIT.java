@@ -52,7 +52,7 @@ public class DeathNoteHandlerIT extends BaseIntegrationTest {
     @Before
     public void setUp() throws Exception {
         super.loadConfigParameters();
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_deathNote.xml");
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
         Patient patient = new Patient();

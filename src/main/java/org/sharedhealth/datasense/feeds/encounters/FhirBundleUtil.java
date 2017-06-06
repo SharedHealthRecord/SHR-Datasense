@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class FhirBundleUtil {
 
-    private FhirContext fhirContext = FhirContext.forDstu2();
+    private FhirContext fhirContext = FhirContext.forDstu3();
 
     public Bundle parseBundle(String content, String type) {
         if (type.equals("xml")) {

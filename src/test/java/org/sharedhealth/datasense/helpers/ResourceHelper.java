@@ -11,7 +11,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class ResourceHelper {
-    private static FhirContext context = FhirContext.forDstu2();
+    private static FhirContext context = FhirContext.forDstu3();
 
     public static String asString(String fileName) throws IOException {
         InputStream resourceAsStream = ResourceHelper.class.getClassLoader().getResourceAsStream(fileName);

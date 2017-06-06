@@ -13,7 +13,7 @@ public class BundleContextTest {
 
     @Test
     public void shouldParseFeedAndIdentifyEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_immunization.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         List<EncounterComposition> encounterCompositions = context.getEncounterCompositions();
         assertEquals(1, encounterCompositions.size());

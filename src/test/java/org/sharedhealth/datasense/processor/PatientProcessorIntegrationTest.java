@@ -78,7 +78,7 @@ public class PatientProcessorIntegrationTest {
                         .withStatus(200)
                         .withHeader("Content-Type", "application/json")
                         .withBody(asString("jsons/P" + VALID_HEALTH_ID + ".json"))));
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         processor.process(context.getEncounterCompositions().get(0));
         Patient patient = patientDao.findPatientById(VALID_HEALTH_ID);

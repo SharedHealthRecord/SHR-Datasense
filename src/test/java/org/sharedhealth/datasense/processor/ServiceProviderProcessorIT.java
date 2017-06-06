@@ -65,7 +65,7 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldDownloadAndSaveFacility() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
@@ -87,7 +87,7 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldNotDownloadFacilityIfAlreadyPresent() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id) " +
@@ -106,7 +106,7 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldFetchFacilityFromProviderIfNotPresentInEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_without_serviceProvider.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_without_serviceProvider.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         jdbcTemplate.update("insert into facility (facility_id, name, type, location_id) " +
                 "values ('" + VALID_FACILITY_ID + "', 'Test Facility', 'Test Facility Type', '302618');", new EmptySqlParameterSource());
@@ -125,7 +125,7 @@ public class ServiceProviderProcessorIT {
 
     @Test
     public void shouldDownloadProviderFacilityIfNotPresent() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_without_serviceProvider.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_without_serviceProvider.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + VALID_FACILITY_ID + ".json"))
@@ -149,7 +149,7 @@ public class ServiceProviderProcessorIT {
     @Ignore
     public void shouldFetchFacilityOfProviderWhenServiceProviderIsBahmniOnCloud() throws Exception {
         String facilityIdOfProvider = "10000059";
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_without_serviceProvider.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_without_serviceProvider.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
 
         givenThat(get(urlEqualTo("/api/1.0/facilities/" + facilityIdOfProvider + ".json"))

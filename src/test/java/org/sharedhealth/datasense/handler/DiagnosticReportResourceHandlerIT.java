@@ -80,13 +80,13 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void canHandleDiagnosticReportResource() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
         assertTrue(diagnosticReportResourceHandler.canHandle(diagnosticReport));
     }
 
     @Test
     public void shouldSaveDiagnosticReport() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
         diagnosticReportResourceHandler.process(diagnosticReport, composition);
         List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticReports.size());
@@ -105,7 +105,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveLabReportWithoutCategory() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
         diagnosticReportResourceHandler.process(diagnosticReport, composition);
         List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticReports.size());
@@ -124,7 +124,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldSaveResultOfDiagnosticReportAsObservation() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
         diagnosticReportResourceHandler.process(diagnosticReport, composition);
         List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);
         DiagnosticReport savedDiagnosticReport = savedDiagnosticReports.get(0);
@@ -139,7 +139,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldAssociateDiagnosticReportWithOrderUsingShrOrderUuid() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
         String concatenatedShrOrderUuid = "shr-enc-12:880ae396-jfjf-4629-1930-f15206e63ab0";
 
         DiagnosticOrder order = new DiagnosticOrder();
@@ -160,7 +160,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldAssociateDiagnosticReportWithOrderUsingEncIdAndConceptId() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
 
         DiagnosticOrder order = new DiagnosticOrder();
         order.setEncounterId("shrEncounterId3");
@@ -181,7 +181,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldNotSaveLocalDiagnosticReports() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_local_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
+        setUpData("stu3/p98001046534_encounter_with_local_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
 
         diagnosticReportResourceHandler.process(diagnosticReport, composition);
         List<DiagnosticReport> savedDiagnosticReports = findByEncounterId(SHR_ENCOUNTER_ID);

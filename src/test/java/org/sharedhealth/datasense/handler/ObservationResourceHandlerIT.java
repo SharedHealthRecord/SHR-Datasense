@@ -51,7 +51,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_vitals.xml");
         bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
     }
@@ -63,7 +63,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldHandleTSObservations() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_vitals_with_somelocalconcepts.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_vitals_with_somelocalconcepts.xml");
         bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
         String topLevelVitalsObs = "urn:uuid:a4708fe7-43c5-4b32-86ec-76924cf1f0e1";
@@ -78,7 +78,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldNotHandleDeathNoteObservations() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_deathNote.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_deathNote.xml");
         BundleContext deathNoteBundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         String deathNoteObsResId = "urn:uuid:7e53fe65-c5b8-49e1-8248-eecb35e5e87c";
         Reference deathReference = new Reference().setReference(deathNoteObsResId);
@@ -149,7 +149,7 @@ public class ObservationResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldGetValueBooleanFromObservation() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_observations.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_observations.xml");
         bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         setEncounterReference(bundleContext, HEALTH_ID, SHR_ENCOUNTER_ID);
         String obsRef4PncWithin48HoursAfterBirth = "urn:uuid:68b6c450-4dec-41d3-aa05-464c2bdaeb98";

@@ -77,13 +77,13 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void canHandleDiagnosticOrderResource() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
         assertTrue(diagnosticOrderResourceHandler.canHandle(diagnosticOrder));
     }
 
     @Test
     public void shouldSaveASingleDiagnosticOrder() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
@@ -94,7 +94,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldDefaultCategoryToLAB() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
@@ -105,7 +105,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldStoreADiagnosticOrderForEachItemInDiagnosticOrder() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(2, savedDiagnosticOrders.size());
@@ -119,7 +119,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldStoreCancelledDiagnosticOrders() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_cancelled_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_cancelled_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(2, savedDiagnosticOrders.size());
@@ -133,7 +133,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldNotStoreDiagnosticOrderWithoutSystemAndCode() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe");
         diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(0, savedDiagnosticOrders.size());

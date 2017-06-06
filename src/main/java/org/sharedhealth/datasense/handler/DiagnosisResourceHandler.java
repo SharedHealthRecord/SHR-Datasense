@@ -35,7 +35,7 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
             }
             return resourceCoding.get(0).getCode().equalsIgnoreCase("diagnosis");
         }
-//            Condition condition = (Condition) resource;
+//  todo:remove           Condition condition = (Condition) resource;
 //            BoundCodeableConceptDt<ConditionCategoryCodesEnum> category = condition.getCategory();
 //            for (CodingDt coding : category.getCoding()) {
 //                if (coding.getCode().equalsIgnoreCase("diagnosis")) {
@@ -52,9 +52,10 @@ public class DiagnosisResourceHandler implements FhirResourceHandler {
         diagnosis.setPatient(composition.getPatientReference().getValue());
         diagnosis.setEncounter(composition.getEncounterReference().getValue());
         populateDiagnosisCodes(diagnosis, fhirDiagnosis.getCode().getCoding());
-        //todo: Date dateAsserted = fhirDiagnosis.getDateRecorded();
-//        Date date = dateAsserted != null ? dateAsserted : composition.getEncounterReference().getValue().getEncounterDateTime();
-//        diagnosis.setDiagnosisDateTime(date);
+//        todo:
+        Date dateAsserted = fhirDiagnosis.getAssertedDate();
+        Date date = dateAsserted != null ? dateAsserted : composition.getEncounterReference().getValue().getEncounterDateTime();
+        diagnosis.setDiagnosisDateTime(date);
         diagnosis.setDiagnosisStatus(fhirDiagnosis.getClinicalStatus().toCode());
         diagnosisDao.save(diagnosis);
     }

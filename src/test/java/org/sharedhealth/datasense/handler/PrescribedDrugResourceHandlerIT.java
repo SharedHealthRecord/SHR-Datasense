@@ -81,20 +81,20 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void canHandleMedicationOrder() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
         assertTrue(prescribedDrugResourceHandler.canHandle(resource));
     }
 
 
     @Test
     public void shouldNotHandleDiagnosticOrderResource() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34", SHR_ENCOUNTER_ID);
         assertFalse(prescribedDrugResourceHandler.canHandle(resource));
     }
 
     @Test
     public void shouldProcessMedicationOrderWithTRDrug() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
         prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
@@ -116,7 +116,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
     @Test
     public void shouldProcessMedicationOrderWithPriorPrescription() throws Exception {
         //create new prescribed drug
-        setUpData("dstu2/xmls/p98001046534_encounter_with_new_presciption.xml", "urn:uuid:acaccc8b-a011-488d-bea3-d2c88a0b07c1", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_new_presciption.xml", "urn:uuid:acaccc8b-a011-488d-bea3-d2c88a0b07c1", SHR_ENCOUNTER_ID);
         prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
@@ -125,7 +125,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         //discontinuing prescribed drug
 
         String discontinuingEncounterId = "DiscontinuingEncounterId";
-        setUpData("dstu2/xmls/p98001046534_encounter_with_discontinued_presciption.xml", "urn:uuid:2af6380b-466f-447a-9bfa-b1d5f816e09c", discontinuingEncounterId);
+        setUpData("stu3/p98001046534_encounter_with_discontinued_presciption.xml", "urn:uuid:2af6380b-466f-447a-9bfa-b1d5f816e09c", discontinuingEncounterId);
         prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterIdForDiscontinuing = findByEncounterId(discontinuingEncounterId);
@@ -147,7 +147,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
     public void shouldProcessMedicationOrderWhenCancelledWithinSameEncounter() throws Exception {
 
         String discontinuingEncounterId = "DiscontinuingEncounterId";
-        setUpData("dstu2/xmls/p98001046534_encounter_with_discontinued_presciption_within_same_encounter.xml", "urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4", discontinuingEncounterId);
+        setUpData("stu3/p98001046534_encounter_with_discontinued_presciption_within_same_encounter.xml", "urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4", discontinuingEncounterId);
         prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterIdForDiscontinuing = findByEncounterId(discontinuingEncounterId);
@@ -167,7 +167,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldProcessMedicationOrderWithLocalDrug() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:2d161c05-64be-4de4-a488-7ed499d2ccca", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_presciption.xml", "urn:uuid:2d161c05-64be-4de4-a488-7ed499d2ccca", SHR_ENCOUNTER_ID);
         prescribedDrugResourceHandler.process(resource, composition);
 
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
@@ -186,7 +186,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldDeleteExistingPrescribedDrug() throws Exception {
-        setUpData("dstu2/xmls/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
+        setUpData("stu3/p98001046534_encounter_with_presciption.xml", "urn:uuid:97711fe6-d025-4324-96a0-a480a49bb893", SHR_ENCOUNTER_ID);
         prescribedDrugResourceHandler.process(resource, composition);
         List<PrescribedDrug> byEncounterId = findByEncounterId(SHR_ENCOUNTER_ID);
 

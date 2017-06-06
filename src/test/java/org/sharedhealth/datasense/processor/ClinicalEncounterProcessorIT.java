@@ -55,7 +55,7 @@ public class ClinicalEncounterProcessorIT {
 
     @Test
     public void shouldSaveEncounter() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_registration.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);

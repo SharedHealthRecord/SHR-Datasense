@@ -65,7 +65,7 @@ public class ImmunizationResourceHandlerIT {
     }
 
     private void loadBundleContext() throws IOException {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_immunization.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_immunization.xml");
         String shrEncounterId = "shrEncounterId";
         bundleContext = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = bundleContext.getEncounterCompositions().get(0);

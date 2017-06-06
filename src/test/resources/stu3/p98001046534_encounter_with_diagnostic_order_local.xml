@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bundle xmlns="http://hl7.org/fhir">
+    <id value="88a7f51b-4672-47f3-a264-d2e332ef5e8d"/>
+    <meta>
+        <lastUpdated value="2016-04-04T15:48:32.000+05:30"/>
+    </meta>
+    <type value="collection"/>
+    <entry>
+        <fullUrl value="urn:uuid:e1dbf345-574a-4e9c-88ca-f5a0bc9a0358"/>
+        <resource>
+            <Composition>
+                <identifier>
+                    <value value="urn:uuid:e1dbf345-574a-4e9c-88ca-f5a0bc9a0358"/>
+                </identifier>
+                <status value="final"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
+                        <code value="51899-3"/>
+                        <display value="Details Document"/>
+                    </coding>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001141244"/>
+                    <display value="98001141244"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:b57f3090-285d-4cb7-8fdd-a416e6aa9859"/>
+                </encounter>
+                <date value="2016-04-04T15:48:32.000+05:30"/>
+                <author>
+                    <reference value="http://172.18.46.199:8084/api/1.0/facilities/10019841.json"/>
+                </author>
+                <title value="Patient Clinical Encounter"/>
+                <confidentiality value="N"/>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:b57f3090-285d-4cb7-8fdd-a416e6aa9859"/>
+                        <display value="Encounter"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1"/>
+                        <display value="Procedure Request"/>
+                    </entry>
+                </section>
+            </Composition>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:b57f3090-285d-4cb7-8fdd-a416e6aa9859"/>
+        <resource>
+            <Encounter>
+                <identifier>
+                    <value value="urn:uuid:b57f3090-285d-4cb7-8fdd-a416e6aa9859"/>
+                </identifier>
+                <status value="finished"/>
+                <class>
+                    <system value="http://hl7.org/fhir/v3/ActCode"/>
+                    <code value="FLD"/>
+                </class>
+                <type>
+                    <text value="Consultation"/>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001141244"/>
+                    <display value="98001141244"/>
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="http://172.18.46.199:8084/api/1.0/providers/20.json"/>
+                    </individual>
+                </participant>
+                <serviceProvider>
+                    <reference value="http://172.18.46.199:8084/api/1.0/facilities/10019841.json"/>
+                </serviceProvider>
+            </Encounter>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1"/>
+        <resource>
+            <ProcedureRequest>
+                <id value="urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1"/>
+                <extension url="http://hl7.org/fhir/diagnosticorder-r2-marker">
+                    <valueBoolean value="true"/>
+                </extension>
+                <identifier>
+                    <value value="urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1"/>
+                </identifier>
+                <status value="active"/>
+                <intent value="order"/>
+                <category>
+                    <coding>
+                        <system value="http://tr.com/valuesets/order-type"/>
+                        <code value="RAD"/>
+                    </coding>
+                </category>
+                <code>
+                    <coding>
+                        <display value="Plain radiography of feet"/>
+                    </coding>
+                </code>
+                <subject>
+                    <reference value="http://172.18.46.199:8081/api/default/patients/98001141244"/>
+                    <display value="98001141244"/>
+                </subject>
+                <context>
+                    <reference value="urn:uuid:b57f3090-285d-4cb7-8fdd-a416e6aa9859"/>
+                </context>
+                <authoredOn value="2016-04-04T15:48:32+05:30"/>
+                <requester>
+                    <agent>
+                        <reference value="http://172.18.46.199:8084/api/1.0/providers/20.json"/>
+                    </agent>
+                </requester>
+            </ProcedureRequest>
+        </resource>
+    </entry>
+</Bundle>

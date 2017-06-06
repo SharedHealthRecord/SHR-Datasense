@@ -60,7 +60,7 @@ public class DiagnosisProcessorIT {
 
     @Test
     public void shouldSaveDiagnosis() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_diagnoses.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_diagnoses.xml");
         String shrEncounterId = "shrEncounterId";
         BundleContext context = new BundleContext(bundle, shrEncounterId);
         EncounterComposition composition = context.getEncounterCompositions().get(0);
@@ -73,7 +73,9 @@ public class DiagnosisProcessorIT {
         composition.getPatientReference().setValue(patient);
         Reference resourceReference = new Reference();
         resourceReference.setReference("urn:uuid:04e9f317-680c-4ff1-9942-bcb5e2b5243b");
+
         processor.process(context.getResourceForReference(resourceReference), composition);
+
         List<Diagnosis> diagnoses = findByEncounterId(shrEncounterId);
         assertEquals(1, diagnoses.size());
         Diagnosis diagnosis = diagnoses.get(0);
@@ -81,7 +83,7 @@ public class DiagnosisProcessorIT {
         assertEquals(shrEncounterId, diagnosis.getEncounter().getEncounterId());
         assertEquals("A90", diagnosis.getDiagnosisCode());
         assertEquals("07952dc2-5206-11e5-ae6d-0050568225ca", diagnosis.getDiagnosisConcept());
-        assertEquals("confirmed", diagnosis.getDiagnosisStatus());
+        assertEquals("active", diagnosis.getDiagnosisStatus());
         assertTrue(DateUtil.parseDate("2015-09-04").equals(diagnosis.getDiagnosisDateTime()));
         assertEquals(hid, diagnosis.getPatient().getHid());
     }

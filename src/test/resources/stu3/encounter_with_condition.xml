@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bundle xmlns="http://hl7.org/fhir">
+    <id value="4fe6f9e2-d10a-4956-aae5-091e810090e1"/>
+    <type value="collection"/>
+    <entry>
+        <resource>
+            <Composition>
+                <id value="bce6c82a-01ec-482b-8dee-12240f372a38"/>
+                <identifier>
+                    <value value="urn:uuid:bce6c82a-01ec-482b-8dee-12240f372a38"/>
+                </identifier>
+                <status value="final"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
+                        <code value="51899-3"/>
+                        <display value="Details Document"/>
+                    </coding>
+                </type>
+                <subject>
+                    <reference value="http://localhost:9997/api/default/patients/5893922485019082753"/>
+                    <display value="5893922485019082753"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:4d2f9872-4df1-438e-9d72-0a8b161d409b"/>
+                </encounter>
+                <date value="2014-07-10T16:05:09+05:30"/>
+                <author>
+                    <reference value="http://www.fr.com/10000069.json"/>
+                </author>
+                <title value="encounter with condition"/>
+                <confidentiality value="N"/>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:4d2f9872-4df1-438e-9d72-0a8b161d409b"/>
+                        <display value="Encounter"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:4e06a589-cc74-4318-abad-d748fa8268ea"/>
+                        <display value="Diagnosis"/>
+                    </entry>
+                </section>
+            </Composition>
+        </resource>
+    </entry>
+    <entry>
+        <resource>
+            <Encounter>
+                <id value="4d2f9872-4df1-438e-9d72-0a8b161d409b"/>
+                <identifier>
+                    <value value="urn:uuid:4d2f9872-4df1-438e-9d72-0a8b161d409b"/>
+                </identifier>
+                <status value="finished"/>
+                <class>
+                    <system value="http://hl7.org/fhir/v3/ActCode"/>
+                    <code value="AMB"/>
+                </class>
+                <type>
+                    <text value="OPD"/>
+                </type>
+                <subject>
+                    <reference value="http://localhost:9997/api/default/patients/5893922485019082753"/>
+                    <display value="5893922485019082753"/>
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="http://www.pr.com/22.json"/>
+                    </individual>
+                </participant>
+                <serviceProvider>
+                    <reference value="http://www.fr.com/10000069.json"/>
+                </serviceProvider>
+            </Encounter>
+        </resource>
+    </entry>
+    <entry>
+        <resource>
+            <Condition>
+                <id value="4e06a589-cc74-4318-abad-d748fa8268ea"/>
+                <identifier>
+                    <value value="urn:uuid:4e06a589-cc74-4318-abad-d748fa8268ea"/>
+                </identifier>
+                <clinicalStatus value="active"/>
+                <category>
+                    <coding>
+                        <system value="http://tr.com/valuesets/condition-category"/>
+                        <code value="diagnosis"/>
+                        <display value="Diagnosis"/>
+                    </coding>
+                </category>
+                <code>
+                    <coding>
+                        <system value="www.bdshr-tr.com/concepts/101"/>
+                        <code value="A00.0"/>
+                        <display value="Cholera Vibrio"/>
+                    </coding>
+                </code>
+                <subject>
+                    <reference value="http://localhost:9997/api/default/patients/5893922485019082753"/>
+                    <display value="5893922485019082753"/>
+                </subject>
+                <context>
+                    <reference value="urn:uuid:4d2f9872-4df1-438e-9d72-0a8b161d409b"/>
+                </context>
+                <assertedDate value="2015-08-24"/>
+                <asserter>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/812.json"/>
+                </asserter>
+            </Condition>
+        </resource>
+    </entry>
+</Bundle>

@@ -50,7 +50,7 @@ public class ProcedureResourceHandlerIT {
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_procedure.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_procedure.xml");
         BundleContext bundleContext = new BundleContext(bundle, SHR_ENCOUNTER_ID);
         composition = bundleContext.getEncounterCompositions().get(0);
 

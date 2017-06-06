@@ -23,7 +23,7 @@ public class BundleContext {
         this.shrEncounterId = shrEncounterId;
     }
 
-//    public <T extends Element> List<T> getResourcesOfType(Class<T> type) {
+// todo:remove   public <T extends Element> List<T> getResourcesOfType(Class<T> type) {
 //        ArrayList<T> resources = new ArrayList<>();
 //        List<T> list = bundle.getAllPopulatedChildElementsOfType(type);
 //        return list;
@@ -60,21 +60,21 @@ public class BundleContext {
 
 
     public Resource getResourceForReference(Reference resourceRef) {
-        String resourceReference = resourceRef.getReference();
+        String resourceReferenceIdPart = StringUtils.substringAfter(resourceRef.getReference(), "urn:uuid:");
         for (Bundle.BundleEntryComponent entry : bundle.getEntry()) {
             Resource entryResource = entry.getResource();
             String entryResourceId = entryResource.getId();
             boolean hasFullUrlDefined = !StringUtils.isBlank(entry.getFullUrl());
 
-            if (entryResourceId.equals(resourceReference)) {
+            if (entryResourceId.endsWith(resourceReferenceIdPart)) {
                 return entryResource;
             } else if (hasFullUrlDefined) {
-                if (entry.getFullUrl().endsWith(resourceReference)) {
+                if (entry.getFullUrl().endsWith(resourceReferenceIdPart)) {
                     return entryResource;
                 }
             }
         }
-        logger.warn("Could not determine resource for reference:" + resourceReference);
+        logger.warn("Could not determine resource for reference:" + resourceReferenceIdPart);
         return null;
     }
 }

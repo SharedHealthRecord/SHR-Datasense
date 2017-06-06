@@ -1,0 +1,291 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bundle xmlns="http://hl7.org/fhir">
+    <id value="5a0f6825-b467-4c69-9586-ef1bceea52e2"/>
+    <meta>
+        <lastUpdated value="2016-06-27T10:28:55.000+05:30"/>
+    </meta>
+    <type value="collection"/>
+    <entry>
+        <fullUrl value="urn:uuid:45012396-aef1-4f68-882f-696b548e42d1"/>
+        <resource>
+            <Composition>
+                <identifier>
+                    <value value="urn:uuid:45012396-aef1-4f68-882f-696b548e42d1"/>
+                </identifier>
+                <status value="final"/>
+                <type>
+                    <coding>
+                        <system value="http://hl7.org/fhir/vs/doc-typecodes"/>
+                        <code value="51899-3"/>
+                        <display value="Details Document"/>
+                    </coding>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <encounter>
+                    <reference value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+                </encounter>
+                <date value="2016-06-27T10:28:55.000+05:30"/>
+                <author>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10019842.json"/>
+                </author>
+                <title value="Patient Clinical Encounter"/>
+                <confidentiality value="N"/>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+                        <display value="Encounter"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4"/>
+                        <display value="Medication Request"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53"/>
+                        <display value="Medication Request"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4-provenance"/>
+                        <display value="Provenance Medication Request"/>
+                    </entry>
+                </section>
+                <section>
+                    <entry>
+                        <reference value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53-provenance"/>
+                        <display value="Provenance Medication Request"/>
+                    </entry>
+                </section>
+            </Composition>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+        <resource>
+            <Encounter>
+                <identifier>
+                    <value value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+                </identifier>
+                <status value="finished"/>
+                <class>
+                    <system value="http://hl7.org/fhir/v3/ActCode"/>
+                    <code value="AMB"/>
+                </class>
+                <type>
+                    <text value="Consultation"/>
+                </type>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <participant>
+                    <individual>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/20.json"/>
+                    </individual>
+                </participant>
+                <period>
+                    <start value="2016-06-27T10:27:11.000+05:30"/>
+                </period>
+                <serviceProvider>
+                    <reference value="http://hrmtest.dghs.gov.bd/api/1.0/facilities/10019842.json"/>
+                </serviceProvider>
+            </Encounter>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4"/>
+        <resource>
+            <MedicationRequest>
+                <extension
+                        url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#MedicationOrderAction">
+                    <valueString value="DISCONTINUE"/>
+                </extension>
+                <identifier>
+                    <value value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4"/>
+                </identifier>
+                <status value="stopped"/>
+                <intent value="order"/>
+                <medicationCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/drugs/cd858ce0-8211-11e5-aa01-0050568276cf"/>
+                        <code value="cd858ce0-8211-11e5-aa01-0050568276cf"/>
+                        <display value="Pantoprazole Tablet 40 mg"/>
+                    </coding>
+                </medicationCodeableConcept>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <context>
+                    <reference value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+                </context>
+                <authoredOn value="2016-06-27T10:40:53+05:30"/>
+                <requester>
+                    <agent>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/20.json"/>
+                    </agent>
+                </requester>
+                <dosageInstruction>
+                    <timing>
+                        <extension
+                                url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#TimingScheduledDate">
+                            <valueDateTime value="2016-06-27T10:40:52.000+05:30"/>
+                        </extension>
+                        <repeat>
+                            <boundsDuration>
+                                <value value="4"/>
+                                <system value="http://unitsofmeasure.org"/>
+                                <code value="wk"/>
+                            </boundsDuration>
+                            <frequency value="3"/>
+                            <period value="1"/>
+                            <periodUnit value="d"/>
+                        </repeat>
+                    </timing>
+                    <asNeededBoolean value="false"/>
+                    <doseQuantity>
+                        <value value="1"/>
+                        <unit value="Capsule dose form"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Medication-Forms"/>
+                        <code value="385049006"/>
+                    </doseQuantity>
+                </dosageInstruction>
+                <dispenseRequest>
+                    <quantity>
+                        <value value="84.0"/>
+                        <unit value="Capsule dose form"/>
+                    </quantity>
+                </dispenseRequest>
+                <priorPrescription>
+                    <reference value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53"/>
+                </priorPrescription>
+            </MedicationRequest>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53"/>
+        <resource>
+            <MedicationRequest>
+                <extension
+                        url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#MedicationOrderAction">
+                    <valueString value="NEW"/>
+                </extension>
+                <identifier>
+                    <value value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53"/>
+                </identifier>
+                <status value="stopped"/>
+                <intent value="order"/>
+                <medicationCodeableConcept>
+                    <coding>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/drugs/cd858ce0-8211-11e5-aa01-0050568276cf"/>
+                        <code value="cd858ce0-8211-11e5-aa01-0050568276cf"/>
+                        <display value="Pantoprazole Tablet 40 mg"/>
+                    </coding>
+                </medicationCodeableConcept>
+                <subject>
+                    <reference value="http://172.18.46.56:8081/api/default/patients/98001046534"/>
+                    <display value="98001046534"/>
+                </subject>
+                <context>
+                    <reference value="urn:uuid:0f73e496-7f0a-479b-bafb-6da84beaed09"/>
+                </context>
+                <authoredOn value="2016-06-27T10:28:55+05:30"/>
+                <requester>
+                    <agent>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/20.json"/>
+                    </agent>
+                </requester>
+                <dosageInstruction>
+                    <timing>
+                        <extension
+                                url="https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#TimingScheduledDate">
+                            <valueDateTime value="2016-06-27T10:28:55.000+05:30"/>
+                        </extension>
+                        <repeat>
+                            <boundsDuration>
+                                <value value="4"/>
+                                <system value="http://unitsofmeasure.org"/>
+                                <code value="wk"/>
+                            </boundsDuration>
+                            <frequency value="3"/>
+                            <period value="1"/>
+                            <periodUnit value="d"/>
+                        </repeat>
+                    </timing>
+                    <asNeededBoolean value="false"/>
+                    <doseQuantity>
+                        <value value="1"/>
+                        <unit value="Capsule dose form"/>
+                        <system value="http://172.18.46.56:9080/openmrs/ws/rest/v1/tr/vs/Medication-Forms"/>
+                        <code value="385049006"/>
+                    </doseQuantity>
+                </dosageInstruction>
+                <dispenseRequest>
+                    <quantity>
+                        <value value="84.0"/>
+                        <unit value="Capsule dose form"/>
+                    </quantity>
+                </dispenseRequest>
+            </MedicationRequest>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4-provenance"/>
+        <resource>
+            <Provenance>
+                <id value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4-provenance"/>
+                <target>
+                    <reference value="urn:uuid:efd4dc92-eb9f-4141-92fb-03e89c536fa4"/>
+                </target>
+                <period>
+                    <start value="2016-06-27T10:40:52+05:30"/>
+                    <end value="2016-06-27T10:40:53+05:30"/>
+                </period>
+                <recorded value="2016-06-27T10:40:53.000+05:30"/>
+                <activity>
+                    <system value="http://hl7.org/fhir/v3/DataOperation"/>
+                    <code value="ABORT"/>
+                    <display value="abort"/>
+                </activity>
+                <agent>
+                    <whoReference>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/20.json"/>
+                    </whoReference>
+                </agent>
+            </Provenance>
+        </resource>
+    </entry>
+    <entry>
+        <fullUrl value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53-provenance"/>
+        <resource>
+            <Provenance>
+                <id value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53-provenance"/>
+                <target>
+                    <reference value="urn:uuid:468075b9-92bb-4df2-b452-6be3a6719d53"/>
+                </target>
+                <period>
+                    <start value="2016-06-27T10:28:55+05:30"/>
+                    <end value="2016-06-27T10:40:52+05:30"/>
+                </period>
+                <recorded value="2016-06-27T10:28:55.000+05:30"/>
+                <activity>
+                    <system value="http://hl7.org/fhir/v3/DataOperation"/>
+                    <code value="CREATE"/>
+                    <display value="create"/>
+                </activity>
+                <agent>
+                    <whoReference>
+                        <reference value="http://hrmtest.dghs.gov.bd/api/1.0/providers/20.json"/>
+                    </whoReference>
+                </agent>
+            </Provenance>
+        </resource>
+    </entry>
+</Bundle>

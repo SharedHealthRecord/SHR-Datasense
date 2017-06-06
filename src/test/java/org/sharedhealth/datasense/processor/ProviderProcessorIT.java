@@ -45,7 +45,7 @@ public class ProviderProcessorIT {
 
     @Before
     public void setUp() throws Exception {
-        Bundle bundle = loadFromXmlFile("dstu2/xmls/p98001046534_encounter_with_registration.xml");
+        Bundle bundle = loadFromXmlFile("stu3/p98001046534_encounter_with_registration.xml");
         BundleContext context = new BundleContext(bundle, "shrEncounterId");
         encounterComposition = context.getEncounterCompositions().get(0);
     }
