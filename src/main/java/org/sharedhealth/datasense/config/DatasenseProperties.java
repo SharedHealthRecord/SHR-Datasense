@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.config;
 
-import liquibase.util.file.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.sharedhealth.datasense.util.StringUtil;
 import org.springframework.context.EnvironmentAware;
@@ -97,6 +96,7 @@ public class DatasenseProperties implements EnvironmentAware {
     public String getShrBaseUrl() {
         return shrServerUrl.trim();
     }
+
     public String getMciBaseUrl() {
         return mciServerUrl.trim();
     }
@@ -213,7 +213,7 @@ public class DatasenseProperties implements EnvironmentAware {
 
     private String getAqsConfigBasePath() {
         String configLocation = StringUtil.removeSuffix(getAqsConfigLocationPath(), "/");
-        return configLocation.substring(0,configLocation.lastIndexOf("/"));
+        return configLocation.substring(0, configLocation.lastIndexOf("/"));
     }
 
 

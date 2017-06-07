@@ -1,7 +1,7 @@
 package org.sharedhealth.datasense.repository;
 
-import org.sharedhealth.datasense.model.ImmunizationReason;
 import org.sharedhealth.datasense.model.Immunization;
+import org.sharedhealth.datasense.model.ImmunizationReason;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
@@ -13,6 +13,7 @@ import java.util.List;
 public class ImmunizationDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
+
     public void save(Immunization immunization) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("patient_hid", immunization.getPatient().getHid());

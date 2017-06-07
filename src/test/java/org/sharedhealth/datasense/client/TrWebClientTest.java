@@ -47,7 +47,7 @@ public class TrWebClientTest {
                         .withStatus(200)
                         .withBody(asString("jsons/C" + CONCEPT_UUID + ".json"))));
 
-        TrConcept trConcept = trWebClient.getTrConcept("http://localhost:9997"+ TR_CONCEPT_URL + CONCEPT_UUID);
+        TrConcept trConcept = trWebClient.getTrConcept("http://localhost:9997" + TR_CONCEPT_URL + CONCEPT_UUID);
         assertNotNull(trConcept);
         assertEquals(CONCEPT_UUID, trConcept.getConceptUuid());
         assertEquals("C Set03", trConcept.getName());
@@ -86,9 +86,9 @@ public class TrWebClientTest {
 
         TrMedication trMedication = trWebClient.getTrMedication("http://localhost:9997" + TR_MEDICATION_URL + DRUG_UUID);
 
-        assertEquals("OPV 1",trMedication.getName());
-        assertEquals(DRUG_UUID,trMedication.getUuid());
-        assertEquals("8bb7fb27-2be1-4b7a-bee4-e09d7b800d39",trMedication.getReferenceTermId());
+        assertEquals("OPV 1", trMedication.getName());
+        assertEquals(DRUG_UUID, trMedication.getUuid());
+        assertEquals("8bb7fb27-2be1-4b7a-bee4-e09d7b800d39", trMedication.getReferenceTermId());
         assertEquals("9d770880-fd65-43f5-a7b7-2fb7b6a4037a", trMedication.getAssociatedConceptId());
 
     }

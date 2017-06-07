@@ -50,7 +50,7 @@ public class DiagnosticOrderDao {
                 return rs.getInt("order_id");
             }
         });
-        if(order_id.isEmpty()) return null;
+        if (order_id.isEmpty()) return null;
         return order_id.get(0);
     }
 
@@ -66,7 +66,7 @@ public class DiagnosticOrderDao {
                 return rs.getInt("order_id");
             }
         });
-        if(order_id.isEmpty()) return null;
+        if (order_id.isEmpty()) return null;
         return order_id.get(0);
     }
 

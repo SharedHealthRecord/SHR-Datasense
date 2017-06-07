@@ -7,7 +7,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.ArrayList;
 import java.util.List;
 
-import static java.lang.String.format;
 import static org.springframework.util.CollectionUtils.isEmpty;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -186,7 +185,7 @@ public class UserInfo {
                 isShrSystemAdmin = true;
             }
         }
-        
+
         private void addDefaultUserGroups() {
             if (containsCaseInsensitive(groups, HRM_SHR_USER_GROUP)) {
                 userGroups.add(SHR_USER_GROUP);

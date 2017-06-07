@@ -15,10 +15,10 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/config/parameters")
-public class ParameterController extends DatasenseController{
+public class ParameterController extends DatasenseController {
 
     private static final Logger logger = Logger.getLogger(ParameterController.class);
-    private static final String[] supportedParamDataTypes = new String[] { "String" };
+    private static final String[] supportedParamDataTypes = new String[]{"String"};
 
     @Autowired
     ConfigurationService configurationService;
@@ -39,7 +39,7 @@ public class ParameterController extends DatasenseController{
         ModelAndView modelAndView = new ModelAndView("config.defineParameter");
         Parameter param = configurationService.parameterById(paramId);
         modelAndView.addObject("configParameter", param);
-        modelAndView.addObject("supportedParameterTypes", new String[] {Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
+        modelAndView.addObject("supportedParameterTypes", new String[]{Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
         modelAndView.addObject("supportedParamDataTypes", supportedParamDataTypes);
         return modelAndView;
     }
@@ -53,11 +53,10 @@ public class ParameterController extends DatasenseController{
         parameter.setDataType("String");
         parameter.setParamType(Parameter.ParameterType.USER_DEFINED.toString());
         modelAndView.addObject("configParameter", parameter);
-        modelAndView.addObject("supportedParameterTypes", new String[] {Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
+        modelAndView.addObject("supportedParameterTypes", new String[]{Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
         modelAndView.addObject("supportedParamDataTypes", supportedParamDataTypes);
         return modelAndView;
     }
-
 
 
     @RequestMapping(value = "/define", method = RequestMethod.POST)
@@ -70,10 +69,10 @@ public class ParameterController extends DatasenseController{
             return new ModelAndView("redirect:/config/parameters");
         } catch (Exception e) {
             logger.error(message, e);
-            String[] formErrors = new String[] {message + e.getMessage()};
+            String[] formErrors = new String[]{message + e.getMessage()};
             ModelAndView modelAndView = new ModelAndView("config.defineParameter");
             modelAndView.addObject("configParameter", parameter);
-            modelAndView.addObject("supportedParameterTypes", new String[] {Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
+            modelAndView.addObject("supportedParameterTypes", new String[]{Parameter.ParameterType.SYSTEM.toString(), Parameter.ParameterType.USER_DEFINED.toString()});
             modelAndView.addObject("supportedParamDataTypes", supportedParamDataTypes);
             modelAndView.addObject("formErrors", formErrors);
             return modelAndView;

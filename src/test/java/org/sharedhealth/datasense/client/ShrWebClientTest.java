@@ -15,9 +15,8 @@ import java.util.UUID;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static junit.framework.Assert.assertEquals;
-import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
 import static org.mockito.MockitoAnnotations.initMocks;
 import static org.sharedhealth.datasense.util.HeaderUtil.*;
 
@@ -97,6 +96,6 @@ public class ShrWebClientTest {
         String content = shrWebClient.getEncounterFeedContent(uri);
 
         assertEquals(null, content);
-        verify(identityServiceClient,times(1)).clearToken();
-    }    
+        verify(identityServiceClient, times(1)).clearToken();
+    }
 }

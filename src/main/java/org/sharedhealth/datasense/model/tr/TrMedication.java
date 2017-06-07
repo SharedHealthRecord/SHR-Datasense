@@ -19,7 +19,9 @@ public class TrMedication {
         return name;
     }
 
-    public String getUuid(){ return uuid; }
+    public String getUuid() {
+        return uuid;
+    }
 
     public void setUuid(String uuid) {
         this.uuid = uuid;

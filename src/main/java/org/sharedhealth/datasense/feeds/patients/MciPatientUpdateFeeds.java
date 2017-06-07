@@ -1,16 +1,13 @@
 package org.sharedhealth.datasense.feeds.patients;
 
 import com.sun.syndication.feed.atom.Feed;
-import com.sun.syndication.io.FeedException;
 import com.sun.syndication.io.WireFeedInput;
 import org.apache.log4j.Logger;
 import org.ict4h.atomfeed.client.repository.AllFeeds;
 import org.sharedhealth.datasense.client.MciWebClient;
 
-import java.io.IOException;
 import java.io.StringReader;
 import java.net.URI;
-import java.net.URISyntaxException;
 
 public class MciPatientUpdateFeeds extends AllFeeds {
     private MciWebClient mciWebClient;
@@ -27,7 +24,7 @@ public class MciPatientUpdateFeeds extends AllFeeds {
             WireFeedInput input = new WireFeedInput();
             return (Feed) input.build(new StringReader(response));
         } catch (Exception e) {
-            log.error("Unable to get for uri " + uri.toString() ,e);
+            log.error("Unable to get for uri " + uri.toString(), e);
             throw new RuntimeException(e);
         }
     }

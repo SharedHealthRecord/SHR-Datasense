@@ -111,7 +111,6 @@ public class DeathNoteHandler implements FhirResourceHandler {
     }
 
 
-
     private void mapDateOfDeathAndPatientAge(PatientDeathDetails patientDeathDetails, EncounterComposition composition, Observation deathNoteObservation, Encounter encounter) {
         Observation dateOfDeathObs = findObservation(composition, deathNoteObservation, configurationService.getDateOfDeathUuid());
         Date dateOfDeath = getDateValue(encounter, dateOfDeathObs);

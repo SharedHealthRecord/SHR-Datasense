@@ -6,11 +6,7 @@ import org.springframework.jdbc.core.ColumnMapRowMapper;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Component
 public class DrugDao {
@@ -22,7 +18,7 @@ public class DrugDao {
         String sql = null;
         if (getDrugCountByUuid(drug.getUuid()) == 0) {
             sql = "insert into drug(drug_uuid, concept_uuid, name, reference_term_uuid) values (:drug_uuid, :concept_uuid, :name, :reference_term_uuid)";
-        }else {
+        } else {
             sql = "update drug set concept_uuid= :concept_uuid, name=:name, reference_term_uuid=:reference_term_uuid, updated_at=:updated_at where drug_uuid= :drug_uuid";
         }
         jdbcTemplate.update(sql, getParameterMap(drug));

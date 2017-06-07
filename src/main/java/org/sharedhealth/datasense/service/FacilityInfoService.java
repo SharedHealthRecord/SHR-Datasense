@@ -54,23 +54,23 @@ public class FacilityInfoService {
     }
 
     public List<Map<String, Object>> getEncounterTypesWithCount(String facilityId, String startDate, String endDate) {
-        return encounterDao.getEncounterTypesWithCount(facilityId,startDate,endDate);
+        return encounterDao.getEncounterTypesWithCount(facilityId, startDate, endDate);
     }
 
 
     public List<Map<String, Object>> getFreeTextCount(String facilityId, String startDate, String endDate) {
         endDate = changeEndDateToEndOfDay(endDate);
-        return prescribedDrugDao.getTotalFreeTextCount(facilityId,startDate,endDate);
+        return prescribedDrugDao.getTotalFreeTextCount(facilityId, startDate, endDate);
     }
 
     public List<Map<String, Object>> getnonCodedDrugsWithCount(String facilityId, String startDate, String endDate) {
         endDate = changeEndDateToEndOfDay(endDate);
-        return prescribedDrugDao.getNonCodedDrugs(facilityId,startDate,endDate);
+        return prescribedDrugDao.getNonCodedDrugs(facilityId, startDate, endDate);
     }
 
     public List<Map<String, Object>> getCodedDrugCount(String facilityId, String startDate, String endDate) {
         endDate = changeEndDateToEndOfDay(endDate);
-        return prescribedDrugDao.getCodedDrugCount(facilityId,startDate,endDate);
+        return prescribedDrugDao.getCodedDrugCount(facilityId, startDate, endDate);
     }
 
     public List<Map<String, Object>> getCodedDrugWithCount(String facilityId, String startDate, String endDate) {

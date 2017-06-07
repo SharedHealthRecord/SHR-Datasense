@@ -32,7 +32,7 @@ public class PatientData {
     private Change mergedWithChange = new Change();
 
     @JsonProperty("hid_card_status")
-    private Change hidCardStatusChange = new Change() ;
+    private Change hidCardStatusChange = new Change();
 
     public Address getAddressChange() {
         return addressChange.getNewValue();

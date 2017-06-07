@@ -5,6 +5,7 @@ import org.hl7.fhir.dstu3.model.Reference;
 import org.hl7.fhir.dstu3.model.Resource;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.sharedhealth.datasense.BaseIntegrationTest;
@@ -37,15 +38,15 @@ import static org.sharedhealth.datasense.helpers.ResourceHelper.loadFromXmlFile;
 @RunWith(SpringJUnit4ClassRunner.class)
 @TestPropertySource("/test-shr-datasense.properties")
 @ContextConfiguration(classes = {DatabaseConfig.class, TestConfig.class})
-public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
+public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     @Autowired
-    private DiagnosticOrderResourceHandler diagnosticOrderResourceHandler;
+    private ProcedureRequestResourceHandler procedureRequestResourceHandler;
 
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 
     private EncounterComposition composition;
-    private Resource diagnosticOrder;
+    private Resource procedureRequest;
 
     private static final String PATIENT_HID = "98001046534";
     private static final String SHR_ENCOUNTER_ID = "shrEncounterId";
@@ -67,7 +68,7 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         composition.getEncounterReference().setValue(encounter);
         composition.getPatientReference().setValue(patient);
         Reference resourceReference = new Reference().setReference(diagnosticOrderResourceUuid);
-        diagnosticOrder = bundleContext.getResourceForReference(resourceReference);
+        procedureRequest = bundleContext.getResourceForReference(resourceReference);
     }
 
     @After
@@ -77,64 +78,67 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void canHandleDiagnosticOrderResource() throws Exception {
-        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
-        assertTrue(diagnosticOrderResourceHandler.canHandle(diagnosticOrder));
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml",
+                "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
+        assertTrue(procedureRequestResourceHandler.canHandle(procedureRequest));
     }
 
     @Test
     public void shouldSaveASingleDiagnosticOrder() throws Exception {
-        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
-        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
+        procedureRequestResourceHandler.process(procedureRequest, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested",
-                "RAD", "01-04-2016",SHR_ENCOUNTER_ID +":e8436e26-a011-48e7-a4e8-a41465dfae34" );
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
+                "RAD", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
     }
 
     @Test
     public void shouldDefaultCategoryToLAB() throws Exception {
-        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34");
-        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
+        procedureRequestResourceHandler.process(procedureRequest, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedDiagnosticOrders.size());
         DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "requested",
-                "LAB", "01-04-2016",SHR_ENCOUNTER_ID +":e8436e26-a011-48e7-a4e8-a41465dfae34");
+        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
+                "LAB", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
     }
 
     @Test
+    @Ignore("not valid for stu3")
     public void shouldStoreADiagnosticOrderForEachItemInDiagnosticOrder() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
-        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        procedureRequestResourceHandler.process(procedureRequest, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
         assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested",
-                "LAB", "04-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21" );
+                "LAB", "04-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
         assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested",
-                "LAB", "04-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
+                "LAB", "04-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
     }
 
     @Test
+    @Ignore("not valid for stu3")
     public void shouldStoreCancelledDiagnosticOrders() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_cancelled_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
-        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        procedureRequestResourceHandler.process(procedureRequest, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(2, savedDiagnosticOrders.size());
         DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
         DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
         assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB",
-                "05-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
+                "05-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
         assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB",
-                "05-04-2016", SHR_ENCOUNTER_ID +":bc82002c-2cac-4568-b7ed-f73688019b21");
+                "05-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
     }
 
     @Test
     public void shouldNotStoreDiagnosticOrderWithoutSystemAndCode() throws Exception {
-        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe");
-        diagnosticOrderResourceHandler.process(diagnosticOrder, composition);
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1");
+        procedureRequestResourceHandler.process(procedureRequest, composition);
         List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(0, savedDiagnosticOrders.size());
     }
@@ -144,10 +148,10 @@ public class DiagnosticOrderResourceHandlerIT extends BaseIntegrationTest {
         assertEquals(PATIENT_HID, savedDiagnosticOrder.getPatientHid());
         assertEquals(SHR_ENCOUNTER_ID, savedDiagnosticOrder.getEncounterId());
         assertEquals(orderCategory, savedDiagnosticOrder.getOrderCategory());
-        assertEquals(orderCode, savedDiagnosticOrder.getCode());
         assertEquals("24", savedDiagnosticOrder.getOrderer());
-        assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
         assertEquals(orderStatus, savedDiagnosticOrder.getOrderStatus());
+        assertEquals(orderCode, savedDiagnosticOrder.getCode());
+        assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
         assertEquals(shrOrderUuid, savedDiagnosticOrder.getShrOrderUuid());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
         assertEquals(orderDate, simpleDateFormat.format(savedDiagnosticOrder.getOrderDate()));

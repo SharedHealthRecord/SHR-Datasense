@@ -12,8 +12,6 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
-import java.net.URISyntaxException;
-
 @Component
 public class TrDrugSyncJob {
     @Autowired

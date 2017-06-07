@@ -29,9 +29,9 @@ public class FacilityDao {
     }
 
     public List<Facility> findFacilityByName(String name) {
-        name = "%"+name+"%";
+        name = "%" + name + "%";
         List<Facility> facilities = jdbcTemplate.query("select " + ALL_FIELDS + " from facility where name like " +
-                ":name",
+                        ":name",
                 Collections.singletonMap("name", name),
                 getRowMapperForFacility());
         return facilities.isEmpty() ? null : facilities;

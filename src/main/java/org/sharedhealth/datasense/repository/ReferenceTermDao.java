@@ -21,7 +21,7 @@ public class ReferenceTermDao {
     public void saveOrUpdate(final TrReferenceTerm trReferenceTerm) {
         HashMap<String, Object> map = getParameterMap(trReferenceTerm);
         String sql;
-        if(findByReferenceTermUuid(trReferenceTerm.getReferenceTermUuid()) == null) {
+        if (findByReferenceTermUuid(trReferenceTerm.getReferenceTermUuid()) == null) {
             sql = "insert into reference_term (reference_term_uuid, name, code, source) values " +
                     "(:reference_term_uuid, :name, :code, :source)";
         } else {
@@ -61,7 +61,7 @@ public class ReferenceTermDao {
                         return trReferenceTerm;
                     }
                 });
-        return trReferenceTerms.isEmpty()? null : trReferenceTerms.get(0);
+        return trReferenceTerms.isEmpty() ? null : trReferenceTerms.get(0);
     }
 
     private HashMap<String, Object> getParameterMap(TrReferenceTerm trReferenceTerm) {

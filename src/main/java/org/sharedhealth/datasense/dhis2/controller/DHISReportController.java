@@ -111,7 +111,7 @@ public class DHISReportController extends DatasenseController {
     @RequestMapping(value = "/schedule/{datasetId}", method = RequestMethod.POST)
     @PreAuthorize("hasAuthority('ROLE_SHR System Admin')")
     public ModelAndView scheduleReportSubmission(ReportScheduleRequest scheduleRequest) {
-        logAccessDetails("Scheduling report submissiom for " + scheduleRequest. getDatasetName());
+        logAccessDetails("Scheduling report submissiom for " + scheduleRequest.getDatasetName());
         ArrayList<String> formErrors = new ArrayList<>();
         ArrayList<String> success = new ArrayList<>();
         try {

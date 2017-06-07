@@ -31,9 +31,9 @@ public class TrWebClient {
 
     public TrMedication getTrMedication(String uri) throws IOException, URISyntaxException {
         String response = getResponse(new URI(uri));
-        if(response != null) {
+        if (response != null) {
             TrMedication trMedication = MapperUtil.readFrom(response, TrMedication.class);
-            trMedication.setUuid(StringUtils.substringAfterLast(uri,"/"));
+            trMedication.setUuid(StringUtils.substringAfterLast(uri, "/"));
             return trMedication;
         }
         return null;

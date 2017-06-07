@@ -5,7 +5,9 @@ import org.ict4h.atomfeed.client.domain.FailedEvent;
 import org.ict4h.atomfeed.client.domain.FailedEventRetryLog;
 import org.ict4h.atomfeed.client.repository.AllFailedEvents;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 public class AllFailedEventsInMemoryImpl implements AllFailedEvents {
 
@@ -39,10 +41,11 @@ public class AllFailedEventsInMemoryImpl implements AllFailedEvents {
 
     @Override
     public List<FailedEvent> getOldestNFailedEvents(String feedUri, int numberOfFailedEvents, int failedEventMaxRetry) {
-        if (numberOfFailedEvents < 1) throw new IllegalArgumentException("Number of failed events should at least be one.");
+        if (numberOfFailedEvents < 1)
+            throw new IllegalArgumentException("Number of failed events should at least be one.");
 
         List<FailedEvent> lastNFailedEvents = new ArrayList<FailedEvent>();
-        for (int i = failedEvents.size() - 1; i >= 0 ; i--) {
+        for (int i = failedEvents.size() - 1; i >= 0; i--) {
             if (lastNFailedEvents.size() == numberOfFailedEvents) break;
 
             FailedEvent failedEvent = failedEvents.get(i);
@@ -56,7 +59,7 @@ public class AllFailedEventsInMemoryImpl implements AllFailedEvents {
 
     public List<FailedEvent> getAllFailedEvents(String feedUri) {
         List<FailedEvent> allFailedEvents = new ArrayList<FailedEvent>();
-        for (int i = failedEvents.size() - 1; i >= 0 ; i--) {
+        for (int i = failedEvents.size() - 1; i >= 0; i--) {
             FailedEvent failedEvent = failedEvents.get(i);
             if (failedEvent.getFeedUri().toString().equalsIgnoreCase(feedUri)) {
                 allFailedEvents.add(failedEvent);
@@ -68,7 +71,7 @@ public class AllFailedEventsInMemoryImpl implements AllFailedEvents {
     @Override
     public int getNumberOfFailedEvents(String feedUri) {
         int numberOfFailedEvents = 0;
-        for (int i = failedEvents.size() - 1; i >= 0 ; i--) {
+        for (int i = failedEvents.size() - 1; i >= 0; i--) {
             if (failedEvents.get(i).getFeedUri().toString().equalsIgnoreCase(feedUri)) {
                 numberOfFailedEvents++;
             }

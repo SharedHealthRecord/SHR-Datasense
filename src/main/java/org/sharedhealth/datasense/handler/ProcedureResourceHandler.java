@@ -60,7 +60,7 @@ public class ProcedureResourceHandler implements FhirResourceHandler {
 
         DiagnosticReport diagnosticReport = (DiagnosticReport) report;
         List<CodeableConcept> codeableConcepts = diagnosticReport.getCodedDiagnosis();
-        if (codeableConcepts.size() == 0 ) {
+        if (codeableConcepts.size() == 0) {
             return;
         }
         CodeableConcept codeableConcept = codeableConcepts.get(0);

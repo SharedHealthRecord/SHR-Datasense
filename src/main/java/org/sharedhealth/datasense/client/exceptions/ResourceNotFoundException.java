@@ -1,7 +1,5 @@
 package org.sharedhealth.datasense.client.exceptions;
 
-import java.io.IOException;
-
 public class ResourceNotFoundException extends RuntimeException {
 
     private final int errorCode;

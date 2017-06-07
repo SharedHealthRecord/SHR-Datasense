@@ -34,8 +34,7 @@ public class CallableAqsQuery implements Callable<HashMap<String, List<Map<Strin
         String queryString = queryDefinition.getQueryString();
         Pattern p = Pattern.compile("\\:(.*?)\\:");
         Matcher m = p.matcher(queryDefinition.getQueryString());
-        while(m.find())
-        {
+        while (m.find()) {
             String paramName = m.group(1);
             Object paramValue = params.get(paramName);
             if (paramValue == null) {

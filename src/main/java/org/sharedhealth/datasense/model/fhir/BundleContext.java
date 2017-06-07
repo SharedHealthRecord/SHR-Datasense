@@ -23,12 +23,6 @@ public class BundleContext {
         this.shrEncounterId = shrEncounterId;
     }
 
-// todo:remove   public <T extends Element> List<T> getResourcesOfType(Class<T> type) {
-//        ArrayList<T> resources = new ArrayList<>();
-//        List<T> list = bundle.getAllPopulatedChildElementsOfType(type);
-//        return list;
-//    }
-
     public List<EncounterComposition> getEncounterCompositions() {
         if (encounterCompositions == null) {
             List<Composition> compositions = getCompositions();

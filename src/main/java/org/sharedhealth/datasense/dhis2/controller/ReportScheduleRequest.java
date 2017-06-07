@@ -56,7 +56,6 @@ public class ReportScheduleRequest {
     }
 
 
-
     public String getDatasetId() {
         return datasetId;
     }
@@ -172,7 +171,9 @@ public class ReportScheduleRequest {
         }
 
         public abstract String period();
+
         public abstract String startDate();
+
         public abstract String endDate();
     }
 
@@ -180,14 +181,17 @@ public class ReportScheduleRequest {
         public NotImplementedPeriod(String reportStartDate) {
             super(reportStartDate);
         }
+
         @Override
         public String period() {
             return null;
         }
+
         @Override
         public String startDate() {
             return null;
         }
+
         @Override
         public String endDate() {
             return null;
@@ -203,10 +207,12 @@ public class ReportScheduleRequest {
         public String period() {
             return String.format("%04d%02d%02d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.MONTH) + 1, reportCalendar.get(Calendar.DAY_OF_MONTH));
         }
+
         @Override
         public String startDate() {
             return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.MONTH) + 1, reportCalendar.get(Calendar.DAY_OF_MONTH));
         }
+
         @Override
         public String endDate() {
             return startDate();
@@ -222,10 +228,12 @@ public class ReportScheduleRequest {
         public String period() {
             return String.format("%04d%02d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.MONTH) + 1);
         }
+
         @Override
         public String startDate() {
             return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), reportCalendar.get(Calendar.MONTH) + 1, 1);
         }
+
         @Override
         public String endDate() {
             int endDayOfMonth = reportCalendar.getActualMaximum(Calendar.DAY_OF_MONTH);
@@ -242,10 +250,12 @@ public class ReportScheduleRequest {
         public String period() {
             return String.format("%04d", reportCalendar.get(Calendar.YEAR));
         }
+
         @Override
         public String startDate() {
             return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 1, 1);
         }
+
         @Override
         public String endDate() {
             return String.format("%04d-%02d-%02d", reportCalendar.get(Calendar.YEAR), 12, 31);
@@ -263,6 +273,7 @@ public class ReportScheduleRequest {
             return String.format("%04dW%d", calendarFromEndOfWeek.get(Calendar.YEAR),
                     calendarFromEndOfWeek.get(Calendar.WEEK_OF_YEAR));
         }
+
         @Override
         public String startDate() {
             Calendar first = getCalendarForFirstDateOfWeek();
@@ -304,16 +315,17 @@ public class ReportScheduleRequest {
 
         private int getQuarterNumber() {
             int month = reportCalendar.get(Calendar.MONTH);
-            return month/3 + 1;
+            return month / 3 + 1;
         }
 
         @Override
         public String startDate() {
             Calendar first = (Calendar) reportCalendar.clone();
             int quarterNumber = getQuarterNumber();
-            int startMonth = quarterNumber*3 - 2;
+            int startMonth = quarterNumber * 3 - 2;
             return String.format("%04d-%02d-%02d", first.get(Calendar.YEAR), startMonth, 1);
         }
+
         @Override
         public String endDate() {
             Calendar last = (Calendar) reportCalendar.clone();

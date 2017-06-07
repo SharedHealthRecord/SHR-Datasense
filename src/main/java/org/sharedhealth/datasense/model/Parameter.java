@@ -1,7 +1,9 @@
 package org.sharedhealth.datasense.model;
 
 public class Parameter {
-    public enum ParameterType { SYSTEM, USER_DEFINED };
+    public enum ParameterType {SYSTEM, USER_DEFINED}
+
+    ;
 
     private int paramId = -1;
     private String paramName;

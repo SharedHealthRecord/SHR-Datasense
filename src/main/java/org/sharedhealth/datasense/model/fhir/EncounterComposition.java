@@ -1,6 +1,7 @@
 package org.sharedhealth.datasense.model.fhir;
 
 
+import org.apache.commons.lang3.StringUtils;
 import org.hl7.fhir.dstu3.model.*;
 
 import java.util.ArrayList;
@@ -53,15 +54,6 @@ public class EncounterComposition {
     public List<Resource> getTopLevelResources() {
         return identifyTopLevelResourcesByExclusion();
     }
-
-    // todo: remove    public ArrayList<Resource> getOnlyParents() {
-    //        ArrayList<Resource> compositionRefResources = getCompositionRefResources();
-    //        for (Resource compositionRefResource : compositionRefResources) {
-    //            //
-    //        }
-    //        return null;
-    //    }
-
 
     private List<Resource> identifyTopLevelResourcesByExclusion() {
         ArrayList<Resource> compositionRefResources = getCompositionRefResources();
@@ -128,7 +120,7 @@ public class EncounterComposition {
 
     private boolean isChildReference(HashSet<Reference> childReferenceDts, String resourceRef) {
         for (Reference childRef : childReferenceDts) {
-            if (!childRef.getReference().isEmpty() && childRef.getReference().equals(resourceRef)) {
+            if (StringUtils.isNotBlank(childRef.getReference()) && childRef.getReference().equals(resourceRef)) {
                 return true;
             }
         }
@@ -159,22 +151,6 @@ public class EncounterComposition {
     public Composition getComposition() {
         return composition;
     }
-
-    // todo: fix if needed   public ArrayList<Resource> getParentResources(String referenceId) {
-    //        ArrayList<Resource> refResources = getCompositionRefResources();
-    //        ArrayList<Resource> parentRefs = new ArrayList<>();
-    //        for (Resource refResource : refResources) {
-    //            if (!refResource.getId().getValue().equals(referenceId)) {
-    //                List<Reference> childReferences = refResource.getAllPopulatedChildElementsOfType(Reference.class);
-    //                for (Reference childReference : childReferences) {
-    //                    if (childReference.getReference().getValue().equals(referenceId)) {
-    //                        parentRefs.add(refResource);
-    //                    }
-    //                }
-    //            }
-    //        }
-    //        return parentRefs;
-    //    }
 
     public Resource getResourceByReference(Reference resultReerence) {
         return context.getResourceForReference(resultReerence);

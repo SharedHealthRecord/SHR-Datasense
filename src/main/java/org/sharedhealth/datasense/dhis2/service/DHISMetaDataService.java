@@ -10,7 +10,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.servlet.ModelAndView;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -45,7 +44,7 @@ public class DHISMetaDataService {
     private List<DHISReportConfig> mergeWithConfiguredReports(final List<DHISReportConfig> mappedDatasets) {
         List<DHISReportConfig> dataSets = new ArrayList<>();
         try {
-            Resource[] resources = context.getResources("file://"+properties.getAqsConfigLocationPath() + "*.json");
+            Resource[] resources = context.getResources("file://" + properties.getAqsConfigLocationPath() + "*.json");
             for (Resource resource : resources) {
                 String filename = resource.getFilename();
                 DHISReportConfig mds = findInMapped(mappedDatasets, filename);
@@ -63,7 +62,7 @@ public class DHISMetaDataService {
 
     private DHISReportConfig findInMapped(List<DHISReportConfig> mappedDatasets, String filename) {
         for (DHISReportConfig mds : mappedDatasets) {
-            if  (mds.getConfigFile().equals(filename)) {
+            if (mds.getConfigFile().equals(filename)) {
                 return mds;
             }
         }

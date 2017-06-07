@@ -38,7 +38,7 @@ public class DrugProcessorTest {
     @Test
     public void shouldProcessADrugIfAssociatedConceptIsDownloaded() throws Exception {
         TrMedication drug = new TrMedication();
-        drug.setCode(getCodeableConcept("CODE","ConceptId"));
+        drug.setCode(getCodeableConcept("CODE", "ConceptId"));
         when(conceptDao.findByConceptUuid("ConceptId")).thenReturn(new TrConcept());
 
         drugProcessor.process(drug);

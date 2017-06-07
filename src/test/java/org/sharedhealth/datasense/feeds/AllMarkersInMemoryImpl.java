@@ -9,10 +9,10 @@ import java.util.HashMap;
 
 public class AllMarkersInMemoryImpl implements AllMarkers {
 
-    private final HashMap<URI,Marker> map;
+    private final HashMap<URI, Marker> map;
 
     public AllMarkersInMemoryImpl() {
-        map = new HashMap<URI,Marker>();
+        map = new HashMap<URI, Marker>();
     }
 
     @Override

@@ -19,7 +19,7 @@ public class StringUtil {
             return trimmedValue;
         }
     }
-    
+
     public static String removePrefix(String value, String prefix) {
         String trimmedValue = value.trim();
         if (trimmedValue.startsWith(prefix)) {

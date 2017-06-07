@@ -190,7 +190,7 @@ public class JobSchedulerService {
                     continue;
                 }
 
-                logger.info(String.format("Getting job details for %s", jobKey ));
+                logger.info(String.format("Getting job details for %s", jobKey));
                 JobDataMap jobDataMap;
                 try {
                     jobDataMap = scheduler.getJobDetail(jobKey).getJobDataMap();

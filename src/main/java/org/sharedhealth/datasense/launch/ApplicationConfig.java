@@ -25,7 +25,7 @@ public class ApplicationConfig {
         engine.setTemplateResolver(templateResolver());
         return engine;
     }
-    
+
     @Bean
     public ThymeleafViewResolver viewResolver() {
         ThymeleafViewResolver viewResolver = new ThymeleafViewResolver();

@@ -76,7 +76,7 @@ public class DrugDaoIT {
 
     private CodeableConcept getCodeableConcept(String code, String conceptId) {
         CodeableConcept drugCode = new CodeableConcept();
-        drugCode.addCoding(getCoding("http://tr.com/openmrs/ws/rest/v1/tr/referenceterms/"+ code, code));
+        drugCode.addCoding(getCoding("http://tr.com/openmrs/ws/rest/v1/tr/referenceterms/" + code, code));
         drugCode.addCoding(getCoding("http://tr.com/openmrs/ws/rest/v1/tr/concepts/concept-uuid", conceptId));
         return drugCode;
     }

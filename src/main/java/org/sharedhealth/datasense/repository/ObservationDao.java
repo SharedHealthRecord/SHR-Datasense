@@ -40,7 +40,7 @@ public class ObservationDao {
         jdbcTemplate.update(sql, new MapSqlParameterSource(map));
     }
 
-    public void deleteExisting(String encounterId){
+    public void deleteExisting(String encounterId) {
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", encounterId);
 

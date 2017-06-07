@@ -22,7 +22,7 @@ public class EncounterReference {
         return value;
     }
 
-    public String getEncounterId(){
+    public String getEncounterId() {
         return this.getValue().getEncounterId();
     }
 

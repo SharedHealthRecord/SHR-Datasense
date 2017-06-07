@@ -80,7 +80,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
         String conceptId = getConceptId(codings);
         String code = getReferenceCode(codings);
         String parentObsUUID = null;
-        if ( (conceptId != null) || (code != null)) {
+        if ((conceptId != null) || (code != null)) {
             observation.setConceptId(conceptId);
             observation.setReferenceCode(code);
 
@@ -90,7 +90,7 @@ public class ObservationResourceHandler implements FhirResourceHandler {
             observation.setDatetime(composition.getEncounterReference().getValue().getEncounterDateTime());
 
             observation.setValue(observationValueMapper.getObservationValue(fhirObservation.getValue()));
-            if(null != reportId) {
+            if (null != reportId) {
                 observation.setReportId(reportId);
             }
             observation.setObservationId(observationDao.save(observation));

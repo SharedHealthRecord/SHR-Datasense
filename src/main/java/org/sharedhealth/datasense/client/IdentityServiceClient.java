@@ -88,7 +88,7 @@ public class IdentityServiceClient {
     public UserInfo getUserInfo(IdentityToken tokenForUser) {
         try {
             String userInfoUrl = StringUtil.ensureSuffix(properties.getIdpServerUserInfoUrl(), URL_SEPARATOR) + tokenForUser.toString();
-            String response = new WebClient().get(new URI(userInfoUrl),getHrmAuthTokenHeaders(properties));
+            String response = new WebClient().get(new URI(userInfoUrl), getHrmAuthTokenHeaders(properties));
             return MapperUtil.readFrom(response, UserInfo.class);
         } catch (IOException e) {
             logger.error("Unable to authenticate user.", e);

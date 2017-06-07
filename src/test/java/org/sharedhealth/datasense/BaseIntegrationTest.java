@@ -34,19 +34,19 @@ public class BaseIntegrationTest {
         return parameter;
     }
 
-    public Properties loadProperties(String filename){
+    public Properties loadProperties(String filename) {
         Properties prop = new Properties();
         InputStream input = null;
         try {
             input = BaseIntegrationTest.class.getClassLoader().getResourceAsStream(filename);
-            if(input==null){
+            if (input == null) {
                 return prop;
             }
             prop.load(input);
         } catch (IOException ex) {
             ex.printStackTrace();
-        } finally{
-            if(input!=null){
+        } finally {
+            if (input != null) {
                 try {
                     input.close();
                 } catch (IOException e) {

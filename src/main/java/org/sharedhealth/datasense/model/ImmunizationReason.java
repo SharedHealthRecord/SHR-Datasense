@@ -1,7 +1,5 @@
 package org.sharedhealth.datasense.model;
 
-import java.util.UUID;
-
 public class ImmunizationReason extends BaseResource {
     private String code;
     private String descr;

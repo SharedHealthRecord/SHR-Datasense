@@ -45,16 +45,16 @@ public class PatientDaoIT {
         String hid = "1234567";
         patient.setHid(hid);
 
-        Map<String, Object> fields = new HashMap<String, Object>(){{
+        Map<String, Object> fields = new HashMap<String, Object>() {{
             put("dob", "1990-02-14T14:20:00.000+05:30");
             put("gender", "M");
-            put("address", new Address("","30","26","15",null,null, null,null));
+            put("address", new Address("", "30", "26", "15", null, null, null, null));
         }};
 
         setFields(patient, fields);
         patientDao.save(patient);
 
-        Map<String, Object> updatedFields = new HashMap(){{
+        Map<String, Object> updatedFields = new HashMap() {{
             put("dob", "1990-02-06T14:20:00.000+05:30");
         }};
 
@@ -75,16 +75,16 @@ public class PatientDaoIT {
         String hid = "1234567";
         patient.setHid(hid);
 
-        Map<String, Object> fields = new HashMap<String, Object>(){{
+        Map<String, Object> fields = new HashMap<String, Object>() {{
             put("dob", "2015-01-01");
             put("gender", "M");
-            put("address", new Address("","30","26","15",null,null, null,null));
+            put("address", new Address("", "30", "26", "15", null, null, null, null));
         }};
 
         setFields(patient, fields);
         patientDao.save(patient);
 
-        Map<String, Object> updatedFields = new HashMap(){{
+        Map<String, Object> updatedFields = new HashMap() {{
             put("gender", "F");
         }};
 
@@ -105,17 +105,17 @@ public class PatientDaoIT {
         String hid = "1234567";
         patient.setHid(hid);
 
-        Map<String, Object> fields = new HashMap<String, Object>(){{
+        Map<String, Object> fields = new HashMap<String, Object>() {{
             put("dob", "2015-01-01");
             put("gender", "M");
-            put("address", new Address("","30","26","15",null,null, null,null));
+            put("address", new Address("", "30", "26", "15", null, null, null, null));
         }};
 
         setFields(patient, fields);
         patientDao.save(patient);
 
-        Map<String, Object> updatedFields = new HashMap(){{
-            put("address", new Address("","20","22","16",null,null, null,null));
+        Map<String, Object> updatedFields = new HashMap() {{
+            put("address", new Address("", "20", "22", "16", null, null, null, null));
         }};
 
         Map<String, Object> expectedFields = new HashMap<>(fields);
@@ -129,16 +129,16 @@ public class PatientDaoIT {
 
     }
 
-    private PatientUpdate getPatientUpdate(Map<String, Object> fields, Map<String, Object> updatedFields, String healthId){
-        PatientUpdate patientUpdate= new PatientUpdate();
+    private PatientUpdate getPatientUpdate(Map<String, Object> fields, Map<String, Object> updatedFields, String healthId) {
+        PatientUpdate patientUpdate = new PatientUpdate();
         PatientData patientData = new PatientData();
-        if(updatedFields.get("gender") != null){
+        if (updatedFields.get("gender") != null) {
             patientData.setGenderChange(new Change(fields.get("gender"), updatedFields.get("gender")));
         }
-        if(updatedFields.get("dob") != null){
+        if (updatedFields.get("dob") != null) {
             patientData.setDobChange(new Change(fields.get("dob"), updatedFields.get("dob")));
         }
-        if(updatedFields.get("address") != null){
+        if (updatedFields.get("address") != null) {
             patientData.setAddressChange(new AddressChange(((Address) fields.get("address")), ((Address) updatedFields.get("address"))));
         }
 
@@ -148,9 +148,9 @@ public class PatientDaoIT {
     }
 
     private void setFields(Patient patient, Map<String, Object> fields) {
-        patient.setDateOfBirth(DateUtil.parseDate((String)fields.get("dob")));
-        patient.setGender((String)fields.get("gender"));
-        patient.setPresentAddress((Address)fields.get("address"));
+        patient.setDateOfBirth(DateUtil.parseDate((String) fields.get("dob")));
+        patient.setGender((String) fields.get("gender"));
+        patient.setPresentAddress((Address) fields.get("address"));
     }
 
     private void assertPatient(final Patient patient, String healthId) {

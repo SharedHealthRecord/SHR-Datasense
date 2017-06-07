@@ -1,7 +1,6 @@
 package org.sharedhealth.datasense.repository;
 
 import org.apache.commons.collections4.CollectionUtils;
-import org.joda.time.DateTime;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.util.DateUtil;
 import org.springframework.beans.factory.annotation.Autowired;

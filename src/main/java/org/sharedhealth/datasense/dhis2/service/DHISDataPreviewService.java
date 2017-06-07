@@ -30,7 +30,7 @@ public class DHISDataPreviewService {
         List<Map> arrayList = new ArrayList<>();
         for (String facilityId : scheduleRequest.getSelectedFacilities()) {
             DHISOrgUnitConfig orgUnitConfig = dhisConfigDao.findOrgUnitConfigFor(facilityId);
-            if(orgUnitConfig == null) {
+            if (orgUnitConfig == null) {
                 String message = "Facility with id [%s] is not configured with a valid DHIS Organization";
                 logger.error(String.format(message, facilityId));
                 formErrors.add(String.format(message, facilityId));

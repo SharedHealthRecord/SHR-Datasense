@@ -1,6 +1,5 @@
 package org.sharedhealth.datasense.handler.mappers;
 
-import ca.uhn.fhir.model.primitive.*;
 import org.hl7.fhir.dstu3.model.*;
 import org.sharedhealth.datasense.util.DateUtil;
 

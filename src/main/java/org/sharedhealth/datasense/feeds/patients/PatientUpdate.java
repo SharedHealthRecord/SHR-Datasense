@@ -63,7 +63,9 @@ public class PatientUpdate {
         this.eventTime = eventTime;
     }
 
-    public boolean hasMergedWithChanges() {return changeSetMap.hasMergedChanges();}
+    public boolean hasMergedWithChanges() {
+        return changeSetMap.hasMergedChanges();
+    }
 
 
     @Override

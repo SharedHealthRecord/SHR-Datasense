@@ -86,7 +86,6 @@ public class FeedProcessorIT {
                         .withBody(asString("jsons/R" + REFERENCE_TERM_UUID + ".json"))));
 
 
-
         String trBasePath = "http://localhost:9997";
         new TRFeedProcessor(referenceTermEventWorker,
                 trBasePath + trReferenceTermAtomfeedUrl + "1",
