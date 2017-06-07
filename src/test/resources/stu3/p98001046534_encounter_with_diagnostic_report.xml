@@ -192,7 +192,7 @@
                 </identifier>
                 <basedOn>
                     <reference
-                            value="http://localhost:9997/patients/98001046534/encounters/shr-enc-12#DiagnosticOrder/880ae396-jfjf-4629-1930-f15206e63ab0"/>
+                            value="http://localhost:9997/patients/98001046534/encounters/shr-enc-12#ProcedureRequest/880ae396-jfjf-4629-1930-f15206e63ab0"/>
                 </basedOn>
                 <status value="final"/>
                 <category>

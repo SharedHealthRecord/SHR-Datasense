@@ -106,7 +106,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugUuid = "cd89844d-8211-11e5-aa01-0050568276cf";
         String expectedDrugName = null;
         String expectedPrescriberId = "20";
-        String expectedStatus = "NEW";
+        String expectedStatus = "active";
         String expectedShrMedicationOrderUuid = SHR_ENCOUNTER_ID + ":97711fe6-d025-4324-96a0-a480a49bb893";
 
         assertPrescription(prescribedDrug, SHR_ENCOUNTER_ID, expectedDate, expectedDrugUuid, expectedDrugName,
@@ -135,7 +135,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugUuid = "cd74d25f-8211-11e5-aa01-0050568276cf";
         String expectedDrugName = null;
         String expectedPrescriberId = "20";
-        String expectedStatus = "DISCONTINUE";
+        String expectedStatus = "stopped";
         String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":2af6380b-466f-447a-9bfa-b1d5f816e09c";
         String expectedPriorShrMedicationUuid = SHR_ENCOUNTER_ID + ":acaccc8b-a011-488d-bea3-d2c88a0b07c1";
 
@@ -157,7 +157,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         String expectedDrugUuid = "cd858ce0-8211-11e5-aa01-0050568276cf";
         String expectedDrugName = null;
         String expectedPrescriberId = "20";
-        String expectedStatus = "DISCONTINUE";
+        String expectedStatus = "stopped";
         String expectedShrMedicationOrderUuid = discontinuingEncounterId + ":efd4dc92-eb9f-4141-92fb-03e89c536fa4";
         String expectedPriorShrMedicationUuid = null;
 
@@ -177,7 +177,7 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
         Date expectedDate = DateUtil.parseDate("24/06/2016", DateUtil.DATE_FMT_DD_MM_YYYY);
         String expectedDrugName = "Asthalin";
         String expectedPrescriberId = "20";
-        String expectedStatus = "NEW";
+        String expectedStatus = "active";
         String expectedShrMedicationOrderUuid = SHR_ENCOUNTER_ID + ":2d161c05-64be-4de4-a488-7ed499d2ccca";
 
         assertPrescription(prescribedDrug, SHR_ENCOUNTER_ID, expectedDate, null, expectedDrugName,
@@ -202,13 +202,14 @@ public class PrescribedDrugResourceHandlerIT extends BaseIntegrationTest {
 
         assertEquals(PATIENT_HID, prescribedDrug.getPatientHid());
         assertEquals(shrEncounterId, prescribedDrug.getEncounterId());
-        assertEquals(expectedDate, prescribedDrug.getPrescriptionDateTime());
         assertEquals(expectedDrugUuid, prescribedDrug.getDrugCode());
         assertEquals(expectedDrugName, prescribedDrug.getNonCodedName());
-        assertEquals(expectedPrescriber, prescribedDrug.getPrescriber());
-        assertEquals(expectedStatus, prescribedDrug.getStatus());
         assertEquals(expectedShrMedicationOrderUuid, prescribedDrug.getShrMedicationOrderUuid());
         assertEquals(expectedPriorShrMedicationOrderUuid, prescribedDrug.getPriorShrMedicationOrderUuid());
+
+        assertEquals(expectedDate, prescribedDrug.getPrescriptionDateTime());
+        assertEquals(expectedPrescriber, prescribedDrug.getPrescriber());
+        assertEquals(expectedStatus, prescribedDrug.getStatus());
 
         assertNotNull(prescribedDrug.getUuid());
     }

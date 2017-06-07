@@ -9,9 +9,6 @@ import org.sharedhealth.datasense.repository.PrescribedDrugDao;
 import org.sharedhealth.datasense.util.ResourceReferenceUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
-
-import java.util.List;
 
 @Component
 public class PrescribedDrugResourceHandler implements FhirResourceHandler {
@@ -34,11 +31,10 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
 
         prescribedDrug.setPatientHid(healthId);
         prescribedDrug.setEncounterId(encounterId);
-        //todo:  prescribedDrug.setPrescriptionDateTime(medicationOrder.getDateWritten());
+        prescribedDrug.setPrescriptionDateTime(medicationOrder.getAuthoredOn());
         setDrugNameAndUuid(medicationOrder, prescribedDrug);
         prescribedDrug.setPrescriber(getMedicationPrescriber(medicationOrder));
-        setStatus(prescribedDrug, medicationOrder);
-
+        prescribedDrug.setStatus(medicationOrder.getStatus().toCode());
         setShrMedicationId(prescribedDrug, encounterId, medicationOrder);
         setPriorMedicationId(prescribedDrug, medicationOrder);
 
@@ -46,8 +42,8 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
     }
 
     private void setShrMedicationId(PrescribedDrug prescribedDrug, String encounterId, MedicationRequest medicationOrder) {
-        String medicationOrderUuid = medicationOrder.getId();
-        prescribedDrug.setShrMedicationOrderUuid(getConcatenatedShrMedicationRequestUuid(encounterId, medicationOrderUuid));
+        String medicationOrderIdPart = StringUtils.substringAfter(medicationOrder.getId(), "urn:uuid:");
+        prescribedDrug.setShrMedicationOrderUuid(getConcatenatedShrMedicationRequestUuid(encounterId, medicationOrderIdPart));
     }
 
     private void setPriorMedicationId(PrescribedDrug prescribedDrug, MedicationRequest medicationOrder) {
@@ -74,14 +70,6 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
 
     }
 
-    private void setStatus(PrescribedDrug prescribedDrug, MedicationRequest medicationOrder) {
-        List<Extension> undeclaredExtensionsByUrl = medicationOrder.getExtensionsByUrl(FHIR_MEDICATION_ORDER_STATUS_EXTENSION_URL);
-        if (!CollectionUtils.isEmpty(undeclaredExtensionsByUrl)) {
-            prescribedDrug.setStatus(undeclaredExtensionsByUrl.get(0).getValue().toString());
-            return;
-        }
-    }
-
     private void setDrugNameAndUuid(MedicationRequest medicationOrder, PrescribedDrug prescribedDrug) {
         CodeableConcept medication = (CodeableConcept) medicationOrder.getMedication();
         Coding codingFirstRep = medication.getCodingFirstRep();
@@ -94,7 +82,7 @@ public class PrescribedDrugResourceHandler implements FhirResourceHandler {
     }
 
     private String getMedicationPrescriber(MedicationRequest medicationOrder) {
-        return null;
-        //todo: return ProviderReference.parseUrl(medicationOrder.getPrescriber().getReference().getValue());
+        MedicationRequest.MedicationRequestRequesterComponent requester = medicationOrder.getRequester();
+        return ProviderReference.parseUrl(requester.getAgent().getReference());
     }
 }

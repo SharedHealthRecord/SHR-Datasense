@@ -79,7 +79,7 @@ public class ClinicalEncounterProcessorIT {
         assertEquals(facilityLocation, encounter.getLocationCode());
         assertEquals(DateUtil.parseDate("2015-09-04T12:34:46.000+05:30"), encounter.getEncounterDateTime());
         assertEquals("REG", encounter.getEncounterType());
-        assertEquals("outpatient", encounter.getEncounterVisitType());
+        assertEquals("AMB", encounter.getEncounterVisitType());
     }
 
     private Encounter findEncounterById(String encounterId) {
