@@ -142,7 +142,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
         String concatenatedShrOrderUuid = "shr-enc-12:880ae396-jfjf-4629-1930-f15206e63ab0";
 
-        DiagnosticOrder order = new DiagnosticOrder();
+        ProcedureRequest order = new ProcedureRequest();
         order.setEncounterId("shr-enc-12");
         order.setPatientHid(PATIENT_HID);
         order.setOrderer("someone");
@@ -162,7 +162,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
     public void shouldAssociateDiagnosticReportWithOrderUsingEncIdAndConceptId() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_report_for_lab.xml", "urn:uuid:2f933127-feb9-4131-be06-4c92980d0b7b");
 
-        DiagnosticOrder order = new DiagnosticOrder();
+        ProcedureRequest order = new ProcedureRequest();
         order.setEncounterId("shrEncounterId3");
         order.setPatientHid(PATIENT_HID);
         order.setOrderer("someone");
@@ -243,20 +243,20 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
                 });
     }
 
-    private Integer saveOrder(DiagnosticOrder diagnosticOrder) {
+    private Integer saveOrder(ProcedureRequest procedureRequest) {
         HashMap<String, Object> map = new HashMap<>();
-        map.put("patient_hid", diagnosticOrder.getPatientHid());
-        map.put("encounter_id", diagnosticOrder.getEncounterId());
-        map.put("order_datetime", diagnosticOrder.getOrderDate());
-        map.put("order_category", diagnosticOrder.getOrderCategory());
-        map.put("code", diagnosticOrder.getCode());
-        map.put("orderer", diagnosticOrder.getOrderer());
-        map.put("order_concept", diagnosticOrder.getOrderConcept());
-        map.put("order_status", diagnosticOrder.getOrderStatus());
-        map.put("uuid", diagnosticOrder.getUuid());
-        map.put("shr_order_uuid", diagnosticOrder.getShrOrderUuid());
+        map.put("patient_hid", procedureRequest.getPatientHid());
+        map.put("encounter_id", procedureRequest.getEncounterId());
+        map.put("order_datetime", procedureRequest.getOrderDate());
+        map.put("order_category", procedureRequest.getOrderCategory());
+        map.put("code", procedureRequest.getCode());
+        map.put("orderer", procedureRequest.getOrderer());
+        map.put("order_concept", procedureRequest.getOrderConcept());
+        map.put("order_status", procedureRequest.getOrderStatus());
+        map.put("uuid", procedureRequest.getUuid());
+        map.put("shr_order_uuid", procedureRequest.getShrOrderUuid());
 
-        String sql = "insert into diagnostic_order (patient_hid, encounter_id, order_datetime, order_category," +
+        String sql = "insert into procedure_request (patient_hid, encounter_id, order_datetime, order_category," +
                 " code , orderer, order_concept, order_status, uuid, shr_order_uuid) values(:patient_hid, :encounter_id, " +
                 ":order_datetime, :order_category, :code, :orderer, :order_concept, :order_status, :uuid, :shr_order_uuid)";
 

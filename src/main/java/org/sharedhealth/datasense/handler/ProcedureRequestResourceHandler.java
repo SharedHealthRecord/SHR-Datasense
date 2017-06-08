@@ -3,12 +3,10 @@ package org.sharedhealth.datasense.handler;
 
 import org.hl7.fhir.dstu3.model.CodeableConcept;
 import org.hl7.fhir.dstu3.model.Coding;
-import org.hl7.fhir.dstu3.model.ProcedureRequest;
 import org.hl7.fhir.dstu3.model.Resource;
-import org.sharedhealth.datasense.model.DiagnosticOrder;
+import org.sharedhealth.datasense.model.ProcedureRequest;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
-import org.sharedhealth.datasense.repository.DiagnosticOrderDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
@@ -21,45 +19,42 @@ import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 @Component
 public class ProcedureRequestResourceHandler implements FhirResourceHandler {
     @Autowired
-    DiagnosticOrderDao diagnosticOrderDao;
-
-    private static final String FHIR_DIAGNOSTIC_ORDER_CATEGORY_EXTENSION_URL = "https://sharedhealth.atlassian.net/wiki/display/docs/fhir-extensions#DiagnosticOrderCategory";
-    private static final String FHIR_DIAGNOSTIC_ORDER_LAB_CATEGORY_CODE = "LAB";
+    org.sharedhealth.datasense.repository.ProcedureRequest procedureRequest;
 
     @Override
     public boolean canHandle(Resource resource) {
-        return resource instanceof ProcedureRequest;
+        return resource instanceof org.hl7.fhir.dstu3.model.ProcedureRequest;
     }
 
     @Override
     public void process(Resource resource, EncounterComposition composition) {
-        ProcedureRequest fhirProcedureRequest = (ProcedureRequest) resource;
+        org.hl7.fhir.dstu3.model.ProcedureRequest fhirProcedureRequest = (org.hl7.fhir.dstu3.model.ProcedureRequest) resource;
         createAndSaveDiagnosticOrder(composition, fhirProcedureRequest);
     }
 
-    private void createAndSaveDiagnosticOrder(EncounterComposition composition, ProcedureRequest fhirDiagnosticOrder) {
-        DiagnosticOrder diagnosticOrder = new DiagnosticOrder();
-        diagnosticOrder.setPatientHid(composition.getPatientReference().getHealthId());
-        diagnosticOrder.setEncounterId(composition.getEncounterReference().getEncounterId());
-        diagnosticOrder.setOrderStatus(fhirDiagnosticOrder.getStatus().toCode());
-        diagnosticOrder.setOrderDate(fhirDiagnosticOrder.getAuthoredOn());
+    private void createAndSaveDiagnosticOrder(EncounterComposition composition, org.hl7.fhir.dstu3.model.ProcedureRequest fhirDiagnosticOrder) {
+        ProcedureRequest procedureRequest = new ProcedureRequest();
+        procedureRequest.setPatientHid(composition.getPatientReference().getHealthId());
+        procedureRequest.setEncounterId(composition.getEncounterReference().getEncounterId());
+        procedureRequest.setOrderStatus(fhirDiagnosticOrder.getStatus().toCode());
+        procedureRequest.setOrderDate(fhirDiagnosticOrder.getAuthoredOn());
 
         String ordererId = ProviderReference.parseUrl(fhirDiagnosticOrder.getRequester().getAgent().getReference());
-        diagnosticOrder.setOrderer(ordererId);
+        procedureRequest.setOrderer(ordererId);
 
-        setCategory(diagnosticOrder, fhirDiagnosticOrder);
-        populateOrderCodeAndConcept(diagnosticOrder, fhirDiagnosticOrder);
-        if (diagnosticOrder.getOrderConcept() == null && diagnosticOrder.getCode() == null) return;
-        setConcatenatedShrOrderUuid(fhirDiagnosticOrder, diagnosticOrder);
+        setCategory(procedureRequest, fhirDiagnosticOrder);
+        populateOrderCodeAndConcept(procedureRequest, fhirDiagnosticOrder);
+        if (procedureRequest.getOrderConcept() == null && procedureRequest.getCode() == null) return;
+        setConcatenatedShrOrderUuid(fhirDiagnosticOrder, procedureRequest);
 
-        diagnosticOrderDao.save(diagnosticOrder);
+        this.procedureRequest.save(procedureRequest);
     }
 
-    private void setConcatenatedShrOrderUuid(ProcedureRequest fhirDiagnosticOrder, DiagnosticOrder diagnosticOrder) {
-        diagnosticOrder.setShrOrderUuid(diagnosticOrder.getEncounterId() + ":" + StringUtils.substringAfter(fhirDiagnosticOrder.getId(), "urn:uuid:"));
+    private void setConcatenatedShrOrderUuid(org.hl7.fhir.dstu3.model.ProcedureRequest fhirDiagnosticOrder, ProcedureRequest procedureRequest) {
+        procedureRequest.setShrOrderUuid(procedureRequest.getEncounterId() + ":" + StringUtils.substringAfter(fhirDiagnosticOrder.getId(), "urn:uuid:"));
     }
 
-    private void setCategory(DiagnosticOrder order, ProcedureRequest fhirOrder) {
+    private void setCategory(ProcedureRequest order, org.hl7.fhir.dstu3.model.ProcedureRequest fhirOrder) {
         CodeableConcept categoryFirstRep = fhirOrder.getCategoryFirstRep();
         if (null != categoryFirstRep) {
             Coding coding = categoryFirstRep.getCodingFirstRep();
@@ -69,14 +64,14 @@ public class ProcedureRequestResourceHandler implements FhirResourceHandler {
         if (order.getOrderCategory() == null) throw new RuntimeException("Category is not present");
     }
 
-    private void populateOrderCodeAndConcept(DiagnosticOrder diagnosticOrder, ProcedureRequest fhirDiagnosticOrder) {
+    private void populateOrderCodeAndConcept(ProcedureRequest procedureRequest, org.hl7.fhir.dstu3.model.ProcedureRequest fhirDiagnosticOrder) {
         CodeableConcept code = fhirDiagnosticOrder.getCode();
         List<Coding> codings = code.getCoding();
         for (Coding coding : codings) {
             if (isConceptUrl(coding.getSystem())) {
-                diagnosticOrder.setOrderConcept(coding.getCode());
+                procedureRequest.setOrderConcept(coding.getCode());
             } else if (isReferenceTermUrl(coding.getSystem())) {
-                diagnosticOrder.setcode(coding.getCode());
+                procedureRequest.setcode(coding.getCode());
             }
         }
     }
@@ -84,6 +79,6 @@ public class ProcedureRequestResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        diagnosticOrderDao.deleteExisting(composition.getEncounterReference().getEncounterId());
+        procedureRequest.deleteExisting(composition.getEncounterReference().getEncounterId());
     }
 }

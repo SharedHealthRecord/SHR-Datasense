@@ -5,7 +5,7 @@ import org.hl7.fhir.dstu3.model.*;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
-import org.sharedhealth.datasense.repository.DiagnosticOrderDao;
+import org.sharedhealth.datasense.repository.ProcedureRequest;
 import org.sharedhealth.datasense.repository.DiagnosticReportDao;
 import org.sharedhealth.datasense.util.TrUrl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,7 +23,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     @Autowired
     ObservationResourceHandler observationResourceHandler;
     @Autowired
-    DiagnosticOrderDao diagnosticOrderDao;
+    ProcedureRequest procedureRequest;
 
     @Override
     public boolean canHandle(Resource resource) {
@@ -95,7 +95,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         if (null == request) return false;
         String referenceUrl = getReferenceUrlFromResourceReference(request.get(0));
         if (referenceUrl.isEmpty()) return false;
-        return referenceUrl.contains("#" + new ProcedureRequest().getResourceType().name());
+        return referenceUrl.contains("#" + new org.hl7.fhir.dstu3.model.ProcedureRequest().getResourceType().name());
     }
 
     private Integer getConcatenatedShrOrderUuidFromRequest(List<Reference> request) {
@@ -104,7 +104,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         String shrOrderUuid = getOrderUuidFromReferenceUrl(referenceUrl);
 
         String concatenatedShrOrderUuid = orderEncounterId + ":" + shrOrderUuid;
-        return diagnosticOrderDao.getOrderId(concatenatedShrOrderUuid);
+        return procedureRequest.getOrderId(concatenatedShrOrderUuid);
 
     }
 
@@ -113,7 +113,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
         for (Coding codingDt : fhirDiagnosticReport.getCode().getCoding()) {
             if (isConceptUrl(codingDt.getSystem())) {
-                return diagnosticOrderDao.getOrderId(orderEncounterId, codingDt.getCode());
+                return procedureRequest.getOrderId(orderEncounterId, codingDt.getCode());
             }
         }
         return null;

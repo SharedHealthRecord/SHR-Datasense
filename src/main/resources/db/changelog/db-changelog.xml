@@ -1082,5 +1082,15 @@
             <column name="hid_card_status" type="varchar(15)"/>
         </addColumn>
     </changeSet>
-
+    <changeSet id="sharedhealth-datasense-20160008-1100" author="Sukreet">
+        <preConditions onFail="MARK_RAN">
+            <tableExists tableName="diagnostic_order"/>
+        </preConditions>
+        <comment>Renaming the table diagnostic_order to procedure_request</comment>
+        <renameTable newTableName="procedure_request" oldTableName="diagnostic_order"/>
+    </changeSet>
+    <changeSet id="sharedhealth-datasense-20160008-1105" author="Sukreet">
+        <comment>Increasing length of shr_order_uuid column in procedure_request</comment>
+        <modifyDataType tableName="procedure_request" columnName="shr_order_uuid" newDataType="varchar(150)"/>
+    </changeSet>
 </databaseChangeLog>

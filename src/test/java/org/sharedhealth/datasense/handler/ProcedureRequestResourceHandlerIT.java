@@ -12,9 +12,9 @@ import org.sharedhealth.datasense.BaseIntegrationTest;
 import org.sharedhealth.datasense.helpers.DatabaseHelper;
 import org.sharedhealth.datasense.helpers.TestConfig;
 import org.sharedhealth.datasense.launch.DatabaseConfig;
-import org.sharedhealth.datasense.model.DiagnosticOrder;
 import org.sharedhealth.datasense.model.Encounter;
 import org.sharedhealth.datasense.model.Patient;
+import org.sharedhealth.datasense.model.ProcedureRequest;
 import org.sharedhealth.datasense.model.fhir.BundleContext;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,10 +87,10 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     public void shouldSaveASingleDiagnosticOrder() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
         procedureRequestResourceHandler.process(procedureRequest, composition);
-        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
-        assertEquals(1, savedDiagnosticOrders.size());
-        DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
+        List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(1, savedProcedureRequests.size());
+        ProcedureRequest savedProcedureRequest = savedProcedureRequests.get(0);
+        assertDiagnosticOrder(savedProcedureRequest, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
                 "RAD", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
     }
 
@@ -98,10 +98,10 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     public void shouldDefaultCategoryToLAB() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
         procedureRequestResourceHandler.process(procedureRequest, composition);
-        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
-        assertEquals(1, savedDiagnosticOrders.size());
-        DiagnosticOrder savedDiagnosticOrder = savedDiagnosticOrders.get(0);
-        assertDiagnosticOrder(savedDiagnosticOrder, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
+        List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(1, savedProcedureRequests.size());
+        ProcedureRequest savedProcedureRequest = savedProcedureRequests.get(0);
+        assertDiagnosticOrder(savedProcedureRequest, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
                 "LAB", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
     }
 
@@ -110,10 +110,10 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     public void shouldStoreADiagnosticOrderForEachItemInDiagnosticOrder() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_requested_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
         procedureRequestResourceHandler.process(procedureRequest, composition);
-        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
-        assertEquals(2, savedDiagnosticOrders.size());
-        DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
-        DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
+        List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(2, savedProcedureRequests.size());
+        ProcedureRequest firstOrder = savedProcedureRequests.get(0);
+        ProcedureRequest secondOrder = savedProcedureRequests.get(1);
         assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "requested",
                 "LAB", "04-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
         assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "requested",
@@ -125,10 +125,10 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     public void shouldStoreCancelledDiagnosticOrders() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_cancelled_with_multiple_items.xml", "urn:uuid:bc82002c-2cac-4568-b7ed-f73688019b21");
         procedureRequestResourceHandler.process(procedureRequest, composition);
-        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
-        assertEquals(2, savedDiagnosticOrders.size());
-        DiagnosticOrder firstOrder = savedDiagnosticOrders.get(0);
-        DiagnosticOrder secondOrder = savedDiagnosticOrders.get(1);
+        List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(2, savedProcedureRequests.size());
+        ProcedureRequest firstOrder = savedProcedureRequests.get(0);
+        ProcedureRequest secondOrder = savedProcedureRequests.get(1);
         assertDiagnosticOrder(firstOrder, "Q51.3", "092aa1b8-73f6-11e5-b875-0050568225ca", "cancelled", "LAB",
                 "05-04-2016", SHR_ENCOUNTER_ID + ":bc82002c-2cac-4568-b7ed-f73688019b21");
         assertDiagnosticOrder(secondOrder, "77145-1", "dbf1f2cf-7c9e-11e5-b875-0050568225ca", "cancelled", "LAB",
@@ -139,34 +139,34 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
     public void shouldNotStoreDiagnosticOrderWithoutSystemAndCode() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_order_local.xml", "urn:uuid:4286b394-869f-4b80-be42-0fc3a60f42fe#1");
         procedureRequestResourceHandler.process(procedureRequest, composition);
-        List<DiagnosticOrder> savedDiagnosticOrders = findByEncounterId(SHR_ENCOUNTER_ID);
-        assertEquals(0, savedDiagnosticOrders.size());
+        List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
+        assertEquals(0, savedProcedureRequests.size());
     }
 
-    private void assertDiagnosticOrder(DiagnosticOrder savedDiagnosticOrder, String orderCode, String orderConcept,
+    private void assertDiagnosticOrder(ProcedureRequest savedProcedureRequest, String orderCode, String orderConcept,
                                        String orderStatus, String orderCategory, String orderDate, String shrOrderUuid) throws ParseException {
-        assertEquals(PATIENT_HID, savedDiagnosticOrder.getPatientHid());
-        assertEquals(SHR_ENCOUNTER_ID, savedDiagnosticOrder.getEncounterId());
-        assertEquals(orderCategory, savedDiagnosticOrder.getOrderCategory());
-        assertEquals("24", savedDiagnosticOrder.getOrderer());
-        assertEquals(orderStatus, savedDiagnosticOrder.getOrderStatus());
-        assertEquals(orderCode, savedDiagnosticOrder.getCode());
-        assertEquals(orderConcept, savedDiagnosticOrder.getOrderConcept());
-        assertEquals(shrOrderUuid, savedDiagnosticOrder.getShrOrderUuid());
+        assertEquals(PATIENT_HID, savedProcedureRequest.getPatientHid());
+        assertEquals(SHR_ENCOUNTER_ID, savedProcedureRequest.getEncounterId());
+        assertEquals(orderCategory, savedProcedureRequest.getOrderCategory());
+        assertEquals("24", savedProcedureRequest.getOrderer());
+        assertEquals(orderStatus, savedProcedureRequest.getOrderStatus());
+        assertEquals(orderCode, savedProcedureRequest.getCode());
+        assertEquals(orderConcept, savedProcedureRequest.getOrderConcept());
+        assertEquals(shrOrderUuid, savedProcedureRequest.getShrOrderUuid());
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        assertEquals(orderDate, simpleDateFormat.format(savedDiagnosticOrder.getOrderDate()));
-        assertNotNull(savedDiagnosticOrder.getUuid());
+        assertEquals(orderDate, simpleDateFormat.format(savedProcedureRequest.getOrderDate()));
+        assertNotNull(savedProcedureRequest.getUuid());
     }
 
-    private List<DiagnosticOrder> findByEncounterId(String shrEncounterId) {
+    private List<ProcedureRequest> findByEncounterId(String shrEncounterId) {
         String sql = "select patient_hid,encounter_id,order_datetime,order_category,code,orderer," +
-                "order_concept,order_status, shr_order_uuid from diagnostic_order where encounter_id= :encounter_id";
+                "order_concept,order_status, shr_order_uuid from procedure_request where encounter_id= :encounter_id";
         HashMap<String, Object> map = new HashMap<>();
         map.put("encounter_id", shrEncounterId);
-        return jdbcTemplate.query(sql, map, new RowMapper<DiagnosticOrder>() {
+        return jdbcTemplate.query(sql, map, new RowMapper<ProcedureRequest>() {
             @Override
-            public DiagnosticOrder mapRow(ResultSet rs, int rowNum) throws SQLException {
-                DiagnosticOrder order = new DiagnosticOrder();
+            public ProcedureRequest mapRow(ResultSet rs, int rowNum) throws SQLException {
+                ProcedureRequest order = new ProcedureRequest();
                 order.setPatientHid(rs.getString("patient_hid"));
                 order.setEncounterId(rs.getString("encounter_id"));
                 order.setOrderDate(rs.getDate("order_datetime"));
