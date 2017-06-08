@@ -34,7 +34,8 @@ public class CatchmentEncounterCrawlerJob {
     @Scheduled(fixedDelayString = "${ENCOUNTER_SYNC_JOB_INTERVAL}", initialDelay = 10000)
     public void start() {
         for (String catchment : properties.getDatasenseCatchmentList()) {
-            String feedUrl = StringUtil.ensureSuffix(properties.getShrBaseUrl(), "/") + "catchments/" + catchment + "/encounters";
+
+            String feedUrl = StringUtil.ensureSuffix(properties.getShrBaseUrl(), "/") + String.format(properties.getShrCatchmentEncounterPath(), catchment);
             AtomFeedSpringTransactionManager transactionManager = new AtomFeedSpringTransactionManager(txMgr);
             ShrEncounterFeedProcessor feedCrawler =
                     new ShrEncounterFeedProcessor(

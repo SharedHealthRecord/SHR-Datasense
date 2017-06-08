@@ -59,6 +59,7 @@ public class DatasenseProperties implements EnvironmentAware {
     private String idpServerUserInfoUrl;
     private String dhisBaseUrl;
     private String pentaThreeDrugUuid;
+    private String shrCatchmentEncounterPath;
 
     @Override
     public void setEnvironment(Environment env) {
@@ -88,6 +89,7 @@ public class DatasenseProperties implements EnvironmentAware {
         this.idpServerUserInfoUrl = env.getProperty("IDP_SERVER_USERINFO_URL");
         this.maxFailedEvents = env.getProperty("MAX_FAILED_EVENTS");
         this.dhisBaseUrl = env.getProperty("DHIS_BASE_URL");
+        this.shrCatchmentEncounterPath = env.getProperty("SHR_CATCHMENT_ENCOUNTER_PATH");
 
 
     }
@@ -219,5 +221,9 @@ public class DatasenseProperties implements EnvironmentAware {
 
     public String getAqsTemplateLocationPath() {
         return getAqsConfigBasePath() + "/templates/";
+    }
+
+    public String getShrCatchmentEncounterPath() {
+        return shrCatchmentEncounterPath;
     }
 }
