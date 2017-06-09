@@ -59,7 +59,7 @@ public class FeedProcessorIT {
         givenThat(get(urlMatching(trConceptAtomfeedUrl + "[0-9]+"))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withBody(asString("dstu1/xmls/conceptAtomfeed.xml"))));
+                        .withBody(asString("feeds/conceptAtomfeed.xml"))));
         givenThat(get(urlMatching("/openmrs/ws/rest/v1/tr/concepts/" + CONCEPT_UUID))
                 .willReturn(aResponse()
                         .withStatus(200)
@@ -79,7 +79,7 @@ public class FeedProcessorIT {
         givenThat(get(urlMatching(trReferenceTermAtomfeedUrl + "[0-9]+"))
                 .willReturn(aResponse()
                         .withStatus(200)
-                        .withBody(asString("dstu1/xmls/referenceTermAtomfeed.xml"))));
+                        .withBody(asString("feeds/referenceTermAtomfeed.xml"))));
         givenThat(get(urlMatching("/openmrs/ws/rest/v1/tr/referenceterms/" + REFERENCE_TERM_UUID))
                 .willReturn(aResponse()
                         .withStatus(200)
