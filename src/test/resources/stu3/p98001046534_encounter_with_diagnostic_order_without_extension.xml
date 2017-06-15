@@ -42,7 +42,7 @@
                 <section>
                     <entry>
                         <reference
-                                value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161"/>
+                                value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161"/>
                         <display value="Procedure Request"/>
                     </entry>
                 </section>
@@ -80,15 +80,15 @@
         </resource>
     </entry>
     <entry>
-        <fullUrl value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161"/>
+        <fullUrl value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161"/>
         <resource>
             <ProcedureRequest>
-                <id value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161"/>
+                <id value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161"/>
                 <extension url="http://hl7.org/fhir/diagnosticorder-r2-marker">
                     <valueBoolean value="true"/>
                 </extension>
                 <identifier>
-                    <value value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161"/>
+                    <value value="urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161"/>
                 </identifier>
                 <status value="active"/>
                 <intent value="order"/>

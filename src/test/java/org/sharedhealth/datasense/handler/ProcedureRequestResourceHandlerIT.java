@@ -96,13 +96,13 @@ public class ProcedureRequestResourceHandlerIT extends BaseIntegrationTest {
 
     @Test
     public void shouldDefaultCategoryToLAB() throws Exception {
-        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
+        setUpData("stu3/p98001046534_encounter_with_diagnostic_order_without_extension.xml", "urn:uuid:e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161");
         procedureRequestResourceHandler.process(procedureRequest, composition);
         List<ProcedureRequest> savedProcedureRequests = findByEncounterId(SHR_ENCOUNTER_ID);
         assertEquals(1, savedProcedureRequests.size());
         ProcedureRequest savedProcedureRequest = savedProcedureRequests.get(0);
         assertDiagnosticOrder(savedProcedureRequest, "BN00ZZZ", "92ad83a5-c835-448d-9401-96554c9a1161", "active",
-                "LAB", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#92ad83a5-c835-448d-9401-96554c9a1161");
+                "LAB", "01-04-2016", SHR_ENCOUNTER_ID + ":e8436e26-a011-48e7-a4e8-a41465dfae34#TR:92ad83a5-c835-448d-9401-96554c9a1161");
     }
 
     @Test

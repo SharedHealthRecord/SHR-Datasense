@@ -11,7 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 
 @Component
-public class ProcedureRequest {
+public class ProcedureRequestDao {
     @Autowired
     private NamedParameterJdbcTemplate jdbcTemplate;
 

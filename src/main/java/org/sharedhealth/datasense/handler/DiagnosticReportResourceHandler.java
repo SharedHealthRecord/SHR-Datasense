@@ -1,12 +1,15 @@
 package org.sharedhealth.datasense.handler;
 
 
-import org.hl7.fhir.dstu3.model.*;
+import org.hl7.fhir.dstu3.model.Coding;
+import org.hl7.fhir.dstu3.model.DiagnosticReport;
+import org.hl7.fhir.dstu3.model.Reference;
+import org.hl7.fhir.dstu3.model.Resource;
 import org.sharedhealth.datasense.model.Observation;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
-import org.sharedhealth.datasense.repository.ProcedureRequest;
 import org.sharedhealth.datasense.repository.DiagnosticReportDao;
+import org.sharedhealth.datasense.repository.ProcedureRequestDao;
 import org.sharedhealth.datasense.util.TrUrl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -23,7 +26,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
     @Autowired
     ObservationResourceHandler observationResourceHandler;
     @Autowired
-    ProcedureRequest procedureRequest;
+    ProcedureRequestDao procedureRequestDao;
 
     @Override
     public boolean canHandle(Resource resource) {
@@ -47,7 +50,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         populateOrderCodeAndConcept(fhirDiagnosticReport.getCode().getCoding(), diagnosticReport);
 
         if (diagnosticReport.getCode() == null && diagnosticReport.getReportConcept() == null) return;
-        diagnosticReport.setOrderId(populateShrOrderId(fhirDiagnosticReport));
+        diagnosticReport.setOrderId(populateOrderId(fhirDiagnosticReport));
 
         int reportId = diagnosticReportDao.save(diagnosticReport);
         saveResultObservations(composition, fhirDiagnosticReport, reportId);
@@ -85,9 +88,12 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         }
     }
 
-    private Integer populateShrOrderId(DiagnosticReport fhirDiagnosticReport) {
-        if (hasShrOrderUuid(fhirDiagnosticReport.getBasedOn()))
-            return getConcatenatedShrOrderUuidFromRequest(fhirDiagnosticReport.getBasedOn());
+    private Integer populateOrderId(DiagnosticReport fhirDiagnosticReport) {
+        if (hasShrOrderUuid(fhirDiagnosticReport.getBasedOn())) {
+            Integer orderId = getConcatenatedShrOrderUuidFromRequest(fhirDiagnosticReport.getBasedOn());
+            if (orderId != null)
+                return orderId;
+        }
         return getShrOrderIdFromEncounter(fhirDiagnosticReport);
     }
 
@@ -104,7 +110,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         String shrOrderUuid = getOrderUuidFromReferenceUrl(referenceUrl);
 
         String concatenatedShrOrderUuid = orderEncounterId + ":" + shrOrderUuid;
-        return procedureRequest.getOrderId(concatenatedShrOrderUuid);
+        return procedureRequestDao.getOrderId(concatenatedShrOrderUuid);
 
     }
 
@@ -113,7 +119,7 @@ public class DiagnosticReportResourceHandler implements FhirResourceHandler {
         String orderEncounterId = getOrderEncounterId(fhirDiagnosticReport);
         for (Coding codingDt : fhirDiagnosticReport.getCode().getCoding()) {
             if (isConceptUrl(codingDt.getSystem())) {
-                return procedureRequest.getOrderId(orderEncounterId, codingDt.getCode());
+                return procedureRequestDao.getOrderId(orderEncounterId, codingDt.getCode());
             }
         }
         return null;

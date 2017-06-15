@@ -7,6 +7,7 @@ import org.hl7.fhir.dstu3.model.Resource;
 import org.sharedhealth.datasense.model.ProcedureRequest;
 import org.sharedhealth.datasense.model.fhir.EncounterComposition;
 import org.sharedhealth.datasense.model.fhir.ProviderReference;
+import org.sharedhealth.datasense.repository.ProcedureRequestDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.util.StringUtils;
@@ -19,7 +20,7 @@ import static org.sharedhealth.datasense.util.TrUrl.isReferenceTermUrl;
 @Component
 public class ProcedureRequestResourceHandler implements FhirResourceHandler {
     @Autowired
-    org.sharedhealth.datasense.repository.ProcedureRequest procedureRequest;
+    ProcedureRequestDao procedureRequestDao;
 
     @Override
     public boolean canHandle(Resource resource) {
@@ -47,7 +48,7 @@ public class ProcedureRequestResourceHandler implements FhirResourceHandler {
         if (procedureRequest.getOrderConcept() == null && procedureRequest.getCode() == null) return;
         setConcatenatedShrOrderUuid(fhirDiagnosticOrder, procedureRequest);
 
-        this.procedureRequest.save(procedureRequest);
+        this.procedureRequestDao.save(procedureRequest);
     }
 
     private void setConcatenatedShrOrderUuid(org.hl7.fhir.dstu3.model.ProcedureRequest fhirDiagnosticOrder, ProcedureRequest procedureRequest) {
@@ -79,6 +80,6 @@ public class ProcedureRequestResourceHandler implements FhirResourceHandler {
 
     @Override
     public void deleteExisting(EncounterComposition composition) {
-        procedureRequest.deleteExisting(composition.getEncounterReference().getEncounterId());
+        procedureRequestDao.deleteExisting(composition.getEncounterReference().getEncounterId());
     }
 }

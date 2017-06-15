@@ -140,7 +140,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
     @Test
     public void shouldAssociateDiagnosticReportWithOrderUsingShrOrderUuid() throws Exception {
         setUpData("stu3/p98001046534_encounter_with_diagnostic_report.xml", "urn:uuid:b8d65b9c-8242-4db5-bb17-9a064ef8df16");
-        String concatenatedShrOrderUuid = "shr-enc-12:880ae396-jfjf-4629-1930-f15206e63ab0";
+        String concatenatedShrOrderUuid = "shr-enc-12:880ae396-jfjf-4629-1930-f15206e63ab0#TR:501qb827-a67c-4q1f-a705-e5efe0q6a972";
 
         ProcedureRequest order = new ProcedureRequest();
         order.setEncounterId("shr-enc-12");
@@ -148,6 +148,7 @@ public class DiagnosticReportResourceHandlerIT extends BaseIntegrationTest {
         order.setOrderer("someone");
         order.setOrderCategory("RAD");
         order.setOrderStatus("requested");
+        order.setOrderConcept("501qb827-a67c-4q1f-a705-e5efe0q6a972");
         order.setShrOrderUuid(concatenatedShrOrderUuid);
         order.setOrderDate(new Date());
         Integer savedOrderId = saveOrder(order);
