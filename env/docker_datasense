@@ -1,0 +1,44 @@
+export DATASENSE_PORT=8083
+export DATABASE_URL=jdbc:mysql://hie-mysql:3306/datasense
+export DATABASE_USER=root
+export DATABASE_PASSWORD=password
+export DATABASE_CHANGELOG_FILE=classpath:/db/changelog/db-changelog.xml
+export DATABASE_DRIVER=com.mysql.jdbc.Driver
+export DATABASE_CON_POOL_SIZE=10
+export SHR_SERVER_URL=htp://shr-server:8082
+export SHR_CATCHMENT_ENCOUNTER_PATH=v2/catchments/%s/encounters
+export TR_SERVER_URL=http://tr-server:9080/
+export MCI_SERVER_URL=http://mci-server:8081
+export MCI_SERVER_PATIENT_URI=/api/default/patients
+export MCI_SERVER_PATIENT_UPDATE_FEED_URI=/api/v1/feed/patients
+export TR_CONCEPT_ATOMFEED_PATH=/openmrs/ws/atomfeed/concept/recent
+export TR_REFERENCE_TERM_ATOMFEED_PATH=/openmrs/ws/atomfeed/conceptreferenceterm/recent
+export TR_MEDICATION_ATOMFEED_PATH=/openmrs/ws/atomfeed/medication/recent
+export TR_USER=admin
+export TR_PASSWORD=Admin123
+export DATASENSE_FACILITY_ID=10019845
+export DATASENSE_CATCHMENT_LIST=3026,3033
+export DATASENSE_LOG_LEVEL=DEBUG
+
+export FACILITY_REGISTRY_URL=http://identity-server:8084/api/1.0/facilities/
+export PROVIDER_REGISTRY_URL=http://identity-server:8084/api/1.0/providers/
+
+export DHIS_USER_NAME=datasense
+export DHIS_PASSWORD=Password678
+export DHIS_AQS_CONFIG_PATH=/opt/datasense/lib/dhis_config/aqs_config/
+export DHIS_BASE_URL=http://172.18.46.225:8080/dhis
+
+export # Properties for identity server
+
+export IDP_SERVER_LOGIN_URL=http://identity-server:8084/signin
+export IDP_SERVER_USERINFO_URL=http://identity-server:8084/token
+export IDP_CLIENT_ID=18552
+export IDP_AUTH_TOKEN=b7aa1f4001ac4b922dabd6a02a0dabc44cf5af74a0d1b68003ce7ccdb897a1d2
+export IDP_CLIENT_EMAIL=rappasam@thoughtworks.com
+export IDP_CLIENT_PASSWORD=thoughtworks
+
+export CLOUD_HOSTED_FACILITY_IDs=10019856
+export ENCOUNTER_SYNC_JOB_INTERVAL=10000
+export PATIENT_UPDATE_SYNC_JOB_INTERVAL=10000
+export TR_SYNC_JOB_INTERVAL=30000
+export MAX_FAILED_EVENTS=50
