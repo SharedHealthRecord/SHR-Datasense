@@ -1,10 +1,4 @@
-FROM centos
-
-RUN cd /etc/yum.repos.d/
-RUN sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-RUN sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
-
-RUN  yum install java-1.8.0-openjdk -y
+FROM azul/zulu-openjdk-centos:8-latest
 
 COPY build/distributions/datasense-*.noarch.rpm /tmp/datasense.rpm
 RUN yum install -y /tmp/datasense.rpm && rm -f /tmp/datasense.rpm && yum clean all
